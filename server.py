@@ -23,7 +23,16 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 app = Flask(__name__)
-
+# לאפשר CORS ל־sitegyn.com (ולוקאלית לפיתוח)
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "https://sitegyn.com",
+            "http://localhost:8000",
+            "http://127.0.0.1:8000"
+        ]
+    }
+})
 
 # ==============================
 # Load system prompt
