@@ -1204,61 +1204,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </script>
 <script>
-  const API_BASE = 'https://sitegyn-backend.onrender.com';
-
-  function createClientId() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
-
-  async function initProject() {
-    let projectId = localStorage.getItem('sitegyn_project_id');
-    let anonymousId = localStorage.getItem('sitegyn_anon_id');
-
-    if (!anonymousId) {
-      anonymousId = createClientId();
-      localStorage.setItem('sitegyn_anon_id', anonymousId);
-    }
-
-    if (projectId) {
-      console.log("Existing project:", projectId);
-      return;
-    }
-
-    try {
-      const res = await fetch(API_BASE + '/api/start_project', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ anonymous_id: anonymousId })
-      });
-
-      const data = await res.json();
-      localStorage.setItem('sitegyn_project_id', data.project_id);
-      console.log("New project created:", data.project_id);
-
-    } catch (err) {
-      console.error("Error starting project:", err);
-    }
-  }
-
-  async function pingBackend() {
-    try {
-      const res = await fetch(API_BASE + '/');
-      console.log('Backend OK:', await res.json());
-    } catch (err) {
-      console.error('Backend error:', err);
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    pingBackend();
-    initProject();
-  });
-</script>
-<script>
   // ===== הגדרות בסיס ל-API =====
   const API_BASE = 'https://sitegyn-backend.onrender.com';
 
