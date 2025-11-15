@@ -1,138 +1,121 @@
 import os
-import json
+from typing import List, Dict, Any
+
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
-from flask_cors import CORS
 from supabase import create_client, Client
 from openai import OpenAI
-from dotenv import load_dotenv
 
-# ==========================
-# Load ENV
-# ==========================
+# ==============================
+# Environment & clients
+# ==============================
+
 load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in environment.")
+if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+    raise RuntimeError("SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY are not set in the environment")
 
-if not OPENAI_API_KEY:
-    raise RuntimeError("Missing OPENAI_API_KEY in environment.")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-client = OpenAI(api_key=OPENAI_API_KEY)
-
-# ==========================
-# Load System Prompt
-# ==========================
-SYSTEM_PROMPT_PATH = "sitegyn_system_prompt.txt"
-
-if not os.path.exists(SYSTEM_PROMPT_PATH):
-    raise RuntimeError(f"Missing system prompt file: {SYSTEM_PROMPT_PATH}")
-
-with open(SYSTEM_PROMPT_PATH, "r", encoding="utf-8") as f:
-    SITEGYN_SYSTEM_PROMPT = f.read()
-
-# ==========================
-# Flask app
-# ==========================
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
 
-# ==========================
-# Helpers
-# ==========================
-def get_project(project_id: str):
-    """Fetch a single project row by id (primary key)."""
-    resp = supabase.table("projects").select("*").eq("id", project_id).execute()
-    if resp.data:
-        return resp.data[0]
-    return None
 
+# ==============================
+# Load system prompt
+# ==============================
+
+def load_system_prompt() -> str:
+    """
+    Load the Sitegyn system prompt from file, or fall back to a short default.
+    """
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        prompt_path = os.path.join(base_dir, "sitegyn_system_prompt.txt")
+        with open(prompt_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except Exception:
+        return (
+            "You are Sitegyn, an assistant that interviews the user to create a website. "
+            "Ask short, clear questions in English. Collect all details needed to design "
+            "a small business website, including business type, services, target audience, "
+            "location, language, and desired style."
+        )
+
+
+SITEGYN_SYSTEM_PROMPT = load_system_prompt()
+
+
+# ==============================
+# Helper functions
+# ==============================
 
 def save_message(project_id: str, role: str, content: str, tokens_used: int | None = None):
-    """Insert a chat message (user/assistant) to chat_messages table."""
-    row = {
-        "project_id": project_id,
-        "role": role,
-        "content": content,
-    }
-    if tokens_used is not None:
-        row["tokens_used"] = tokens_used
-
-    supabase.table("chat_messages").insert(row).execute()
-
-
-def update_project(project_id: str, updates: dict):
-    """Update fields in the projects table for a given id."""
-    if not updates:
-        return
-    supabase.table("projects").update(updates).eq("id", project_id).execute()
-
-
-def is_ready_to_build(project: dict) -> bool:
     """
-    Check if all required fields for building a site are present.
-    Required fields:
-      - business_type
-      - business_description
-      - business_name
-      - site_language
+    Insert a single chat message into the chat_messages table.
     """
-    required = ["business_type", "business_description", "business_name", "site_language"]
-    return all(project.get(field) for field in required)
+    supabase.table("chat_messages").insert(
+        {
+            "project_id": project_id,
+            "role": role,
+            "content": content,
+            "tokens_used": tokens_used,
+        }
+    ).execute()
 
 
 def extract_and_update_fields(project_id: str, ai_text: str):
     """
-    Extract the JSON block from the assistant's reply and update the 'projects' table
-    with any non-null fields: business_type, business_description, business_name, site_language.
-
-    We assume the model always ends the reply with:
-
-    ```json
-    {
-      "business_type": ...,
-      "business_description": ...,
-      "business_name": ...,
-      "site_language": ...
-    }
-    ```
+    OPTIONAL: try to find a JSON block in the assistant text and update the projects row.
+    If nothing is found, this function does nothing and does not raise.
     """
-    if not ai_text:
-        return
-
-    start = ai_text.rfind("```json")
-    if start == -1:
-        return
-
-    end = ai_text.find("```", start + 7)
-    if end == -1:
-        return
-
-    json_str = ai_text[start + 7:end].strip()
+    import json
+    import re
 
     try:
-        data = json.loads(json_str)
+        match = re.search(r"\{.*\}", ai_text, re.DOTALL)
+        if not match:
+            return
+
+        block = match.group(0)
+        data = json.loads(block)
+
+        allowed_fields = [
+            "business_name",
+            "business_type",
+            "niche",
+            "city",
+            "country",
+            "site_language",
+            "main_goal",
+            "primary_color",
+            "style_keywords",
+            "pages_json",
+            "content_json",
+            "selected_template_id",
+        ]
+
+        updates: Dict[str, Any] = {}
+        for field in allowed_fields:
+            if field in data and data[field] is not None:
+                updates[field] = data[field]
+
+        if updates:
+            supabase.table("projects").update(updates).eq("id", project_id).execute()
     except Exception:
+        # We never want JSON extraction to break the chat flow
         return
 
-    updates = {}
-    for field in ["business_type", "business_description", "business_name", "site_language"]:
-        if field in data:
-            val = data[field]
-            if val is not None and str(val).strip() != "":
-                updates[field] = val
 
-    if updates:
-        update_project(project_id, updates)
-
-
-# ==========================
+# ==============================
 # Routes
-# ==========================
+# ==============================
+
+
 @app.route("/", methods=["GET"])
 def health():
     """Simple health-check endpoint."""
@@ -149,10 +132,12 @@ def start_project():
         new_project = result.data[0]
         project_id = new_project["id"]
 
-        return jsonify({
-            "project_id": project_id,
-            "project": new_project
-        })
+        return jsonify(
+            {
+                "project_id": project_id,
+                "project": new_project,
+            }
+        )
     except Exception as e:
         print("Error in /api/start_project:", e)
         return jsonify({"error": "could_not_create_project"}), 500
@@ -161,59 +146,49 @@ def start_project():
 @app.route("/api/chat", methods=["POST"])
 def chat():
     """
-    Main chat endpoint.
-
-    Expected JSON body:
+    Main chat endpoint. Expects JSON:
     {
-      "project_id": "some-uuid",
-      "message": "user message text"
+      "project_id": "...",
+      "message": "user text"
     }
-
-    Returns:
+    Returns JSON:
     {
-      "reply": "assistant reply text",
-      "ready_to_build": bool
+      "reply": "...",
+      "project_id": "..."
     }
     """
-    data = request.get_json() or {}
-    project_id = (data.get("project_id") or "").strip()
-    user_message = (data.get("message") or "").strip()
-
-    if not project_id:
-        return jsonify({"error": "missing project_id"}), 400
-    if not user_message:
-        return jsonify({"error": "missing message"}), 400
-
-    # Make sure the project exists
-    project = get_project(project_id)
-    if not project:
-        return jsonify({"error": "project_not_found"}), 404
-
     try:
-        # 1) save user message
+        payload = request.get_json(force=True) or {}
+        project_id = payload.get("project_id")
+        user_message = payload.get("message")
+
+        if not project_id or not user_message:
+            return jsonify({"error": "missing_project_id_or_message"}), 400
+
+        # 1) Save user message
         save_message(project_id, "user", user_message)
 
-        # 2) fetch history for this project (last ~30 messages)
-        history_res = (
+        # 2) Load full history for this project
+        history_resp = (
             supabase.table("chat_messages")
-            .select("role, content, created_at")
+            .select("role, content")
             .eq("project_id", project_id)
-            .order("created_at", desc=False)
-            .limit(30)
+            .order("created_at", ascending=True)
             .execute()
         )
-        history = history_res.data or []
+        history: List[Dict[str, Any]] = history_resp.data or []
 
-        # 3) build messages for OpenAI
-        messages = [{"role": "system", "content": SITEGYN_SYSTEM_PROMPT}]
-        for m in history:
-            messages.append({
-                "role": m["role"],
-                "content": m["content"],
-            })
+        # 3) Build messages list for OpenAI
+        messages: List[Dict[str, str]] = [
+            {"role": "system", "content": SITEGYN_SYSTEM_PROMPT}
+        ]
 
-        # 4) call OpenAI
-        completion = client.chat.completions.create(
+        for msg in history:
+            role = "assistant" if msg["role"] == "assistant" else "user"
+            messages.append({"role": role, "content": msg["content"]})
+
+        # 4) Call OpenAI
+        completion = openai_client.chat.completions.create(
             model="gpt-4.1-mini",
             messages=messages,
             temperature=0.4,
@@ -222,29 +197,24 @@ def chat():
         assistant_text = completion.choices[0].message.content
         total_tokens = completion.usage.total_tokens if completion.usage else None
 
-        # 5) save assistant message
+        # 5) Save assistant message
         save_message(project_id, "assistant", assistant_text, total_tokens)
 
-        # 6) update project fields from structured JSON in the answer
+        # 6) Try to extract structured data & update project
         extract_and_update_fields(project_id, assistant_text)
 
-        # 7) re-fetch project and check readiness
-        updated_project = get_project(project_id)
-        ready = is_ready_to_build(updated_project) if updated_project else False
-
-        return jsonify({
-            "reply": assistant_text,
-            "ready_to_build": ready,
-            "project_id": project_id,
-        })
-
+        # 7) Return reply to frontend
+        return jsonify({"reply": assistant_text, "project_id": project_id})
     except Exception as e:
         print("Error in /api/chat:", e)
         return jsonify({"error": "chat_failed"}), 500
 
 
-# ==========================
-# Local run
-# ==========================
+# ==============================
+# Local dev
+# ==============================
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    # For local testing only. On Render, the 'Start Command' runs this file.
+    port = int(os.getenv("PORT", "5001"))
+    app.run(host="0.0.0.0", port=port, debug=True)
