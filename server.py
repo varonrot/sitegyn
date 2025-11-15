@@ -31,19 +31,10 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 # ==========================================
 app = Flask(__name__)
 
+# בינתיים פותחים לכולם כדי לוודא שאין בעיית CORS
 CORS(
     app,
-    resources={
-        r"/api/*": {
-            "origins": [
-                "https://sitegyn.com",
-                "https://www.sitegyn.com",
-                "http://localhost:8000",
-                "http://127.0.0.1:8000",
-            ],
-            "supports_credentials": False,
-        }
-    },
+    resources={r"/api/*": {"origins": "*"}}
 )
 
 # ==========================================
@@ -101,7 +92,6 @@ def chat():
         data = request.get_json() or {}
         project_id = data.get("project_id")
         message = (data.get("message") or "").strip()
-        chat_history = data.get("chat_history") or []
 
         if not project_id or not message:
             raise ValueError("Missing project_id or message")
@@ -118,13 +108,15 @@ def chat():
             supabase.table("chat_messages")
             .select("role, content")
             .eq("project_id", project_id)
-            .order("created_at", ascending=True)
+            .order("created_at", desc=False)  # ✅ תיקון במקום ascending=True
             .execute()
         )
         history_rows = history_resp.data or []
 
         messages: List[Dict[str, str]] = [
-            {"role": row["role"], "content": row["content"]} for row in history_rows
+            {"role": row["role"], "content": row["content"]}
+            for row in history_rows
+            if row.get("role") and row.get("content")
         ]
 
         # Safety: make sure ההודעה האחרונה היא זו ששלחנו עכשיו
@@ -141,22 +133,29 @@ def chat():
         choice = completion.choices[0]
 
         # תומך גם במבנה dict וגם באובייקט
-        msg_obj = getattr(choice, "message", None) or choice.get("message")
-        if isinstance(msg_obj, dict):
-            assistant_text = msg_obj.get("content", "")
-        else:
+        msg_obj = getattr(choice, "message", None) or getattr(choice, "delta", None) or getattr(choice, "logprobs", None)
+        if not msg_obj:
+            msg_obj = choice.message  # fallback
+
+        try:
+            assistant_text = msg_obj.get("content", "")  # dict-like
+        except AttributeError:
             assistant_text = getattr(msg_obj, "content", "")
 
         usage = getattr(completion, "usage", None)
         total_tokens = getattr(usage, "total_tokens", None) if usage else None
 
         # 4. Save assistant reply
-        supabase.table("chat_messages").insert({
+        assistant_row = {
             "project_id": project_id,
             "role": "assistant",
             "content": assistant_text,
-            "tokens_used": total_tokens,
-        }).execute()
+        }
+        # מוסיפים tokens_used רק אם יש ערך
+        if total_tokens is not None:
+            assistant_row["tokens_used"] = total_tokens
+
+        supabase.table("chat_messages").insert(assistant_row).execute()
 
         # 5. Return reply
         return jsonify({
