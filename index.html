@@ -1203,6 +1203,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. ניסיון לקבל פרויקט קיים מהמכשיר
+    let projectId = localStorage.getItem("sitegyn_project_id");
+
+    // 2. אם אין — יוצרים חדש מול השרת
+    if (!projectId) {
+        fetch("https://your-render-server.com/create-project", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        })
+        .then(res => res.json())
+        .then(data => {
+            localStorage.setItem("sitegyn_project_id", data.project_id);
+        });
+    }
+
+    // 3. מכאן והלאה — כל שליחת הודעה לצ'ט משתמשת ב-projectId
+});
+</script>
 
 </body>
 </html>
