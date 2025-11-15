@@ -4,3 +4,5 @@ supabase
 python-dotenv
 openai
 pydantic
+Flask
+supabase-py
