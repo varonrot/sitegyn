@@ -1223,6 +1223,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. מכאן והלאה — כל שליחת הודעה לצ'ט משתמשת ב-projectId
 });
 </script>
+<script>
+  // כתובת ה-API של השרת ב-Render
+  const API_BASE = 'https://sitegyn-backend.onrender.com';
 
+  // בדיקת חיבור לשרת
+  async function pingBackend() {
+    try {
+      const res = await fetch(API_BASE + '/');
+      const data = await res.json();
+      console.log('Backend OK:', data);
+    } catch (err) {
+      console.error('Backend error:', err);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', pingBackend);
+</script>
 </body>
 </html>
