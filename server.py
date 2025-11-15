@@ -155,8 +155,7 @@ def chat():
             "content": message,
             "status": "complete"
         }).execute()
-
-        # 2. Pull full history from DB (source of truth)
+        # 2. Load full chat history from Supabase
         history_resp = (
             supabase.table("chat_messages")
             .select("role, content")
@@ -166,39 +165,48 @@ def chat():
         )
         history_rows = history_resp.data or []
 
+        # Count how many answers the user has already given (for speed-mode)
+        user_turns = sum(1 for row in history_rows if row.get("role") == "user")
+
+        # 3. Build the messages list for OpenAI
         messages: List[Dict[str, str]] = []
 
-        # System prompt – loaded from file or hardcoded
-        # בראש הקובץ, אחרי ה-imports:
-        SYSTEM_PROMPT_PATH = "sitegyn_system_prompt.txt"
-
-        with open(SYSTEM_PROMPT_PATH, "r", encoding="utf-8") as f:
-            SITEGYN_SYSTEM_PROMPT = f.read()
-
-        # בתוך chat():
-        messages: List[Dict[str, str]] = []
+        # Main system prompt (loaded from sitegyn_system_prompt.txt)
         messages.append({"role": "system", "content": SITEGYN_SYSTEM_PROMPT})
+
+        # Hidden context: current project_id (never mention this to the user)
         messages.append({
             "role": "system",
-            "content": f"The current project_id is {project_id}. Never mention this ID to the user."
+            "content": (
+                f"The current project_id is {project_id}. "
+                "Never mention this ID to the user."
+            ),
         })
 
-        # Optional second system message with project_id context
+        # Speed-mode instruction: how many user answers so far
         messages.append({
             "role": "system",
-            "content": f"The current project_id is {project_id}. Never mention this ID to the user."
+            "content": (
+                f"For this project there have been {user_turns} user answers so far. "
+                "After 3 or more user answers, if you have not yet explicitly asked the user "
+                "whether they want to see an initial website demo or continue the interview, "
+                "you MUST offer that choice in your next reply and you MUST NOT ask additional "
+                "business questions in the same message."
+            ),
         })
 
-        # Add history
+        # Add previous chat history (user + assistant)
         for row in history_rows:
-            r = row.get("role")
-            c = row.get("content")
-            if r and c:
-                messages.append({"role": r, "content": c})
+            messages.append({
+                "role": row["role"],
+                "content": row["content"],
+            })
 
-        # Safety: make sure ההודעה האחרונה היא זו ששלחנו עכשיו
-        if not messages or messages[-1]["content"] != message:
+        # Safety: make sure the last message is the current user message
+        if not history_rows or history_rows[-1]["content"] != message:
             messages.append({"role": "user", "content": message})
+
+
 
         # 3. Call OpenAI
         try:
