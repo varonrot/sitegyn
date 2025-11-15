@@ -44,8 +44,8 @@ app = Flask(__name__)
 # Helpers
 # ==========================
 def get_project(project_id: str):
-    """Fetch a single project row by project_id."""
-    resp = supabase.table("projects").select("*").eq("project_id", project_id).execute()
+    """Fetch a single project row by id (primary key)."""
+    resp = supabase.table("projects").select("*").eq("id", project_id).execute()
     if resp.data:
         return resp.data[0]
     return None
@@ -61,10 +61,10 @@ def save_message(project_id: str, role: str, content: str):
 
 
 def update_project(project_id: str, updates: dict):
-    """Update fields in the projects table for a given project_id."""
+    """Update fields in the projects table for a given id."""
     if not updates:
         return
-    supabase.table("projects").update(updates).eq("project_id", project_id).execute()
+    supabase.table("projects").update(updates).eq("id", project_id).execute()
 
 
 def is_ready_to_build(project: dict) -> bool:
