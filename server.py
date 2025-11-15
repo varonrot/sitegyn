@@ -169,13 +169,19 @@ def chat():
         messages: List[Dict[str, str]] = []
 
         # System prompt – loaded from file or hardcoded
-        system_prompt = (
-            "You are the Sitegyn Assistant, a website-specification AI. "
-            "You interview the user to fully define a website project. "
-            "Always ask one question at a time. Use <update>{...}</update> "
-            "blocks to send JSON updates for the current project."
-        )
-        messages.append({"role": "system", "content": system_prompt})
+        # בראש הקובץ, אחרי ה-imports:
+        SYSTEM_PROMPT_PATH = "sitegyn_system_prompt.txt"
+
+        with open(SYSTEM_PROMPT_PATH, "r", encoding="utf-8") as f:
+            SITEGYN_SYSTEM_PROMPT = f.read()
+
+        # בתוך chat():
+        messages: List[Dict[str, str]] = []
+        messages.append({"role": "system", "content": SITEGYN_SYSTEM_PROMPT})
+        messages.append({
+            "role": "system",
+            "content": f"The current project_id is {project_id}. Never mention this ID to the user."
+        })
 
         # Optional second system message with project_id context
         messages.append({
