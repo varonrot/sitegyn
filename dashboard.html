@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Earnings — Realtime Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --page-bg: #050b16;    /* overall background */
+      --panel-bg: #121e2d;   /* inner panels / cards */
+      --muted: #98b0bf;
+      --accent: #18a7ff;
+      --text: #e8f6ff;
+
+      --success: #29c76f;
+      --warning: #ffb85c;
+      --danger: #ff5c7a;
+      --info-soft: #3b82f6;
+
+      --topbar-h:64px;
+      --sidebar-w:260px;
+      --sidebar-collapsed-w:72px;
+      --nav-gap:6px;
+      --nav-padding:9px 10px;
+      --icon-size:18px;
+      --promo-height:220px;
+    }
+
+    /* light theme variables (applied when body.light-theme) */
+    body.light-theme{
+      --page-bg: #f5f7fa;
+      --panel-bg: #ffffff;
+      --muted: #64707a;
+      --accent: #2266ff;
+      --text: #0b1726;
+      --success: #24a85f;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info-soft: #2563eb;
+    }
+
+    @media (prefers-color-scheme: light){
+      :root.auto-theme {
+        --page-bg: #f5f7fa;
+        --panel-bg: #ffffff;
+        --muted: #64707a;
+        --accent: #2266ff;
+        --text: #0b1726;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;-webkit-font-smoothing:antialiased}
+    body{background:var(--page-bg);color:var(--text);transition:background .18s,color .18s}
+
+    /* TOPBAR */
+    .topbar{
+      position:fixed; top:0; left:0; right:0;
+      height:var(--topbar-h); display:flex; align-items:center;
+      padding:8px 18px; gap:12px; background:#050b16;
+      border-bottom:1px solid rgba(255,255,255,0.04); z-index:100;
+    }
+    .left-area{display:flex;align-items:center;gap:10px;min-width:160px}
+    .logo{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;
+      background:radial-gradient(circle at 20% 20%,#4bf7ff,#0e9bff 40%,#2563eb 80%);
+      font-weight:800;color:white;font-size:18px;
+      box-shadow:0 0 18px rgba(24,167,255,.55);
+    }
+    .brand-title{font-weight:700;color:#ffffff;margin-left:6px;font-size:18px;letter-spacing:0.4px}
+    .brand-title span{color:var(--accent);}
+    .spacer{flex:1}
+    .right-actions{display:flex;align-items:center;gap:10px}
+    .icon-btn{width:38px;height:38px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--text);position:relative;cursor:pointer;border:0}
+    .icon-btn:hover{background:rgba(255,255,255,0.05)}
+    .avatar{width:38px;height:38px;border-radius:50%;background:url('https://i.pravatar.cc/100?img=5') center/cover;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer;border:2px solid rgba(255,255,255,0.18)}
+
+    .top-cta-edu{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 14px;border-radius:999px;
+      background:var(--success);color:#fff;font-size:13px;
+      font-weight:600;text-decoration:none;
+      box-shadow:0 0 14px rgba(20,185,102,.5);
+      border:0;cursor:pointer;
+    }
+    .top-cta-edu i{font-size:14px}
+
+    /* MENU PANELS */
+    .menu-panel{position:absolute; right:0; top:48px; min-width:220px; background:var(--panel-bg); border-radius:8px; padding:8px 0; box-shadow:0 14px 40px rgba(3,10,18,.6); border:1px solid rgba(255,255,255,0.03); display:none; z-index:200;}
+    .menu-panel.show{display:block}
+    .menu-title{padding:8px 14px;color:var(--muted);font-size:13px;border-bottom:1px solid rgba(255,255,255,0.02)}
+    .menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;color:var(--text);cursor:pointer;font-size:15px;text-decoration:none}
+    .menu-item:hover{background:rgba(0,0,0,0.06)}
+    .menu-item .icon-small{width:30px;text-align:center;color:var(--muted)}
+
+    .theme-panel{position:absolute; right:48px; top:48px; min-width:160px; background:var(--panel-bg); border-radius:8px; padding:6px; box-shadow:0 14px 40px rgba(3,10,18,.6); display:none; z-index:200; border:1px solid rgba(255,255,255,0.03)}
+    .theme-panel.show{display:block}
+    .theme-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:6px;cursor:pointer}
+    .theme-row:hover{background:rgba(255,255,255,0.02)}
+    .theme-row .check{margin-left:auto;color:var(--accent)}
+
+    /* layout */
+    .layout{display:flex;min-height:100vh;padding-top:var(--topbar-h)}
+
+    /* SIDEBAR */
+    .sidebar{
+      position:fixed; top:var(--topbar-h); bottom:0; left:0;
+      width:var(--sidebar-w);
+      background:linear-gradient(180deg,#041831 0%,#064893 45%,#0f8fff 100%);
+      padding:12px 6px; overflow:auto;
+      transition:width .22s ease, transform .25s ease; border-right:1px solid rgba(0,0,0,0.4); z-index:90;
+      display:flex; flex-direction:column;
+      color:#e7f5ff;
+    }
+<!--    .sidebar::after{-->
+<!--      content:"";-->
+<!--      position:absolute;-->
+<!--      right:-25px;-->
+<!--      bottom:40px;-->
+<!--      width:140px;-->
+<!--      height:90px;-->
+<!--      opacity:.16;-->
+<!--      pointer-events:none;-->
+<!--      background:url("data:image/svg+xml,%3Csvg%20viewBox='0%200%20120%2080'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M5%2060L55%2020L95%2010L75%2040L115%2060L65%2055L35%2070Z'%20fill='%23ffffff'%20fill-opacity='0.9'/%3E%3C/svg%3E") no-repeat center/contain;-->
+<!--    }-->
+
+    .section-title{color:rgba(231,245,255,.76);font-size:11px;margin:10px 8px 6px;padding-left:12px;text-transform:uppercase;letter-spacing:0.7px}
+    .nav-list{display:flex;flex-direction:column;gap:var(--nav-gap);padding:0 6px 8px 6px}
+    .nav-item{
+      display:flex;align-items:center;gap:10px;padding:var(--nav-padding);border-radius:8px;color:#e7f5ff;text-decoration:none;
+      transition:background .12s, color .12s, transform .08s;font-size:14px;
+    }
+    .nav-item .icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(3,18,46,.3);color:#c8ddff;flex-shrink:0;font-size:var(--icon-size)}
+    .nav-item .label{font-size:14px}
+    .nav-item:hover{background:rgba(6,38,92,0.95);color:#fff;transform:translateY(-1px)}
+    .nav-item.active{
+      background:linear-gradient(90deg,rgba(21,128,255,.9),rgba(67,56,202,.9));
+      color:#ffffff;
+      box-shadow:0 0 16px rgba(37,99,235,.7);
+    }
+    .nav-item.active .icon{background:rgba(3,15,36,.6);color:#fff}
+
+    .divider{height:1px;background:rgba(12,39,87,0.75);margin:10px 8px;border-radius:2px}
+
+    .dropdown-btn{background:transparent;border:0;text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px;padding:var(--nav-padding);border-radius:8px;color:#e7f5ff}
+    .dropdown-arrow{margin-left:auto;transition:transform .18s ease}
+    .dropdown-container{display:none;flex-direction:column;padding-left:46px;margin-top:6px;gap:6px}
+    .dropdown-link{padding:4px 0;color:rgba(226,241,255,.85);font-size:13px;text-decoration:none}
+    .dropdown-link:hover{color:#ffffff}
+
+    .sidebar-footer{margin-top:auto;padding:12px}
+    .promo{
+      background:rgba(5,22,58,.9);border-radius:16px;padding:14px;border:1px solid rgba(84,180,255,0.28);
+      display:flex;flex-direction:column;align-items:flex-start;gap:10px;position:relative;height:var(--promo-height);
+      box-shadow:0 14px 35px rgba(3,10,30,.85);
+    }
+    .promo .close-btn{position:absolute;right:10px;top:8px;color:rgba(255,255,255,0.55);cursor:pointer;font-size:16px}
+    .promo .art{width:72px;height:72px;border-radius:999px;display:grid;place-items:center;
+      background:radial-gradient(circle at 20% 20%,#4bf7ff,#0e9bff 40%,#2563eb 80%);
+      box-shadow:0 0 18px rgba(12,170,255,.65);
+    }
+    .promo h4{margin:6px 0 0;font-size:16px;color:#f9fbff}
+    .promo p{margin:0;color:rgba(214,231,255,.85);font-size:13px}
+    .promo .cta{margin-top:auto;width:100%;display:flex;justify-content:flex-start}
+    .promo .cta a{background:#22c55e;color:white;padding:9px 14px;border-radius:999px;text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:8px;font-size:13px}
+    .promo .cta a i{font-size:13px}
+
+    .sidebar.collapsed{width:var(--sidebar-collapsed-w)}
+    .sidebar.collapsed .section-title,.sidebar.collapsed .label{display:none}
+    .sidebar.collapsed .nav-item{justify-content:center;padding:8px}
+    .sidebar.collapsed .dropdown-container{display:none!important}
+    .sidebar.collapsed .promo{display:none}
+
+    .sidebar::-webkit-scrollbar{width:8px}
+    .sidebar::-webkit-scrollbar-thumb{background:rgba(3,21,45,.7);border-radius:8px}
+
+    /* MAIN */
+    .main{flex:1;margin-left:var(--sidebar-w);padding:22px 32px 120px;transition:margin-left .22s ease;background:radial-gradient(circle at top,#10203b,#050b16 55%);}
+    .main.narrow{margin-left:var(--sidebar-collapsed-w)}
+    .content-wide{width:100%;}
+    .panel{background:var(--panel-bg);border-radius:14px;padding:18px;margin-bottom:18px;border:1px solid rgba(255,255,255,0.03)}
+
+    /* DASHBOARD GRID */
+    .dash-grid-top{
+      display:grid;
+      grid-template-columns: minmax(0,2.1fr) minmax(0,1.4fr) minmax(0,1.4fr);
+      gap:16px;
+      margin-bottom:18px;
+    }
+    .dash-grid-mid{
+      display:grid;
+      grid-template-columns: minmax(0,2.1fr) minmax(0,1.6fr);
+      gap:16px;
+      margin-bottom:18px;
+    }
+    .dash-grid-bottom{
+      display:grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+
+    @media (max-width:1180px){
+      .dash-grid-top{grid-template-columns: minmax(0,1.7fr) minmax(0,1.5fr);}
+      .dash-grid-mid{grid-template-columns: minmax(0,1fr);}
+      .dash-grid-bottom{grid-template-columns: repeat(2,minmax(0,1fr));}
+    }
+    @media (max-width:880px){
+      .main{margin-left:0;padding:14px}
+      .dash-grid-top{grid-template-columns: minmax(0,1fr);}
+      .dash-grid-bottom{grid-template-columns: minmax(0,1fr);}
+    }
+
+    .card{
+      background:var(--panel-bg);
+      border-radius:14px;
+      padding:16px 16px 14px;
+      border:1px solid rgba(255,255,255,0.04);
+      box-shadow:0 10px 30px rgba(0,0,0,.45);
+      position:relative;
+      overflow:hidden;
+    }
+    .card-soft{
+      background:linear-gradient(135deg,rgba(24,167,255,0.08),rgba(24,167,255,0.02));
+      border-color:rgba(24,167,255,0.25);
+    }
+    .card-header{
+      display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;
+    }
+    .card-title{font-size:15px;font-weight:600}
+    .card-sub{font-size:13px;color:var(--muted);margin-top:2px}
+    .pill{
+      padding:3px 9px;border-radius:999px;font-size:11px;
+      background:rgba(15,118,255,.16);color:#cce4ff;border:1px solid rgba(37,99,235,.5);
+    }
+
+    .kpi-row{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}
+    .kpi{
+      flex:1;min-width:130px;
+      padding:10px 10px 9px;border-radius:12px;
+      background:rgba(3,15,40,.9);
+      border:1px solid rgba(255,255,255,0.04);
+    }
+    .kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px}
+    .kpi-value{font-size:20px;font-weight:700;margin-top:4px}
+    .kpi-change{font-size:12px;margin-top:2px}
+    .kpi-change.positive{color:var(--success)}
+    .kpi-change.negative{color:var(--danger)}
+
+    .progress-bar-track{
+      width:100%;height:7px;border-radius:999px;
+      background:rgba(15,23,42,0.9);overflow:hidden;margin-top:8px;
+    }
+    .progress-bar-fill{
+      height:100%;border-radius:999px;
+      background:linear-gradient(90deg,#22c55e,#4ade80);
+      width:75%;
+    }
+
+    .avatar-stack{
+      display:flex;align-items:center;gap:0;
+      margin-top:10px;
+    }
+    .avatar-stack img{
+      width:26px;height:26px;border-radius:999px;border:2px solid #0b1726;
+      object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,.5);
+      margin-right:-8px;
+    }
+    .avatar-stack span{
+      font-size:11px;color:var(--muted);margin-left:8px;
+    }
+
+    .chip-date{
+      width:60px;height:60px;border-radius:999px;
+      background:radial-gradient(circle at 30% 20%,#4bf7ff,#2563eb);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      font-weight:700;color:#eff6ff;font-size:14px;
+    }
+    .chip-date small{font-size:10px;font-weight:500;opacity:.85}
+
+    .btn-green{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:9px 14px;border-radius:999px;
+      background:var(--success);color:#f9fdfb;font-size:13px;font-weight:600;
+      border:0;text-decoration:none;cursor:pointer;
+      box-shadow:0 0 16px rgba(34,197,94,.6);
+      margin-top:16px;
+    }
+    .btn-green i{font-size:14px}
+
+    .mini-tag{font-size:11px;padding:3px 7px;border-radius:999px;background:rgba(15,118,255,0.16);color:#bfdbfe}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;margin:6px 0;font-size:13px;color:var(--muted);}
+    .stat-row strong{color:var(--text);}
+
+    .bar-chart{
+      margin-top:14px;display:flex;align-items:flex-end;gap:8px;height:120px;
+    }
+    .bar{
+      flex:1;border-radius:6px 6px 0 0;
+      background:linear-gradient(180deg,#38bdf8,#0ea5e9);
+      position:relative;
+    }
+    .bar:nth-child(2){height:70%;opacity:.85}
+    .bar:nth-child(3){height:90%;}
+    .bar:nth-child(4){height:55%;opacity:.8}
+    .bar:nth-child(5){height:65%;}
+    .bar:nth-child(6){height:40%;opacity:.7}
+    .bar-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--muted);}
+
+    .activity-item{font-size:13px;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;gap:8px}
+    .activity-item span:first-child{color:var(--text);}
+
+    .pill-small{
+      padding:2px 7px;border-radius:999px;font-size:10px;
+      background:rgba(15,23,42,.9);color:var(--muted);
+    }
+
+    @media (max-width:920px){
+      .sidebar{transform:translateX(-110%);position:fixed}
+      .sidebar.open{transform:translateX(0)}
+      .main{margin-left:0;padding:12px}
+      .right-actions .cart-btn,
+      .right-actions .notify-btn,
+      .right-actions .apps-btn{display:none}
+      .right-actions{gap:8px}
+    }
+
+    .icon-btn:focus, .menu-item:focus, .dropdown-btn:focus{outline:2px solid rgba(28,121,210,.18);outline-offset:2px}
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <header class="topbar" role="banner">
+    <div class="left-area">
+      <button class="icon-btn" id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar"><i class="fa-solid fa-bars"></i></button>
+      <a href="landing.html" class="spa-link" style="text-decoration:none; display:flex;align-items:center;gap:8px">
+         <div class="logo">A</div>
+         <div class="brand-title">analyst44</div>
+      </a>
+    </div>
+
+    <div class="spacer"></div>
+
+<!--    <div class="right-actions" role="navigation" aria-label="Top actions">-->
+<!--      &lt;!&ndash; education CTA &ndash;&gt;-->
+<!--      <a href="education/index.html" class="top-cta-edu spa-link">-->
+<!--        <i class="fa-solid fa-play"></i>-->
+<!--        <span>Open education hub</span>-->
+<!--      </a>-->
+
+      <div class="dropdown" style="position:relative">
+        <button class="icon-btn" id="themeToggle" title="Theme" aria-haspopup="true" aria-expanded="false"><i class="fa-regular fa-moon"></i></button>
+        <div class="theme-panel" id="themePanel" role="menu" aria-hidden="true">
+          <div class="menu-title">Theme</div>
+          <div class="theme-row" data-theme="light" role="menuitem" tabindex="0"><span style="width:26px;text-align:center"><i class="fa-solid fa-sun"></i></span><div>Light</div><div class="check" aria-hidden="true" style="display:none">✓</div></div>
+          <div class="theme-row" data-theme="dark" role="menuitem" tabindex="0"><span style="width:26px;text-align:center"><i class="fa-regular fa-moon"></i></span><div>Dark</div><div class="check" aria-hidden="true" style="display:none">✓</div></div>
+          <div class="theme-row" data-theme="auto" role="menuitem" tabindex="0"><span style="width:26px;text-align:center"><i class="fa-regular fa-circle-half-stroke"></i></span><div>Auto</div><div class="check" aria-hidden="true" style="display:none">✓</div></div>
+        </div>
+      </div>
+
+      <!-- cart -->
+      <a class="icon-btn cart-btn" href="purchase.html" title="Cart" aria-label="Cart"><i class="fa-solid fa-cart-shopping"></i></a>
+
+      <!-- notifications -->
+      <a class="icon-btn notify-btn" href="notifications.html" title="Notifications" aria-label="Notifications"><i class="fa-regular fa-bell"></i></a>
+
+      <!-- apps -->
+      <a class="icon-btn apps-btn" href="apps.html" title="Apps" aria-label="Apps"><i class="fa-solid fa-grid"></i></a>
+
+      <div class="dropdown" id="userDropdown">
+        <div class="avatar" id="avatarBtn" aria-haspopup="true" aria-expanded="false" title="User"></div>
+        <div class="menu-panel" id="userMenu" role="menu" aria-hidden="true">
+          <div class="menu-title">Account</div>
+          <a class="menu-item" href="purchase.html"><span class="icon-small"><i class="fa-solid fa-crown"></i></span><span>Upgrade to Pro</span></a>
+          <a class="menu-item" href="profile.html"><span class="icon-small"><i class="fa-regular fa-user"></i></span><span>Profile</span></a>
+          <a class="menu-item" href="feedback.html"><span class="icon-small"><i class="fa-regular fa-comment-dots"></i></span><span>Feedback</span></a>
+          <a class="menu-item" href="settings.html"><span class="icon-small"><i class="fa-solid fa-gear"></i></span><span>Settings</span></a>
+          <a class="menu-item" href="logout.html" id="logoutBtn"><span class="icon-small"><i class="fa-solid fa-right-from-bracket"></i></span><span>Logout</span></a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+      <div class="section-title">Main</div>
+      <nav class="nav-list" aria-label="Main nav">
+        <a class="nav-item active spa-link" href="dashboard.html"><span class="icon"><i class="fa-solid fa-house"></i></span><span class="label">Dashboard</span></a>
+
+        <button class="dropdown-btn" aria-expanded="false">
+          <span class="icon"><i class="fa-solid fa-bolt"></i></span><span class="label">Realtime</span><i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+        </button>
+        <div class="dropdown-container">
+          <a class="dropdown-link spa-link" href="realtime_live.html">Live Feed</a>
+          <a class="dropdown-link spa-link" href="realtime_scores.html">Scores</a>
+          <a class="dropdown-link spa-link" href="realtime_alerts.html">Alerts</a>
+        </div>
+
+        <a class="nav-item spa-link" href="watchlists.html"><span class="icon"><i class="fa-regular fa-star"></i></span><span class="label">Watchlists</span></a>
+        <a class="nav-item spa-link" href="universe.html"><span class="icon"><i class="fa-solid fa-layer-group"></i></span><span class="label">Universe</span></a>
+      </nav>
+
+      <div class="divider"></div>
+
+      <div class="section-title">Analysis</div>
+      <nav class="nav-list" aria-label="Analysis">
+        <a class="nav-item spa-link" href="income.html"><span class="icon"><i class="fa-regular fa-file-lines"></i></span><span class="label">Income Statement</span></a>
+        <a class="nav-item spa-link" href="balance.html"><span class="icon"><i class="fa-solid fa-balance-scale"></i></span><span class="label">Balance Sheet</span></a>
+        <a class="nav-item spa-link" href="cashflow.html"><span class="icon"><i class="fa-solid fa-droplet"></i></span><span class="label">Cash Flow</span></a>
+        <a class="nav-item spa-link" href="consensus.html"><span class="icon"><i class="fa-solid fa-people-roof"></i></span><span class="label">Consensus</span></a>
+        <a class="nav-item spa-link" href="calendar.html"><span class="icon"><i class="fa-solid fa-calendar-days"></i></span><span class="label">Earnings Calendar</span></a>
+      </nav>
+
+      <div class="divider"></div>
+
+      <div class="section-title">Reports</div>
+      <nav class="nav-list" aria-label="Reports">
+        <a class="nav-item spa-link" href="reports_latest.html"><span class="icon"><i class="fa-solid fa-file-lines"></i></span><span class="label">Latest Reports</span></a>
+        <a class="nav-item spa-link" href="reports_archive.html"><span class="icon"><i class="fa-solid fa-clock-rotate-left"></i></span><span class="label">Archive</span></a>
+        <a class="nav-item spa-link" href="reports_compare.html"><span class="icon"><i class="fa-solid fa-scale-balanced"></i></span><span class="label">Peer Comparison</span></a>
+      </nav>
+
+      <div class="divider"></div>
+
+      <div class="section-title">Tools</div>
+      <nav class="nav-list" aria-label="Tools">
+        <a class="nav-item spa-link" href="screener.html"><span class="icon"><i class="fa-solid fa-magnifying-glass-chart"></i></span><span class="label">Screener</span></a>
+        <a class="nav-item spa-link" href="backtest.html"><span class="icon"><i class="fa-solid fa-play-circle"></i></span><span class="label">Backtest</span></a>
+        <a class="nav-item spa-link" href="alerts.html"><span class="icon"><i class="fa-regular fa-bell"></i></span><span class="label">Alerts</span></a>
+        <a class="nav-item spa-link" href="export.html"><span class="icon"><i class="fa-solid fa-file-export"></i></span><span class="label">Export</span></a>
+      </nav>
+
+      <div class="divider"></div>
+
+      <div class="section-title">Pages</div>
+      <nav class="nav-list" aria-label="Pages">
+        <a class="nav-item spa-link" href="help.html"><span class="icon"><i class="fa-regular fa-circle-question"></i></span><span class="label">Help</span></a>
+        <a class="nav-item spa-link" href="education/index.html"><span class="icon"><i class="fa-solid fa-graduation-cap"></i></span><span class="label">Education</span></a>
+        <a class="nav-item spa-link" href="privacy.html"><span class="icon"><i class="fa-solid fa-user-secret"></i></span><span class="label">Privacy Policy</span></a>
+        <a class="nav-item spa-link" href="terms.html"><span class="icon"><i class="fa-solid fa-file-contract"></i></span><span class="label">Terms & Conditions</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="promo" id="promoCard" role="region" aria-label="Promo">
+          <div class="close-btn" id="promoClose" title="Close"><i class="fa-solid fa-xmark"></i></div>
+          <div class="art"><i class="fa-solid fa-bolt-lightning" style="color:white;font-size:26px;"></i></div>
+          <h4>Your realtime edge</h4>
+          <p>Connect earnings, scores and watchlists into one live.</p>
+          <div class="cta">
+            <a href="purchase.html" class="spa-link">
+              <i class="fa-solid fa-rocket"></i>
+              <span>Upgrade to Pro</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main" id="main" role="main">
+      <div id="page" class="content-wide" aria-live="polite">
+
+        <!-- TOP GRID -->
+        <section class="dash-grid-top">
+          <!-- welcome / quick links -->
+          <div class="card card-soft">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Welcome to Analyst44</div>
+                <div class="card-sub">Your realtime cockpit for earnings and financial statement scores.</div>
+              </div>
+              <span class="pill">Today’s earnings</span>
+            </div>
+
+            <div class="kpi-row">
+              <div class="kpi">
+                <div class="kpi-label">Companies reporting today</div>
+                <div class="kpi-value">32</div>
+                <div class="kpi-change positive">+5 vs last session</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">Avg report score</div>
+                <div class="kpi-value">74 / 100</div>
+                <div class="kpi-change">Neutral overall</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">High-quality beats</div>
+                <div class="kpi-value" style="color:var(--success)">11</div>
+                <div class="kpi-change positive">Score ≥ 80</div>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:14px;margin-top:14px;flex-wrap:wrap;">
+              <div style="flex:1;min-width:140px;font-size:13px;color:var(--muted)">
+                <div style="margin-bottom:6px;"><span class="mini-tag">Quick start</span></div>
+                <ul style="margin:0 0 0 16px;padding:0;line-height:1.6">
+                  <li>Open <strong>Income Statement</strong> view for today’s reporters.</li>
+                  <li>Sort by score to find strong/weak releases.</li>
+                  <li>Save your ideas into a <strong>Watchlist</strong>.</li>
+                </ul>
+              </div>
+              <div style="flex:1;min-width:160px;font-size:13px;color:var(--muted);display:flex;flex-direction:column;justify-content:space-between;">
+                <div>
+                  <div style="margin-bottom:4px;">Active users this session</div>
+                  <div class="avatar-stack">
+                    <img src="https://i.pravatar.cc/100?img=12" alt="">
+                    <img src="https://i.pravatar.cc/100?img=33" alt="">
+                    <img src="https://i.pravatar.cc/100?img=18" alt="">
+                    <img src="https://i.pravatar.cc/100?img=45" alt="">
+                    <span>+ 42 in your workspace</span>
+                  </div>
+                </div>
+                <div style="margin-top:10px;">
+                  <a href="realtime_live.html" class="btn-green spa-link">
+                    <i class="fa-solid fa-signal"></i>
+                    <span>Go to realtime view</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- team / coverage progress -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Coverage progress</div>
+                <div class="card-sub">Tracked universe &amp; scoring status for this season.</div>
+              </div>
+              <span class="mini-tag">Universe</span>
+            </div>
+            <div class="stat-row">
+              <span>Universe size</span>
+              <strong>8,619 symbols</strong>
+            </div>
+            <div class="stat-row">
+              <span>Statements with score</span>
+              <strong>5,430 (63%)</strong>
+            </div>
+            <div class="stat-row">
+              <span>Alerts configured</span>
+              <strong>94</strong>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px;">
+              <span>Scored</span><span>Target 80% by season end</span>
+            </div>
+          </div>
+
+          <!-- upcoming schedule / education -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Upcoming earnings window</div>
+                <div class="card-sub">Get prepared before numbers hit the tape.</div>
+              </div>
+              <div class="chip-date">
+                <div>14</div>
+                <small>Nov</small>
+              </div>
+            </div>
+            <p class="card-sub" style="margin-top:6px;">
+              Review the methodology behind Analyst44 scores and learn how to trade around
+              earnings with confidence.
+            </p>
+            <a href="education/index.html" class="btn-green spa-link">
+              <i class="fa-solid fa-circle-play"></i>
+              <span>Start education session</span>
+            </a>
+
+            <div class="avatar-stack" style="margin-top:14px;">
+              <img src="https://i.pravatar.cc/100?img=31" alt="">
+              <img src="https://i.pravatar.cc/100?img=15" alt="">
+              <img src="https://i.pravatar.cc/100?img=7" alt="">
+              <span>Latest class rating: 4.9/5</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- MIDDLE GRID -->
+        <section class="dash-grid-mid">
+          <!-- pseudo chart / weekly view -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Report scores this week</div>
+                <div class="card-sub">Distribution of scores for the last 7 calendar days.</div>
+              </div>
+              <span class="pill-small">Live sync</span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
+              <div style="flex:1;min-width:220px;">
+                <div class="bar-chart">
+                  <div class="bar" style="height:60%;"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar" style="height:45%;"></div>
+                  <div class="bar" style="height:80%;"></div>
+                </div>
+                <div class="bar-labels">
+                  <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                </div>
+              </div>
+              <div style="flex:1;min-width:200px;font-size:13px;color:var(--muted);">
+                <div class="stat-row">
+                  <span>High quality (≥ 80)</span>
+                  <strong>38%</strong>
+                </div>
+                <div class="stat-row">
+                  <span>In line (60–79)</span>
+                  <strong>44%</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Weak (&lt; 60)</span>
+                  <strong style="color:var(--danger)">18%</strong>
+                </div>
+                <p style="margin-top:10px;">
+                  Use the <strong>Scores</strong> view under Realtime to drill into each bucket and
+                  create trade ideas or risk-off filters.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- recent activity -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Recent activity</div>
+                <div class="card-sub">Last actions across your workspace.</div>
+              </div>
+              <span class="mini-tag">Today</span>
+            </div>
+            <div class="activity-item">
+              <span>New alert: <strong>Score &lt; 40 on SPX universe</strong></span>
+              <span class="pill-small">08:21</span>
+            </div>
+            <div class="activity-item">
+              <span>Watchlist <strong>“Tech – Earnings Week 3”</strong> updated (12 symbols).</span>
+              <span class="pill-small">08:03</span>
+            </div>
+            <div class="activity-item">
+              <span>Income dashboard refreshed from Supabase.</span>
+              <span class="pill-small">07:56</span>
+            </div>
+            <div class="activity-item">
+              <span>User <strong>Rotem</strong> viewed <strong>Income Statement</strong> page.</span>
+              <span class="pill-small">07:44</span>
+            </div>
+            <div class="activity-item">
+              <span>Backtest <strong>“Score &gt; 80 + volume spike”</strong> saved.</span>
+              <span class="pill-small">Yesterday</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- BOTTOM GRID -->
+        <section class="dash-grid-bottom">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Next steps</div>
+                <div class="card-sub">Where do you want to go now?</div>
+              </div>
+            </div>
+            <ul style="margin:4px 0 0 16px;color:var(--muted);font-size:13px;line-height:1.6">
+              <li><a href="income.html" class="spa-link" style="color:var(--accent);text-decoration:none;">Open today’s income statements view</a></li>
+              <li><a href="calendar.html" class="spa-link" style="color:var(--accent);text-decoration:none;">Check upcoming earnings in the calendar</a></li>
+              <li><a href="reports_latest.html" class="spa-link" style="color:var(--accent);text-decoration:none;">Browse latest scored reports</a></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Risk dashboard</div>
+                <div class="card-sub">Keep an eye on concentration and exposure.</div>
+              </div>
+            </div>
+            <div class="stat-row">
+              <span>Top 10 positions exposure</span>
+              <strong>56%</strong>
+            </div>
+            <div class="stat-row">
+              <span>Single sector weight</span>
+              <strong style="color:var(--warning)">28% Tech</strong>
+            </div>
+            <div class="stat-row">
+              <span>Alerts vs breaches</span>
+              <strong>7 / 0</strong>
+            </div>
+            <p class="card-sub" style="margin-top:10px;">
+              Combine Analyst44 scores with your portfolio data (via Export / API) to monitor
+              “high risk + weak score” clusters.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Education progress</div>
+                <div class="card-sub">Track how much of the curriculum your team completed.</div>
+              </div>
+            </div>
+            <div class="stat-row">
+              <span>Core earnings module</span>
+              <strong>75% complete</strong>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" style="width:75%;background:linear-gradient(90deg,#22c55e,#a3e635);"></div>
+            </div>
+            <div class="stat-row" style="margin-top:10px;">
+              <span>Advanced scoring techniques</span>
+              <strong>3 of 8 lessons</strong>
+            </div>
+            <a href="education/index.html" class="top-cta-edu spa-link" style="margin-top:12px;">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <span>Continue learning</span>
+            </a>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    (function(){
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const main = document.getElementById('main');
+      const promoClose = document.getElementById('promoClose');
+      const promoCard = document.getElementById('promoCard');
+      const mq = window.matchMedia('(max-width:920px)');
+
+      // sidebar toggle
+      sidebarToggle.addEventListener('click', ()=>{
+        if(mq.matches){
+          sidebar.classList.toggle('open');
+        } else {
+          sidebar.classList.toggle('collapsed');
+          main.classList.toggle('narrow');
+        }
+      });
+
+      // sidebar dropdowns
+      document.querySelectorAll(".dropdown-btn").forEach(btn=>{
+        btn.addEventListener("click",()=>{
+          const open = btn.classList.toggle("open");
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          const arrow = btn.querySelector('.dropdown-arrow');
+          arrow.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+          const panel = btn.nextElementSibling;
+          panel.style.display = open ? 'flex' : 'none';
+        });
+      });
+
+      // promo close
+      promoClose && promoClose.addEventListener('click', ()=>{ promoCard.style.display = 'none'; });
+
+      // USER MENU
+      const avatarBtn = document.getElementById('avatarBtn');
+      const userMenu = document.getElementById('userMenu');
+      avatarBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const open = userMenu.classList.toggle('show');
+        avatarBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+
+      // THEME PANEL
+      const themeToggle = document.getElementById('themeToggle');
+      const themePanel = document.getElementById('themePanel');
+
+      themeToggle.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const open = themePanel.classList.toggle('show');
+        themeToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        updateThemeChecks();
+      });
+
+      document.addEventListener('click', (e)=>{
+        if(!userMenu.contains(e.target) && !avatarBtn.contains(e.target)) userMenu.classList.remove('show');
+        if(!themePanel.contains(e.target) && !themeToggle.contains(e.target)) themePanel.classList.remove('show');
+        if(mq.matches && sidebar.classList.contains('open')){
+          const inside = sidebar.contains(e.target) || sidebarToggle.contains(e.target);
+          if(!inside) sidebar.classList.remove('open');
+        }
+      });
+
+      document.addEventListener('keydown', (e)=>{
+        if(e.key==='Escape'){ userMenu.classList.remove('show'); themePanel.classList.remove('show'); sidebar.classList.remove('open'); }
+      });
+
+      // THEME MANAGEMENT
+      const themeRows = Array.from(document.querySelectorAll('.theme-row'));
+      const THEME_KEY = 'falcon_theme_choice';
+      function applyTheme(choice){
+        document.body.classList.remove('light-theme');
+        document.documentElement.classList.remove('auto-theme');
+        if(choice === 'light'){ document.body.classList.add('light-theme'); }
+        else if(choice === 'dark'){ /* default dark */ }
+        else if(choice === 'auto'){ document.documentElement.classList.add('auto-theme'); }
+        try{ localStorage.setItem(THEME_KEY, choice); } catch(e){}
+        updateThemeChecks();
+      }
+      function initTheme(){
+        let saved = null;
+        try{ saved = localStorage.getItem(THEME_KEY); } catch(e){}
+        if(!saved) saved = 'dark';
+        applyTheme(saved);
+      }
+      function updateThemeChecks(){
+        const current = localStorage.getItem(THEME_KEY) || 'dark';
+        themeRows.forEach(r=>{
+          const ch = r.querySelector('.check');
+          if(r.dataset.theme === current) ch.style.display = 'block'; else ch.style.display = 'none';
+        });
+      }
+      themeRows.forEach(r=>{
+        r.addEventListener('click', (e)=>{ const choice = r.dataset.theme; applyTheme(choice); themePanel.classList.remove('show'); });
+        r.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { r.click(); } });
+      });
+
+      // logout
+      const logoutBtn = document.getElementById('logoutBtn');
+      logoutBtn && logoutBtn.addEventListener('click', (e)=>{ /* handle auth here if needed */ });
+
+      initTheme();
+      updateThemeChecks();
+      window.addEventListener('resize', ()=>{ if(!mq.matches) sidebar.classList.remove('open'); });
+
+      /* SPA loader */
+      document.addEventListener('click', async (ev)=>{
+        const a = ev.target.closest('a.spa-link');
+        if(!a) return;
+        if(a.target === '_blank' || a.href.startsWith('http')) return;
+        ev.preventDefault();
+        const url = a.getAttribute('href');
+        try{
+          const res = await fetch(url, {cache: 'no-store'});
+          if(!res.ok){ window.location.href = url; return; }
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const page = doc.getElementById('page') || doc.querySelector('main') || doc.body;
+          if(page) main.innerHTML = page.innerHTML; else main.innerHTML = html;
+          history.pushState({spa:true, url}, '', url);
+          if(typeof window.onPageLoaded === 'function') window.onPageLoaded(url);
+        }catch(err){ console.error('SPA load failed', err); window.location.href = url; }
+      });
+
+      window.addEventListener('popstate', async (ev)=>{
+        if(ev.state && ev.state.url){
+          try{
+            const res = await fetch(ev.state.url);
+            const html = await res.text();
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const page = doc.getElementById('page') || doc.querySelector('main') || doc.body;
+            document.querySelector('main').innerHTML = (page && page.innerHTML) || html;
+          }catch(e){ location.reload(); }
+        } else { location.reload(); }
+      });
+    })();
+  </script>
+</body>
+</html>
