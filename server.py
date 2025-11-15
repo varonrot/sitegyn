@@ -1,6 +1,7 @@
 import os
 import json
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from supabase import create_client, Client
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -38,7 +39,8 @@ with open(SYSTEM_PROMPT_PATH, "r", encoding="utf-8") as f:
 # Flask app
 # ==========================
 app = Flask(__name__)
-
+# הרשה בקשות מ-frontend (אפשר להתחיל מ-* ואז להקשיח)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # ==========================
 # Helpers
