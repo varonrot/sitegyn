@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Analyst44 — Realtime earnings scoring</title>
+  <title>Sitegyn — AI website builder</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png">
   <style>
     :root{
       --bg-main:#050713;
@@ -56,110 +57,110 @@
       gap:10px;
     }
     .nav-brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
 
-.nav-toggle{
-  display:none;
-  width:32px;
-  height:32px;
-  margin-right:8px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.35);
-  background:rgba(8,11,24,0.95);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-}
+    .nav-toggle{
+      display:none;
+      width:32px;
+      height:32px;
+      margin-right:8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.35);
+      background:rgba(8,11,24,0.95);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
 
-.nav-toggle span{
-  display:block;
-  width:16px;
-  height:2px;
-  border-radius:999px;
-  background:#f9fbff;
-  position:relative;
-}
+    .nav-toggle span{
+      display:block;
+      width:16px;
+      height:2px;
+      border-radius:999px;
+      background:#f9fbff;
+      position:relative;
+    }
 
-.nav-toggle span::before,
-.nav-toggle span::after{
-  content:"";
-  position:absolute;
-  left:0;
-  width:16px;
-  height:2px;
-  border-radius:999px;
-  background:#f9fbff;
-}
+    .nav-toggle span::before,
+    .nav-toggle span::after{
+      content:"";
+      position:absolute;
+      left:0;
+      width:16px;
+      height:2px;
+      border-radius:999px;
+      background:#f9fbff;
+    }
 
-.nav-toggle span::before{ top:-5px; }
-.nav-toggle span::after{ top:5px; }
+    .nav-toggle span::before{ top:-5px; }
+    .nav-toggle span::after{ top:5px; }
 
-.nav-toggle.is-open span{
-  background:transparent;
-}
+    .nav-toggle.is-open span{
+      background:transparent;
+    }
 
-.nav-toggle.is-open span::before{
-  top:0;
-  transform:rotate(45deg);
-}
+    .nav-toggle.is-open span::before{
+      top:0;
+      transform:rotate(45deg);
+    }
 
-.nav-toggle.is-open span::after{
-  top:0;
-  transform:rotate(-45deg);
-}
+    .nav-toggle.is-open span::after{
+      top:0;
+      transform:rotate(-45deg);
+    }
 
-/* פאנל מובייל */
-.nav-mobile{
-  position:fixed;
-  top:64px;
-  left:0;
-  right:0;
-  background:rgba(5,7,19,0.98);
-  backdrop-filter:blur(20px);
-  transform:translateY(-100%);
-  opacity:0;
-  pointer-events:none;
-  transition:transform .25s ease, opacity .25s ease;
-  z-index:40;
-}
+    /* פאנל מובייל */
+    .nav-mobile{
+      position:fixed;
+      top:64px;
+      left:0;
+      right:0;
+      background:rgba(5,7,19,0.98);
+      backdrop-filter:blur(20px);
+      transform:translateY(-100%);
+      opacity:0;
+      pointer-events:none;
+      transition:transform .25s ease, opacity .25s ease;
+      z-index:40;
+    }
 
-.nav-mobile.open{
-  transform:translateY(0);
-  opacity:1;
-  pointer-events:auto;
-}
+    .nav-mobile.open{
+      transform:translateY(0);
+      opacity:1;
+      pointer-events:auto;
+    }
 
-.nav-mobile-inner{
-  padding:18px 24px 32px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-}
+    .nav-mobile-inner{
+      padding:18px 24px 32px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
 
-.nav-mobile-link{
-  font-size:16px;
-  color:#f4f5ff;
-  text-align:left;
-  background:transparent;
-  border:none;
-  padding:6px 0;
-  cursor:pointer;
-}
+    .nav-mobile-link{
+      font-size:16px;
+      color:#f4f5ff;
+      text-align:left;
+      background:transparent;
+      border:none;
+      padding:6px 0;
+      cursor:pointer;
+    }
 
-.nav-mobile-link.secondary{
-  font-size:14px;
-  color:var(--muted);
-}
+    .nav-mobile-link.secondary{
+      font-size:14px;
+      color:var(--muted);
+    }
 
-.nav-mobile-divider{
-  height:1px;
-  background:rgba(255,255,255,0.06);
-  margin:10px 0;
-}
+    .nav-mobile-divider{
+      height:1px;
+      background:rgba(255,255,255,0.06);
+      margin:10px 0;
+    }
 
     .logo-circle{
       width:34px;height:34px;
@@ -816,50 +817,48 @@
     }
 
     @media (max-width:720px){
-  .nav{
-    padding:0 16px;
-  }
+      .nav{
+        padding:0 16px;
+      }
 
-  /* להסתיר תפריט עליון רגיל במוביל */
-  .nav-links{
-    display:none;
-  }
+      /* להסתיר תפריט עליון רגיל במוביל */
+      .nav-links{
+        display:none;
+      }
 
-  /* להציג המבורגר בצד שמאל */
-  .nav-toggle{
-    display:flex;
-  }
+      /* להציג המבורגר בצד שמאל */
+      .nav-toggle{
+        display:flex;
+      }
 
-  /* להסתיר Help במוביל */
-  .btn-outline{
-    display:none;
-  }
+      /* להסתיר Help במוביל */
+      .btn-outline{
+        display:none;
+      }
 
-  /* Dashboard הירוק נשאר כמו שהוא */
+      .hero-inner{
+        padding:0 18px;
+      }
+      .section,.pricing-section,.cta-band{
+        padding:0 18px 60px;
+      }
+      .feature-grid{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .footer-grid{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-banner{
+        padding:70px 18px;
+      }
+    }
 
-  .hero-inner{
-    padding:0 18px;
-  }
-  .section,.pricing-section,.cta-band{
-    padding:0 18px 60px;
-  }
-  .feature-grid{
-    grid-template-columns:minmax(0,1fr);
-  }
-  .footer-grid{
-    grid-template-columns:minmax(0,1fr);
-  }
-  .cta-banner{
-    padding:70px 18px;
-  }
-}
-
-/* במחשב – לא צריך את פאנל המובייל */
-@media (min-width:721px){
-  .nav-mobile{
-    display:none;
-  }
-}
+    /* במחשב – לא צריך את פאנל המובייל */
+    @media (min-width:721px){
+      .nav-mobile{
+        display:none;
+      }
+    }
 
   </style>
 </head>
@@ -867,55 +866,54 @@
 <div class="page-wrap">
 
   <!-- TOP NAV -->
- <header class="nav">
-  <div class="nav-left">
-    <!-- המבורגר בצד שמאל -->
-    <button class="nav-toggle" type="button" aria-label="Toggle navigation">
-      <span></span>
-    </button>
+  <header class="nav">
+    <div class="nav-left">
+      <!-- המבורגר בצד שמאל -->
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation">
+        <span></span>
+      </button>
 
-    <!-- לוגו + לינק ל-landing -->
-    <a href="landing.html" class="nav-brand">
-      <div class="logo-circle">A</div>
-      <div class="logo-text">analyst<span>44</span></div>
-    </a>
+      <!-- לוגו + לינק ל-landing -->
+      <a href="landing.html" class="nav-brand">
+        <div class="logo-circle">A</div>
+        <div class="logo-text">sitegyn<span>.com</span></div>
+      </a>
+    </div>
+
+    <nav class="nav-links">
+      <a href="landing.html#product">Product</a>
+      <a href="features.html">Features</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="landing.html#education">Education</a>
+    </nav>
+
+    <div class="nav-right">
+      <button class="btn-outline" onclick="location.href='help.html'">
+        <span class="icon">?</span>
+        <span>Help</span>
+      </button>
+      <button class="btn-primary" onclick="location.href='dashboard.html'">
+        Dashboard →
+      </button>
+    </div>
+  </header>
+
+  <!-- תפריט מובייל -->
+  <div class="nav-mobile" id="navMobile">
+    <div class="nav-mobile-inner">
+      <button class="nav-mobile-link" onclick="location.href='landing.html#product'">Product</button>
+      <button class="nav-mobile-link" onclick="location.href='features.html'">Features</button>
+      <button class="nav-mobile-link" onclick="location.href='pricing.html'">Pricing</button>
+      <button class="nav-mobile-link" onclick="location.href='about.html'">About</button>
+      <button class="nav-mobile-link" onclick="location.href='landing.html#education'">Education</button>
+
+      <div class="nav-mobile-divider"></div>
+
+      <button class="nav-mobile-link secondary" onclick="location.href='help.html'">Help center</button>
+      <button class="nav-mobile-link" onclick="location.href='dashboard.html'">Open dashboard →</button>
+    </div>
   </div>
-
-  <nav class="nav-links">
-    <a href="landing.html#product">Product</a>
-    <a href="features.html">Features</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="about.html">About</a>
-    <a href="landing.html#education">Education</a>
-  </nav>
-
-  <div class="nav-right">
-    <button class="btn-outline" onclick="location.href='help.html'">
-      <span class="icon">?</span>
-      <span>Help</span>
-    </button>
-    <button class="btn-primary" onclick="location.href='dashboard.html'">
-      Dashboard →
-    </button>
-  </div>
-</header>
-
-<!-- תפריט מובייל -->
-<div class="nav-mobile" id="navMobile">
-  <div class="nav-mobile-inner">
-    <button class="nav-mobile-link" onclick="location.href='landing.html#product'">Product</button>
-    <button class="nav-mobile-link" onclick="location.href='features.html'">Features</button>
-    <button class="nav-mobile-link" onclick="location.href='pricing.html'">Pricing</button>
-    <button class="nav-mobile-link" onclick="location.href='about.html'">About</button>
-    <button class="nav-mobile-link" onclick="location.href='landing.html#education'">Education</button>
-
-    <div class="nav-mobile-divider"></div>
-
-    <button class="nav-mobile-link secondary" onclick="location.href='help.html'">Help center</button>
-    <button class="nav-mobile-link" onclick="location.href='dashboard.html'">Open dashboard →</button>
-  </div>
-</div>
-
 
   <div class="mobile-menu">
     <a href="#product" onclick="document.body.classList.remove('nav-open');">Product</a>
@@ -933,24 +931,24 @@
       <div class="hero-inner">
         <div class="hero-copy">
           <div class="hero-pill">
-            <span class="tag">Realtime</span>
-            <span>Earnings &amp; financial statement intelligence</span>
+            <span class="tag">AI websites</span>
+            <span>From idea to live site in under a minute</span>
           </div>
           <h1 class="hero-title">
-            Bring <span id="typed"></span><br>clarity to your workflow.
+            Create <span id="typed"></span><br>without touching a line of code.
           </h1>
           <p class="hero-sub">
-            Analyst44 watches the earnings tape in realtime, scores every report from 0–100,
-            and surfaces the strongest and weakest releases before the market reacts.
+            Sitegyn turns a short chat into a complete website – sections, copy and layout
+            tailored to your business. No templates, no drag-and-drop builders, just answer a few questions.
           </p>
 
           <div class="hero-actions">
-            <button class="btn-primary" onclick="location.href='dashboard.html'">
-              Go to realtime view
+            <button class="btn-primary" onclick="initProject();">
+              Create your AI website
             </button>
             <button class="btn-ghost" onclick="location.href='#education'">
               <span class="icon">▶</span>
-              <span>Watch methodology</span>
+              <span>See how it works</span>
             </button>
           </div>
 
@@ -961,29 +959,29 @@
             <img src="https://i.pravatar.cc/60?img=5" alt="">
           </div>
           <div class="hero-meta">
-            42 analysts active · Avg class rating 4.9/5
+            Early creators already building AI-made sites with Sitegyn
           </div>
         </div>
 
         <div class="hero-media">
           <div class="hero-card">
             <div class="hero-card-inner">
-              <img src="analyst44-dashboard.png" alt="Analyst44 realtime earnings dashboard screenshot">
+              <img src="analyst44-dashboard.png" alt="Sitegyn AI website builder preview">
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- WHY ANALYST44 -->
+    <!-- WHY SITEGYN -->
     <section class="section" id="features">
       <div class="section-inner">
         <div class="section-header">
-          <div class="section-kicker">WHY ANALYST44</div>
-          <h2 class="section-title">Built for realtime earnings research.</h2>
+          <div class="section-kicker">WHY SITEGYN</div>
+          <h2 class="section-title">Built for people who hate building websites.</h2>
           <p class="section-sub">
-            Move from noisy headlines to structured insights with our scoring engine
-            and statement parsing pipeline.
+            Describe your business once, let the AI handle structure, copy and design.
+            You edit the result instead of staring at a blank page or wrestling with templates.
           </p>
         </div>
 
@@ -991,40 +989,43 @@
           <article class="feature-card">
             <div>
               <div class="feature-icon">⚡</div>
-              <h3 class="feature-title">Realtime scoring</h3>
+              <h3 class="feature-title">From chat to full layout</h3>
               <p class="feature-text">
-                Every earnings release analyzed instantly from 0–100 the moment it hits the tape.
+                Answer a few guided questions and Sitegyn generates a complete multi-section layout
+                that matches your goals – hero, services, testimonials and more.
               </p>
             </div>
           </article>
 
           <article class="feature-card">
             <div>
-              <div class="feature-icon">📡</div>
-              <h3 class="feature-title">Signal detection</h3>
+              <div class="feature-icon">✍️</div>
+              <h3 class="feature-title">AI copy that sounds like you</h3>
               <p class="feature-text">
-                Spot strong beats, soft prints and red flags without reading a 60-page release.
+                Tone, audience and language tuned to your answers, so every section feels on-brand
+                and explains what you do in clear English.
               </p>
             </div>
           </article>
 
           <article class="feature-card">
             <div>
-              <div class="feature-icon">📑</div>
-              <h3 class="feature-title">Statement extraction</h3>
+              <div class="feature-icon">🎨</div>
+              <h3 class="feature-title">Design presets & color themes</h3>
               <p class="feature-text">
-                Income, balance and cash-flow lines normalized into clean, queryable fields.
+                Smart color palettes, backgrounds and layouts inspired by modern SaaS and landing pages,
+                ready to export into your favorite builder.
               </p>
             </div>
           </article>
 
           <article class="feature-card">
             <div>
-              <div class="feature-icon">🔔</div>
-              <h3 class="feature-title">Smart alerts</h3>
+              <div class="feature-icon">🔁</div>
+              <h3 class="feature-title">Regenerate & refine</h3>
               <p class="feature-text">
-                Guidance shifts, margins &amp; surprise levels detected automatically and
-                pushed to your watchlists.
+                Not happy with a section? Regenerate only that block, tweak the prompt,
+                and keep the parts you like – until the whole page feels right.
               </p>
             </div>
           </article>
@@ -1037,31 +1038,32 @@
       <div class="pricing-layout">
         <div class="pricing-card">
           <div class="pricing-label">PRICING</div>
-          <h2 class="pricing-headline">Early-access pricing.</h2>
+          <h2 class="pricing-headline">Simple early-access pricing.</h2>
           <div class="pricing-price">$ — / month</div>
           <div class="pricing-sub">
-            Upgrade when you're ready — your universe &amp; watchlists stay with you.
+            Start with a single AI-generated site. Upgrade only when Sitegyn becomes
+            your default way to start new projects.
           </div>
           <ul class="pricing-list">
-            <li><span class="bullet">✔</span><span>Realtime earnings scoring.</span></li>
-            <li><span class="bullet">✔</span><span>Income / balance / cash-flow extraction.</span></li>
-            <li><span class="bullet">✔</span><span>Coverage &amp; score dashboards.</span></li>
-            <li><span class="bullet">✔</span><span>Export to CSV &amp; research stack.</span></li>
+            <li><span class="bullet">✔</span><span>Unlimited drafts for one main website.</span></li>
+            <li><span class="bullet">✔</span><span>Export-ready copy, sections and structure.</span></li>
+            <li><span class="bullet">✔</span><span>Support for multiple languages and tones.</span></li>
+            <li><span class="bullet">✔</span><span>Priority access to new layout & design presets.</span></li>
           </ul>
           <div class="pricing-actions">
             <button class="btn-pill-primary" onclick="location.href='pricing.html'">View full pricing →</button>
-            <button class="btn-pill-secondary" onclick="location.href='#education'">Methodology</button>
+            <button class="btn-pill-secondary" onclick="location.href='#education'">Learn the workflow</button>
           </div>
         </div>
 
         <div class="pricing-copy" id="education">
           <p>
-            Use Analyst44 privately as your own earnings assistant. When the methodology fits your workflow,
-            roll it out to the rest of the team.
+            Use Sitegyn as your private AI web studio. Capture your positioning once, then reuse it
+            whenever you need a new landing page, product page or portfolio.
           </p>
           <p style="margin-top:12px;">
-            Built to integrate with Supabase, Render and standard broker APIs.
-            Start small with a focused universe, then scale coverage as your process matures.
+            The goal is simple: stop wasting hours fighting builders and templates.
+            Let the AI assemble a complete first version, then spend your energy on fine-tuning.
           </p>
         </div>
       </div>
@@ -1071,11 +1073,11 @@
     <section class="cta-banner">
       <div class="cta-banner-inner">
         <h2 class="cta-banner-title">
-          Ready to plug realtime earnings scores into your workflow?
+          Ready to create your first AI website with Sitegyn?
         </h2>
         <p class="cta-banner-text">
-          Join the early-access group, connect your universe and start grading every report
-          the moment it hits the tape.
+          Join the early-access list and be among the first to turn a short conversation
+          into a complete website draft you can launch or export.
         </p>
         <button onclick="location.href='signup.html'">
           Join the early-access list
@@ -1091,8 +1093,8 @@
         <div>
           <div class="footer-title">OUR MISSION</div>
           <p class="footer-text">
-            Analyst44 helps traders and research teams turn messy earnings releases into structured,
-            trade-ready signals — with realtime scoring, clean data and intuitive dashboards.
+            Sitegyn helps founders, freelancers and small teams turn ideas into websites in minutes,
+            not weeks – with AI-generated copy, structure and design they can actually edit.
           </p>
         </div>
 
@@ -1119,15 +1121,15 @@
         <div>
           <div class="footer-title">FROM THE BLOG</div>
           <ul class="footer-links">
-            <li><a href="blog-dashboard.html">Interactive earnings dashboards</a></li>
-            <li><a href="blog-scoring-stack.html">Building a realtime scoring stack</a></li>
-            <li><a href="blog-earnings-season.html">How to trade around earnings season</a></li>
+            <li><a href="blog-dashboard.html">Designing AI-first landing pages</a></li>
+            <li><a href="blog-scoring-stack.html">How to brief your AI for better copy</a></li>
+            <li><a href="blog-earnings-season.html">From idea to website in one sitting</a></li>
           </ul>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <div>Thank you for creating with Analyst44 · 2025</div>
+        <div>Thank you for creating with Sitegyn · 2025</div>
         <div>v0.1.0</div>
       </div>
     </div>
@@ -1141,7 +1143,7 @@ if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
-    const words = ["signal", "earnings", "coverage", "scores", "insights"];
+const words = ["AI website","landing page","portfolio site","course hub"];
 let wordIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -1200,9 +1202,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
-
 </script>
+
 <script>
   // ===== הגדרות בסיס ל-API =====
   const API_BASE = 'https://sitegyn-backend.onrender.com';
