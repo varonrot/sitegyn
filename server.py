@@ -39,7 +39,6 @@ with open(SYSTEM_PROMPT_PATH, "r", encoding="utf-8") as f:
 # Flask app
 # ==========================
 app = Flask(__name__)
-# הרשה בקשות מ-frontend (אפשר להתחיל מ-* ואז להקשיח)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # ==========================
@@ -53,13 +52,17 @@ def get_project(project_id: str):
     return None
 
 
-def save_message(project_id: str, role: str, content: str):
+def save_message(project_id: str, role: str, content: str, tokens_used: int | None = None):
     """Insert a chat message (user/assistant) to chat_messages table."""
-    supabase.table("chat_messages").insert({
+    row = {
         "project_id": project_id,
         "role": role,
-        "content": content
-    }).execute()
+        "content": content,
+    }
+    if tokens_used is not None:
+        row["tokens_used"] = tokens_used
+
+    supabase.table("chat_messages").insert(row).execute()
 
 
 def update_project(project_id: str, updates: dict):
@@ -101,7 +104,6 @@ def extract_and_update_fields(project_id: str, ai_text: str):
     if not ai_text:
         return
 
-    # Find the last ```json block
     start = ai_text.rfind("```json")
     if start == -1:
         return
@@ -115,7 +117,6 @@ def extract_and_update_fields(project_id: str, ai_text: str):
     try:
         data = json.loads(json_str)
     except Exception:
-        # If JSON is invalid, we silently skip
         return
 
     updates = {}
@@ -136,14 +137,14 @@ def extract_and_update_fields(project_id: str, ai_text: str):
 def health():
     """Simple health-check endpoint."""
     return jsonify({"status": "ok", "service": "sitegyn-backend"})
+
+
 @app.route("/api/start_project", methods=["POST"])
 def start_project():
     """
     Create a new empty project row in Supabase and return its project_id.
-    Frontend sends: { "anonymous_id": "..." } but כרגע אנחנו לא חייבים לשמור אותו.
     """
     try:
-        # יוצר רשומה חדשה בטבלת projects עם ערכי ברירת מחדל
         result = supabase.table("projects").insert({}).execute()
         new_project = result.data[0]
         project_id = new_project["id"]
@@ -156,14 +157,15 @@ def start_project():
         print("Error in /api/start_project:", e)
         return jsonify({"error": "could_not_create_project"}), 500
 
-@app.route("/chat", methods=["POST"])
+
+@app.route("/api/chat", methods=["POST"])
 def chat():
     """
     Main chat endpoint.
 
     Expected JSON body:
     {
-      "project_id": "some-uuid-or-id",
+      "project_id": "some-uuid",
       "message": "user message text"
     }
 
@@ -174,64 +176,75 @@ def chat():
     }
     """
     data = request.get_json() or {}
-    project_id = data.get("project_id")
-    user_message = data.get("message")
+    project_id = (data.get("project_id") or "").strip()
+    user_message = (data.get("message") or "").strip()
 
     if not project_id:
         return jsonify({"error": "missing project_id"}), 400
     if not user_message:
         return jsonify({"error": "missing message"}), 400
 
-    # Ensure project exists
+    # Make sure the project exists
     project = get_project(project_id)
     if not project:
-        return jsonify({"error": "project not found"}), 404
+        return jsonify({"error": "project_not_found"}), 404
 
-    # Save user message
-    save_message(project_id, "user", user_message)
+    try:
+        # 1) save user message
+        save_message(project_id, "user", user_message)
 
-    # Fetch chat history for this project
-    history_resp = supabase.table("chat_messages").select("*").eq("project_id", project_id).order("id", ascending=True).execute()
-    history = history_resp.data or []
+        # 2) fetch history for this project (last ~30 messages)
+        history_res = (
+            supabase.table("chat_messages")
+            .select("role, content, created_at")
+            .eq("project_id", project_id)
+            .order("created_at", desc=False)
+            .limit(30)
+            .execute()
+        )
+        history = history_res.data or []
 
-    messages = [{"role": "system", "content": SITEGYN_SYSTEM_PROMPT}]
+        # 3) build messages for OpenAI
+        messages = [{"role": "system", "content": SITEGYN_SYSTEM_PROMPT}]
+        for m in history:
+            messages.append({
+                "role": m["role"],
+                "content": m["content"],
+            })
 
-    # Add previous conversation
-    for msg in history:
-        messages.append({
-            "role": msg["role"],
-            "content": msg["content"]
+        # 4) call OpenAI
+        completion = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=messages,
+            temperature=0.4,
+        )
+
+        assistant_text = completion.choices[0].message.content
+        total_tokens = completion.usage.total_tokens if completion.usage else None
+
+        # 5) save assistant message
+        save_message(project_id, "assistant", assistant_text, total_tokens)
+
+        # 6) update project fields from structured JSON in the answer
+        extract_and_update_fields(project_id, assistant_text)
+
+        # 7) re-fetch project and check readiness
+        updated_project = get_project(project_id)
+        ready = is_ready_to_build(updated_project) if updated_project else False
+
+        return jsonify({
+            "reply": assistant_text,
+            "ready_to_build": ready,
+            "project_id": project_id,
         })
 
-    # Call OpenAI Chat Completion
-    ai_response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=messages
-    )
-
-    ai_text = ai_response.choices[0].message.content
-
-    # Save assistant message
-    save_message(project_id, "assistant", ai_text)
-
-    # Extract structured fields from AI text & update project
-    extract_and_update_fields(project_id, ai_text)
-
-    # Re-fetch project after possible updates
-    updated_project = get_project(project_id)
-    ready = is_ready_to_build(updated_project) if updated_project else False
-
-    # For now we only return reply + ready_to_build
-    # Later you can add: "site_url": "...", once build_site() exists.
-    return jsonify({
-        "reply": ai_text,
-        "ready_to_build": ready
-    })
+    except Exception as e:
+        print("Error in /api/chat:", e)
+        return jsonify({"error": "chat_failed"}), 500
 
 
 # ==========================
 # Local run
 # ==========================
 if __name__ == "__main__":
-    # For local development
     app.run(host="0.0.0.0", port=5001, debug=True)
