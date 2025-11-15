@@ -49,11 +49,18 @@ except Exception:
 app = Flask(__name__)
 
 # Allow the frontend to call our API
+# IMPORTANT: enable CORS for ALL routes (/*), not just /api/*,
+# because the frontend also pings the root URL "/".
 CORS(
     app,
-    resources={r"/api/*": {"origins": "*"}},
+    resources={r"/*": {"origins": "*"}},
     supports_credentials=True,
 )
+
+# Simple health check so GET / won't return 404 (and will include CORS headers)
+@app.route("/", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"})
 
 # ==========================================
 # Helper: extract <update> JSON block
