@@ -1240,5 +1240,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener('DOMContentLoaded', pingBackend);
 </script>
+<script>
+  const API_BASE = 'https://sitegyn-backend.onrender.com';
+
+  // 1. פונקציה ליצירת UUID פשוט (מספיק לנו כרגע בצד לקוח)
+  function createClientId() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  // 2. קריאה בהעלאת הדף – לוודא שיש project_id בלוקל סטורג'
+  async function initProject() {
+    let projectId = localStorage.getItem('sitegyn_project_id');
+    let anonymousId = localStorage.getItem('sitegyn_anon_id');
+
+    if (!anonymousId) {
+      anonymousId = createClientId();
+      localStorage.setItem('sitegyn_anon_id', anonymousId);
+    }
+
+    // אם כבר יש project_id – רק מציגים בלוג
+    if (projectId) {
+      console.log('Existing project_id:', projectId);
+      return;
+    }
+
+    // אין project_id → מבקשים מהשרת לפתוח פרויקט חדש
+    try {
+      const res = await fetch(API_BASE + '/api/start_project', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ anonymous_id: anonymousId })
+      });
+
+      const data = await res.json();
+      projectId = data.project_id;
+      localStorage.setItem('sitegyn_project_id', projectId);
+      console.log('New project_id:', projectId);
+    } catch (err) {
+      console.error('Error starting project:', err);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    pingBackend();      // מהסעיף הקודם – לבדוק שהשרת חי
+    initProject();      // לוודא שיש project_id
+  });
+</script>
 </body>
 </html>
