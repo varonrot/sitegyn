@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from supabase import create_client, Client
 from openai import OpenAI
 
@@ -28,11 +29,13 @@ CORS(app, resources={
     r"/api/*": {
         "origins": [
             "https://sitegyn.com",
+            "https://www.sitegyn.com",
             "http://localhost:8000",
             "http://127.0.0.1:8000"
         ]
     }
 })
+
 
 # ==============================
 # Load system prompt
