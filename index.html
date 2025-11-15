@@ -1259,53 +1259,76 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 </script>
 <script>
+  // ===== הגדרות בסיס ל-API =====
   const API_BASE = 'https://sitegyn-backend.onrender.com';
 
-  // 1. פונקציה ליצירת UUID פשוט (מספיק לנו כרגע בצד לקוח)
+  // מזהה לקוח בדפדפן
   function createClientId() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
+    let id = localStorage.getItem('sitegyn_client_id');
+    if (!id) {
+      id = 'client_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem('sitegyn_client_id', id);
+      console.log('[Sitegyn] New client_id created:', id);
+    } else {
+      console.log('[Sitegyn] Existing client_id:', id);
+    }
+    return id;
   }
 
-  // 2. קריאה בהעלאת הדף – לוודא שיש project_id בלוקל סטורג'
+  // קריאה לשרת כדי ליצור/להמשיך פרויקט
   async function initProject() {
-    let projectId = localStorage.getItem('sitegyn_project_id');
-    let anonymousId = localStorage.getItem('sitegyn_anon_id');
+    const clientId = createClientId();
 
-    if (!anonymousId) {
-      anonymousId = createClientId();
-      localStorage.setItem('sitegyn_anon_id', anonymousId);
-    }
+    // כרגע זה ערכים קשיחים. אחר כך נחבר לשאלות של הצ'ט
+    const payload = {
+      client_id: clientId,
+      language: 'en',
+      business_type: 'consulting',
+      business_name: 'Demo Biz'
+    };
 
-    // אם כבר יש project_id – רק מציגים בלוג
-    if (projectId) {
-      console.log('Existing project_id:', projectId);
-      return;
-    }
-
-    // אין project_id → מבקשים מהשרת לפתוח פרויקט חדש
     try {
-      const res = await fetch(API_BASE + '/api/start_project', {
+      console.log('[Sitegyn] Starting project, payload:', payload);
+
+      const res = await fetch(`${API_BASE}/api/start_project`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ anonymous_id: anonymousId })
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
       });
 
+      if (!res.ok) {
+        console.error('[Sitegyn] start_project failed:', res.status, await res.text());
+        return;
+      }
+
       const data = await res.json();
-      projectId = data.project_id;
-      localStorage.setItem('sitegyn_project_id', projectId);
-      console.log('New project_id:', projectId);
+      console.log('[Sitegyn] Project started:', data);
+
+      if (data.project_id) {
+        localStorage.setItem('sitegyn_project_id', data.project_id);
+      }
     } catch (err) {
-      console.error('Error starting project:', err);
+      console.error('[Sitegyn] Error calling /api/start_project:', err);
     }
   }
 
+  // פינג פשוט לשרת (לראות שהוא חי)
+  async function pingBackend() {
+    try {
+      const res = await fetch(`${API_BASE}/`);
+      const data = await res.json();
+      console.log('[Sitegyn] Backend OK:', data);
+    } catch (err) {
+      console.error('[Sitegyn] Backend ping failed:', err);
+    }
+  }
+
+  // מריצים כשעמוד מוכן
   document.addEventListener('DOMContentLoaded', () => {
-    pingBackend();      // מהסעיף הקודם – לבדוק שהשרת חי
-    initProject();      // לוודא שיש project_id
+    pingBackend();
+    initProject();
   });
 </script>
 </body>

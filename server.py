@@ -136,7 +136,25 @@ def extract_and_update_fields(project_id: str, ai_text: str):
 def health():
     """Simple health-check endpoint."""
     return jsonify({"status": "ok", "service": "sitegyn-backend"})
+@app.route("/api/start_project", methods=["POST"])
+def start_project():
+    """
+    Create a new empty project row in Supabase and return its project_id.
+    Frontend sends: { "anonymous_id": "..." } but כרגע אנחנו לא חייבים לשמור אותו.
+    """
+    try:
+        # יוצר רשומה חדשה בטבלת projects עם ערכי ברירת מחדל
+        result = supabase.table("projects").insert({}).execute()
+        new_project = result.data[0]
+        project_id = new_project["id"]
 
+        return jsonify({
+            "project_id": project_id,
+            "project": new_project
+        })
+    except Exception as e:
+        print("Error in /api/start_project:", e)
+        return jsonify({"error": "could_not_create_project"}), 500
 
 @app.route("/chat", methods=["POST"])
 def chat():
