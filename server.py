@@ -188,7 +188,21 @@ def chat():
             messages=messages,
             temperature=0.5,
         )
+
+        # הטקסט המלא מהמודל (כולל <update> ... </update>)
         assistant_text = completion.choices[0].message.content or ""
+
+        # גרסה נקייה למשתמש – בלי בלוק ה-<update> JSON
+        assistant_visible = assistant_text
+        start_tag = "<update>"
+        end_tag = "</update>"
+        start_idx = assistant_visible.find(start_tag)
+        end_idx = assistant_visible.find(end_tag)
+        if start_idx != -1 and end_idx != -1:
+            assistant_visible = (
+                    assistant_visible[:start_idx] +
+                    assistant_visible[end_idx + len(end_tag):]
+            ).strip()
 
         # 5) Save assistant message
         tokens_used = completion.usage.total_tokens if completion.usage else None
@@ -211,7 +225,7 @@ def chat():
 
         # 7) Return assistant reply
         return jsonify({
-            "reply": assistant_text,
+            "reply": assistant_visible,
             "project_id": project_id,
         })
 
