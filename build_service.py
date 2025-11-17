@@ -44,18 +44,26 @@ def _get_from_content_json(content: Dict[str, Any], path: str) -> str:
 
 
 def _load_project(project_id: str) -> Optional[Dict[str, Any]]:
+    """טוען פרויקט מסופבייס. מחזיר dict או None אם אין/יש שגיאה."""
     supabase = get_supabase()
-    resp = (
-        supabase.table("projects")
-        .select("*")
-        .eq("id", project_id)
-        .single()
-        .execute()
-    )
+
+    try:
+        resp = (
+            supabase.table("projects")
+            .select("*")
+            .eq("id", project_id)
+            .single()   # אם אין רשומה זה יזרוק – אנחנו תופסים ב־except
+            .execute()
+        )
+    except Exception as e:
+        print(f"[build] error loading project {project_id}: {e}")
+        return None
 
     data = getattr(resp, "data", None)
     if not data:
+        print(f"[build] no project found for id {project_id}")
         return None
+
     return data
 
 
