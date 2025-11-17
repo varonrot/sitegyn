@@ -2,9 +2,10 @@ import os
 import json
 import traceback
 from typing import List, Dict, Any
+from pathlib import Path     # ← להוסיף כאן!
 
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from supabase import create_client, Client
 from openai import OpenAI
@@ -233,35 +234,44 @@ def chat():
         traceback.print_exc()
         return jsonify({"error": "chat_failed", "details": str(e)}), 500
 
-from build_service import run_build_for_project
+from build_service import run_build_for_project  # שורה קיימת
 
+# ---------- NEW: שרת שמחזיר את האתר שנבנה ----------
 
-@app.route("/api/build/<project_id>", methods=["POST"])
-def build_project(project_id):
+@app.route("/site/<project_id>")
+def serve_site(project_id: str):
     """
-    Build the website for this project_id using build_service.py
-    and return the output URL.
+    מחזיר את ה-HTML שנבנה עבור project_id מסוים,
+    מתוך התיקייה output/<project_id>/index.html
     """
-    try:
-        print(f"[api] Build requested for project {project_id}")
+    output_path = Path("output") / project_id / "index.html"
 
-        output_path = run_build_for_project(project_id)
-
-        if not output_path:
-            return jsonify({"error": "build_failed"}), 400
-
-        # URL שיכול לשמש להצגה (בשלב הבא נעשה אותו URL אמיתי)
-        public_url = f"/output/{project_id}/index.html"
-
+    if not output_path.exists():
         return jsonify({
-            "status": "success",
-            "project_id": project_id,
-            "url": public_url
-        })
+            "status": "error",
+            "message": "site not built yet for this project_id"
+        }), 404
 
-    except Exception as e:
-        traceback.print_exc()
-        return jsonify({"error": "build_exception", "details": str(e)}), 500
+    return send_file(str(output_path), mimetype="text/html")
+
+# ---------- API לבנייה (כבר יש, משאירים כמו שהוא) ----------
+
+@app.route("/api/build/<project_id>", methods=["GET", "POST"])
+def api_build_project(project_id: str):
+    output_path = run_build_for_project(project_id)
+
+    if output_path is None:
+        return jsonify({
+            "status": "error",
+            "message": "build failed",
+        }), 400
+
+    return jsonify({
+        "status": "ok",
+        "project_id": project_id,
+        "output_path": str(output_path),
+    })
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "8000")), debug=True)
