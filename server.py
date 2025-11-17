@@ -78,6 +78,11 @@ def parse_update_block(assistant_text: str) -> Dict[str, Any]:
 # Routes
 # ==========================================
 
+@app.route("/admin")
+def admin_page():
+    return send_from_directory(".", "admin.html")
+
+
 @app.route("/api/health", methods=["GET"])
 def health():
     return jsonify({"status": "ok"})
@@ -272,6 +277,56 @@ def api_build_project(project_id: str):
         "output_path": str(output_path),
     })
 
+@app.route("/api/projects", methods=["GET"])
+def api_list_projects():
+    """
+    מחזיר רשימת פרויקטים לניהול (id + שם + subdomain).
+    """
+    try:
+        resp = (
+            supabase.table("projects")
+            .select("id, business_name, business_type, subdomain, created_at")
+            .order("created_at", desc=True)
+            .limit(100)
+            .execute()
+        )
+        data = getattr(resp, "data", []) or []
+        return jsonify({"status": "ok", "projects": data})
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route("/api/projects/<project_id>/subdomain", methods=["POST"])
+def api_update_subdomain(project_id):
+    """
+    מעדכן subdomain לפרויקט מסוים, ואפשר אחר כך לקרוא גם ל־/api/build/<project_id>.
+    """
+    try:
+        payload = request.get_json() or {}
+        subdomain = (payload.get("subdomain") or "").strip().lower()
+
+        if not subdomain:
+            return jsonify({"status": "error", "message": "subdomain is required"}), 400
+
+        # עדכון בטבלה
+        resp = (
+            supabase.table("projects")
+            .update({"subdomain": subdomain})
+            .eq("id", project_id)
+            .execute()
+        )
+        updated = getattr(resp, "data", []) or []
+
+        return jsonify({
+            "status": "ok",
+            "project_id": project_id,
+            "subdomain": subdomain,
+            "project": updated,
+        })
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "8000")), debug=True)

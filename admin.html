@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Sitegyn – Projects Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+           max-width: 1000px; margin: 40px auto; padding: 0 16px; background:#050816; color:#f5f5f5; }
+    h1 { margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { padding: 8px; border-bottom: 1px solid #222; text-align: left; }
+    th { background:#111827; }
+    input[type="text"] { width: 160px; padding: 4px 6px; border-radius: 4px; border:1px solid #444; background:#020617; color:#f9fafb; }
+    button { padding: 6px 10px; border-radius: 4px; border:none; cursor:pointer; background:#22c55e; color:#020617; font-weight:500; }
+    button:disabled { opacity: .6; cursor: default; }
+    .url-hint { font-size: 12px; color:#9ca3af; }
+  </style>
+</head>
+<body>
+  <h1>Sitegyn – Projects Admin</h1>
+  <p class="url-hint">
+    כאן מגדירים לכל פרויקט subdomain. לדוגמה: <strong>rotempizza</strong> → <code>https://rotempizza.sitegyn.com</code>
+  </p>
+
+  <table id="projects-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Business name</th>
+        <th>Current subdomain</th>
+        <th>Set subdomain</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="projects-body">
+      <tr><td colspan="5">Loading…</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    async function loadProjects() {
+      const tbody = document.getElementById("projects-body");
+      tbody.innerHTML = "<tr><td colspan='5'>Loading…</td></tr>";
+
+      const res = await fetch("/api/projects");
+      const data = await res.json();
+
+      if (data.status !== "ok") {
+        tbody.innerHTML = "<tr><td colspan='5'>Error loading projects</td></tr>";
+        return;
+      }
+
+      const rows = data.projects.map(p => {
+        const sub = p.subdomain || "";
+        return `
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.business_name || ""}</td>
+            <td>${sub || "<i>none</i>"}</td>
+            <td>
+              <input type="text" id="sub-${p.id}" placeholder="rotempizza" value="${sub}">
+            </td>
+            <td>
+              <button onclick="saveSubdomain('${p.id}')">Save &amp; Build</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      if (!rows.length) {
+        tbody.innerHTML = "<tr><td colspan='5'>No projects yet</td></tr>";
+      } else {
+        tbody.innerHTML = rows.join("");
+      }
+    }
+
+    async function saveSubdomain(projectId) {
+      const input = document.getElementById("sub-" + projectId);
+      const sub = input.value.trim().toLowerCase();
+      if (!sub) {
+        alert("נא להזין subdomain");
+        return;
+      }
+
+      const btn = input.parentElement.nextElementSibling.querySelector("button");
+      btn.disabled = true;
+      btn.textContent = "Saving…";
+
+      try {
+        // 1) עדכון subdomain בטבלה
+        let res = await fetch(`/api/projects/${projectId}/subdomain`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ subdomain: sub })
+        });
+        const data = await res.json();
+        if (data.status !== "ok") {
+          throw new Error(data.message || "update failed");
+        }
+
+        // 2) טריגר לבנייה
+        await fetch(`/api/build/${projectId}`, { method: "POST" });
+
+        alert(`Saved & built. URL (בעתיד): https://${sub}.sitegyn.com`);
+        loadProjects();
+      } catch (err) {
+        console.error(err);
+        alert("Error: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Save & Build";
+      }
+    }
+
+    loadProjects();
+  </script>
+</body>
+</html>
