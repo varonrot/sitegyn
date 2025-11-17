@@ -233,6 +233,35 @@ def chat():
         traceback.print_exc()
         return jsonify({"error": "chat_failed", "details": str(e)}), 500
 
+from build_service import run_build_for_project
+
+
+@app.route("/api/build/<project_id>", methods=["POST"])
+def build_project(project_id):
+    """
+    Build the website for this project_id using build_service.py
+    and return the output URL.
+    """
+    try:
+        print(f"[api] Build requested for project {project_id}")
+
+        output_path = run_build_for_project(project_id)
+
+        if not output_path:
+            return jsonify({"error": "build_failed"}), 400
+
+        # URL שיכול לשמש להצגה (בשלב הבא נעשה אותו URL אמיתי)
+        public_url = f"/output/{project_id}/index.html"
+
+        return jsonify({
+            "status": "success",
+            "project_id": project_id,
+            "url": public_url
+        })
+
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": "build_exception", "details": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "8000")), debug=True)
