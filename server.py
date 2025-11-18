@@ -4,11 +4,13 @@ import traceback
 from typing import List, Dict, Any
 from pathlib import Path     # ← להוסיף כאן!
 
+from flask import Flask, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from supabase import create_client, Client
 from openai import OpenAI
+from config.templates_config import TEMPLATES  # ← חדש
 
 # ==========================================
 # Load environment
@@ -105,6 +107,45 @@ def start_project():
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
+# ============================
+# Template selection by niche
+# ============================
+
+NICHE_TEMPLATES = {
+    # כרגע רק פיצה – אפשר להרחיב אח״כ
+    "pizza": [
+        "template_pizza_01",
+        "template_pizza_02",
+    ],
+}
+
+
+def pick_template_for_project(project: Dict[str, Any], update_obj: Dict[str, Any]) -> str | None:
+    """
+    מחזיר selected_template_id מתאים אם עדיין אין כזה.
+    קודם בודק אם כבר קיים טמפלט, אחרת בוחר רנדומלית לפי niche.
+    """
+    # אם כבר יש טמפלט – לא ניגע
+    existing = (
+        update_obj.get("selected_template_id")
+        or project.get("selected_template_id")
+    )
+    if existing:
+        return existing
+
+    niche = (update_obj.get("niche") or project.get("niche") or "").lower().strip()
+    if not niche:
+        return None
+
+    candidates = NICHE_TEMPLATES.get(niche, [])
+
+    # אפשר גם לסנן לפי TEMPLATES אם רוצים לוודא שקיימים
+    candidates = [tid for tid in candidates if tid in TEMPLATES]
+
+    if not candidates:
+        return None
+
+    return random.choice(candidates)
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
@@ -225,6 +266,22 @@ def chat():
         update_obj = parse_update_block(assistant_text)
         if update_obj:
             try:
+                # נטען את הפרויקט הקיים כדי לדעת מה ה-niche והאם כבר קיים טמפלט
+                proj_resp = (
+                    supabase.table("projects")
+                    .select("*")
+                    .eq("id", project_id)
+                    .execute()
+                )
+                proj_rows = getattr(proj_resp, "data", []) or []
+                project = proj_rows[0] if proj_rows else {}
+
+                # אם עדיין אין selected_template_id – נבחר אחד לפי הנישה
+                template_id = pick_template_for_project(project, update_obj)
+                if template_id and not update_obj.get("selected_template_id"):
+                    update_obj["selected_template_id"] = template_id
+
+                # עדכון הפרויקט
                 supabase.table("projects").update(update_obj).eq("id", project_id).execute()
             except Exception:
                 traceback.print_exc()
