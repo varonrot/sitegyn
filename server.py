@@ -1,16 +1,17 @@
 import os
 import json
 import traceback
+import random  # ← להוסיף
 from typing import List, Dict, Any
-from pathlib import Path     # ← להוסיף כאן!
+from pathlib import Path
 
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, send_file
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from supabase import create_client, Client
 from openai import OpenAI
-from config.templates_config import TEMPLATES  # ← חדש
+from config.templates_config import TEMPLATES
+
 
 # ==========================================
 # Load environment
@@ -111,21 +112,14 @@ def start_project():
 # Template selection by niche
 # ============================
 
-NICHE_TEMPLATES = {
-    # כרגע רק פיצה – אפשר להרחיב אח״כ
-    "pizza": [
-        "template_pizza_01",
-        "template_pizza_02",
-    ],
-}
-
-
-def pick_template_for_project(project: Dict[str, Any], update_obj: Dict[str, Any]) -> str | None:
+def pick_template_for_project(project: Dict[str, Any],
+                              update_obj: Dict[str, Any]) -> str | None:
     """
-    מחזיר selected_template_id מתאים אם עדיין אין כזה.
-    קודם בודק אם כבר קיים טמפלט, אחרת בוחר רנדומלית לפי niche.
+    אם כבר יש selected_template_id – מחזיר אותו.
+    אחרת בוחר טמפלט רנדומלי לפי הנישה שהצ'ט מחזיר (pizza / hair_salon / photography).
     """
-    # אם כבר יש טמפלט – לא ניגע
+
+    # אם כבר יש טמפלט מוגדר (בעדכון הנוכחי או בפרויקט) – לא נוגעים
     existing = (
         update_obj.get("selected_template_id")
         or project.get("selected_template_id")
@@ -133,18 +127,19 @@ def pick_template_for_project(project: Dict[str, Any], update_obj: Dict[str, Any
     if existing:
         return existing
 
-    niche = (update_obj.get("niche") or project.get("niche") or "").lower().strip()
+    # הנישה מגיעה מהצ'ט כמילה אחת לפי ה-system_prompt (pizza, hair_salon, photography)
+    niche = (update_obj.get("niche") or project.get("niche") or "").strip().lower()
     if not niche:
         return None
 
-    candidates = NICHE_TEMPLATES.get(niche, [])
-
-    # אפשר גם לסנן לפי TEMPLATES אם רוצים לוודא שקיימים
-    candidates = [tid for tid in candidates if tid in TEMPLATES]
+    # מחפשים כל טמפלט שה-id שלו מתחיל ב-template_<niche>_
+    prefix = f"template_{niche}_"
+    candidates = [tid for tid in TEMPLATES.keys() if tid.startswith(prefix)]
 
     if not candidates:
         return None
 
+    # בחירה רנדומלית מתוך כל הטמפלטים שמתאימים לנישה
     return random.choice(candidates)
 
 @app.route("/api/chat", methods=["POST"])
