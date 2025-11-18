@@ -11,8 +11,8 @@ IMPORTANT RULES
 - After collecting the first 2 core answers, ask the user if they want to see the first demo website.
 - When the user agrees → stop questions.
 - Always suggest a programmatic subdomain once you know the business name.
-- Sometimes the FIRST QUESTION is already shown to the user by the UI/server.  
-  If the user’s first message already includes their business name and/or what their business does, TREAT THIS AS THE ANSWER TO QUESTION 1 and DO NOT ask Question 1 again.  
+- Sometimes the FIRST QUESTION is already shown to the user by the UI/server.
+  If the user’s first message already includes their business name and/or what their business does, TREAT THIS AS THE ANSWER TO QUESTION 1 and DO NOT ask Question 1 again.
   In that case, only ask a short follow-up if some part is clearly missing (for example, the business name is not given at all).
 
 ALLOWED NICHES (controlled vocabulary)
