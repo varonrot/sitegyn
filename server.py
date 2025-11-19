@@ -5,7 +5,7 @@ import random  # ← להוסיף
 from typing import List, Dict, Any
 from pathlib import Path
 
-from flask import Flask, request, jsonify, send_from_directory, send_file
+from flask import Flask, request, jsonify, send_from_directory, send_file, redirect, url_for
 from dotenv import load_dotenv
 from flask_cors import CORS
 from supabase import create_client, Client
@@ -327,6 +327,35 @@ def serve_site(project_id: str):
         }), 404
 
     return send_file(str(output_path), mimetype="text/html")
+
+# ---------- PREVIEW לפי subdomain ----------
+
+@app.route("/preview/<subdomain>")
+def preview_by_subdomain(subdomain: str):
+    """
+    מציג אתר לפי ה-subdomain ששמור בטבלת projects,
+    למשל: /preview/bella-pizza
+    """
+    try:
+        resp = (
+            supabase.table("projects")
+            .select("id")
+            .eq("subdomain", subdomain)
+            .limit(1)
+            .execute()
+        )
+        rows = getattr(resp, "data", []) or []
+    except Exception as e:
+        traceback.print_exc()
+        return f"Error looking up project: {e}", 500
+
+    if not rows:
+        return "Project not found", 404
+
+    project_id = rows[0]["id"]
+
+    # מפנים לראוט הקיים שמגיש את האתר לפי project_id
+    return redirect(url_for("serve_site", project_id=project_id))
 
 # ---------- API לבנייה (כבר יש, משאירים כמו שהוא) ----------
 
