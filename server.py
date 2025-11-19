@@ -102,6 +102,10 @@ def parse_update_block(assistant_text: str) -> Dict[str, Any]:
 def admin_page():
     return send_from_directory(".", "admin.html")
 
+@app.route("/")
+def homepage():
+    # מגיש את דף הבית הסטטי שלנו (landing.html שנמצא באותו תיקייה של server.py)
+    return send_from_directory(".", "index.html")
 
 @app.route("/api/health", methods=["GET"])
 def health():
