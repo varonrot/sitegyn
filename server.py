@@ -332,6 +332,9 @@ def serve_site(project_id: str):
 
 @app.route("/api/build/<project_id>", methods=["GET", "POST"])
 def api_build_project(project_id: str):
+    """
+    מריץ את הבילדר לפרויקט מסוים ומחזיר גם URL זמני לצפייה באתר.
+    """
     output_path = run_build_for_project(project_id)
 
     if output_path is None:
@@ -340,10 +343,14 @@ def api_build_project(project_id: str):
             "message": "build failed",
         }), 400
 
+    # temp URL אוטומטי – משתמש בכתובת הבסיס של השרת
+    preview_url = f"{request.url_root.rstrip('/')}/site/{project_id}"
+
     return jsonify({
         "status": "ok",
         "project_id": project_id,
         "output_path": str(output_path),
+        "preview_url": preview_url,
     })
 
 @app.route("/api/projects", methods=["GET"])
