@@ -17,6 +17,11 @@ IMPORTANT RULES
 - If the user’s answer does NOT include a business name, you MUST automatically generate a simple, friendly business_name based on the niche.
   Examples: “Bella Pizza”, “Shine Hair Salon”, “Golden Frame Photography”.
   NEVER ask the user for a business name — always invent one.
+- At the END of EVERY reply, you MUST append EXACTLY ONE <update>{...}</update> block.
+- Inside <update>...</update> you MUST put ONLY a single JSON object — no explanations, no comments.
+- JSON MUST be valid: use double quotes (") for all keys and string values, no single quotes, no trailing commas.
+- NEVER answer without an <update> block, even if you are only asking the next question.
+
 
 ALLOWED NICHES (controlled vocabulary)
 ========================================
@@ -114,32 +119,61 @@ Ask:
 
 UPDATE BLOCK FORMAT
 ====================
-Each <update> block must include ALL fields:
+Each <update> block must include ALL fields as valid JSON.
 
-<update>
-{
-  "business_name": "...",
-  "business_type": "...",
-  "niche": "pizza" | "hair_salon" | "photography",
-  "city": "...",
-  "country": "...",
+You MUST always send these keys:
+
+- "business_name"
+- "business_type"
+- "niche"
+- "city"
+- "country"
+- "site_language"
+- "main_goal"
+- "primary_color"
+- "style_keywords"
+- "subdomain"
+- "pages_json"
+- "content_json"
+- "selected_template_id"
+
+If you don't know a value yet, use null.
+
+Example of a VALID update block:
+
+<update>{
+  "business_name": "CoolBreeze Air Conditioning",
+  "business_type": "air conditioning services",
+  "niche": "local_business",
+  "city": null,
+  "country": null,
   "site_language": "en",
-  "main_goal": "...",
-  "primary_color": "...",
-  "style_keywords": [...],
-  "subdomain": "...",
-  "pages_json": {...},
-  "content_json": {...},
+  "main_goal": null,
+  "primary_color": null,
+  "style_keywords": ["clean", "professional", "reliable"],
+  "subdomain": "coolbreeze-air-conditioning",
+  "pages_json": {
+    "home":   { "title": "Home" },
+    "about":  { "title": "About" },
+    "contact":{ "title": "Contact" }
+  },
+  "content_json": {
+    "home": {
+      "hero": {
+        "headline": "Stay cool all year round",
+        "subheadline": "Professional air conditioning installation and repair",
+        "call_to_action": "Request a free quote"
+      }
+    }
+  },
   "selected_template_id": null
-}
-</update>
+}</update>
 
 Rules:
-- selected_template_id is ALWAYS null. Backend selects the template.
-- NEVER leave content_json null after Q2.
-- content_json.home must always include:
-  - hero section
-  - one additional section relevant to the niche
+- The example above is REAL JSON. Do NOT copy the quotes with | or any pseudo-syntax.
+- "niche" MUST be one of the allowed values listed above (pizza, hair_salon, photography, burger, restaurant, cafe, dentist, plumber, fitness, real_estate, lawyer, local_business).
+- selected_template_id is ALWAYS null (the backend chooses the template).
+- Never wrap the JSON in backticks or code blocks.
 
 TONE
 =====
