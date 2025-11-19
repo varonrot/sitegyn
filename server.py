@@ -48,6 +48,23 @@ except FileNotFoundError:
 app = Flask(__name__)
 CORS(app)
 
+# ==========================================
+# Serve built temporary sites
+# ==========================================
+from pathlib import Path
+from flask import send_from_directory
+
+BASE_DIR = Path(__file__).resolve().parent
+OUTPUT_DIR = BASE_DIR / "output"
+
+# כל אתר שנבנה יוצג תחת /temp/<project_id>/index.html
+app.route("/temp/<project_id>/<path:filename>")(
+    lambda project_id, filename: send_from_directory(
+        OUTPUT_DIR / project_id,
+        filename
+    )
+)
+
 
 # ------------------------------------------
 # Helpers
