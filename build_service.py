@@ -1,187 +1,95 @@
+# build_service.py
 import os
-import json
+import traceback
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Optional
 
-from supabase import create_client, Client
-from dotenv import load_dotenv
+from supabase import create_client
 
-# ==========================================
-# Supabase setup
-# ==========================================
-load_dotenv()
+# בסיס הפרויקט
+BASE_DIR = Path(__file__).resolve().parent
+TEMPLATES_ROOT = BASE_DIR / "sitegyn" / "templates"
+OUTPUT_ROOT = BASE_DIR / "output"
 
+# חיבור ל-Supabase (אותם משתנים כמו ב-server.py)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
+if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+    raise RuntimeError("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in environment")
 
-def get_supabase() -> Client:
-    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
-        raise RuntimeError("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars")
-    return create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
-
-
-# ==========================================
-# Helpers
-# ==========================================
-
-BASE_DIR = Path(__file__).resolve().parent  # PyCharmMiscProject
-TEMPLATES_DIR = BASE_DIR / "templates"      # בתוך הפרויקט
-BUILDS_DIR = BASE_DIR / "output"           # נשתמש בתיקיית output הקיימת
+supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 
-def _get_from_content_json(content: Dict[str, Any], path: str) -> str:
+def _resolve_template_path(template_id: str) -> Optional[Path]:
     """
-    מקבל dict של content_json ומסלול נקודות כמו 'home.hero.title'
-    ומחזיר את הערך או מחרוזת ריקה אם חסר.
+    לוקח selected_template_id כמו 'template_pizza_02'
+    ומחפש את הקובץ:
+    sitegyn/templates/template_pizza_02/template_pizza_02.html
     """
-    current: Any = content
-    for part in path.split("."):
-        if not isinstance(current, dict) or part not in current:
-            return ""
-        current = current[part]
-    return "" if current is None else str(current)
+    if not template_id:
+        return None
+
+    folder = template_id
+    html_name = f"{template_id}.html"
+    candidate = TEMPLATES_ROOT / folder / html_name
+    if candidate.exists():
+        return candidate
+
+    # אם לא קיים – נחזיר None
+    return None
 
 
-def _load_project(project_id: str) -> Optional[Dict[str, Any]]:
-    """טוען פרויקט מסופבייס. מחזיר dict או None אם אין/יש שגיאה."""
-    supabase = get_supabase()
-
+def run_build_for_project(project_id: str) -> Optional[Path]:
+    """
+    בונה אתר לפרויקט:
+    1. מביא את השורה מטבלת projects
+    2. מוצא את הטמפלט לפי selected_template_id
+    3. מעתיק את ה-HTML לתיקיית output/<project_id>/index.html
+    4. מחזיר את הנתיב המלא אם הצליח, אחרת None
+    """
     try:
+        # 1) נביא את הפרויקט מ-Supabase
         resp = (
             supabase.table("projects")
             .select("*")
             .eq("id", project_id)
-            .single()   # אם אין רשומה זה יזרוק – אנחנו תופסים ב־except
+            .limit(1)
             .execute()
         )
-    except Exception as e:
-        print(f"[build] error loading project {project_id}: {e}")
+        rows = getattr(resp, "data", []) or []
+        if not rows:
+            print(f"[build_service] project {project_id} not found")
+            return None
+
+        project = rows[0]
+
+        # 2) נזהה את ה-template_id
+        template_id = project.get("selected_template_id")
+
+        # fallback: אם אין template_id, ננסה ברירת מחדל לפיצה
+        if not template_id:
+            print(f"[build_service] project {project_id} has no selected_template_id, using default template_pizza_02")
+            template_id = "template_pizza_02"
+
+        template_path = _resolve_template_path(template_id)
+        if not template_path:
+            print(f"[build_service] template file not found for template_id={template_id}")
+            return None
+
+        # 3) ניצור תיקיית output/<project_id>
+        out_dir = OUTPUT_ROOT / project_id
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        out_path = out_dir / "index.html"
+
+        # 4) לעת עתה – פשוט מעתיקים את ה-HTML כמו שהוא
+        html_source = template_path.read_text(encoding="utf-8")
+        out_path.write_text(html_source, encoding="utf-8")
+
+        print(f"[build_service] built site for project {project_id} at {out_path}")
+        return out_path
+
+    except Exception:
+        traceback.print_exc()
         return None
-
-    data = getattr(resp, "data", None)
-    if not data:
-        print(f"[build] no project found for id {project_id}")
-        return None
-
-    return data
-
-
-# ==========================================
-# Public API
-# ==========================================
-
-def run_build_for_project(project_id: str) -> Optional[Path]:
-    """
-    בונה אתר עבור project_id נתון:
-    1. טוען את הפרויקט מסופבייס
-    2. טוען את קובץ ה-HTML של הטמפלט + mapping
-    3. ממלא placeholders מתוך content_json
-    4. שומר index.html ב-builds/{project_id}/index.html
-    5. מעדכן website_status ל-'partial' אם היה initial/NULL
-
-    מחזיר את הנתיב לקובץ ה-HTML שנוצר, או None אם הבנייה נכשלה.
-    """
-    project = _load_project(project_id)
-    if project is None:
-        print(f"[build] project not found: {project_id}")
-        return None
-
-    selected_template_id = project.get("selected_template_id")
-    content_json = project.get("content_json") or {}
-
-    if not selected_template_id:
-        print(f"[build] project {project_id} has no selected_template_id")
-        return None
-
-    if not isinstance(content_json, dict):
-        print(f"[build] project {project_id} has invalid content_json")
-        return None
-
-    # -------------------------------
-    # מסלולי קבצים של הטמפלט
-    # -------------------------------
-    template_dir = TEMPLATES_DIR / selected_template_id
-    html_path = template_dir / f"{selected_template_id}.html"
-    mapping_path = template_dir / f"{selected_template_id}_mapping.json"
-
-    if not html_path.exists():
-        print(f"[build] template html not found: {html_path}")
-        return None
-
-    if not mapping_path.exists():
-        print(f"[build] mapping file not found: {mapping_path}")
-        return None
-
-    # -------------------------------
-    # טעינת mapping + html
-    # -------------------------------
-    try:
-        with mapping_path.open("r", encoding="utf-8") as f:
-            mapping: Dict[str, str] = json.load(f)
-    except Exception as e:
-        print(f"[build] failed to load mapping: {e}")
-        return None
-
-    try:
-        html = html_path.read_text(encoding="utf-8")
-    except Exception as e:
-        print(f"[build] failed to read html template: {e}")
-        return None
-
-    # -------------------------------
-    # בניית מילון החלפות מ-content_json
-    # -------------------------------
-    replacements: Dict[str, str] = {}
-    for placeholder_key, json_path in mapping.items():
-        value = _get_from_content_json(content_json, json_path)
-        replacements[placeholder_key] = value
-
-    # -------------------------------
-    # החלפת placeholders
-    # -------------------------------
-    filled_html = html
-    for key, value in replacements.items():
-        # תבנית: {{ key }} – עם רווחים
-        filled_html = filled_html.replace(f"{{{{ {key} }}}}", value)
-        # למקרה שבטעות נשתמש ללא רווחים: {{key}}
-        filled_html = filled_html.replace(f"{{{{{key}}}}}", value)
-
-    # -------------------------------
-    # שמירת הקובץ שנבנה
-    # -------------------------------
-    output_dir = BUILDS_DIR / project_id
-    output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / "index.html"
-
-    try:
-        output_path.write_text(filled_html, encoding="utf-8")
-    except Exception as e:
-        print(f"[build] failed to write output html: {e}")
-        return None
-
-    print(f"[build] built site for project {project_id}: {output_path}")
-
-    # -------------------------------
-    # עדכון סטטוס האתר (partial)
-    # -------------------------------
-    current_status = project.get("website_status")
-    if current_status in (None, "", "initial"):
-        try:
-            supabase = get_supabase()
-            supabase.table("projects").update(
-                {"website_status": "partial"}
-            ).eq("id", project_id).execute()
-        except Exception as e:
-            print(f"[build] failed to update website_status: {e}")
-
-    return output_path
-
-
-# אפשר להריץ מקומית לבדיקה:
-if __name__ == "__main__":
-    test_project_id = os.getenv("TEST_PROJECT_ID", "").strip()
-    if not test_project_id:
-        print("Set TEST_PROJECT_ID in env to test build.")
-    else:
-        run_build_for_project(test_project_id)
