@@ -335,6 +335,8 @@ def preview_by_subdomain(subdomain: str):
     """
     מציג אתר לפי ה-subdomain ששמור בטבלת projects,
     למשל: /preview/bella-pizza
+    שים לב: לא עושים redirect, אלא מחזירים את ה-HTML ישירות,
+    כדי שה-URL בדפדפן יישאר /preview/<subdomain> (או /p/<subdomain>).
     """
     try:
         resp = (
@@ -354,8 +356,8 @@ def preview_by_subdomain(subdomain: str):
 
     project_id = rows[0]["id"]
 
-    # מפנים לראוט הקיים שמגיש את האתר לפי project_id
-    return redirect(url_for("serve_site", project_id=project_id))
+    # במקום redirect → מחזירים את ה-HTML של האתר ישירות
+    return serve_site(project_id)
 
 # ---------- API לבנייה (כבר יש, משאירים כמו שהוא) ----------
 @app.route("/p/<subdomain>")
@@ -363,9 +365,11 @@ def public_page_by_subdomain(subdomain: str):
     """
     URL ציבורי ללקוח, למשל:
     https://sitegyn.com/p/bella-pizza
-    כרגע זה פשוט עושה redirect ל- /preview/<subdomain>
+
+    לא עושים redirect, אלא משתמשים בפונקציה של /preview
+    כדי שהכתובת תישאר /p/<subdomain> ולא תקפוץ ל-/site/...
     """
-    return redirect(url_for("preview_by_subdomain", subdomain=subdomain))
+    return preview_by_subdomain(subdomain)
 
 @app.route("/api/build/<project_id>", methods=["GET", "POST"])
 def api_build_project(project_id: str):
