@@ -358,6 +358,14 @@ def preview_by_subdomain(subdomain: str):
     return redirect(url_for("serve_site", project_id=project_id))
 
 # ---------- API לבנייה (כבר יש, משאירים כמו שהוא) ----------
+@app.route("/p/<subdomain>")
+def public_page_by_subdomain(subdomain: str):
+    """
+    URL ציבורי ללקוח, למשל:
+    https://sitegyn.com/p/bella-pizza
+    כרגע זה פשוט עושה redirect ל- /preview/<subdomain>
+    """
+    return redirect(url_for("preview_by_subdomain", subdomain=subdomain))
 
 @app.route("/api/build/<project_id>", methods=["GET", "POST"])
 def api_build_project(project_id: str):
