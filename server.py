@@ -300,35 +300,27 @@ def chat():
                 # עדכון הפרויקט
                 supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
-                # ===== AUTO-BUILD TRIGGER =====
-                # ===== AUTO-BUILD TRIGGER =====
-                # ===== AUTO-BUILD TRIGGER =====
                 try:
-                    if update_obj.get("subdomain"):
-                        print(f"[AUTO BUILD] Building site for project {project_id}...")
-                        from build_service import run_build_for_project
-                        run_build_for_project(project_id)
+
+                    # ===== AUTO-BUILD TRIGGER =====
+                    try:
+                        if update_obj.get("subdomain"):
+                            print(f"[AUTO BUILD] Building site for project {project_id}...")
+                            from build_service import run_build_for_project
+                            run_build_for_project(project_id)
+                    except Exception as e:
+                        print("[AUTO BUILD ERROR]:", e)
+
+                    # 7) Return assistant reply
+                    return jsonify({
+                        "reply": assistant_visible,
+                        "project_id": project_id,
+                    })
+
                 except Exception as e:
-                    print("[AUTO BUILD ERROR]:", e)
+                    traceback.print_exc()
+                    return jsonify({"error": "chat_failed", "details": str(e)}), 500
 
-            except Exception:
-                traceback.print_exc()
-
-            # 7) Return assistant reply
-            return jsonify({
-                "reply": assistant_visible,
-                "project_id": project_id,
-            })
-
-        # 7) Return assistant reply
-        return jsonify({
-            "reply": assistant_visible,
-            "project_id": project_id,
-        })
-
-    except Exception as e:
-        traceback.print_exc()
-        return jsonify({"error": "chat_failed", "details": str(e)}), 500
 
 from build_service import run_build_for_project  # שורה קיימת
 
