@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>{{ home_hero_title }}</title>
@@ -295,7 +295,7 @@
       white-space: nowrap;
     }
 
-    /* Why us */
+    /* Sections */
     .section {
       margin-bottom: 46px;
     }
@@ -497,12 +497,12 @@
     <header class="nav">
       <div class="logo">
         <div class="logo-mark"></div>
-        <div>RotemPizza</div>
+        <div>{{ logo_title }}</div>
       </div>
       <nav class="nav-links">
-        <a href="#menu">התפריט</a>
-        <a href="#about">למה אנחנו</a>
-        <a href="#contact" class="nav-cta">הזמנה מהירה</a>
+        <a href="#menu">Menu</a>
+        <a href="#about">Why us</a>
+        <a href="#contact" class="nav-cta">Order now</a>
       </nav>
     </header>
 
@@ -511,7 +511,7 @@
       <div class="hero-main">
         <div class="eyebrow">
           <span class="eyebrow-pill">🍕</span>
-          פיצרייה איטלקית אמיתית – משלוחים ומה oven אבן
+          {{ eyebrow_text }}
         </div>
 
         <h1 class="hero-title">{{ home_hero_title }}</h1>
@@ -525,16 +525,16 @@
             {{ home_hero_cta }}
           </a>
           <a href="#menu" class="btn-secondary">
-            לראות תפריט מלא
+            View full menu
           </a>
         </div>
 
         <div class="hero-sub">
           <div class="hero-sub-badges">
-            <span class="badge">בצק טרי כל יום</span>
-            <span class="badge">גבינות פרימיום</span>
+            <span class="badge">Fresh dough every day</span>
+            <span class="badge">Premium cheeses</span>
           </div>
-          <span>זמן ממוצע למשלוח בעיר: כ-30 דקות</span>
+          <span>Average delivery time in your area: ~30 minutes.</span>
         </div>
       </div>
 
@@ -548,32 +548,32 @@
     <!-- Why us -->
     <section class="section" id="about">
       <div class="section-header">
-        <div class="section-title">למה לבחור ב-RotemPizza?</div>
-        <div class="section-sub">שלושה דברים שגורמים ללקוחות לחזור שוב ושוב.</div>
+        <div class="section-title">{{ why_us_title }}</div>
+        <div class="section-sub">{{ why_us_subtitle }}</div>
       </div>
 
       <div class="features-grid">
         <article class="feature-card">
           <div class="feature-icon">🔥</div>
-          <div class="feature-title">תנור אבן לוהט</div>
+          <div class="feature-title">{{ feature_1_title }}</div>
           <p class="feature-text">
-            אפייה בחום גבוה שמייצרת בסיס קריספי ושחום מבחוץ, ורך מבפנים – כמו בפיצרייה באיטליה.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">🥬</div>
-          <div class="feature-title">חומרי גלם טריים</div>
-          <p class="feature-text">
-            רטבים שמוכנים במקום, גבינות איכותיות וירקות טריים שנחתכים יום-יום במטבח.
+            {{ feature_1_text }}
           </p>
         </article>
 
         <article class="feature-card">
           <div class="feature-icon">🚗</div>
-          <div class="feature-title">משלוחים מהירים</div>
+          <div class="feature-title">{{ feature_2_title }}</div>
           <p class="feature-text">
-            שליחים קבועים שמכירים את הרחובות, עם אריזות ששומרות על הפיצה חמה ויציבה בדרך אליך.
+            {{ feature_2_text }}
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">🥬</div>
+          <div class="feature-title">{{ feature_3_title }}</div>
+          <p class="feature-text">
+            {{ feature_3_text }}
           </p>
         </article>
       </div>
@@ -582,38 +582,38 @@
     <!-- Menu preview -->
     <section class="section" id="menu">
       <div class="section-header">
-        <div class="section-title">טעימה מהתפריט</div>
-        <div class="section-sub">כמה מהפיצות הכי מבוקשות – כל השאר מחכה ללקוח באתר או בטלפון.</div>
+        <div class="section-title">{{ menu_section_title }}</div>
+        <div class="section-sub">{{ menu_section_subtitle }}</div>
       </div>
 
       <div class="menu-grid">
         <article class="menu-card">
           <div class="menu-header">
-            <div class="menu-name">מרגריטה קלאסית</div>
-            <div class="menu-price">₪42</div>
+            <div class="menu-name">{{ menu_item_1_name }}</div>
+            <div class="menu-price">{{ menu_item_1_price }}</div>
           </div>
           <p class="menu-desc">
-            רוטב עגבניות איטלקי, גבינת מוצרלה, בזיליקום טרי ושמן זית כתית מעולה.
+            {{ menu_item_1_desc }}
           </p>
         </article>
 
         <article class="menu-card">
           <div class="menu-header">
-            <div class="menu-name">פפרוני פיקנטית</div>
-            <div class="menu-price">₪52</div>
+            <div class="menu-name">{{ menu_item_2_name }}</div>
+            <div class="menu-price">{{ menu_item_2_price }}</div>
           </div>
           <p class="menu-desc">
-            תערובת גבינות, פפרוני מתובל ותוספת פלפל צ'ילי קלוי למי שאוהב קצת אש.
+            {{ menu_item_2_desc }}
           </p>
         </article>
 
         <article class="menu-card">
           <div class="menu-header">
-            <div class="menu-name">ווג'י צבעונית</div>
-            <div class="menu-price">₪49</div>
+            <div class="menu-name">{{ menu_item_3_name }}</div>
+            <div class="menu-price">{{ menu_item_3_price }}</div>
           </div>
           <p class="menu-desc">
-            ארטישוק, זיתי קלמטה, פלפלים צבעוניים, בצל סגול ופסטו בזיליקום מעל.
+            {{ menu_item_3_desc }}
           </p>
         </article>
       </div>
@@ -623,17 +623,17 @@
     <section class="section" id="contact">
       <div class="contact-card">
         <div class="contact-text">
-          <strong>הזמינו עכשיו</strong><br />
-          לשיחה מהירה או הודעת WhatsApp – המשלוח בדרך אליכם.
+          <strong>{{ contact_title }}</strong><br />
+          {{ contact_subtitle }}
         </div>
         <div class="contact-actions">
-          <button class="whatsapp-btn">הזמנה ב-WhatsApp</button>
-          <span class="chip">פתוחים היום: 12:00–23:30</span>
+          <button class="whatsapp-btn">{{ cta_whatsapp }}</button>
+          <span class="chip">{{ opening_hours }}</span>
         </div>
       </div>
 
       <footer>
-        אתר שנבנה אוטומטית עם Sitegyn – תבנית template_pizza_02.
+        Simple demo site generated with Sitegyn – template_pizza_02.
       </footer>
     </section>
   </div>
