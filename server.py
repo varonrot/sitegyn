@@ -299,8 +299,19 @@ def chat():
 
                 # עדכון הפרויקט
                 supabase.table("projects").update(update_obj).eq("id", project_id).execute()
-            except Exception:
-                traceback.print_exc()
+
+                # ===== AUTO-BUILD TRIGGER =====
+                try:
+                    # אם יש סאב-דומיין — מריץ בילד אוטומטי
+                    if update_obj.get("subdomain"):
+                        print(f"[AUTO BUILD] Building site for project {project_id}...")
+                        from build_service import run_build_for_project
+                        run_build_for_project(project_id)
+                except Exception as e:
+                    print("[AUTO BUILD ERROR]:", e)
+
+                 except Exception:
+                         traceback.print_exc()
 
         # 7) Return assistant reply
         return jsonify({
