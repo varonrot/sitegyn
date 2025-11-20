@@ -1,11 +1,13 @@
 {
-  "logo_text": "business_name",
+  "logo_title": "business_name",
   "eyebrow_text": "business_type",
-  "nav_btn_text": "home.hero.call_to_action",
 
   "home_hero_title": "home.hero.headline",
   "home_hero_paragraph": "home.hero.subheadline",
   "home_hero_cta": "home.hero.call_to_action",
+
+  "why_us_title": "home.about.paragraphs[0]",
+  "why_us_subtitle": "home.about.paragraphs[1]",
 
   "feature_1_title": "home.about.reasons_to_choose_us[0].title",
   "feature_1_text": "home.about.reasons_to_choose_us[0].description",
@@ -15,6 +17,9 @@
 
   "feature_3_title": "home.about.reasons_to_choose_us[2].title",
   "feature_3_text": "home.about.reasons_to_choose_us[2].description",
+
+  "menu_section_title": "\"Our most popular pizzas\"",
+  "menu_section_subtitle": "\"A quick taste of what we serve\"",
 
   "menu_item_1_name": "home.menu.items[0].name",
   "menu_item_1_desc": "home.menu.items[0].description",
@@ -29,7 +34,7 @@
   "menu_item_3_price": "home.menu.items[2].price",
 
   "contact_title": "home.contact.title",
-  "contact_description": "home.contact.description",
-  "contact_hours": "home.contact.opening_hours",
-  "contact_cta": "home.contact.call_to_action"
+  "contact_subtitle": "home.contact.description",
+  "cta_whatsapp": "home.contact.call_to_action",
+  "opening_hours": "home.contact.opening_hours"
 }
