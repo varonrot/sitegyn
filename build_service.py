@@ -83,7 +83,7 @@ def _normalize_pizza_content(raw: Dict[str, Any]) -> Dict[str, Any]:
     menu = home.get("menu") or {}
     items = menu.get("items") or []
     about = home.get("about") or {}
-    reasons = about.get("reasons_to_choose_us") or []
+    reasons = about.get("reasons") or []
     contact = home.get("contact") or {}
 
     flat: Dict[str, Any] = {}
