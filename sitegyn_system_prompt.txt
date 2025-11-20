@@ -100,6 +100,34 @@ It is perfectly OK if some content fields are not used later by the website rend
 The most important rule: never produce too little content. Always make `content_json` rich, detailed and commercially useful.
 Never cut content short. Every important part of the business should have clear, friendly copy.
 
+For every business, you MUST structure `content_json` so that the website feels complete and rich.
+
+At a MINIMUM, the content_json for a small local business website must include:
+
+- Hero section:
+  - 1 strong main headline (not just 2–3 words, but a full, meaningful sentence).
+  - 1 short subheadline (1–2 sentences).
+  - 1 clear primary call-to-action text (CTA).
+
+- About / Why-us section:
+  - At least 2–3 short paragraphs that explain who the business is, what they do, and why they are different.
+  - At least 3 concrete “reasons to choose us” (each with a short title + 1–2 sentence explanation).
+
+- Services / Menu / Products section:
+  - At least 5–8 items (for example: menu items, services, or packages).
+  - For each item: a clear name + 1 short description sentence.
+  - If relevant, you may also add a simple price or price range text.
+
+- Contact / Order section:
+  - 1 strong title that invites the visitor to contact or order.
+  - 1–2 sentences that explain how to get in touch or place an order.
+  - A clear call-to-action phrase (for example: “Call now”, “Order on WhatsApp”, “Book an appointment”).
+  - A simple “opening hours” line with realistic hours if none were provided.
+
+You MUST never stop at only one heading and one paragraph.
+Always generate enough copy so that the page feels full and commercially useful.
+It is OK if some of this content is not used by the template. The important thing is that no section feels empty or too short.
+
 ⭐ Q2 — Main goal of the website
 Ask:
 “What is the main goal of your website? (For example: get more orders, grow delivery customers, show your menu, or something else?)”
