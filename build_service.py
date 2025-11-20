@@ -59,17 +59,34 @@ def _load_template_mapping(template_id: str) -> Dict[str, Any]:
         return {}
 
 
-def _safe_get(d: Dict[str, Any], key: str) -> Optional[str]:
-    val = d.get(key)
-    if isinstance(val, (str, int, float)):
-        return str(val)
+def _find_value_by_key(data: Any, key: str) -> Optional[str]:
+    """
+    מחפש מפתח בשם key בכל עומק של dict / list.
+    מחזיר את הערך הראשון שהוא str/int/float.
+    """
+    if isinstance(data, dict):
+        # קודם בדיקה ישירה
+        if key in data and isinstance(data[key], (str, int, float)):
+            return str(data[key])
+        # ואז מעבר על כל הערכים
+        for v in data.values():
+            result = _find_value_by_key(v, key)
+            if result is not None:
+                return result
+
+    elif isinstance(data, list):
+        for item in data:
+            result = _find_value_by_key(item, key)
+            if result is not None:
+                return result
+
     return None
 
 
 def _render_template(html_source: str, project: dict, mapping: Dict[str, Any]) -> str:
     """
     מאתר את כל ה-{{ key }} ב-HTML ומחליף:
-    1. קודם מתוך content_json[key] אם קיים
+    1. קודם מתוך content_json (בכל עומק) אם קיים key כזה
     2. אחרת מתוך mapping[key] עם .format(**ctx)
     3. אחרת מנסה ctx[key] (business_name וכו')
     4. אחרת משאיר את ה-placeholder כמו שהוא
@@ -90,21 +107,21 @@ def _render_template(html_source: str, project: dict, mapping: Dict[str, Any]) -
     }
 
     # opening_hours – אם יש ב-content_json נשתמש בו, אחרת ברירת מחדל
-    oh = content_json.get("opening_hours")
+    oh = _find_value_by_key(content_json, "opening_hours")
     if isinstance(oh, str) and oh.strip():
         ctx["opening_hours"] = oh
     else:
         ctx["opening_hours"] = "Open daily: 11:00–23:00"
 
-    # נשתמש בקאש כדי שלא נחשב אותו מפתח כמה פעמים
+    # קאש שלא נחשב אותו מפתח כמה פעמים
     cache: Dict[str, Optional[str]] = {}
 
     def resolve_key(key: str) -> Optional[str]:
         if key in cache:
             return cache[key]
 
-        # 1) קודם מתוך content_json
-        v = _safe_get(content_json, key)
+        # 1) קודם מנסה למצוא key כזה בכל עומק של content_json
+        v = _find_value_by_key(content_json, key)
         if v is not None:
             cache[key] = v
             return v
