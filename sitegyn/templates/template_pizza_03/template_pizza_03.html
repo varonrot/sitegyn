@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ home_hero_title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #060814;
+      --card-bg: #0d101f;
+      --accent: #ff4f3c;
+      --accent-soft: rgba(255, 79, 60, 0.14);
+      --text: #f8fafc;
+      --muted: #a3b1c6;
+      --border: rgba(148, 163, 184, 0.25);
+      --radius-lg: 18px;
+      --radius-xl: 26px;
+      --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.65);
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #111827 0, #020617 45%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 20px 16px 80px;
+    }
+
+    /* Top nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fde68a, #f97316 40%, #b91c1c 100%);
+      box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.35), 0 14px 32px rgba(15, 23, 42, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-mark::before {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 999px;
+      border: 2px solid rgba(248, 250, 252, 0.7);
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding: 6px 10px;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--text);
+    }
+
+    .nav-cta {
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(248, 113, 113, 0.45);
+    }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.7fr);
+      gap: 32px;
+      align-items: center;
+      padding: 26px 22px;
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at top left, #1f2937 0, #020617 55%, #000 100%);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      right: -80px;
+      top: -120px;
+      background: radial-gradient(circle at 30% 20%, rgba(248, 250, 252, 0.8), rgba(248, 250, 252, 0) 70%),
+                  radial-gradient(circle at 70% 70%, rgba(248, 250, 252, 0.5), rgba(248, 250, 252, 0) 75%);
+      opacity: 0.07;
+      pointer-events: none;
+    }
+
+    .hero-main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 10px 2px 2px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.9);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3vw + 1.2rem, 3rem);
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+
+    .hero-title span.accent {
+      color: var(--accent);
+    }
+
+    .hero-text {
+      color: var(--muted);
+      font-size: 0.98rem;
+      max-width: 32rem;
+      margin-bottom: 24px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, #f97316, #ec4899);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 18px 40px rgba(236, 72, 153, 0.55);
+      font-size: 0.95rem;
+    }
+
+    .btn-secondary {
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: rgba(15, 23, 42, 0.7);
+      cursor: pointer;
+    }
+
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-sub-badges {
+      display: inline-flex;
+      gap: 6px;
+    }
+
+    .badge {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .hero-visual {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pizza-card {
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 30%, #fde68a 0, #fbbf24 22%, #f97316 40%, #b91c1c 70%, #7f1d1d 100%),
+        radial-gradient(circle at 75% 75%, rgba(248, 250, 252, 0.4), rgba(248, 250, 252, 0) 65%);
+      box-shadow: 0 32px 70px rgba(15, 23, 42, 0.95);
+      position: relative;
+      overflow: hidden;
+      border: 4px solid rgba(15, 23, 42, 0.95);
+    }
+
+    .pizza-card::before,
+    .pizza-card::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      border: 2px dashed rgba(248, 250, 252, 0.7);
+    }
+
+    .pizza-card::before {
+      inset: 32px;
+    }
+
+    .pizza-card::after {
+      inset: 70px;
+      border-style: solid;
+      border-color: rgba(15, 23, 42, 0.7);
+      opacity: 0.7;
+    }
+
+    .pizza-label {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      font-size: 0.8rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      backdrop-filter: blur(10px);
+      white-space: nowrap;
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: 46px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .section-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 14px 14px 16px;
+      font-size: 0.88rem;
+    }
+
+    .feature-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feature-text {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Menu */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .menu-card {
+      background: radial-gradient(circle at top, rgba(248, 250, 252, 0.03), rgba(15, 23, 42, 0.98));
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 13px 14px 14px;
+      font-size: 0.9rem;
+    }
+
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .menu-name {
+      font-weight: 600;
+    }
+
+    .menu-price {
+      font-weight: 600;
+      color: #facc15;
+      font-size: 0.9rem;
+    }
+
+    .menu-desc {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    /* Contact/footer */
+    .contact-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 14px 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.86rem;
+    }
+
+    .contact-text {
+      color: var(--muted);
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .whatsapp-btn {
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #22c55e;
+      color: #052e16;
+      font-weight: 600;
+      border: none;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: 28px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 20px 18px;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .features-grid,
+      .menu-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .contact-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .page {
+        padding-inline: 14px;
+      }
+
+      .hero {
+        padding-inline: 16px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Top nav -->
+    <header class="nav">
+      <div class="logo">
+        <div class="logo-mark"></div>
+        <div>{{ logo_title }}</div>
+      </div>
+      <nav class="nav-links">
+        <a href="#menu">Menu</a>
+        <a href="#about">Why us</a>
+        <a href="#contact" class="nav-cta">Order now</a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+      <div class="hero-main">
+        <div class="eyebrow">
+          <span class="eyebrow-pill">🍕</span>
+          {{ eyebrow_text }}
+        </div>
+
+        <h1 class="hero-title">{{ home_hero_title }}</h1>
+
+        <p class="hero-text">
+          {{ home_hero_paragraph }}
+        </p>
+
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">
+            {{ home_hero_cta }}
+          </a>
+          <a href="#menu" class="btn-secondary">
+            View full menu
+          </a>
+        </div>
+
+        <div class="hero-sub">
+          <div class="hero-sub-badges">
+            <span class="badge">Fresh dough every day</span>
+            <span class="badge">Premium cheeses</span>
+          </div>
+          <span>Average delivery time in your area: ~30 minutes.</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="pizza-card">
+          <div class="pizza-label">“Just one more slice…”</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why us -->
+    <section class="section" id="about">
+      <div class="section-header">
+        <div class="section-title">{{ why_us_title }}</div>
+        <div class="section-sub">{{ why_us_subtitle }}</div>
+      </div>
+
+      <div class="features-grid">
+        <article class="feature-card">
+          <div class="feature-icon">🔥</div>
+          <div class="feature-title">{{ feature_1_title }}</div>
+          <p class="feature-text">
+            {{ feature_1_text }}
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">🚗</div>
+          <div class="feature-title">{{ feature_2_title }}</div>
+          <p class="feature-text">
+            {{ feature_2_text }}
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">🥬</div>
+          <div class="feature-title">{{ feature_3_title }}</div>
+          <p class="feature-text">
+            {{ feature_3_text }}
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Menu preview -->
+    <section class="section" id="menu">
+      <div class="section-header">
+        <div class="section-title">{{ menu_section_title }}</div>
+        <div class="section-sub">{{ menu_section_subtitle }}</div>
+      </div>
+
+      <div class="menu-grid">
+        <article class="menu-card">
+          <div class="menu-header">
+            <div class="menu-name">{{ menu_item_1_name }}</div>
+            <div class="menu-price">{{ menu_item_1_price }}</div>
+          </div>
+          <p class="menu-desc">
+            {{ menu_item_1_desc }}
+          </p>
+        </article>
+
+        <article class="menu-card">
+          <div class="menu-header">
+            <div class="menu-name">{{ menu_item_2_name }}</div>
+            <div class="menu-price">{{ menu_item_2_price }}</div>
+          </div>
+          <p class="menu-desc">
+            {{ menu_item_2_desc }}
+          </p>
+        </article>
+
+        <article class="menu-card">
+          <div class="menu-header">
+            <div class="menu-name">{{ menu_item_3_name }}</div>
+            <div class="menu-price">{{ menu_item_3_price }}</div>
+          </div>
+          <p class="menu-desc">
+            {{ menu_item_3_desc }}
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section" id="contact">
+      <div class="contact-card">
+        <div class="contact-text">
+          <strong>{{ contact_title }}</strong><br />
+          {{ contact_subtitle }}
+        </div>
+        <div class="contact-actions">
+          <button class="whatsapp-btn">{{ cta_whatsapp }}</button>
+          <span class="chip">{{ opening_hours }}</span>
+        </div>
+      </div>
+
+      <footer>
+        Simple demo site generated with Sitegyn – template_pizza_02.
+      </footer>
+    </section>
+  </div>
+</body>
+</html>
