@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent
 TEMPLATES_ROOT = BASE_DIR / "sitegyn" / "templates"
 OUTPUT_ROOT = BASE_DIR / "output"
 
-# חיבור ל-Supabase (אותו כמו ב-server.py)
+# חיבור ל-Supabase
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
@@ -25,10 +25,6 @@ PLACEHOLDER_PATTERN = re.compile(r"\{\{\s*([a-zA-Z0-9_]+)\s*\}\}")
 
 
 def _resolve_template_path(template_id: str) -> Optional[Path]:
-    """
-    לדוגמה: template_id = 'template_pizza_02'
-    נתיב: sitegyn/templates/template_pizza_02/template_pizza_02.html
-    """
     if not template_id:
         return None
 
@@ -42,9 +38,6 @@ def _resolve_template_path(template_id: str) -> Optional[Path]:
 
 
 def _load_template_mapping(template_id: str) -> Dict[str, Any]:
-    """
-    קורא את template_pizza_02_mapping.json אם קיים.
-    """
     folder = template_id
     mapping_name = f"{template_id}_mapping.json"
     path = TEMPLATES_ROOT / folder / mapping_name
@@ -59,24 +52,27 @@ def _load_template_mapping(template_id: str) -> Dict[str, Any]:
         return {}
 
 
-def _find_value_by_key(data: Any, key: str) -> Optional[str]:
+def _find_value_by_key_ci(data: Any, key: str) -> Optional[str]:
     """
-    מחפש מפתח בשם key בכל עומק של dict / list.
-    מחזיר את הערך הראשון שהוא str/int/float.
+    מחפש מפתח בשם key בכל עומק של dict / list, בצורה לא רגישה לאותיות.
     """
+    target = key.lower()
+
     if isinstance(data, dict):
-        # קודם בדיקה ישירה
-        if key in data and isinstance(data[key], (str, int, float)):
-            return str(data[key])
+        # קודם בדיקה ישירה (case-insensitive)
+        for k, v in data.items():
+            if k.lower() == target and isinstance(v, (str, int, float)):
+                return str(v)
+
         # ואז מעבר על כל הערכים
         for v in data.values():
-            result = _find_value_by_key(v, key)
+            result = _find_value_by_key_ci(v, key)
             if result is not None:
                 return result
 
     elif isinstance(data, list):
         for item in data:
-            result = _find_value_by_key(item, key)
+            result = _find_value_by_key_ci(item, key)
             if result is not None:
                 return result
 
@@ -85,19 +81,18 @@ def _find_value_by_key(data: Any, key: str) -> Optional[str]:
 
 def _render_template(html_source: str, project: dict, mapping: Dict[str, Any]) -> str:
     """
-    מאתר את כל ה-{{ key }} ב-HTML ומחליף:
-    1. קודם מתוך content_json (בכל עומק) אם קיים key כזה
-    2. אחרת מתוך mapping[key] עם .format(**ctx)
-    3. אחרת מנסה ctx[key] (business_name וכו')
-    4. אחרת משאיר את ה-placeholder כמו שהוא
+    מחליף את כל ה-{{ key }} ב-HTML:
+    1. קודם מתוך content_json (בכל עומק, case-insensitive)
+    2. אחרת מתוך mapping[key] או mapping[key.lower()] עם .format(**ctx)
+    3. אחרת עסקים מיוחדים (למשל LOGO_TITLE -> business_name)
+    4. אחרת מנסה ctx[key]
+    5. אחרת משאיר את placeholder כמו שהוא
     """
 
-    # content_json מהפרויקט
     content_json = project.get("content_json") or {}
     if not isinstance(content_json, dict):
         content_json = {}
 
-    # קונטקסט להחלפת {business_name} וכו' בתוך mapping
     ctx: Dict[str, Any] = {
         "business_name": project.get("business_name") or "",
         "business_type": project.get("business_type") or "",
@@ -106,38 +101,50 @@ def _render_template(html_source: str, project: dict, mapping: Dict[str, Any]) -
         "country": project.get("country") or "",
     }
 
-    # opening_hours – אם יש ב-content_json נשתמש בו, אחרת ברירת מחדל
-    oh = _find_value_by_key(content_json, "opening_hours")
+    # opening_hours
+    oh = _find_value_by_key_ci(content_json, "opening_hours")
     if isinstance(oh, str) and oh.strip():
         ctx["opening_hours"] = oh
     else:
         ctx["opening_hours"] = "Open daily: 11:00–23:00"
 
-    # קאש שלא נחשב אותו מפתח כמה פעמים
     cache: Dict[str, Optional[str]] = {}
 
-    def resolve_key(key: str) -> Optional[str]:
+    def resolve_key(raw_key: str) -> Optional[str]:
+        key = raw_key.strip()
+        kl = key.lower()
+
         if key in cache:
             return cache[key]
 
-        # 1) קודם מנסה למצוא key כזה בכל עומק של content_json
-        v = _find_value_by_key(content_json, key)
+        # 1) content_json (תוך כדי case-insensitive)
+        v = _find_value_by_key_ci(content_json, key)
         if v is not None:
             cache[key] = v
             return v
 
-        # 2) מתוך mapping.json, כולל format על {business_name} וכו'
-        if mapping and key in mapping:
-            raw = mapping[key]
+        # 2) mapping.json
+        if mapping:
+            raw = None
+            if key in mapping:
+                raw = mapping[key]
+            elif kl in mapping:
+                raw = mapping[kl]
+
             if isinstance(raw, str):
                 try:
                     formatted = raw.format(**ctx)
                 except Exception:
-                    formatted = raw  # אם חסר מפתח ב-ctx, נשאיר כמו שהוא
+                    formatted = raw
                 cache[key] = formatted
                 return formatted
 
-        # 3) אם יש ctx עם אותו שם מפתח (למשל business_name)
+        # 3) מיפוי מיוחד: LOGO_TITLE -> business_name
+        if kl == "logo_title" and ctx.get("business_name"):
+            cache[key] = str(ctx["business_name"])
+            return cache[key]
+
+        # 4) ctx[key]
         if key in ctx and ctx[key]:
             cache[key] = str(ctx[key])
             return cache[key]
@@ -146,10 +153,9 @@ def _render_template(html_source: str, project: dict, mapping: Dict[str, Any]) -
         return None
 
     def repl(match: re.Match) -> str:
-        key = match.group(1).strip()
+        key = match.group(1)
         value = resolve_key(key)
         if value is None:
-            # אין ערך – נשאיר placeholder כדי שיהיה ברור שחסר
             return match.group(0)
         return value
 
@@ -158,14 +164,6 @@ def _render_template(html_source: str, project: dict, mapping: Dict[str, Any]) -
 
 
 def run_build_for_project(project_id: str) -> Optional[Path]:
-    """
-    בונה אתר לפרויקט:
-      1. מושך את ה-project מ-Supabase
-      2. מוצא template_id
-      3. קורא HTML + mapping.json
-      4. מזריק תוכן
-      5. כותב ל-output/<project_id>/index.html
-    """
     try:
         resp = (
             supabase.table("projects")
@@ -181,11 +179,7 @@ def run_build_for_project(project_id: str) -> Optional[Path]:
 
         project = rows[0]
 
-        template_id = project.get("selected_template_id")
-        if not template_id:
-            # ברירת מחדל לפיצה אם אין כלום
-            template_id = "template_pizza_02"
-
+        template_id = project.get("selected_template_id") or "template_pizza_02"
         template_path = _resolve_template_path(template_id)
         if not template_path:
             print(f"[build_service] template file not found for template_id={template_id}")
@@ -193,12 +187,10 @@ def run_build_for_project(project_id: str) -> Optional[Path]:
 
         mapping = _load_template_mapping(template_id)
 
-        # ניצור תיקיית output/<project_id>
         out_dir = OUTPUT_ROOT / project_id
         out_dir.mkdir(parents=True, exist_ok=True)
         out_path = out_dir / "index.html"
 
-        # קריאה + רנדר
         html_source = template_path.read_text(encoding="utf-8")
         rendered_html = _render_template(html_source, project, mapping)
         out_path.write_text(rendered_html, encoding="utf-8")
@@ -212,7 +204,6 @@ def run_build_for_project(project_id: str) -> Optional[Path]:
 
 
 if __name__ == "__main__":
-    # לדוגמה לבדיקה ידנית – תחליף ל-ID שקיים אצלך
     test_project_id = os.getenv("TEST_PROJECT_ID")
     if test_project_id:
         run_build_for_project(test_project_id)
