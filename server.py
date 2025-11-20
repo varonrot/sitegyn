@@ -1,17 +1,19 @@
 import os
 import json
 import traceback
-import random  # ← להוסיף
+import random
 from typing import List, Dict, Any
 from pathlib import Path
 
-from flask import Flask, request, jsonify, send_from_directory, send_file, redirect, url_for
+from flask import Flask, request, jsonify, send_from_directory, Response
 from dotenv import load_dotenv
 from flask_cors import CORS
 from supabase import create_client, Client
 from openai import OpenAI
 from config.templates_config import TEMPLATES
 
+# === Render On-The-Fly ===
+from render_service import render_project_html_by_subdomain
 
 # ==========================================
 # Load environment
@@ -32,15 +34,13 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 # ==========================================
-# Load Sitegyn system prompt from file
+# Load Sitegyn system prompt
 # ==========================================
 PROMPT_PATH = os.path.join(os.path.dirname(__file__), "sitegyn_system_prompt.txt")
 
-try:
-    with open(PROMPT_PATH, "r", encoding="utf-8") as f:
-        SITEGYN_SYSTEM_PROMPT = f.read()
-except FileNotFoundError:
-    raise RuntimeError(f"sitegyn_system_prompt.txt not found at {PROMPT_PATH}")
+with open(PROMPT_PATH, "r", encoding="utf-8") as f:
+    SITEGYN_SYSTEM_PROMPT = f.read()
+
 
 # ==========================================
 # Flask app
@@ -48,131 +48,73 @@ except FileNotFoundError:
 app = Flask(__name__)
 CORS(app)
 
+
 # ==========================================
-# Serve built temporary sites
-# ==========================================
-from pathlib import Path
-from flask import send_from_directory
-
-BASE_DIR = Path(__file__).resolve().parent
-OUTPUT_DIR = BASE_DIR / "output"
-
-# כל אתר שנבנה יוצג תחת /temp/<project_id>/index.html
-app.route("/temp/<project_id>/<path:filename>")(
-    lambda project_id, filename: send_from_directory(
-        OUTPUT_DIR / project_id,
-        filename
-    )
-)
-
-
-# ------------------------------------------
 # Helpers
-# ------------------------------------------
+# ==========================================
 def parse_update_block(assistant_text: str) -> Dict[str, Any]:
-    """
-    Extract the JSON object from inside <update>...</update> in the assistant's reply.
-    If nothing is found or parsing fails, return {}.
-    """
+    """Extract JSON inside <update>...</update>."""
     try:
-        start_tag = "<update>"
-        end_tag = "</update>"
-        start_idx = assistant_text.find(start_tag)
-        end_idx = assistant_text.find(end_tag)
-
-        if start_idx == -1 or end_idx == -1:
+        start = assistant_text.find("<update>")
+        end = assistant_text.find("</update>")
+        if start == -1 or end == -1:
             return {}
-
-        json_str = assistant_text[start_idx + len(start_tag):end_idx].strip()
-        if not json_str:
-            return {}
-
-        return json.loads(json_str)
-    except Exception:
-        # If anything goes wrong, we don't want to crash the whole chat.
+        raw = assistant_text[start + len("<update>"): end].strip()
+        return json.loads(raw) if raw else {}
+    except:
         traceback.print_exc()
         return {}
 
 
-# ==========================================
-# Routes
-# ==========================================
+# ============================
+# Template selection
+# ============================
+def pick_template_for_project(project: Dict[str, Any],
+                              update_obj: Dict[str, Any]) -> str | None:
 
-@app.route("/admin")
-def admin_page():
-    return send_from_directory(".", "admin.html")
+    existing = update_obj.get("selected_template_id") or project.get("selected_template_id")
+    if existing:
+        return existing
+
+    niche = (update_obj.get("niche") or project.get("niche") or "").strip().lower()
+    if not niche:
+        return None
+
+    prefix = f"template_{niche}_"
+    candidates = [tid for tid in TEMPLATES.keys() if tid.startswith(prefix)]
+    if not candidates:
+        return None
+
+    return random.choice(candidates)
+
+
+# ==========================================
+# ROUTES
+# ==========================================
 
 @app.route("/")
 def homepage():
-    # מגיש את דף הבית הסטטי שלנו (landing.html שנמצא באותו תיקייה של server.py)
     return send_from_directory(".", "index.html")
 
-@app.route("/api/health", methods=["GET"])
+
+@app.route("/api/health")
 def health():
     return jsonify({"status": "ok"})
 
 
 @app.route("/api/start_project", methods=["POST"])
 def start_project():
-    """
-    Create a new project row and return project_id.
-    """
-    try:
-        # Create empty project row with generated UUID
-        resp = supabase.table("projects").insert({}).execute()
-        if not resp.data:
-            return jsonify({"error": "insert_failed"}), 500
+    resp = supabase.table("projects").insert({}).execute()
+    if not resp.data:
+        return jsonify({"error": "insert_failed"}), 500
+    return jsonify({"project_id": resp.data[0]["id"]})
 
-        project_id = resp.data[0]["id"]
-        return jsonify({"project_id": project_id})
-    except Exception as e:
-        traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
 
-# ============================
-# Template selection by niche
-# ============================
-
-def pick_template_for_project(project: Dict[str, Any],
-                              update_obj: Dict[str, Any]) -> str | None:
-    """
-    אם כבר יש selected_template_id – מחזיר אותו.
-    אחרת בוחר טמפלט רנדומלי לפי הנישה שהצ'ט מחזיר (pizza / hair_salon / photography).
-    """
-
-    # אם כבר יש טמפלט מוגדר (בעדכון הנוכחי או בפרויקט) – לא נוגעים
-    existing = (
-        update_obj.get("selected_template_id")
-        or project.get("selected_template_id")
-    )
-    if existing:
-        return existing
-
-    # הנישה מגיעה מהצ'ט כמילה אחת לפי ה-system_prompt (pizza, hair_salon, photography)
-    niche = (update_obj.get("niche") or project.get("niche") or "").strip().lower()
-    if not niche:
-        return None
-
-    # מחפשים כל טמפלט שה-id שלו מתחיל ב-template_<niche>_
-    prefix = f"template_{niche}_"
-    candidates = [tid for tid in TEMPLATES.keys() if tid.startswith(prefix)]
-
-    if not candidates:
-        return None
-
-    # בחירה רנדומלית מתוך כל הטמפלטים שמתאימים לנישה
-    return random.choice(candidates)
-
+# ==========================================
+# CHAT — stores history + updates DB
+# ==========================================
 @app.route("/api/chat", methods=["POST"])
 def chat():
-    """
-    Handle a chat turn:
-    - Save user message to chat_messages
-    - Load full history for this project
-    - Send to OpenAI with several system prompts (main + project_id + user_turns logic)
-    - Save assistant reply
-    - Parse <update> JSON (if exists) and update projects row
-    """
     try:
         data = request.get_json(force=True)
         project_id = data.get("project_id")
@@ -183,292 +125,133 @@ def chat():
         if not user_message:
             return jsonify({"error": "empty_message"}), 400
 
-        # 1) Save user message in chat_messages
+        # Save user message
         supabase.table("chat_messages").insert({
             "project_id": project_id,
             "role": "user",
             "content": user_message,
-            "status": "complete"
         }).execute()
 
-        # 2) Load full history for this project
-        history_resp = (
-            supabase.table("chat_messages")
-            .select("role, content")
-            .eq("project_id", project_id)
-            .order("created_at", desc=False)
-            .execute()
-        )
-        history_rows = history_resp.data or []
+        # Load entire history
+        history = supabase.table("chat_messages") \
+            .select("role, content") \
+            .eq("project_id", project_id) \
+            .order("created_at", desc=False) \
+            .execute().data or []
 
-        # Count how many user turns we already have
-        user_turns = sum(1 for row in history_rows if row.get("role") == "user")
+        user_turns = sum(1 for r in history if r["role"] == "user")
 
-        # 3) Build messages for OpenAI
-        messages: List[Dict[str, str]] = []
+        # Build messages
+        messages = [
+            {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
+            {"role": "system", "content": f"The current project_id is {project_id}."},
+            {
+                "role": "system",
+                "content": (
+                    f"For this project there have been {user_turns} user answers so far. "
+                    "After 2 or more user answers, offer a demo or continue."
+                )
+            }
+        ]
 
-        # Main system prompt from file
-        messages.append({
-            "role": "system",
-            "content": SITEGYN_SYSTEM_PROMPT
-        })
+        for row in history:
+            messages.append({"role": row["role"], "content": row["content"]})
 
-        # System: project_id
-        messages.append({
-            "role": "system",
-            "content": f"The current project_id is {project_id}. Never mention this ID to the user."
-        })
-
-        # System: dynamic rule about offering a draft after 2 answers
-        messages.append({
-            "role": "system",
-            "content": (
-                f"For this project there have been {user_turns} user answers so far. "
-                "After 2 or more user answers, if you have not yet explicitly asked the user "
-                "whether they want to see an initial website demo or continue the interview, "
-                "you MUST offer that choice in your next reply and you MUST NOT ask additional "
-                "business questions in the same message. If they say they want to see a demo, "
-                "respond conversationally as instructed, but still include the <update> JSON."
-            ),
-        })
-
-        # Conversation history (user + assistant)
-        for row in history_rows:
-            role = row.get("role")
-            content = row.get("content", "")
-            if role not in ("user", "assistant"):
-                continue
-            messages.append({"role": role, "content": content})
-
-        # Add the latest user message again as the last turn
-        # (it is also in history, but we can ensure it's present; duplication is harmless
-        # for short histories, but if you want, you can skip this line.)
-        # messages.append({"role": "user", "content": user_message})
-
-        # 4) Call OpenAI
+        # OpenAI call
         completion = client.chat.completions.create(
             model="gpt-4.1-mini",
             messages=messages,
             temperature=0.5,
         )
 
-        # הטקסט המלא מהמודל (כולל <update> ... </update>)
         assistant_text = completion.choices[0].message.content or ""
 
-        # גרסה נקייה למשתמש – בלי בלוק ה-<update> JSON
-        assistant_visible = assistant_text
-        start_tag = "<update>"
-        end_tag = "</update>"
-        start_idx = assistant_visible.find(start_tag)
-        end_idx = assistant_visible.find(end_tag)
-        if start_idx != -1 and end_idx != -1:
-            assistant_visible = (
-                    assistant_visible[:start_idx] +
-                    assistant_visible[end_idx + len(end_tag):]
-            ).strip()
+        # strip update block for UI
+        visible_text = assistant_text
+        if "<update>" in assistant_text and "</update>" in assistant_text:
+            before = visible_text.split("<update>")[0]
+            after = visible_text.split("</update>")[-1]
+            visible_text = (before + after).strip()
 
-        # 5) Save assistant message
-        tokens_used = completion.usage.total_tokens if completion.usage else None
-
+        # Save assistant message
         supabase.table("chat_messages").insert({
             "project_id": project_id,
             "role": "assistant",
             "content": assistant_text,
-            "tokens_used": tokens_used,
-            "status": "complete"
         }).execute()
 
-        # 6) Parse <update> JSON and update projects table (if present)
+        # Parse <update> block
         update_obj = parse_update_block(assistant_text)
         if update_obj:
-            try:
-                # נטען את הפרויקט הקיים כדי לדעת מה ה-niche והאם כבר קיים טמפלט
-                proj_resp = (
-                    supabase.table("projects")
-                    .select("*")
-                    .eq("id", project_id)
-                    .execute()
-                )
-                proj_rows = getattr(proj_resp, "data", []) or []
-                project = proj_rows[0] if proj_rows else {}
+            project_row = supabase.table("projects").select("*").eq("id", project_id).execute().data[0]
 
-                # אם עדיין אין selected_template_id – נבחר אחד לפי הנישה
-                template_id = pick_template_for_project(project, update_obj)
-                if template_id and not update_obj.get("selected_template_id"):
-                    update_obj["selected_template_id"] = template_id
+            template_id = pick_template_for_project(project_row, update_obj)
+            if template_id and not update_obj.get("selected_template_id"):
+                update_obj["selected_template_id"] = template_id
 
-                # נבנה תמונת מצב סופית של הפרויקט אחרי העדכון
-                final_project_state = {**project, **update_obj}
+            # Update project
+            supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
-                # נבנה תמונת מצב סופית של הפרויקט אחרי העדכון
-                final_project_state = {**project, **update_obj}
-
-                # עדכון הפרויקט בבסיס הנתונים
-                supabase.table("projects").update(update_obj).eq("id", project_id).execute()
-
-                # ===== AUTO BUILD TRIGGER =====
-                try:
-                    has_subdomain = bool(final_project_state.get("subdomain"))
-                    has_content = bool(final_project_state.get("content_json"))
-
-                    # מריצים בילדר אחרי *כל* עדכון שיש בו גם subdomain וגם content_json
-                    if has_subdomain and has_content:
-                        print(f"[AUTO BUILD] Building site for project {project_id}...")
-                        from build_service import run_build_for_project
-                        run_build_for_project(project_id)
-                except Exception as e:
-                    print("[AUTO BUILD ERROR]:", e)
-
-
-            except Exception:
-                traceback.print_exc()
-
-        # 7) Return assistant reply
         return jsonify({
-            "reply": assistant_visible,
-            "project_id": project_id,
+            "reply": visible_text,
+            "project_id": project_id
         })
 
     except Exception as e:
         traceback.print_exc()
-        return jsonify({"error": "chat_failed", "details": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
-from build_service import run_build_for_project  # שורה קיימת
 
-# ---------- NEW: שרת שמחזיר את האתר שנבנה ----------
-
-@app.route("/site/<project_id>")
-def serve_site(project_id: str):
-    """
-    מחזיר את ה-HTML שנבנה עבור project_id מסוים,
-    מתוך התיקייה output/<project_id>/index.html
-    """
-    output_path = Path("output") / project_id / "index.html"
-
-    if not output_path.exists():
-        return jsonify({
-            "status": "error",
-            "message": "site not built yet for this project_id"
-        }), 404
-
-    return send_file(str(output_path), mimetype="text/html")
-
-# ---------- PREVIEW לפי subdomain ----------
-
-@app.route("/preview/<subdomain>")
-def preview_by_subdomain(subdomain: str):
-    """
-    מציג אתר לפי ה-subdomain ששמור בטבלת projects,
-    למשל: /preview/bella-pizza
-    שים לב: לא עושים redirect, אלא מחזירים את ה-HTML ישירות,
-    כדי שה-URL בדפדפן יישאר /preview/<subdomain> (או /p/<subdomain>).
-    """
-    try:
-        resp = (
-            supabase.table("projects")
-            .select("id")
-            .eq("subdomain", subdomain)
-            .limit(1)
-            .execute()
-        )
-        rows = getattr(resp, "data", []) or []
-    except Exception as e:
-        traceback.print_exc()
-        return f"Error looking up project: {e}", 500
-
-    if not rows:
-        return "Project not found", 404
-
-    project_id = rows[0]["id"]
-
-    # במקום redirect → מחזירים את ה-HTML של האתר ישירות
-    return serve_site(project_id)
-
-# ---------- API לבנייה (כבר יש, משאירים כמו שהוא) ----------
+# ==========================================
+# PUBLIC SITE — on-the-fly render (NEW)
+# ==========================================
 @app.route("/p/<subdomain>")
 def public_page_by_subdomain(subdomain: str):
-    """
-    URL ציבורי ללקוח, למשל:
-    https://sitegyn.com/p/bella-pizza
+    html = render_project_html_by_subdomain(subdomain)
+    if html is None:
+        return "Project not found or failed to render", 404
+    return Response(html, mimetype="text/html")
 
-    לא עושים redirect, אלא משתמשים בפונקציה של /preview
-    כדי שהכתובת תישאר /p/<subdomain> ולא תקפוץ ל-/site/...
-    """
-    return preview_by_subdomain(subdomain)
 
-@app.route("/api/build/<project_id>", methods=["GET", "POST"])
-def api_build_project(project_id: str):
-    """
-    מריץ את הבילדר לפרויקט מסוים ומחזיר גם URL זמני לצפייה באתר.
-    """
-    output_path = run_build_for_project(project_id)
-
-    if output_path is None:
-        return jsonify({
-            "status": "error",
-            "message": "build failed",
-        }), 400
-
-    # temp URL אוטומטי – משתמש בכתובת הבסיס של השרת
-    preview_url = f"{request.url_root.rstrip('/')}/site/{project_id}"
-
-    return jsonify({
-        "status": "ok",
-        "project_id": project_id,
-        "output_path": str(output_path),
-        "preview_url": preview_url,
-    })
-
+# ==========================================
+# Admin
+# ==========================================
 @app.route("/api/projects", methods=["GET"])
 def api_list_projects():
-    """
-    מחזיר רשימת פרויקטים לניהול (id + שם + subdomain).
-    """
     try:
-        resp = (
-            supabase.table("projects")
-            .select("id, business_name, business_type, subdomain, created_at")
-            .order("created_at", desc=True)
-            .limit(100)
-            .execute()
-        )
-        data = getattr(resp, "data", []) or []
-        return jsonify({"status": "ok", "projects": data})
-    except Exception as e:
+        rows = supabase.table("projects") \
+            .select("id, business_name, business_type, subdomain, created_at") \
+            .order("created_at", desc=True) \
+            .limit(100) \
+            .execute().data or []
+
+        return jsonify({"status": "ok", "projects": rows})
+    except:
         traceback.print_exc()
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({"status": "error"}), 500
 
 
 @app.route("/api/projects/<project_id>/subdomain", methods=["POST"])
 def api_update_subdomain(project_id):
-    """
-    מעדכן subdomain לפרויקט מסוים, ואפשר אחר כך לקרוא גם ל־/api/build/<project_id>.
-    """
     try:
         payload = request.get_json() or {}
-        subdomain = (payload.get("subdomain") or "").strip().lower()
+        sub = (payload.get("subdomain") or "").strip().lower()
 
-        if not subdomain:
-            return jsonify({"status": "error", "message": "subdomain is required"}), 400
+        if not sub:
+            return jsonify({"status": "error", "message": "subdomain required"}), 400
 
-        # עדכון בטבלה
-        resp = (
-            supabase.table("projects")
-            .update({"subdomain": subdomain})
-            .eq("id", project_id)
-            .execute()
-        )
-        updated = getattr(resp, "data", []) or []
+        updated = supabase.table("projects") \
+            .update({"subdomain": sub}) \
+            .eq("id", project_id) \
+            .execute().data
 
-        return jsonify({
-            "status": "ok",
-            "project_id": project_id,
-            "subdomain": subdomain,
-            "project": updated,
-        })
+        return jsonify({"status": "ok", "project": updated})
     except Exception as e:
-        traceback.print_exc()
         return jsonify({"status": "error", "message": str(e)}), 500
 
+
+# ==========================================
+# Run server
+# ==========================================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "8000")), debug=True)
