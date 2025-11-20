@@ -297,18 +297,28 @@ def chat():
                 if template_id and not update_obj.get("selected_template_id"):
                     update_obj["selected_template_id"] = template_id
 
-                # עדכון הפרויקט
+                # נבנה תמונת מצב סופית של הפרויקט אחרי העדכון
+                final_project_state = {**project, **update_obj}
+
+                # נבנה תמונת מצב סופית של הפרויקט אחרי העדכון
+                final_project_state = {**project, **update_obj}
+
+                # עדכון הפרויקט בבסיס הנתונים
                 supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
                 # ===== AUTO BUILD TRIGGER =====
                 try:
-                    # אם יש subdomain - מפעילים בנייה אוטומטית
-                    if update_obj.get("subdomain"):
+                    has_subdomain = bool(final_project_state.get("subdomain"))
+                    has_content = bool(final_project_state.get("content_json"))
+
+                    # מריצים בילדר אחרי *כל* עדכון שיש בו גם subdomain וגם content_json
+                    if has_subdomain and has_content:
                         print(f"[AUTO BUILD] Building site for project {project_id}...")
                         from build_service import run_build_for_project
                         run_build_for_project(project_id)
                 except Exception as e:
                     print("[AUTO BUILD ERROR]:", e)
+
 
             except Exception:
                 traceback.print_exc()
