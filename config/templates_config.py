@@ -281,4 +281,59 @@ TEMPLATES = {
         "schema": "templates/template_real_estate_04/schema.json",
     },
 
+    # =====================
+    # LAWYER
+    # =====================
+    "template_lawyer_01": {
+        "html": "templates/template_lawyer_01/template_lawyer_01.html",
+        "mapping": "templates/template_lawyer_01/template_lawyer_01_mapping.json",
+        "content_prompt": "prompts/lawyer_01_prompt.txt",
+        "schema": "templates/template_lawyer_01/schema.json",
+    },
+    "template_lawyer_02": {
+        "html": "templates/template_lawyer_02/template_lawyer_02.html",
+        "mapping": "templates/template_lawyer_02/template_lawyer_02_mapping.json",
+        "content_prompt": "prompts/lawyer_02_prompt.txt",
+        "schema": "templates/template_lawyer_02/schema.json",
+    },
+    "template_lawyer_03": {
+        "html": "templates/template_lawyer_03/template_lawyer_03.html",
+        "mapping": "templates/template_lawyer_03/template_lawyer_03_mapping.json",
+        "content_prompt": "prompts/lawyer_03_prompt.txt",
+        "schema": "templates/template_lawyer_03/schema.json",
+    },
+    "template_lawyer_04": {
+        "html": "templates/template_lawyer_04/template_lawyer_04.html",
+        "mapping": "templates/template_lawyer_04/template_lawyer_04_mapping.json",
+        "content_prompt": "prompts/lawyer_04_prompt.txt",
+        "schema": "templates/template_lawyer_04/schema.json",
+    },
+
+    # =====================
+    # LOCAL BUSINESS (GENERIC)
+    # =====================
+    "template_local_business_01": {
+        "html": "templates/template_local_business_01/template_local_business_01.html",
+        "mapping": "templates/template_local_business_01/template_local_business_01_mapping.json",
+        "content_prompt": "prompts/local_business_01_prompt.txt",
+        "schema": "templates/template_local_business_01/schema.json",
+    },
+    "template_local_business_02": {
+        "html": "templates/template_local_business_02/template_local_business_02.html",
+        "mapping": "templates/template_local_business_02/template_local_business_02_mapping.json",
+        "content_prompt": "prompts/local_business_02_prompt.txt",
+        "schema": "templates/template_local_business_02/schema.json",
+    },
+    "template_local_business_03": {
+        "html": "templates/template_local_business_03/template_local_business_03.html",
+        "mapping": "templates/template_local_business_03/template_local_business_03_mapping.json",
+        "content_prompt": "prompts/local_business_03_prompt.txt",
+        "schema": "templates/template_local_business_03/schema.json",
+    },
+    "template_local_business_04": {
+        "html": "templates/template_local_business_04/template_local_business_04.html",
+        "mapping": "templates/template_local_business_04/template_local_business_04_mapping.json",
+        "content_prompt": "prompts/local_business_04_prompt.txt",
+        "schema": "templates/template_local_business_04/schema.json",
+    },
 }
