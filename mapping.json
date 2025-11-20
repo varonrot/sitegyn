@@ -1,0 +1,88 @@
+{
+  "home": {
+    "hero": {
+      "headline": "",
+      "subheadline": "",
+      "paragraph": "",
+      "call_to_action": ""
+    },
+
+    "about": {
+      "title": "",
+      "paragraphs": []
+    },
+
+    "why_us": {
+      "title": "",
+      "subtitle": "",
+      "reasons": [
+        {
+          "title": "",
+          "description": ""
+        }
+      ]
+    },
+
+    "services": {
+      "title": "",
+      "subtitle": "",
+      "items": [
+        {
+          "name": "",
+          "description": "",
+          "price": "",
+          "icon": ""
+        }
+      ]
+    },
+
+    "products": {
+      "title": "",
+      "subtitle": "",
+      "items": [
+        {
+          "name": "",
+          "description": "",
+          "price": "",
+          "image": ""
+        }
+      ]
+    },
+
+    "testimonials": {
+      "title": "",
+      "items": [
+        {
+          "quote": "",
+          "name": "",
+          "role": ""
+        }
+      ]
+    },
+
+    "faq": {
+      "title": "",
+      "items": [
+        {
+          "question": "",
+          "answer": ""
+        }
+      ]
+    },
+
+    "gallery": {
+      "title": "",
+      "images": []
+    },
+
+    "contact": {
+      "title": "",
+      "description": "",
+      "opening_hours": "",
+      "address": "",
+      "phone": "",
+      "email": "",
+      "call_to_action": ""
+    }
+  }
+}
