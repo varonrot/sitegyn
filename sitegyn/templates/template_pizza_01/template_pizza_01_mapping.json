@@ -1,41 +1,35 @@
 {
-  "logo_title": "logo_title",
-  "eyebrow_text": "eyebrow_text",
+  "logo_text": "business_name",
+  "eyebrow_text": "business_type",
+  "nav_btn_text": "home.hero.call_to_action",
 
-  "home_hero_title": "home_hero_title",
-  "home_hero_paragraph": "home_hero_paragraph",
-  "home_hero_cta": "home_hero_cta",
+  "home_hero_title": "home.hero.headline",
+  "home_hero_paragraph": "home.hero.subheadline",
+  "home_hero_cta": "home.hero.call_to_action",
 
-  "feature_1_title": "feature_1_title",
-  "feature_1_text": "feature_1_text",
+  "feature_1_title": "home.why_us.reasons[0].title",
+  "feature_1_text": "home.why_us.reasons[0].description",
 
-  "feature_2_title": "feature_2_title",
-  "feature_2_text": "feature_2_text",
+  "feature_2_title": "home.why_us.reasons[1].title",
+  "feature_2_text": "home.why_us.reasons[1].description",
 
-  "feature_3_title": "feature_3_title",
-  "feature_3_text": "feature_3_text",
+  "feature_3_title": "home.why_us.reasons[2].title",
+  "feature_3_text": "home.why_us.reasons[2].description",
 
-  "why_us_title": "why_us_title",
-  "why_us_subtitle": "why_us_subtitle",
+  "menu_item_1_name": "home.menu.items[0].name",
+  "menu_item_1_desc": "home.menu.items[0].description",
+  "menu_item_1_price": "home.menu.items[0].price",
 
-  "menu_section_title": "menu_section_title",
-  "menu_section_subtitle": "menu_section_subtitle",
+  "menu_item_2_name": "home.menu.items[1].name",
+  "menu_item_2_desc": "home.menu.items[1].description",
+  "menu_item_2_price": "home.menu.items[1].price",
 
-  "menu_item_1_name": "menu_item_1_name",
-  "menu_item_1_desc": "menu_item_1_desc",
-  "menu_item_1_price": "menu_item_1_price",
+  "menu_item_3_name": "home.menu.items[2].name",
+  "menu_item_3_desc": "home.menu.items[2].description",
+  "menu_item_3_price": "home.menu.items[2].price",
 
-  "menu_item_2_name": "menu_item_2_name",
-  "menu_item_2_desc": "menu_item_2_desc",
-  "menu_item_2_price": "menu_item_2_price",
-
-  "menu_item_3_name": "menu_item_3_name",
-  "menu_item_3_desc": "menu_item_3_desc",
-  "menu_item_3_price": "menu_item_3_price",
-
-  "contact_title": "contact_title",
-  "contact_subtitle": "contact_subtitle",
-
-  "cta_whatsapp": "cta_whatsapp",
-  "opening_hours": "opening_hours"
+  "contact_title": "home.contact.title",
+  "contact_description": "home.contact.description",
+  "contact_hours": "home.contact.opening_hours",
+  "contact_cta": "home.contact.call_to_action"
 }
