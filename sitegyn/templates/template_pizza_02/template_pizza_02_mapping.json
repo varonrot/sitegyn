@@ -1,6 +1,7 @@
 {
-  "logo_title": "business_name",
+  "LOGO_TITLE": "business_name",
   "eyebrow_text": "business_type",
+  "nav_btn_text": "home.hero.call_to_action",
 
   "home_hero_title": "home.hero.headline",
   "home_hero_paragraph": "home.hero.subheadline",
