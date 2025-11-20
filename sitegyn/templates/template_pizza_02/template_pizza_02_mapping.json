@@ -1,37 +1,74 @@
-{
-  "logo_title": "{business_name}",
+For every business, you MUST structure `content_json` so that the website feels complete and rich.
 
-  "eyebrow_text": "Authentic {business_type} – delivery & takeaway",
+At a MINIMUM, the `content_json` for a small local business website must include:
 
-  "home_hero_title": "{business_name} – Fresh Hot Pizza Delivered",
-  "home_hero_paragraph": "Enjoy fresh, authentic pizza made with premium ingredients and baked in a stone oven.",
-  "home_hero_cta": "Order Now",
+- Hero section:
+  - 1 strong main headline (not just 2–3 words, but a full, meaningful sentence).
+  - 1 short subheadline (1–2 sentences).
+  - 1 clear primary call-to-action text (CTA).
 
-  "why_us_title": "Why Choose {business_name}?",
-  "why_us_subtitle": "Three reasons customers keep coming back to us.",
+- About / Why-us section:
+  - At least 2–3 short paragraphs that explain who the business is, what they do, and why they are different.
+  - At least 3 concrete “reasons to choose us” (each with a short title + 1–2 sentence explanation).
 
-  "feature_1_title": "Premium Ingredients",
-  "feature_1_text": "We use only the freshest, highest-quality ingredients for an unforgettable taste.",
-  "feature_2_title": "Fast Delivery",
-  "feature_2_text": "Our delivery team makes sure your pizza arrives hot and on time.",
-  "feature_3_title": "Local & Authentic",
-  "feature_3_text": "Traditional recipes made with love – a true Italian-style experience.",
+- Services / Menu / Products section:
+  - At least 5–8 items (for example: menu items, services, or packages).
+  - For each item: a clear name + 1 short description sentence.
+  - If relevant, you may also add a simple price or price range text.
 
-  "menu_section_title": "Customer Favorites",
-  "menu_section_subtitle": "A small taste of our most popular pizzas.",
+- Contact / Order section:
+  - 1 strong title that invites the visitor to contact or order.
+  - 1–2 sentences that explain how to get in touch or place an order.
+  - A clear call-to-action phrase (for example: “Call now”, “Order on WhatsApp”, “Book an appointment”).
+  - A simple “opening hours” line with realistic hours if none were provided.
 
-  "menu_item_1_name": "Classic Margherita",
-  "menu_item_1_price": "$12",
-  "menu_item_1_desc": "Tomato sauce, mozzarella cheese, and fresh basil.",
-  "menu_item_2_name": "Pepperoni Heat",
-  "menu_item_2_price": "$14",
-  "menu_item_2_desc": "Mozzarella, spicy pepperoni, and a touch of chili flakes.",
-  "menu_item_3_name": "Veggie Garden",
-  "menu_item_3_price": "$13",
-  "menu_item_3_desc": "Colorful mix of fresh vegetables on a crispy base.",
+You MUST never stop at only one heading and one paragraph.
+Always generate enough copy so that the page feels full and commercially useful.
+It is OK if some of this content is not used by the template. The important thing is that no section feels empty or too short.
 
-  "contact_title": "Order Now",
-  "contact_subtitle": "Call us or send a WhatsApp message – your pizza is already on the way.",
-  "cta_whatsapp": "Order on WhatsApp",
-  "opening_hours": "Open today: {opening_hours}"
+ADDITIONAL REQUIREMENT – TEMPLATE PLACEHOLDERS
+
+To make sure the website builder can inject your copy into different HTML templates, you must also include inside `content_json` a flat object called `"placeholders"`.
+
+This object MUST contain ready-to-use text values for all template placeholders that the site might need.
+
+Example structure (simplified):
+
+"content_json": {
+  "placeholders": {
+    "logo_title": "...",
+    "eyebrow_text": "...",
+    "home_hero_title": "...",
+    "home_hero_paragraph": "...",
+    "home_hero_cta": "...",
+    "why_us_title": "...",
+    "why_us_subtitle": "...",
+    "feature_1_title": "...",
+    "feature_1_text": "...",
+    "feature_2_title": "...",
+    "feature_2_text": "...",
+    "feature_3_title": "...",
+    "feature_3_text": "...",
+    "menu_section_title": "...",
+    "menu_section_subtitle": "...",
+    "menu_item_1_name": "...",
+    "menu_item_1_price": "...",
+    "menu_item_1_desc": "...",
+    "menu_item_2_name": "...",
+    "menu_item_2_price": "...",
+    "menu_item_2_desc": "...",
+    "menu_item_3_name": "...",
+    "menu_item_3_price": "...",
+    "menu_item_3_desc": "...",
+    "contact_title": "...",
+    "contact_subtitle": "...",
+    "cta_whatsapp": "...",
+    "opening_hours": "..."
+  },
+
+  "... other structured sections like hero, about, services, contact ..."
 }
+
+For pizza restaurants you MUST always fill **all** of the placeholders above with real marketing copy (not just 1–2 words).
+
+After **each** answer (after Question 1 and again after Question 2) you MUST regenerate the full `"placeholders"` object so that it reflects the user’s current main goal and overwrites any previous values.
