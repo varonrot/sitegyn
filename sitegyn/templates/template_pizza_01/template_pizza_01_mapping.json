@@ -1,39 +1,41 @@
 {
-  "logo_title": "{business_name}",
-  "eyebrow_text": "Authentic pizza restaurant – delivery & takeaway",
+  "logo_title": "logo_title",
+  "eyebrow_text": "eyebrow_text",
 
-  "home_hero_title": "{business_name} – Fresh Hot Pizza Delivered",
-  "home_hero_paragraph": "Enjoy fresh, authentic pizza made with premium ingredients and baked in a stone oven.",
-  "home_hero_cta": "Order Now",
+  "home_hero_title": "home_hero_title",
+  "home_hero_paragraph": "home_hero_paragraph",
+  "home_hero_cta": "home_hero_cta",
 
-  "feature_1_title": "Premium Ingredients",
-  "feature_1_text": "We use only the freshest, highest-quality ingredients to give you an unforgettable taste.",
-  "feature_2_title": "Fast Delivery",
-  "feature_2_text": "Our delivery team makes sure your pizza arrives hot and on time.",
-  "feature_3_title": "Local & Authentic",
-  "feature_3_text": "Traditional recipes made with love – a true Italian-style experience.",
+  "feature_1_title": "feature_1_title",
+  "feature_1_text": "feature_1_text",
 
-  "why_us_title": "Why Choose {business_name}?",
-  "why_us_subtitle": "Three reasons customers keep coming back to us.",
+  "feature_2_title": "feature_2_title",
+  "feature_2_text": "feature_2_text",
 
-  "menu_section_title": "Customer Favorites",
-  "menu_section_subtitle": "A small taste of our most popular pizzas.",
+  "feature_3_title": "feature_3_title",
+  "feature_3_text": "feature_3_text",
 
-  "menu_item_1_name": "Classic Margherita",
-  "menu_item_1_desc": "Tomato sauce, mozzarella cheese, and fresh basil.",
-  "menu_item_1_price": "$12",
+  "why_us_title": "why_us_title",
+  "why_us_subtitle": "why_us_subtitle",
 
-  "menu_item_2_name": "Pepperoni Heat",
-  "menu_item_2_desc": "Mozzarella, spicy pepperoni, and a touch of chili flakes.",
-  "menu_item_2_price": "$14",
+  "menu_section_title": "menu_section_title",
+  "menu_section_subtitle": "menu_section_subtitle",
 
-  "menu_item_3_name": "Veggie Garden",
-  "menu_item_3_desc": "Colorful mix of fresh vegetables on a crispy base.",
-  "menu_item_3_price": "$13",
+  "menu_item_1_name": "menu_item_1_name",
+  "menu_item_1_desc": "menu_item_1_desc",
+  "menu_item_1_price": "menu_item_1_price",
 
-  "contact_title": "Order Now",
-  "contact_subtitle": "Call us or send a WhatsApp message – your pizza is already on the way.",
+  "menu_item_2_name": "menu_item_2_name",
+  "menu_item_2_desc": "menu_item_2_desc",
+  "menu_item_2_price": "menu_item_2_price",
 
-  "cta_whatsapp": "Order on WhatsApp",
-  "opening_hours": "Open daily: 11:00–23:00"
+  "menu_item_3_name": "menu_item_3_name",
+  "menu_item_3_desc": "menu_item_3_desc",
+  "menu_item_3_price": "menu_item_3_price",
+
+  "contact_title": "contact_title",
+  "contact_subtitle": "contact_subtitle",
+
+  "cta_whatsapp": "cta_whatsapp",
+  "opening_hours": "opening_hours"
 }
