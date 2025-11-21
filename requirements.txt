@@ -6,3 +6,4 @@ openai
 pydantic
 Flask
 flask-cors
+beautifulsoup4
