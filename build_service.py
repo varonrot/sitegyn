@@ -38,8 +38,8 @@ def _resolve_template_path(template_id: str) -> Path:
         sitegyn/templates/template_pizza_01/...
     """
     # project root
-    base_dir = Path(__file__).resolve().parent  # /sitegyn/build_service.py
-    base_dir = base_dir.parent                 # /sitegyn/
+    base_dir = Path(__file__).resolve().parent  # זה כבר /sitegyn/
+
     from templates_config import TEMPLATES
 
     html_rel_path = TEMPLATES[template_id]["html"]
@@ -49,7 +49,7 @@ def _resolve_template_path(template_id: str) -> Path:
 def _load_template_mapping(template_id: str) -> Dict[str, str]:
     """Load mapping.json for template."""
     base_dir = Path(__file__).resolve().parent  # /sitegyn/build_service.py
-    base_dir = base_dir.parent                 # /sitegyn/
+
     from templates_config import TEMPLATES
 
     mapping_rel_path = TEMPLATES[template_id]["mapping"]
