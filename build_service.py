@@ -19,7 +19,6 @@ supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 # Helpers – load project + resolve paths
 # ==========================================
 def _load_project_by_id(project_id: str) -> Optional[Dict[str, Any]]:
-    """Load project row from Supabase."""
     result = (
         supabase.table("projects")
         .select("*")
@@ -35,18 +34,22 @@ def _load_project_by_id(project_id: str) -> Optional[Dict[str, Any]]:
 def _resolve_template_path(template_id: str) -> Path:
     """
     Resolve HTML file path for the given template.
-    We rely on templates_config.json structure.
+    IMPORTANT: adjusted for your Git folder structure:
+        sitegyn/templates/template_pizza_01/...
     """
-    base_dir = Path(__file__).resolve().parent.parent
+    # project root
+    base_dir = Path(__file__).resolve().parent  # /sitegyn/build_service.py
+    base_dir = base_dir.parent                 # /sitegyn/
     from templates_config import TEMPLATES
 
     html_rel_path = TEMPLATES[template_id]["html"]
-    return base_dir / html_rel_path
+    return base_dir / html_rel_path            # sitegyn/templates/...
 
 
 def _load_template_mapping(template_id: str) -> Dict[str, str]:
-    """Loads mapping.json for template."""
-    base_dir = Path(__file__).resolve().parent.parent
+    """Load mapping.json for template."""
+    base_dir = Path(__file__).resolve().parent  # /sitegyn/build_service.py
+    base_dir = base_dir.parent                 # /sitegyn/
     from templates_config import TEMPLATES
 
     mapping_rel_path = TEMPLATES[template_id]["mapping"]
@@ -58,11 +61,6 @@ def _load_template_mapping(template_id: str) -> Dict[str, str]:
 # NEW: get_value_by_path – handles paths like "menu.pizzas[1].name"
 # ==========================================
 def get_value_by_path(data: Dict[str, Any], path: str) -> Any:
-    """
-    Extracts nested value from dict using path like:
-    "home.hero.headline"
-    "offers.deals[2].price_text"
-    """
     current = data
     tokens = re.findall(r"[a-zA-Z0-9_]+|\[\d+\]", path)
 
@@ -83,33 +81,22 @@ def get_value_by_path(data: Dict[str, Any], path: str) -> Any:
 
 
 # ==========================================
-# NEW: inject_value_into_html – replaces innerText of an element by ID
+# inject_value_into_html – replaces innerText of an element by ID
 # ==========================================
 def inject_value_into_html(soup: BeautifulSoup, element_id: str, value: str):
-    """
-    Finds element with id="element_id" and replaces its inner text with value.
-    """
     tag = soup.find(id=element_id)
     if tag:
-        # Clear children and set text
         tag.clear()
         tag.append(str(value))
 
 
 # ==========================================
-# NEW: _render_template – the modern renderer
+# Modern renderer – inject content_json into HTML
 # ==========================================
 def _render_template(html_source: str, project: Dict[str, Any], mapping: Dict[str, str]) -> str:
-    """
-    Renders final HTML by injecting values from project["content_json"]
-    into HTML according to mapping (id -> schema.path).
-    """
     content_json = project.get("content_json") or {}
-
-    # Parse with BeautifulSoup for clean DOM manipulation
     soup = BeautifulSoup(html_source, "html.parser")
 
-    # For each HTML id → find value in content_json
     for html_id, schema_path in mapping.items():
         value = get_value_by_path(content_json, schema_path)
         if value is not None:
@@ -119,13 +106,9 @@ def _render_template(html_source: str, project: Dict[str, Any], mapping: Dict[st
 
 
 # ==========================================
-# OPTIONAL: build_site_for_project (for static output)
+# OPTIONAL static builder
 # ==========================================
 def build_site_for_project(project_id: str, output_dir: Optional[str] = None) -> Optional[str]:
-    """
-    Build a static version of the site for a given project_id (optional).
-    Only used if you want physical files.
-    """
     project = _load_project_by_id(project_id)
     if not project:
         return None
