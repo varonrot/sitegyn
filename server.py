@@ -278,6 +278,30 @@ def chat():
                 .data[0]
             )
 
+            # --- Conversation history update ---
+            existing_history = project_row.get("conversation_history") or {}
+
+            # נדאג שתמיד יהיה dict
+            if not isinstance(existing_history, dict):
+                existing_history = {}
+
+            # נוסיף רשומה חדשה עם התשובה האחרונה של המשתמש
+            # אפשר לפי מספר סבב, או פשוט רשימת פניות
+            user_history_list = existing_history.get("user_turns", [])
+            if not isinstance(user_history_list, list):
+                user_history_list = []
+
+            user_history_list.append({
+                "message": user_message,
+            })
+
+            existing_history["user_turns"] = user_history_list
+
+            # נעדכן את ה-update_obj כך שישמר בטבלת projects
+            update_obj["conversation_history"] = existing_history
+            # --- סוף עדכון היסטוריה ---
+
+
             # 1) בחירת טמפלט
             template_id = pick_template_for_project(project_row, update_obj)
             if template_id and not update_obj.get("selected_template_id"):
