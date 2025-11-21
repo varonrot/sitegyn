@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from flask_cors import CORS
 from supabase import create_client, Client
 from openai import OpenAI
-from config.templates_config import TEMPLATES
+from templates_config import TEMPLATES
 
 # === Render On-The-Fly ===
 from render_service import render_project_html_by_subdomain
