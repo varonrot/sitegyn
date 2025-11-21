@@ -37,7 +37,7 @@ def _resolve_template_path(template_id: str) -> Path:
     Resolve HTML file path for the given template.
     We rely on templates_config.json structure.
     """
-    base_dir = Path(__file__).resolve().parent
+    base_dir = Path(__file__).resolve().parent.parent
     from templates_config import TEMPLATES
 
     html_rel_path = TEMPLATES[template_id]["html"]
@@ -46,7 +46,7 @@ def _resolve_template_path(template_id: str) -> Path:
 
 def _load_template_mapping(template_id: str) -> Dict[str, str]:
     """Loads mapping.json for template."""
-    base_dir = Path(__file__).resolve().parent
+    base_dir = Path(__file__).resolve().parent.parent
     from templates_config import TEMPLATES
 
     mapping_rel_path = TEMPLATES[template_id]["mapping"]
