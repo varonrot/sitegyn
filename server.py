@@ -98,40 +98,42 @@ def generate_content_for_project(
     """
     Use the generic content_fill_prompt + template schema
     to generate content_json for this project & template.
+    אם משהו נכשל בדרך (קובץ חסר / GPT נופל) – נחזיר None
+    ולא נשבור את זרימת העדכון ל-projects.
     """
-    template_conf = TEMPLATES.get(template_id)
-    if not template_conf:
-        return None
-
-    base_dir = Path(__file__).resolve().parent
-
-    # 1) schema של הטמפלט
-    schema_path = base_dir / template_conf["schema"]
-    schema_str = schema_path.read_text(encoding="utf-8")
-
-    # 2) הפרומפט הכללי (או מה שמוגדר ב-content_prompt)
-    content_prompt_path = base_dir / "content_fill_prompt.txt"
-    if template_conf.get("content_prompt"):
-        content_prompt_path = base_dir / template_conf["content_prompt"]
-
-    prompt_template = content_prompt_path.read_text(encoding="utf-8")
-
-    # 3) BUSINESS_DATA_JSON – מה שיש לנו על הפרויקט + העדכון האחרון
-    business_data = {
-        "project": project_row,
-        "update": update_obj,
-    }
-    business_data_str = json.dumps(business_data, ensure_ascii=False)
-
-    # 4) מכניסים את ה-schema ואת BUSINESS_DATA לתוך הפרומפט
-    final_prompt = (
-        prompt_template
-        .replace("{{SCHEMA_JSON}}", schema_str)
-        .replace("{{BUSINESS_DATA_JSON}}", business_data_str)
-    )
-
-    # 5) קריאה שנייה ל-GPT שמחזירה JSON טהור בלבד
     try:
+        template_conf = TEMPLATES.get(template_id)
+        if not template_conf:
+            return None
+
+        base_dir = Path(__file__).resolve().parent
+
+        # 1) schema של הטמפלט
+        schema_path = base_dir / template_conf["schema"]
+        schema_str = schema_path.read_text(encoding="utf-8")
+
+        # 2) הפרומפט הכללי (או מה שמוגדר ב-content_prompt)
+        content_prompt_path = base_dir / "content_fill_prompt.txt"
+        if template_conf.get("content_prompt"):
+            content_prompt_path = base_dir / template_conf["content_prompt"]
+
+        prompt_template = content_prompt_path.read_text(encoding="utf-8")
+
+        # 3) BUSINESS_DATA_JSON – מה שיש לנו על הפרויקט + העדכון האחרון
+        business_data = {
+            "project": project_row,
+            "update": update_obj,
+        }
+        business_data_str = json.dumps(business_data, ensure_ascii=False)
+
+        # 4) מכניסים את ה-schema ואת BUSINESS_DATA לתוך הפרומפט
+        final_prompt = (
+            prompt_template
+            .replace("{{SCHEMA_JSON}}", schema_str)
+            .replace("{{BUSINESS_DATA_JSON}}", business_data_str)
+        )
+
+        # 5) קריאה שנייה ל-GPT שמחזירה JSON טהור בלבד
         completion = client.chat.completions.create(
             model="gpt-4.1-mini",
             messages=[{"role": "user", "content": final_prompt}],
@@ -140,15 +142,10 @@ def generate_content_for_project(
         text = completion.choices[0].message.content.strip()
         content_json = json.loads(text)
         return content_json
+
     except Exception:
         traceback.print_exc()
         return None
-
-
-# ==========================================
-# ROUTES
-# ==========================================
-
 
 # ==========================================
 # ROUTES
@@ -260,15 +257,20 @@ def chat():
                 update_obj["selected_template_id"] = template_id
 
             # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
+            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
             if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
-                content_json = generate_content_for_project(
-                    client=client,
-                    project_row=project_row,
-                    update_obj=update_obj,
-                    template_id=template_id,
-                )
-                if content_json:
-                    update_obj["content_json"] = content_json
+                try:
+                    content_json = generate_content_for_project(
+                        client=client,
+                        project_row=project_row,
+                        update_obj=update_obj,
+                        template_id=template_id,
+                    )
+                    if content_json:
+                        update_obj["content_json"] = content_json
+                except Exception:
+                    traceback.print_exc()
+                    # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
