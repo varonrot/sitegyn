@@ -88,6 +88,68 @@ def pick_template_for_project(project: Dict[str, Any],
     return random.choice(candidates)
 
 
+# ⬇️ כאן להדביק את generate_content_for_project ⬇️
+def generate_content_for_project(
+    client: OpenAI,
+    project_row: Dict[str, Any],
+    update_obj: Dict[str, Any],
+    template_id: str,
+) -> Dict[str, Any] | None:
+    """
+    Use the generic content_fill_prompt + template schema
+    to generate content_json for this project & template.
+    """
+    template_conf = TEMPLATES.get(template_id)
+    if not template_conf:
+        return None
+
+    base_dir = Path(__file__).resolve().parent
+
+    # 1) schema של הטמפלט
+    schema_path = base_dir / template_conf["schema"]
+    schema_str = schema_path.read_text(encoding="utf-8")
+
+    # 2) הפרומפט הכללי (או מה שמוגדר ב-content_prompt)
+    content_prompt_path = base_dir / "content_fill_prompt.txt"
+    if template_conf.get("content_prompt"):
+        content_prompt_path = base_dir / template_conf["content_prompt"]
+
+    prompt_template = content_prompt_path.read_text(encoding="utf-8")
+
+    # 3) BUSINESS_DATA_JSON – מה שיש לנו על הפרויקט + העדכון האחרון
+    business_data = {
+        "project": project_row,
+        "update": update_obj,
+    }
+    business_data_str = json.dumps(business_data, ensure_ascii=False)
+
+    # 4) מכניסים את ה-schema ואת BUSINESS_DATA לתוך הפרומפט
+    final_prompt = (
+        prompt_template
+        .replace("{{SCHEMA_JSON}}", schema_str)
+        .replace("{{BUSINESS_DATA_JSON}}", business_data_str)
+    )
+
+    # 5) קריאה שנייה ל-GPT שמחזירה JSON טהור בלבד
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[{"role": "user", "content": final_prompt}],
+            temperature=0.0,
+        )
+        text = completion.choices[0].message.content.strip()
+        content_json = json.loads(text)
+        return content_json
+    except Exception:
+        traceback.print_exc()
+        return None
+
+
+# ==========================================
+# ROUTES
+# ==========================================
+
+
 # ==========================================
 # ROUTES
 # ==========================================
@@ -183,14 +245,39 @@ def chat():
         # Parse <update> block
         update_obj = parse_update_block(assistant_text)
         if update_obj:
-            project_row = supabase.table("projects").select("*").eq("id", project_id).execute().data[0]
+            # שולפים את רשומת הפרויקט
+            project_row = (
+                supabase.table("projects")
+                .select("*")
+                .eq("id", project_id)
+                .execute()
+                .data[0]
+            )
 
+            # 1) בחירת טמפלט
             template_id = pick_template_for_project(project_row, update_obj)
             if template_id and not update_obj.get("selected_template_id"):
                 update_obj["selected_template_id"] = template_id
 
-            # Update project
+            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
+            if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
+                content_json = generate_content_for_project(
+                    client=client,
+                    project_row=project_row,
+                    update_obj=update_obj,
+                    template_id=template_id,
+                )
+                if content_json:
+                    update_obj["content_json"] = content_json
+
+            # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
+
+            # 4) (אופציונלי) להפעיל את render_service מיד אחרי שיש תוכן
+            #    אם יש לך פונקציה כזו ב-render_service.py:
+            # from render_service import build_site_for_project
+            # build_site_for_project(project_id)
+
 
         return jsonify({
             "reply": visible_text,
