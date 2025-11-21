@@ -298,10 +298,21 @@ def chat():
                     traceback.print_exc()
                     # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
-            # 3) עדכון הטבלה ב-Supabase
-            supabase.table("projects").update(update_obj).eq("id", project_id).execute()
+            # שליפת השורה הקיימת
+        project_row = (
+            supabase.table("projects")
+            .select("*")
+            .eq("id", project_id)
+            .execute()
+            .data[0]
+        )
 
+        # MERGE – מוודא שלא נמחק שדות קיימים
+        merged = project_row.copy()
+        merged.update(update_obj)
 
+        # עדכון ב-Supabase
+        supabase.table("projects").update(merged).eq("id", project_id).execute()
 
         return jsonify({
             "reply": visible_text,
