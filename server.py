@@ -239,8 +239,35 @@ def chat():
             "content": assistant_text,
         }).execute()
 
-        # Parse <update> block
+        # Parse <update> block מהתשובה הראשונה
         update_obj = parse_update_block(assistant_text)
+
+        # אם המודל לא החזיר בכלל <update>...</update> – נעשה קריאה שנייה "נסתרת"
+        if not update_obj:
+            try:
+                backend_messages = messages + [
+                    {
+                        "role": "system",
+                        "content": (
+                            "Your previous reply did not follow the instructions. "
+                            "Now respond ONLY with a single <update>{...}</update> block "
+                            "containing valid JSON for the current project. "
+                            "Do not add any natural language or explanation."
+                        ),
+                    }
+                ]
+                completion2 = client.chat.completions.create(
+                    model="gpt-4.1-mini",
+                    messages=backend_messages,
+                    temperature=0.0,
+                )
+                backend_text = completion2.choices[0].message.content or ""
+                update_obj = parse_update_block(backend_text)
+            except Exception:
+                traceback.print_exc()
+                update_obj = {}
+
+        # אם יש לנו עדכון אחרי אחד משני הניסיונות – ממשיכים כרגיל
         if update_obj:
             # שולפים את רשומת הפרויקט
             project_row = (
@@ -256,7 +283,6 @@ def chat():
             if template_id and not update_obj.get("selected_template_id"):
                 update_obj["selected_template_id"] = template_id
 
-            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
             # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
             if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
                 try:
@@ -275,10 +301,6 @@ def chat():
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
-            # 4) (אופציונלי) להפעיל את render_service מיד אחרי שיש תוכן
-            #    אם יש לך פונקציה כזו ב-render_service.py:
-            # from render_service import build_site_for_project
-            # build_site_for_project(project_id)
 
 
         return jsonify({
