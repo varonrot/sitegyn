@@ -283,7 +283,21 @@ def chat():
             if template_id and not update_obj.get("selected_template_id"):
                 update_obj["selected_template_id"] = template_id
 
-         
+            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
+            if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
+                try:
+                    content_json = generate_content_for_project(
+                        client=client,
+                        project_row=project_row,
+                        update_obj=update_obj,
+                        template_id=template_id,
+                    )
+                    if content_json:
+                        update_obj["content_json"] = content_json
+                except Exception:
+                    traceback.print_exc()
+                    # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
+
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
