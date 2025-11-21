@@ -375,15 +375,34 @@ def api_update_subdomain(project_id):
         if not sub:
             return jsonify({"status": "error", "message": "subdomain required"}), 400
 
+        # --- Auto-resolve subdomain conflicts ---
+        base = sub
+        candidate = base
+        counter = 1
+
+        while True:
+            conflict = supabase.table("projects") \
+                .select("id") \
+                .eq("subdomain", candidate) \
+                .neq("id", project_id) \
+                .execute().data
+
+            if not conflict:
+                break  # פנוי
+
+            candidate = f"{base}-{counter}"
+            counter += 1
+
+        # candidate = subdomain הסופי והפנוי
+
         updated = supabase.table("projects") \
-            .update({"subdomain": sub}) \
+            .update({"subdomain": candidate}) \
             .eq("id", project_id) \
             .execute().data
 
-        return jsonify({"status": "ok", "project": updated})
+        return jsonify({"status": "ok", "subdomain": candidate, "project": updated})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-
 
 # ==========================================
 # Run server
