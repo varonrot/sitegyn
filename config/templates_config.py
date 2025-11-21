@@ -8,25 +8,25 @@ TEMPLATES = {
         "html": "templates/template_pizza_01/template_pizza_01.html",
         "mapping": "templates/template_pizza_01/template_pizza_01_mapping.json",
         "content_prompt": "prompts/pizza_01_prompt.txt",
-        "schema": "templates/template_pizza_01/schema.json",
+        "schema": "templates/template_pizza_01/template_pizza_01_schema.json",
     },
     "template_pizza_02": {
         "html": "templates/template_pizza_02/template_pizza_02.html",
         "mapping": "templates/template_pizza_02/template_pizza_02_mapping.json",
         "content_prompt": "prompts/pizza_02_prompt.txt",
-        "schema": "templates/template_pizza_02/schema.json",
+        "schema": "templates/template_pizza_02/template_pizza_02_schema.json",
     },
     "template_pizza_03": {
         "html": "templates/template_pizza_03/template_pizza_03.html",
         "mapping": "templates/template_pizza_03/template_pizza_03_mapping.json",
         "content_prompt": "prompts/pizza_03_prompt.txt",
-        "schema": "templates/template_pizza_03/schema.json",
+        "schema": "templates/template_pizza_03/template_pizza_03_schema.json",
     },
     "template_pizza_04": {
         "html": "templates/template_pizza_04/template_pizza_04.html",
         "mapping": "templates/template_pizza_04/template_pizza_04_mapping.json",
         "content_prompt": "prompts/pizza_04_prompt.txt",
-        "schema": "templates/template_pizza_04/schema.json",
+        "schema": "templates/template_pizza_04/template_pizza_04_schema.json",
     },
 
     # =====================
