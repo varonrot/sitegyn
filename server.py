@@ -146,60 +146,90 @@ def generate_content_for_project(
     except Exception:
         traceback.print_exc()
         return None
+def generate_full_content_update(client, project_row, conversation_history, template_id, user_input):
+    try:
+        # טוענים את פרומפט 2 מהקובץ
+        with open("content_fill_prompt2.txt", "r", encoding="utf-8") as f:
+            base_prompt = f.read()
+
+        # טוענים schema מהתיקייה של הטמפלט
+        schema_path = Path("templates") / template_id / f"{template_id}_schema.json"
+        with open(schema_path, "r", encoding="utf-8") as f:
+            schema_json = json.load(f)
+
+        payload = {
+            "schema_json": schema_json,
+            "content_json_original": project_row.get("content_json") or {},
+            "conversation_history": conversation_history or {},
+            "user_input": user_input,
+            "project_data": project_row,
+        }
+
+        messages = [
+            {"role": "system", "content": base_prompt},
+            {"role": "user", "content": json.dumps(payload)}
+        ]
+
+        resp = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            temperature=0.8
+        )
+
+        raw = resp.choices[0].message["content"]
+
+        return json.loads(raw)
+
+    except Exception as e:
+        print("❌ ERROR in generate_full_content_update:", e)
+        traceback.print_exc()
+        return None
+
+def generate_full_content_update(client, project_row, conversation_history, template_id):
+    """
+    מפעיל את פרומפט 2 – עדכון מלא של content_json בהתאם לתשובות המשתמש הקודמות
+    """
+
+    try:
+        # טוענים את פרומפט 2 מהקובץ
+        with open("content_fill_prompt2.txt", "r", encoding="utf-8") as f:
+            prompt2 = f.read()
+
+        # בונים את ההודעה ל-GPT
+        messages = [
+            {"role": "system", "content": prompt2},
+            {
+                "role": "user",
+                "content": json.dumps({
+                    "template_id": template_id,
+                    "project": project_row,
+                    "conversation_history": conversation_history
+                }, ensure_ascii=False)
+            }
+        ]
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            temperature=0.3,
+        )
+
+        raw = response.choices[0].message.content.strip()
+
+        try:
+            result_json = json.loads(raw)
+            return result_json
+        except:
+            print("JSON parse error:", raw)
+            return None
+
+    except Exception as e:
+        print("Error generate_full_content_update:", e)
+        return None
 
 # ==========================================
 # ROUTES
 # ==========================================
-
-def generate_full_content_update(
-    client: OpenAI,
-    project_row: Dict[str, Any],
-    conversation_history: Dict[str, Any],
-    template_id: str,
-):
-    """
-    הפעלה של פרומפט 2 — מעדכן תוכן קיים לפי היסטוריית השיחה.
-    חוזר JSON נקי שמחליף את content_json.
-    """
-    try:
-        template_conf = TEMPLATES.get(template_id)
-        if not template_conf:
-            return None
-
-        base_dir = Path(__file__).resolve().parent
-
-        # 1) schema
-        schema_path = base_dir / template_conf["schema"]
-        schema_str = schema_path.read_text(encoding="utf-8")
-
-        # 2) פרומפט 2
-        prompt2_path = base_dir / "content_fill_prompt2.txt"
-        prompt_template = prompt2_path.read_text(encoding="utf-8")
-
-        data = {
-            "project": project_row,
-            "conversation_history": conversation_history,
-        }
-        data_str = json.dumps(data, ensure_ascii=False)
-
-        final_prompt = (
-            prompt_template
-            .replace("{{SCHEMA_JSON}}", schema_str)
-            .replace("{{BUSINESS_DATA_JSON}}", data_str)
-        )
-
-        completion = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[{"role": "user", "content": final_prompt}],
-            temperature=0.0,
-        )
-
-        text = completion.choices[0].message.content.strip()
-        return json.loads(text)
-
-    except Exception:
-        traceback.print_exc()
-        return None
 
 @app.route("/")
 def homepage():
@@ -357,32 +387,34 @@ def chat():
             if template_id and not update_obj.get("selected_template_id"):
                 update_obj["selected_template_id"] = template_id
 
-            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
-            # --- CONTENT GENERATION LOGIC ---
-            # אם זו שאלה ראשונה → יוצרים content_json בסיסי
-            if user_turns == 1:
-                content_json = generate_content_for_project(
-                    client=client,
-                    project_row=project_row,
-                    update_obj=update_obj,
-                    template_id=template_id,
+            # ---------------------------------------
+            # יצירת או עדכון content_json באמצעות GPT
+            # ---------------------------------------
+            try:
+                # שולפים את הפרויקט המעודכן לאחר המיזוג
+                fresh = (
+                    supabase.table("projects")
+                    .select("*")
+                    .eq("id", project_id)
+                    .execute()
+                    .data[0]
                 )
-                if content_json:
-                    update_obj["content_json"] = content_json
 
-            # אם זו שאלה 2+ → מפעילים את Prompt2 כדי לעדכן תוכן קיים
-            elif user_turns >= 2:
-                try:
-                    new_content = generate_full_content_update(
-                        client=client,
-                        project_row=project_row,
-                        conversation_history=existing_history,
-                        template_id=template_id,
-                    )
-                    if new_content:
-                        update_obj["content_json"] = new_content
-                except Exception:
-                    traceback.print_exc()
+                # מפעילים את פרומפט 2 ליצירת/עדכון התוכן
+                new_content = generate_full_content_update(
+                    client=client,
+                    project_row=fresh,
+                    conversation_history=fresh.get("conversation_history") or {},
+                    template_id=fresh.get("selected_template_id"),
+                )
+
+                if new_content:
+                    update_obj["content_json"] = new_content
+
+            except Exception as e:
+                traceback.print_exc()
+
+                # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
