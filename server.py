@@ -308,19 +308,31 @@ def chat():
                 update_obj["selected_template_id"] = template_id
 
             # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
-            if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
+            # --- CONTENT GENERATION LOGIC ---
+            # אם זו שאלה ראשונה → יוצרים content_json בסיסי
+            if user_turns == 1:
+                content_json = generate_content_for_project(
+                    client=client,
+                    project_row=project_row,
+                    update_obj=update_obj,
+                    template_id=template_id,
+                )
+                if content_json:
+                    update_obj["content_json"] = content_json
+
+            # אם זו שאלה 2+ → מפעילים את Prompt2 כדי לעדכן תוכן קיים
+            elif user_turns >= 2:
                 try:
-                    content_json = generate_content_for_project(
+                    new_content = generate_full_content_update(
                         client=client,
                         project_row=project_row,
-                        update_obj=update_obj,
+                        conversation_history=existing_history,
                         template_id=template_id,
                     )
-                    if content_json:
-                        update_obj["content_json"] = content_json
+                    if new_content:
+                        update_obj["content_json"] = new_content
                 except Exception:
                     traceback.print_exc()
-                    # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
