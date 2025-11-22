@@ -151,6 +151,56 @@ def generate_content_for_project(
 # ROUTES
 # ==========================================
 
+def generate_full_content_update(
+    client: OpenAI,
+    project_row: Dict[str, Any],
+    conversation_history: Dict[str, Any],
+    template_id: str,
+):
+    """
+    הפעלה של פרומפט 2 — מעדכן תוכן קיים לפי היסטוריית השיחה.
+    חוזר JSON נקי שמחליף את content_json.
+    """
+    try:
+        template_conf = TEMPLATES.get(template_id)
+        if not template_conf:
+            return None
+
+        base_dir = Path(__file__).resolve().parent
+
+        # 1) schema
+        schema_path = base_dir / template_conf["schema"]
+        schema_str = schema_path.read_text(encoding="utf-8")
+
+        # 2) פרומפט 2
+        prompt2_path = base_dir / "content_fill_prompt2.txt"
+        prompt_template = prompt2_path.read_text(encoding="utf-8")
+
+        data = {
+            "project": project_row,
+            "conversation_history": conversation_history,
+        }
+        data_str = json.dumps(data, ensure_ascii=False)
+
+        final_prompt = (
+            prompt_template
+            .replace("{{SCHEMA_JSON}}", schema_str)
+            .replace("{{BUSINESS_DATA_JSON}}", data_str)
+        )
+
+        completion = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[{"role": "user", "content": final_prompt}],
+            temperature=0.0,
+        )
+
+        text = completion.choices[0].message.content.strip()
+        return json.loads(text)
+
+    except Exception:
+        traceback.print_exc()
+        return None
+
 @app.route("/")
 def homepage():
     return send_from_directory(".", "index.html")
