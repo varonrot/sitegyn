@@ -146,86 +146,6 @@ def generate_content_for_project(
     except Exception:
         traceback.print_exc()
         return None
-def generate_full_content_update(client, project_row, conversation_history, template_id, user_input):
-    try:
-        # טוענים את פרומפט 2 מהקובץ
-        with open("content_fill_prompt2.txt", "r", encoding="utf-8") as f:
-            base_prompt = f.read()
-
-        # טוענים schema מהתיקייה של הטמפלט
-        schema_path = Path("templates") / template_id / f"{template_id}_schema.json"
-        with open(schema_path, "r", encoding="utf-8") as f:
-            schema_json = json.load(f)
-
-        payload = {
-            "schema_json": schema_json,
-            "content_json_original": project_row.get("content_json") or {},
-            "conversation_history": conversation_history or {},
-            "user_input": user_input,
-            "project_data": project_row,
-        }
-
-        messages = [
-            {"role": "system", "content": base_prompt},
-            {"role": "user", "content": json.dumps(payload)}
-        ]
-
-        resp = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=messages,
-            temperature=0.8
-        )
-
-        raw = resp.choices[0].message["content"]
-
-        return json.loads(raw)
-
-    except Exception as e:
-        print("❌ ERROR in generate_full_content_update:", e)
-        traceback.print_exc()
-        return None
-
-def generate_full_content_update(client, project_row, conversation_history, template_id):
-    """
-    מפעיל את פרומפט 2 – עדכון מלא של content_json בהתאם לתשובות המשתמש הקודמות
-    """
-
-    try:
-        # טוענים את פרומפט 2 מהקובץ
-        with open("content_fill_prompt2.txt", "r", encoding="utf-8") as f:
-            prompt2 = f.read()
-
-        # בונים את ההודעה ל-GPT
-        messages = [
-            {"role": "system", "content": prompt2},
-            {
-                "role": "user",
-                "content": json.dumps({
-                    "template_id": template_id,
-                    "project": project_row,
-                    "conversation_history": conversation_history
-                }, ensure_ascii=False)
-            }
-        ]
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=messages,
-            temperature=0.3,
-        )
-
-        raw = response.choices[0].message.content.strip()
-
-        try:
-            result_json = json.loads(raw)
-            return result_json
-        except:
-            print("JSON parse error:", raw)
-            return None
-
-    except Exception as e:
-        print("Error generate_full_content_update:", e)
-        return None
 
 # ==========================================
 # ROUTES
@@ -387,34 +307,20 @@ def chat():
             if template_id and not update_obj.get("selected_template_id"):
                 update_obj["selected_template_id"] = template_id
 
-            # ---------------------------------------
-            # יצירת או עדכון content_json באמצעות GPT
-            # ---------------------------------------
-            try:
-                # שולפים את הפרויקט המעודכן לאחר המיזוג
-                fresh = (
-                    supabase.table("projects")
-                    .select("*")
-                    .eq("id", project_id)
-                    .execute()
-                    .data[0]
-                )
-
-                # מפעילים את פרומפט 2 ליצירת/עדכון התוכן
-                new_content = generate_full_content_update(
-                    client=client,
-                    project_row=fresh,
-                    conversation_history=fresh.get("conversation_history") or {},
-                    template_id=fresh.get("selected_template_id"),
-                )
-
-                if new_content:
-                    update_obj["content_json"] = new_content
-
-            except Exception as e:
-                traceback.print_exc()
-
-                # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
+            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
+            if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
+                try:
+                    content_json = generate_content_for_project(
+                        client=client,
+                        project_row=project_row,
+                        update_obj=update_obj,
+                        template_id=template_id,
+                    )
+                    if content_json:
+                        update_obj["content_json"] = content_json
+                except Exception:
+                    traceback.print_exc()
+                    # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
