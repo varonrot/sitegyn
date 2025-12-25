@@ -45,7 +45,11 @@ with open(PROMPT_PATH, "r", encoding="utf-8") as f:
 # ==========================================
 # Flask app
 # ==========================================
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder=".",
+    static_url_path=""
+)
 CORS(app)
 
 
