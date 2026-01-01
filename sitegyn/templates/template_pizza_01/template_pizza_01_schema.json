@@ -1,13 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Pizza Website Content",
+  "title": "Sitegyn Pizza Template – Content Schema",
   "type": "object",
+  "required": ["home", "about", "offers", "menu", "services", "contact"],
   "properties": {
     "home": {
       "type": "object",
+      "required": ["hero"],
       "properties": {
         "hero": {
           "type": "object",
+          "required": ["headline", "subheadline", "primary_cta"],
           "properties": {
             "kicker": { "type": "string" },
             "headline": { "type": "string" },
@@ -20,14 +23,14 @@
               "minItems": 3,
               "maxItems": 3
             }
-          },
-          "required": ["headline", "subheadline", "primary_cta"]
+          }
         }
-      },
-      "required": ["hero"]
+      }
     },
+
     "about": {
       "type": "object",
+      "required": ["title", "paragraphs"],
       "properties": {
         "title": { "type": "string" },
         "tagline": { "type": "string" },
@@ -45,11 +48,12 @@
           "minItems": 3,
           "maxItems": 3
         }
-      },
-      "required": ["title", "paragraphs"]
+      }
     },
+
     "offers": {
       "type": "object",
+      "required": ["title", "deals"],
       "properties": {
         "title": { "type": "string" },
         "subtitle": { "type": "string" },
@@ -57,22 +61,23 @@
           "type": "array",
           "items": {
             "type": "object",
+            "required": ["name", "description"],
             "properties": {
               "badge": { "type": "string" },
               "name": { "type": "string" },
               "price_text": { "type": "string" },
               "description": { "type": "string" }
-            },
-            "required": ["name", "description"]
+            }
           },
           "minItems": 3,
           "maxItems": 3
         }
-      },
-      "required": ["title", "deals"]
+      }
     },
+
     "menu": {
       "type": "object",
+      "required": ["title", "pizzas"],
       "properties": {
         "title": { "type": "string" },
         "subtitle": { "type": "string" },
@@ -80,21 +85,22 @@
           "type": "array",
           "items": {
             "type": "object",
+            "required": ["name", "description"],
             "properties": {
               "name": { "type": "string" },
               "tags": { "type": "string" },
               "description": { "type": "string" }
-            },
-            "required": ["name", "description"]
+            }
           },
           "minItems": 3,
           "maxItems": 3
         }
-      },
-      "required": ["title", "pizzas"]
+      }
     },
+
     "services": {
       "type": "object",
+      "required": ["title", "items"],
       "properties": {
         "title": { "type": "string" },
         "subtitle": { "type": "string" },
@@ -102,20 +108,21 @@
           "type": "array",
           "items": {
             "type": "object",
+            "required": ["title", "description"],
             "properties": {
               "title": { "type": "string" },
               "description": { "type": "string" }
-            },
-            "required": ["title", "description"]
+            }
           },
           "minItems": 3,
           "maxItems": 3
         }
-      },
-      "required": ["title", "items"]
+      }
     },
+
     "contact": {
       "type": "object",
+      "required": ["title", "phone", "address"],
       "properties": {
         "title": { "type": "string" },
         "subtitle": { "type": "string" },
@@ -134,9 +141,7 @@
           "minItems": 2,
           "maxItems": 2
         }
-      },
-      "required": ["title", "phone", "address"]
+      }
     }
-  },
-  "required": ["home", "about", "offers", "menu", "services", "contact"]
+  }
 }
