@@ -265,27 +265,10 @@ body{
 
   <!-- ================= STRUCTURE ================= -->
   <div class="section-title">Structure</div>
-  <div class="nav-list">
-    <div class="nav-item active">
-      <span class="icon"><i class="fa-solid fa-layer-group"></i></span>
-      Sections Tree
-    </div>
+    <div class="nav-list" id="sections-tree">
+  <!-- Sections will be injected from sections_tree.json -->
+</div>
 
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-plus"></i></span>
-      Add Section
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-up-down"></i></span>
-      Reorder Sections
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-eye"></i></span>
-      Hide / Show Sections
-    </div>
-  </div>
 
   <!-- ================= CURRENT SECTION ================= -->
   <div class="section-title">Selected Section</div>
@@ -404,14 +387,15 @@ body{
 
 </aside>
 
+<!-- CANVAS -->
+<main class="canvas">
+  <iframe
+    id="site-preview"
+    src="https://sitegyn.com/p/yossi-pizza?editor=true"
+    style="width:100%;height:100%;border:none;">
+  </iframe>
+</main>
 
-  <!-- CANVAS -->
-  <main class="canvas">
-    <div class="canvas-box">
-      <strong>Live Site Canvas</strong><br>
-      Click any section to select it
-    </div>
-  </main>
 
 <!-- RIGHT -->
 <aside class="sidebar right">
@@ -564,6 +548,68 @@ function toggleRight(){
   document.querySelector('.sidebar.right').classList.toggle('open');
   document.querySelector('.sidebar.left').classList.remove('open');
 }
+</script>
+<script>
+let sectionsTree = [];
+
+async function loadSectionsTree() {
+  const res = await fetch(
+    '/sitegyn/templates/template_pizza_01/sections_tree.json'
+  );
+  sectionsTree = await res.json();
+  renderSectionsTree();
+}
+</script>
+<script>
+function renderSectionsTree() {
+  const root = document.getElementById('sections-tree');
+  root.innerHTML = '';
+
+  if (!sectionsTree.sections) return;
+
+  sectionsTree.sections.forEach(section => {
+    const el = document.createElement('div');
+    el.className = 'nav-item';
+    el.dataset.sectionId = section.id;
+
+    el.innerHTML = `
+      <span class="icon">
+        <i class="fa-solid fa-${section.icon || 'layer-group'}"></i>
+      </span>
+      ${section.label}
+    `;
+
+    el.onclick = () => selectSection(section.id);
+
+    root.appendChild(el);
+  });
+}
+</script>
+<script>
+function selectSection(sectionId) {
+  document.querySelectorAll('#sections-tree .nav-item')
+    .forEach(el => el.classList.remove('active'));
+
+  const active = document.querySelector(
+    `#sections-tree .nav-item[data-section-id="${sectionId}"]`
+  );
+  if (active) active.classList.add('active');
+
+  const iframe = document.getElementById('site-preview');
+  if (!iframe) return;
+
+  iframe.contentWindow.postMessage(
+    {
+      type: 'SELECT_SECTION',
+      sectionId
+    },
+    '*'
+  );
+}
+</script>
+
+<script>
+loadSectionsTree();
 </script>
 
 </body>
