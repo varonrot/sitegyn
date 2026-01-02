@@ -271,5 +271,21 @@
 </section>
 
   </div>
+  <script>
+window.addEventListener('message', (e) => {
+  if (e.data?.type === 'SELECT_SECTION') {
+    const el = document.getElementById(e.data.sectionId);
+    if (!el) return;
+
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.style.outline = '2px solid #22c55e';
+
+    setTimeout(() => {
+      el.style.outline = '';
+    }, 1500);
+  }
+});
+</script>
+
 </body>
 </html>
