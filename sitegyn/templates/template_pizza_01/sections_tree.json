@@ -2,26 +2,21 @@
   "version": "1.0",
   "template": "template_pizza_01",
   "sections": [
-    {
-      "id": "hero",
-      "label": "Hero",
-      "icon": "sparkles",
-      "path": "home.hero",
-      "editable": true,
-      "fields": [
-        { "id": "kicker", "label": "Kicker", "path": "home.hero.kicker", "type": "text" },
-        { "id": "headline", "label": "Headline", "path": "home.hero.headline", "type": "text", "required": true },
-        { "id": "subheadline", "label": "Subheadline", "path": "home.hero.subheadline", "type": "textarea" },
-        { "id": "primary_cta", "label": "Primary CTA", "path": "home.hero.primary_cta", "type": "text" },
-        { "id": "secondary_cta", "label": "Secondary CTA", "path": "home.hero.secondary_cta", "type": "text" },
-        {
-          "id": "pills",
-          "label": "Hero Pills",
-          "type": "list",
-          "path": "home.hero.pills",
-          "minItems": 3,
-          "maxItems": 3
-        }
+{
+  "id": "hero",
+  "label": "Hero",
+  "icon": "fa-solid fa-wand-magic-sparkles",
+  "order": 1,
+  "path": "home.hero",
+  "editable": true,
+  "hidden": false,
+  "fields": [
+    { "id": "kicker", "label": "Kicker", "path": "home.hero.kicker", "type": "text" },
+    { "id": "headline", "label": "Headline", "path": "home.hero.headline", "type": "text", "required": true },
+    { "id": "subheadline", "label": "Subheadline", "path": "home.hero.subheadline", "type": "textarea" }
+  ],
+  "ai_actions": ["rewrite", "shorten", "tone"]
+}
       ],
       "ai_actions": ["rewrite", "shorten", "tone"]
     },
