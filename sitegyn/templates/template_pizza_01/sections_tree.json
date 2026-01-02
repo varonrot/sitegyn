@@ -1,0 +1,153 @@
+{
+  "version": "1.0",
+  "template": "template_pizza_01",
+  "sections": [
+    {
+      "id": "hero",
+      "label": "Hero",
+      "icon": "sparkles",
+      "path": "home.hero",
+      "editable": true,
+      "fields": [
+        { "id": "kicker", "label": "Kicker", "path": "home.hero.kicker", "type": "text" },
+        { "id": "headline", "label": "Headline", "path": "home.hero.headline", "type": "text", "required": true },
+        { "id": "subheadline", "label": "Subheadline", "path": "home.hero.subheadline", "type": "textarea" },
+        { "id": "primary_cta", "label": "Primary CTA", "path": "home.hero.primary_cta", "type": "text" },
+        { "id": "secondary_cta", "label": "Secondary CTA", "path": "home.hero.secondary_cta", "type": "text" },
+        {
+          "id": "pills",
+          "label": "Hero Pills",
+          "type": "list",
+          "path": "home.hero.pills",
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ],
+      "ai_actions": ["rewrite", "shorten", "tone"]
+    },
+
+    {
+      "id": "about",
+      "label": "About",
+      "icon": "info",
+      "path": "about",
+      "editable": true,
+      "fields": [
+        { "id": "title", "label": "Title", "path": "about.title", "type": "text" },
+        { "id": "tagline", "label": "Tagline", "path": "about.tagline", "type": "text" },
+        {
+          "id": "paragraphs",
+          "label": "Paragraphs",
+          "path": "about.paragraphs",
+          "type": "list",
+          "minItems": 3,
+          "maxItems": 3
+        },
+        { "id": "why_badge", "label": "Why Badge", "path": "about.why_badge", "type": "text" },
+        { "id": "why_title", "label": "Why Title", "path": "about.why_title", "type": "text" },
+        {
+          "id": "why_points",
+          "label": "Why Points",
+          "path": "about.why_points",
+          "type": "list",
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ],
+      "ai_actions": ["rewrite", "expand", "tone"]
+    },
+
+    {
+      "id": "offers",
+      "label": "Special Offers",
+      "icon": "tag",
+      "path": "offers",
+      "editable": true,
+      "repeatable": false,
+      "children": {
+        "path": "offers.deals",
+        "label": "Offer",
+        "minItems": 3,
+        "maxItems": 3,
+        "fields": [
+          { "id": "badge", "label": "Badge", "path": "badge", "type": "text" },
+          { "id": "name", "label": "Name", "path": "name", "type": "text" },
+          { "id": "price_text", "label": "Price", "path": "price_text", "type": "text" },
+          { "id": "description", "label": "Description", "path": "description", "type": "textarea" }
+        ]
+      },
+      "ai_actions": ["rewrite", "upsell"]
+    },
+
+    {
+      "id": "menu",
+      "label": "Menu",
+      "icon": "pizza",
+      "path": "menu",
+      "editable": true,
+      "children": {
+        "path": "menu.pizzas",
+        "label": "Pizza",
+        "minItems": 3,
+        "maxItems": 3,
+        "fields": [
+          { "id": "name", "label": "Name", "path": "name", "type": "text" },
+          { "id": "tags", "label": "Tags", "path": "tags", "type": "text" },
+          { "id": "description", "label": "Description", "path": "description", "type": "textarea" }
+        ]
+      },
+      "ai_actions": ["rewrite", "shorten"]
+    },
+
+    {
+      "id": "services",
+      "label": "Services",
+      "icon": "truck",
+      "path": "services",
+      "editable": true,
+      "children": {
+        "path": "services.items",
+        "label": "Service",
+        "minItems": 3,
+        "maxItems": 3,
+        "fields": [
+          { "id": "title", "label": "Title", "path": "title", "type": "text" },
+          { "id": "description", "label": "Description", "path": "description", "type": "textarea" }
+        ]
+      },
+      "ai_actions": ["rewrite", "clarify"]
+    },
+
+    {
+      "id": "contact",
+      "label": "Contact",
+      "icon": "phone",
+      "path": "contact",
+      "editable": true,
+      "fields": [
+        { "id": "title", "label": "Title", "path": "contact.title", "type": "text" },
+        { "id": "subtitle", "label": "Subtitle", "path": "contact.subtitle", "type": "text" },
+        { "id": "phone", "label": "Phone", "path": "contact.phone", "type": "text" },
+        { "id": "address", "label": "Address", "path": "contact.address", "type": "text" },
+        { "id": "hours_title", "label": "Hours Title", "path": "contact.hours_title", "type": "text" },
+        {
+          "id": "hours_lines",
+          "label": "Opening Hours",
+          "path": "contact.hours_lines",
+          "type": "list",
+          "minItems": 3,
+          "maxItems": 3
+        },
+        {
+          "id": "cta_pills",
+          "label": "CTA Pills",
+          "path": "contact.cta_pills",
+          "type": "list",
+          "minItems": 2,
+          "maxItems": 2
+        }
+      ],
+      "ai_actions": ["rewrite", "shorten"]
+    }
+  ]
+}
