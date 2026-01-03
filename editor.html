@@ -637,7 +637,7 @@ async function loadEditorSiteByUser() {
   const { data: project, error } = await supabase
     .from("projects")
     .select("subdomain")
-    .eq("user_id", userId)
+    .eq("id", userId)
     .limit(1)
     .single();
 
@@ -646,8 +646,8 @@ async function loadEditorSiteByUser() {
     return;
   }
 
-  iframe.src = `https://${project.subdomain}.sitegyn.com/?editor=true`;
-}
+  iframe.src = `https://sitegyn.com/p/${project.subdomain}?editor=true`;
+
 
 loadEditorSiteByUser();
 </script>
