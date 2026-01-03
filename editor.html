@@ -247,8 +247,8 @@ body{
     </button>
 
     <div class="user-cluster">
-      <div class="site-pill"><i class="fa-solid fa-globe"></i> yossi-pizza.com</div>
-      <div class="status-pill"><span class="dot"></span> Saved</div>
+      <div class="site-pill" id="site-pill"></div>
+      <div class="avatar" id="avatar"></div>
       <div class="avatar">Y</div>
     </div>
 
@@ -611,6 +611,7 @@ function selectSection(sectionId) {
 <script>
 loadSectionsTree();
 </script>
+
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -619,37 +620,40 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
 
-function getUserIdFromUrl() {
+let CURRENT_PROJECT_ID = null;
+
+function getProjectIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("user_id");
+  return params.get("project_id");
 }
 
-async function loadEditorSiteByUser() {
-  const userId = getUserIdFromUrl();
+async function loadEditorSiteByProject() {
+  const projectId = getProjectIdFromUrl();
+  CURRENT_PROJECT_ID = projectId;
+
   const iframe = document.getElementById("site-preview");
   if (!iframe) return;
 
-  if (!userId) {
-    iframe.src = "https://sitegyn.com/templates/default";
+  if (!projectId) {
+    iframe.src = "/templates/default";
     return;
   }
 
   const { data: project, error } = await supabase
     .from("projects")
     .select("subdomain")
-    .eq("id", userId)
-    .limit(1)
+    .eq("id", projectId)
     .single();
 
   if (error || !project?.subdomain) {
-    iframe.src = "https://sitegyn.com/templates/default";
+    iframe.src = "/templates/default";
     return;
   }
 
-  iframe.src = `https://sitegyn.com/p/${project.subdomain}?editor=true`;
+  iframe.src = `/p/${project.subdomain}?editor=true`;
+}
 
-
-loadEditorSiteByUser();
+loadEditorSiteByProject();
 </script>
 
 </body>
