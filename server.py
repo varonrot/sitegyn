@@ -45,7 +45,11 @@ with open(PROMPT_PATH, "r", encoding="utf-8") as f:
 # ==========================================
 # Flask app
 # ==========================================
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder=".",
+    static_url_path=""
+)
 CORS(app)
 
 
@@ -342,22 +346,9 @@ def chat():
 # ==========================================
 @app.route("/p/<subdomain>")
 def public_page_by_subdomain(subdomain: str):
-    project = (
-        supabase
-        .table("projects")
-        .select("*")
-        .eq("subdomain", subdomain)
-        .single()
-        .execute()
-    )
-
-    if not project.data:
-        return "Project not found", 404
-
-    html = render_project_html_by_subdomain(project.data)
-    if not html:
-        return "Failed to render project", 500
-
+    html = render_project_html_by_subdomain(subdomain)
+    if html is None:
+        return "Project not found or failed to render", 404
     return Response(html, mimetype="text/html")
 
 
