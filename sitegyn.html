@@ -1478,10 +1478,10 @@ function openEditorFromHome() {
   const projectId = localStorage.getItem('sitegyn_project_id');
 
   if (projectId) {
-    // יש פרויקט למחשב הזה → פותחים אותו
+
     window.location.href = `/editor.html?project_id=${projectId}`;
   } else {
-    // אין פרויקט → מתחילים צ'אט / יצירה
+
     openChat();
   }
 }
