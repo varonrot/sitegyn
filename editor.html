@@ -598,6 +598,10 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
 
+function getProjectIdFromUrl() {
+  return new URLSearchParams(window.location.search).get("project_id");
+}
+
 function getDeviceId() {
   let id = localStorage.getItem("sitegyn_device_id");
   if (!id) {
@@ -611,25 +615,25 @@ async function loadEditorSite() {
   const iframe = document.getElementById("site-preview");
   const canvas = document.getElementById("editor-canvas");
 
-  if (!iframe) return;
-
-  const projectId = getProjectId();
-
-  if (!projectId) {
-    iframe.srcdoc = "<h1 style='color:white'>No project id</h1>";
+  if (!iframe) {
+    console.error("iframe not found");
     return;
   }
 
-  canvas.dataset.projectId = projectId;
+  // 🔑 מזהה מחשב
+  const deviceId = getDeviceId();
+  canvas.dataset.projectId = deviceId;
 
   const { data, error } = await supabase
     .from("projects")
     .select("subdomain")
-    .eq("id", projectId)
+    .eq("id", deviceId)
     .single();
 
   if (error || !data?.subdomain) {
-    iframe.srcdoc = "<h1 style='color:white'>Project not found</h1>";
+    console.warn("No project for this device", error);
+    iframe.srcdoc =
+      "<h1 style='color:white'>No project on this device</h1>";
     return;
   }
 
@@ -641,8 +645,11 @@ async function loadEditorSite() {
   }
 
   iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
+
+  console.log("Editor loaded project for device:", deviceId, subdomain);
 }
 
+loadEditorSite();
 
 </script>
 
