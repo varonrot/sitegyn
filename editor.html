@@ -406,12 +406,18 @@ body{
 
 
   <!-- CANVAS -->
-  <main class="canvas">
-    <div class="canvas-box">
-      <strong>Live Site Canvas</strong><br>
-      Click any section to select it
-    </div>
-  </main>
+<main class="canvas">
+  <iframe
+    id="site-preview"
+    style="
+      width:100%;
+      height:100%;
+      border:none;
+      border-radius:16px;
+      background:#000;
+    "
+  ></iframe>
+</main>
 
 <!-- RIGHT -->
 <aside class="sidebar right">
@@ -564,6 +570,44 @@ function toggleRight(){
   document.querySelector('.sidebar.right').classList.toggle('open');
   document.querySelector('.sidebar.left').classList.remove('open');
 }
+</script>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const supabase = createClient(
+  "https://xkchlqcwntcoakmyicqb.supabase.co",
+  "YOUR_ANON_KEY"
+);
+
+function getProjectIdFromUrl() {
+  return new URLSearchParams(window.location.search).get("project_id");
+}
+
+async function loadEditorSite() {
+  const iframe = document.getElementById("site-preview");
+  if (!iframe) return;
+
+  const projectId = getProjectIdFromUrl();
+  if (!projectId) {
+    iframe.src = "/templates/default";
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("projects")
+    .select("subdomain")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.subdomain) {
+    iframe.src = "/templates/default";
+    return;
+  }
+
+  iframe.src = `/p/${data.subdomain}?editor=true`;
+}
+
+loadEditorSite();
 </script>
 
 </body>
