@@ -598,8 +598,20 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
 
-function getProjectIdFromUrl() {
-  return new URLSearchParams(window.location.search).get("project_id");
+function getProjectId() {
+  const urlId = new URLSearchParams(window.location.search).get("project_id");
+  if (urlId) return urlId;
+
+  const localId = localStorage.getItem("sitegyn_project_id");
+  if (localId) {
+    // מסנכרן URL בשביל ריפרש / שיתוף
+    const url = new URL(window.location.href);
+    url.searchParams.set("project_id", localId);
+    window.history.replaceState({}, "", url.toString());
+    return localId;
+  }
+
+  return null;
 }
 
 async function loadEditorSite() {
@@ -611,7 +623,7 @@ async function loadEditorSite() {
     return;
   }
 
-  const projectId = getProjectIdFromUrl();
+  const projectId = getProjectId();
   if (!projectId) {
     console.warn("No project_id in URL");
     iframe.srcdoc = "<h1 style='color:white'>No project_id</h1>";
