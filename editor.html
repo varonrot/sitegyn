@@ -263,7 +263,7 @@ body{
     </button>
 
     <div class="user-cluster">
-      <div class="site-pill"><i class="fa-solid fa-globe"></i> yossi-pizza.com</div>
+      <div class="site-pill"></div>
       <div class="status-pill"><span class="dot"></span> Saved</div>
       <div class="avatar">Y</div>
     </div>
@@ -598,8 +598,13 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
 
-function getProjectIdFromUrl() {
-  return new URLSearchParams(window.location.search).get("project_id");
+function getDeviceId() {
+  let id = localStorage.getItem("sitegyn_device_id");
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem("sitegyn_device_id", id);
+  }
+  return id;
 }
 
 async function loadEditorSite() {
@@ -611,30 +616,20 @@ async function loadEditorSite() {
     return;
   }
 
-  const { data: { user } } = await supabase.auth.getUser();
+  // 🔑 מזהה מחשב
+  const deviceId = getDeviceId();
+  canvas.dataset.projectId = deviceId;
 
-  if (!user) {
-    iframe.srcdoc = "<h1 style='color:white'>Please login</h1>";
-    return;
-  }
-
-  const projectId = getProjectIdFromUrl();
-  if (!projectId) {
-    iframe.srcdoc = "<h1 style='color:white'>No project_id</h1>";
-    return;
-  }
-
-  canvas.dataset.projectId = projectId;
- 
   const { data, error } = await supabase
     .from("projects")
     .select("subdomain")
-    .eq("id", projectId)
-    .eq("owner_id", user.id)
+    .eq("id", deviceId)
     .single();
 
   if (error || !data?.subdomain) {
-    iframe.srcdoc = "<h1 style='color:white'>Not your project</h1>";
+    console.warn("No project for this device", error);
+    iframe.srcdoc =
+      "<h1 style='color:white'>No project on this device</h1>";
     return;
   }
 
@@ -647,7 +642,7 @@ async function loadEditorSite() {
 
   iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
 
-  console.log("Editor loaded project:", subdomain);
+  console.log("Editor loaded project for device:", deviceId, subdomain);
 }
 
 loadEditorSite();
