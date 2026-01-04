@@ -611,24 +611,30 @@ async function loadEditorSite() {
     return;
   }
 
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    iframe.srcdoc = "<h1 style='color:white'>Please login</h1>";
+    return;
+  }
+
   const projectId = getProjectIdFromUrl();
   if (!projectId) {
-    console.warn("No project_id in URL");
     iframe.srcdoc = "<h1 style='color:white'>No project_id</h1>";
     return;
   }
 
   canvas.dataset.projectId = projectId;
-
+ 
   const { data, error } = await supabase
     .from("projects")
     .select("subdomain")
     .eq("id", projectId)
+    .eq("owner_id", user.id)
     .single();
 
   if (error || !data?.subdomain) {
-    console.error("Project not found", error);
-    iframe.srcdoc = "<h1 style='color:white'>Project not found</h1>";
+    iframe.srcdoc = "<h1 style='color:white'>Not your project</h1>";
     return;
   }
 
@@ -645,6 +651,7 @@ async function loadEditorSite() {
 }
 
 loadEditorSite();
+
 </script>
 
 </body>
