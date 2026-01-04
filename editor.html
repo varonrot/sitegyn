@@ -611,25 +611,25 @@ async function loadEditorSite() {
   const iframe = document.getElementById("site-preview");
   const canvas = document.getElementById("editor-canvas");
 
-  if (!iframe) {
-    console.error("iframe not found");
+  if (!iframe) return;
+
+  const projectId = getProjectId();
+
+  if (!projectId) {
+    iframe.srcdoc = "<h1 style='color:white'>No project id</h1>";
     return;
   }
 
-  // 🔑 מזהה מחשב
-  const deviceId = getDeviceId();
-  canvas.dataset.projectId = deviceId;
+  canvas.dataset.projectId = projectId;
 
   const { data, error } = await supabase
     .from("projects")
     .select("subdomain")
-    .eq("id", deviceId)
+    .eq("id", projectId)
     .single();
 
   if (error || !data?.subdomain) {
-    console.warn("No project for this device", error);
-    iframe.srcdoc =
-      "<h1 style='color:white'>No project on this device</h1>";
+    iframe.srcdoc = "<h1 style='color:white'>Project not found</h1>";
     return;
   }
 
@@ -641,11 +641,8 @@ async function loadEditorSite() {
   }
 
   iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
-
-  console.log("Editor loaded project for device:", deviceId, subdomain);
 }
 
-loadEditorSite();
 
 </script>
 
