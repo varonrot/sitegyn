@@ -632,14 +632,12 @@ async function loadEditorSite() {
 
   const subdomain = data.subdomain;
 
-  // ✅ עדכון ה־UI (הטופ־בר)
   const sitePill = document.querySelector(".site-pill");
   if (sitePill) {
     sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
   }
 
-  // 🚨 זה הנתיב הקריטי
-  iframe.src = `/p/${subdomain}/index.html?editor=true`;
+  iframe.src = `/p/${subdomain}?editor=true`;
 
   console.log("Editor loaded project:", subdomain);
 }
