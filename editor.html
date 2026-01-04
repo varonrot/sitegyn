@@ -422,7 +422,7 @@ body{
 
 
   <!-- CANVAS -->
-<main class="canvas">
+<main class="canvas" id="editor-canvas" data-project-id="">
   <iframe
     id="site-preview"
     style="
@@ -434,6 +434,7 @@ body{
     "
   ></iframe>
 </main>
+
 
 <!-- RIGHT -->
 <aside class="sidebar right">
@@ -601,13 +602,21 @@ function getProjectIdFromUrl() {
 
 async function loadEditorSite() {
   const iframe = document.getElementById("site-preview");
-  if (!iframe) return;
+  const canvas = document.getElementById("editor-canvas");
+
+  if (!iframe) {
+    console.error("iframe not found");
+    return;
+  }
 
   const projectId = getProjectIdFromUrl();
   if (!projectId) {
-    iframe.src = "/templates/default";
+    console.warn("No project_id in URL");
+    iframe.srcdoc = "<h1 style='color:white'>No project_id</h1>";
     return;
   }
+
+  canvas.dataset.projectId = projectId;
 
   const { data, error } = await supabase
     .from("projects")
@@ -616,11 +625,23 @@ async function loadEditorSite() {
     .single();
 
   if (error || !data?.subdomain) {
-    iframe.src = "/templates/default";
+    console.error("Project not found", error);
+    iframe.srcdoc = "<h1 style='color:white'>Project not found</h1>";
     return;
   }
 
-  iframe.src = `/p/${data.subdomain}?editor=true`;
+  const subdomain = data.subdomain;
+
+  // ✅ עדכון ה־UI (הטופ־בר)
+  const sitePill = document.querySelector(".site-pill");
+  if (sitePill) {
+    sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
+  }
+
+  // 🚨 זה הנתיב הקריטי
+  iframe.src = `/p/${subdomain}/index.html?editor=true`;
+
+  console.log("Editor loaded project:", subdomain);
 }
 
 loadEditorSite();
