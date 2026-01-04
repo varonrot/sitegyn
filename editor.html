@@ -423,18 +423,18 @@ body{
 
   <!-- CANVAS -->
 <main class="canvas" id="editor-canvas" data-project-id="">
-    <iframe src="https://sitegyn.com/p/yossi-pizza"></iframe>
+<!--    <iframe src="https://sitegyn.com/p/yossi-pizza"></iframe>-->
 
-<!--  <iframe-->
-<!--    id="site-preview"-->
-<!--    style="-->
-<!--      width:100%;-->
-<!--      height:100%;-->
-<!--      border:none;-->
-<!--      border-radius:16px;-->
-<!--      background:#000;-->
-<!--    "-->
-<!--  ></iframe>-->
+  <iframe
+    id="site-preview"
+    style="
+      width:100%;
+      height:100%;
+      border:none;
+      border-radius:16px;
+      background:#000;
+    "
+  ></iframe>
 </main>
 
 
@@ -639,7 +639,7 @@ async function loadEditorSite() {
     sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
   }
 
-  iframe.src = `/p/${subdomain}?editor=true`;
+  iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
 
   console.log("Editor loaded project:", subdomain);
 }
