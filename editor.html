@@ -598,6 +598,10 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
 
+function getProjectIdFromUrl() {
+  return new URLSearchParams(window.location.search).get("project_id");
+}
+
 async function loadEditorSite() {
   const iframe = document.getElementById("site-preview");
   const canvas = document.getElementById("editor-canvas");
@@ -635,7 +639,7 @@ async function loadEditorSite() {
     sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
   }
 
-  iframe.src = `/p/${subdomain}?editor=true`;
+  iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
 
   console.log("Editor loaded project:", subdomain);
 }
