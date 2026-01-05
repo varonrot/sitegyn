@@ -1,5 +1,5 @@
 /* =========================================================
-   EDITOR – LEFT SIDEBAR
+   EDITOR – LEFT SIDEBAR (NO ICONS)
    ========================================================= */
 
 /* ===== SIDEBAR BASE ===== */
@@ -34,7 +34,6 @@
 .sidebar.left .nav-item{
   display:flex;
   align-items:center;
-  gap:12px;
   padding:12px 14px;
   border-radius:14px;
   background:rgba(0,0,0,.22);
@@ -64,84 +63,9 @@
   box-shadow:0 6px 18px rgba(21,128,255,.35);
 }
 
-/* ===== ICON CONTAINER (Unicode FA6 tuned) ===== */
-.sidebar.left .nav-item::before{
-  content:"\f111"; /* default */
-  width:36px;
-  height:36px;
-  min-width:36px;
-  border-radius:12px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  background:rgba(255,255,255,.08);
-  color:#ffffff;
-
-  font-family:"Font Awesome 6 Free";
-  font-weight:900;
-  font-size:16px;
-  line-height:1;
-
-  position:relative;
-  top:1px;
-
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  text-shadow:0 0 0 rgba(0,0,0,0);
+/* ===== REMOVE ALL ICON PLACEHOLDERS ===== */
+.sidebar.left .nav-item::before,
+.sidebar.left .nav-item::after{
+  display:none !important;
+  content:none !important;
 }
-
-/* icon hover / active */
-.sidebar.left .nav-item:hover::before{
-  background:rgba(255,255,255,.14);
-}
-
-.sidebar.left .nav-item.active::before{
-  background:rgba(255,255,255,.22);
-  transform:scale(1.04);
-}
-
-/* =========================================================
-   ICONS – mapping by section / field (FA6 Free safe)
-   ========================================================= */
-
-/* HOME */
-.nav-item[data-path^="home.hero.kicker"]::before{content:"\f02b";} /* tag */
-.nav-item[data-path^="home.hero.headline"]::before{content:"\f1dc";} /* heading */
-.nav-item[data-path^="home.hero.subheadline"]::before{content:"\f036";} /* align */
-.nav-item[data-path^="home.hero.primary_cta"]::before{content:"\f14a";} /* check-square */
-.nav-item[data-path^="home.hero.secondary_cta"]::before{content:"\f0c8";} /* square */
-.nav-item[data-path^="home.hero.pills"]::before{content:"\f03a";} /* list */
-
-/* ABOUT */
-.nav-item[data-path^="about.title"]::before{content:"\f1dc";}
-.nav-item[data-path^="about.tagline"]::before{content:"\f10d";} /* quote */
-.nav-item[data-path^="about.paragraphs"]::before{content:"\f1dd";} /* paragraphs */
-.nav-item[data-path^="about.why_badge"]::before{content:"\f005";} /* star */
-.nav-item[data-path^="about.why_title"]::before{content:"\f1dc";}
-.nav-item[data-path^="about.why_points"]::before{content:"\f058";} /* check-circle */
-
-/* OFFERS */
-.nav-item[data-path^="offers.title"]::before{content:"\f1dc";}
-.nav-item[data-path^="offers.subtitle"]::before{content:"\f036";}
-.nav-item[data-path^="offers.deals"]::before{content:"\f02c";} /* tags */
-
-/* MENU */
-.nav-item[data-path^="menu.title"]::before{content:"\f1dc";}
-.nav-item[data-path^="menu.subtitle"]::before{content:"\f036";}
-.nav-item[data-path^="menu.pizzas"]::before{content:"\f07a";} /* shopping-bag */
-
-/* SERVICES */
-.nav-item[data-path^="services.title"]::before{content:"\f1dc";}
-.nav-item[data-path^="services.subtitle"]::before{content:"\f036";}
-.nav-item[data-path^="services.items"]::before{content:"\f013";} /* gear */
-
-/* CONTACT */
-.nav-item[data-path^="contact.title"]::before{content:"\f1dc";}
-.nav-item[data-path^="contact.subtitle"]::before{content:"\f036";}
-.nav-item[data-path^="contact.phone"]::before{content:"\f095";}
-.nav-item[data-path^="contact.address"]::before{content:"\f3c5";}
-.nav-item[data-path^="contact.hours_title"]::before{content:"\f017";}
-.nav-item[data-path^="contact.hours_lines"]::before{content:"\f03a";}
-.nav-item[data-path^="contact.cta_pills"]::before{content:"\f0a1";}
