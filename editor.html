@@ -6,7 +6,7 @@
 <title>Sitegyn Editor</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
+ 
 <style>
 :root{
   --topbar-h:56px;
@@ -438,7 +438,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 ========================= */
 const supabase = createClient(
   "https://xkchlqcwntcoakmyicqb.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
 
 /* =========================
@@ -470,6 +470,7 @@ function loadTemplateLeftSidebarCSS(templateId) {
   link.id = cssId;
   link.rel = "stylesheet";
   link.href = `/sitegyn/templates/${templateId}/editor_left_sidebar.css`;
+
   document.head.appendChild(link);
 }
 
@@ -479,6 +480,7 @@ function loadTemplateLeftSidebarCSS(templateId) {
 async function loadEditorSite() {
   const iframe = document.getElementById("site-preview");
   const canvas = document.getElementById("editor-canvas");
+
   if (!iframe) return;
 
   const projectId = getProjectId();
@@ -489,23 +491,26 @@ async function loadEditorSite() {
 
   canvas.dataset.projectId = projectId;
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("projects")
     .select("subdomain")
     .eq("id", projectId)
     .single();
 
-  if (!data?.subdomain) {
+  if (error || !data?.subdomain) {
     iframe.srcdoc = "<h1 style='color:white'>Project not found</h1>";
     return;
   }
 
+  const subdomain = data.subdomain;
+
   const sitePill = document.querySelector(".site-pill");
   if (sitePill) {
-    sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${data.subdomain}`;
+    sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
   }
 
-  iframe.src = `https://sitegyn.com/p/${data.subdomain}?editor=true`;
+  iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
+
   await loadTemplateSidebar(projectId);
 }
 
@@ -515,15 +520,16 @@ loadEditorSite();
    Load template schema
 ========================= */
 async function loadTemplateSidebar(projectId) {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("projects")
     .select("selected_template_id")
     .eq("id", projectId)
     .single();
 
-  if (!data?.selected_template_id) return;
+  if (error || !data?.selected_template_id) return;
 
   const templateId = data.selected_template_id;
+
   loadTemplateLeftSidebarCSS(templateId);
 
   const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema.json`;
@@ -540,18 +546,20 @@ function buildSidebarFromSchema(schema) {
   if (!container) return;
 
   container.innerHTML = "";
+
   const sections = schema.properties || {};
 
   for (const sectionKey in sections) {
-    const sectionProps = sections[sectionKey].properties || {};
+    const sectionSchema = sections[sectionKey];
+    const sectionProps = sectionSchema.properties || {};
 
-    /* Section title */
+    // Section title
     const title = document.createElement("div");
     title.className = "section-title";
     title.textContent = capitalize(sectionKey);
     container.appendChild(title);
 
-    /* Special: home.hero */
+    // Special: home.hero
     if (sectionKey === "home" && sectionProps.hero) {
       buildNestedSection(
         container,
@@ -562,57 +570,42 @@ function buildSidebarFromSchema(schema) {
       continue;
     }
 
-    /* Regular fields */
-    const list = document.createElement("div");
-    list.className = "nav-list";
+ // Regular fields
+const list = document.createElement("div");
+list.className = "nav-list";
 
-    for (const fieldKey in sectionProps) {
-      const item = document.createElement("div");
-      item.className = "nav-item";
-      item.dataset.path = `${sectionKey}.${fieldKey}`;
+for (const fieldKey in sectionProps) {
+  const item = document.createElement("div");
+  item.className = "nav-item";
+  item.textContent = humanize(fieldKey);
+  item.dataset.path = `${sectionKey}.${fieldKey}`;
+  list.appendChild(item);
+}
 
-      item.innerHTML = `
-        <span class="icon">
-          <i class="fa-solid fa-circle"></i>
-        </span>
-        <span class="label">${humanize(fieldKey)}</span>
-      `;
+container.appendChild(list);
 
-      list.appendChild(item);
-    }
-
-    container.appendChild(list);
   }
 }
 
-/* =========================
-   Nested section builder
-========================= */
 function buildNestedSection(container, titleText, fields, basePath) {
   const subtitle = document.createElement("div");
   subtitle.className = "section-subtitle";
   subtitle.textContent = titleText;
   container.appendChild(subtitle);
 
-  const list = document.createElement("div");
-  list.className = "nav-list";
+const list = document.createElement("div");
+list.className = "nav-list";
 
-  for (const fieldKey in fields) {
-    const item = document.createElement("div");
-    item.className = "nav-item nested";
-    item.dataset.path = `${basePath}.${fieldKey}`;
+for (const fieldKey in fields) {
+  const item = document.createElement("div");
+  item.className = "nav-item nested";
+  item.textContent = humanize(fieldKey);
+  item.dataset.path = `${basePath}.${fieldKey}`;
+  list.appendChild(item);
+}
 
-    item.innerHTML = `
-      <span class="icon">
-        <i class="fa-solid fa-circle"></i>
-      </span>
-      <span class="label">${humanize(fieldKey)}</span>
-    `;
+container.appendChild(list);
 
-    list.appendChild(item);
-  }
-
-  container.appendChild(list);
 }
 
 /* =========================
