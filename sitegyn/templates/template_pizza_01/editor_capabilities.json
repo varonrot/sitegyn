@@ -1,0 +1,228 @@
+{
+  "home": {
+    "hero": {
+      "kicker": {
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "text"
+      },
+      "headline": {
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "headline"
+      },
+      "subheadline": {
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "paragraph"
+      },
+      "primary_cta": {
+        "inline_edit": true,
+        "ai_edit": false,
+        "input_type": "button_label"
+      },
+      "secondary_cta": {
+        "inline_edit": true,
+        "ai_edit": false,
+        "input_type": "button_label"
+      },
+      "pills": {
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "short_list",
+        "reorder": false,
+        "add_remove": false
+      }
+    }
+  },
+
+  "about": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "tagline": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "paragraphs": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "multi_paragraph",
+      "reorder": false,
+      "add_remove": false
+    },
+    "why_badge": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "badge"
+    },
+    "why_title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "why_points": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "bullet_list",
+      "reorder": false,
+      "add_remove": false
+    }
+  },
+
+  "offers": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "subtitle": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "deals": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "cards",
+      "per_item": {
+        "badge": {
+          "inline_edit": true,
+          "ai_edit": false,
+          "input_type": "badge"
+        },
+        "name": {
+          "inline_edit": true,
+          "ai_edit": true,
+          "input_type": "text"
+        },
+        "price_text": {
+          "inline_edit": true,
+          "ai_edit": false,
+          "input_type": "price"
+        },
+        "description": {
+          "inline_edit": false,
+          "ai_edit": true,
+          "input_type": "paragraph"
+        }
+      },
+      "reorder": false,
+      "add_remove": false
+    }
+  },
+
+  "menu": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "subtitle": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "pizzas": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "menu_items",
+      "per_item": {
+        "name": {
+          "inline_edit": true,
+          "ai_edit": true,
+          "input_type": "text"
+        },
+        "tags": {
+          "inline_edit": true,
+          "ai_edit": false,
+          "input_type": "tags"
+        },
+        "description": {
+          "inline_edit": false,
+          "ai_edit": true,
+          "input_type": "paragraph"
+        }
+      },
+      "reorder": false,
+      "add_remove": false
+    }
+  },
+
+  "services": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "subtitle": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "items": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "cards",
+      "per_item": {
+        "title": {
+          "inline_edit": true,
+          "ai_edit": true,
+          "input_type": "text"
+        },
+        "description": {
+          "inline_edit": false,
+          "ai_edit": true,
+          "input_type": "paragraph"
+        }
+      },
+      "reorder": false,
+      "add_remove": false
+    }
+  },
+
+  "contact": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "subtitle": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "phone": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "phone"
+    },
+    "address": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "address"
+    },
+    "hours_title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "hours_lines": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "list",
+      "reorder": false,
+      "add_remove": false
+    },
+    "cta_pills": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "short_list",
+      "reorder": false,
+      "add_remove": false
+    }
+  }
+}
