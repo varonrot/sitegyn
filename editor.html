@@ -278,148 +278,8 @@ body{
 
 <!-- LEFT -->
 <aside class="sidebar left">
-
-  <!-- ================= STRUCTURE ================= -->
-  <div class="section-title">Structure</div>
-  <div class="nav-list">
-    <div class="nav-item active">
-      <span class="icon"><i class="fa-solid fa-layer-group"></i></span>
-      Sections Tree
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-plus"></i></span>
-      Add Section
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-up-down"></i></span>
-      Reorder Sections
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-eye"></i></span>
-      Hide / Show Sections
-    </div>
-  </div>
-
-  <!-- ================= CURRENT SECTION ================= -->
-  <div class="section-title">Selected Section</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-tag"></i></span>
-      Section Type: Hero
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-arrows-up-down-left-right"></i></span>
-      Position & Order
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-trash"></i></span>
-      Delete Section
-    </div>
-  </div>
-
-  <!-- ================= CONTENT ================= -->
-  <div class="section-title">Content</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-pen"></i></span>
-      Text & Headings
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-image"></i></span>
-      Images & Media
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-link"></i></span>
-      Buttons & Links
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-list"></i></span>
-      Lists & Repeater Items
-    </div>
-  </div>
-
-  <!-- ================= DESIGN ================= -->
-  <div class="section-title">Design</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-palette"></i></span>
-      Colors
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-font"></i></span>
-      Typography
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-border-all"></i></span>
-      Spacing & Layout
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-arrows-left-right"></i></span>
-      Alignment
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-layer-group"></i></span>
-      Backgrounds & Overlays
-    </div>
-  </div>
-
-  <!-- ================= RESPONSIVE ================= -->
-  <div class="section-title">Responsive</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-desktop"></i></span>
-      Desktop Rules
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-tablet-screen-button"></i></span>
-      Tablet Rules
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-mobile-screen"></i></span>
-      Mobile Rules
-    </div>
-  </div>
-
-  <!-- ================= ADVANCED ================= -->
-  <div class="section-title">Advanced</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-code"></i></span>
-      Custom HTML
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-bolt"></i></span>
-      Custom CSS
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-gear"></i></span>
-      Section Logic
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-database"></i></span>
-      Bind to Data
-    </div>
-  </div>
-
+  <div id="sidebar-dynamic"></div>
 </aside>
-
 
   <!-- CANVAS -->
 <main class="canvas" id="editor-canvas" data-project-id="">
@@ -441,137 +301,117 @@ body{
 <!-- RIGHT -->
 <aside class="sidebar right">
 
-  <!-- ================= AI ACTIONS ================= -->
-  <div class="section-title">AI Actions</div>
+  <!-- ================= HERO AI ================= -->
+  <div class="section-title">Hero – AI</div>
   <div class="nav-list">
     <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-      Rewrite Section
+      <span class="icon"><i class="fa-solid fa-tag"></i></span>
+      Rewrite Kicker
     </div>
-
     <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-pen-fancy"></i></span>
-      Improve Copy
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Headline
     </div>
-
     <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-language"></i></span>
-      Change Tone & Style
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subheadline
     </div>
-
     <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-spell-check"></i></span>
-      Fix Grammar & Clarity
+      <span class="icon"><i class="fa-solid fa-list"></i></span>
+      Improve Pills
     </div>
   </div>
 
-  <!-- ================= GENERATE CONTENT ================= -->
-  <div class="section-title">Generate Content</div>
+  <!-- ================= ABOUT AI ================= -->
+  <div class="section-title">About – AI</div>
   <div class="nav-list">
     <div class="nav-item">
       <span class="icon"><i class="fa-solid fa-heading"></i></span>
-      Generate Headlines
+      Rewrite Title
     </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-quote-left"></i></span>
+      Rewrite Tagline
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-paragraph"></i></span>
+      Rewrite Paragraphs
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-certificate"></i></span>
+      Rewrite Why Badge
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-list-check"></i></span>
+      Improve Why Points
+    </div>
+  </div>
 
+  <!-- ================= OFFERS AI ================= -->
+  <div class="section-title">Offers – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Section Title
+    </div>
     <div class="nav-item">
       <span class="icon"><i class="fa-solid fa-align-left"></i></span>
-      Generate Paragraphs
+      Rewrite Section Subtitle
     </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-list"></i></span>
-      Bullet Points & Lists
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-quote-right"></i></span>
-      Testimonials Copy
-    </div>
-  </div>
-
-  <!-- ================= MEDIA & VISUAL ================= -->
-  <div class="section-title">Images & Visual</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-image"></i></span>
-      Generate Images
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-palette"></i></span>
-      Image Style & Mood
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-expand"></i></span>
-      Hero Image Concepts
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-layer-group"></i></span>
-      Background Suggestions
-    </div>
-  </div>
-
-  <!-- ================= STRUCTURE & LAYOUT ================= -->
-  <div class="section-title">Layout & Structure</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-columns"></i></span>
-      Suggest Layout Variations
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-diagram-project"></i></span>
-      Restructure Section
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-up-down-left-right"></i></span>
-      Optimize Spacing
-    </div>
-  </div>
-
-  <!-- ================= SEO & OPTIMIZATION ================= -->
-  <div class="section-title">SEO & Optimization</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-      SEO Improve
-    </div>
-
     <div class="nav-item">
       <span class="icon"><i class="fa-solid fa-tags"></i></span>
-      Keywords Suggestions
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-gauge-high"></i></span>
-      Performance Tips
-    </div>
-
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-mobile-screen"></i></span>
-      Mobile Optimization
+      Improve Deals Content
     </div>
   </div>
 
-  <!-- ================= GLOBAL AI ================= -->
-  <div class="section-title">Global AI</div>
+  <!-- ================= MENU AI ================= -->
+  <div class="section-title">Menu – AI</div>
   <div class="nav-list">
     <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-globe"></i></span>
-      Rewrite Entire Page
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
     </div>
-
     <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-rotate"></i></span>
-      Regenerate with New Prompt
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subtitle
     </div>
-
     <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-flask"></i></span>
-      A/B Variations
+      <span class="icon"><i class="fa-solid fa-pizza-slice"></i></span>
+      Improve Pizza Descriptions
+    </div>
+  </div>
+
+  <!-- ================= SERVICES AI ================= -->
+  <div class="section-title">Services – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-boxes-stacked"></i></span>
+      Improve Service Items
+    </div>
+  </div>
+
+  <!-- ================= CONTACT AI ================= -->
+  <div class="section-title">Contact – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-clock"></i></span>
+      Rewrite Opening Hours Text
     </div>
   </div>
 
@@ -590,42 +430,45 @@ function toggleRight(){
   document.querySelector('.sidebar.left').classList.remove('open');
 }
 </script>
-<script type="module">
+ <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+/* =========================
+   Supabase
+========================= */
 const supabase = createClient(
   "https://xkchlqcwntcoakmyicqb.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
 
+/* =========================
+   Project ID
+========================= */
 function getProjectId() {
   const urlId = new URLSearchParams(window.location.search).get("project_id");
   if (urlId) return urlId;
 
   const localId = localStorage.getItem("sitegyn_project_id");
   if (localId) {
-
     const url = new URL(window.location.href);
     url.searchParams.set("project_id", localId);
     window.history.replaceState({}, "", url.toString());
     return localId;
   }
-
   return null;
 }
 
+/* =========================
+   Load editor + iframe
+========================= */
 async function loadEditorSite() {
   const iframe = document.getElementById("site-preview");
   const canvas = document.getElementById("editor-canvas");
 
-  if (!iframe) {
-    console.error("iframe not found");
-    return;
-  }
+  if (!iframe) return;
 
   const projectId = getProjectId();
   if (!projectId) {
-    console.warn("No project_id in URL");
     iframe.srcdoc = "<h1 style='color:white'>No project_id</h1>";
     return;
   }
@@ -639,7 +482,6 @@ async function loadEditorSite() {
     .single();
 
   if (error || !data?.subdomain) {
-    console.error("Project not found", error);
     iframe.srcdoc = "<h1 style='color:white'>Project not found</h1>";
     return;
   }
@@ -653,10 +495,98 @@ async function loadEditorSite() {
 
   iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
 
-  console.log("Editor loaded project:", subdomain);
+  await loadTemplateSidebar(projectId);
 }
 
 loadEditorSite();
+
+/* =========================
+   Load template schema
+========================= */
+async function loadTemplateSidebar(projectId) {
+  const { data, error } = await supabase
+    .from("projects")
+    .select("selected_template_id")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.selected_template_id) return;
+
+  const templateId = data.selected_template_id;
+  const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema.json`;
+  const schema = await fetch(schemaUrl).then(r => r.json());
+
+  buildSidebarFromSchema(schema);
+}
+
+/* =========================
+   Sidebar builder
+========================= */
+function buildSidebarFromSchema(schema) {
+  const container = document.getElementById("sidebar-dynamic");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const sections = schema.properties || {};
+
+  for (const sectionKey in sections) {
+    const sectionSchema = sections[sectionKey];
+    const sectionProps = sectionSchema.properties || {};
+
+    // Section title
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.textContent = capitalize(sectionKey);
+    container.appendChild(title);
+
+    // Special: home.hero
+    if (sectionKey === "home" && sectionProps.hero) {
+      buildNestedSection(
+        container,
+        "Hero",
+        sectionProps.hero.properties || {},
+        "home.hero"
+      );
+      continue;
+    }
+
+    // Regular fields
+    for (const fieldKey in sectionProps) {
+      const item = document.createElement("div");
+      item.className = "nav-item";
+      item.textContent = humanize(fieldKey);
+      item.dataset.path = `${sectionKey}.${fieldKey}`;
+      container.appendChild(item);
+    }
+  }
+}
+
+function buildNestedSection(container, titleText, fields, basePath) {
+  const subtitle = document.createElement("div");
+  subtitle.className = "section-subtitle";
+  subtitle.textContent = titleText;
+  container.appendChild(subtitle);
+
+  for (const fieldKey in fields) {
+    const item = document.createElement("div");
+    item.className = "nav-item nested";
+    item.textContent = humanize(fieldKey);
+    item.dataset.path = `${basePath}.${fieldKey}`;
+    container.appendChild(item);
+  }
+}
+
+/* =========================
+   Utils
+========================= */
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function humanize(str) {
+  return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+}
 </script>
 
 </body>
