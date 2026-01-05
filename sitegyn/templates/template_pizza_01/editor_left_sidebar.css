@@ -71,14 +71,25 @@
   height:34px;
   min-width:34px;
   border-radius:10px;
-  display:grid;
-  place-items:center;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
   background:rgba(0,0,0,.35);
   color:#ffffff;
+
   font-family:"Font Awesome 6 Free";
-  font-weight:900;
+  font-weight:900; /* solid */
   font-size:14px;
+  line-height:1;
+
+  font-style:normal;
+  font-variant:normal;
+  text-rendering:auto;
+  -webkit-font-smoothing:antialiased;
 }
+
 
 /* =========================================================
    ICONS – mapping by section / field
