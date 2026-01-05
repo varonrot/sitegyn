@@ -430,7 +430,7 @@ function toggleRight(){
   document.querySelector('.sidebar.left').classList.remove('open');
 }
 </script>
- <script type="module">
+<script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* =========================
@@ -456,6 +456,22 @@ function getProjectId() {
     return localId;
   }
   return null;
+}
+
+/* =========================
+   Load template LEFT sidebar CSS
+========================= */
+function loadTemplateLeftSidebarCSS(templateId) {
+  const cssId = "template-left-sidebar-css";
+  const existing = document.getElementById(cssId);
+  if (existing) existing.remove();
+
+  const link = document.createElement("link");
+  link.id = cssId;
+  link.rel = "stylesheet";
+  link.href = `/sitegyn/templates/${templateId}/editor_left_sidebar.css`;
+
+  document.head.appendChild(link);
 }
 
 /* =========================
@@ -513,6 +529,10 @@ async function loadTemplateSidebar(projectId) {
   if (error || !data?.selected_template_id) return;
 
   const templateId = data.selected_template_id;
+
+  /* 👉 טעינת CSS של סרגל שמאל */
+  loadTemplateLeftSidebarCSS(templateId);
+
   const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema.json`;
   const schema = await fetch(schemaUrl).then(r => r.json());
 
