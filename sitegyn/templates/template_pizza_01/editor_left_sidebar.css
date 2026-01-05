@@ -66,7 +66,7 @@
 
 /* ===== ICON CONTAINER ===== */
 .sidebar.left .nav-item::before{
-  content:"";
+  content:"\f111"; /* default dot */
   width:34px;
   height:34px;
   min-width:34px;
@@ -80,7 +80,7 @@
   color:#ffffff;
 
   font-family:"Font Awesome 6 Free";
-  font-weight:900; /* solid */
+  font-weight:900;
   font-size:14px;
   line-height:1;
 
@@ -88,7 +88,9 @@
   font-variant:normal;
   text-rendering:auto;
   -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
+
 
 
 /* =========================================================
@@ -96,35 +98,35 @@
    ========================================================= */
 
 /* HOME */
-.nav-item[data-path^="home.hero.kicker"]::before{content:"\f02b";}
-.nav-item[data-path^="home.hero.headline"]::before{content:"\f1dc";}
-.nav-item[data-path^="home.hero.subheadline"]::before{content:"\f036";}
-.nav-item[data-path^="home.hero.primary_cta"]::before{content:"\f14a";}
-.nav-item[data-path^="home.hero.secondary_cta"]::before{content:"\f0c8";}
-.nav-item[data-path^="home.hero.pills"]::before{content:"\f03a";}
+.nav-item[data-path^="home.hero.kicker"]::before{content:"\f02b";} /* tag */
+.nav-item[data-path^="home.hero.headline"]::before{content:"\f1dc";} /* heading */
+.nav-item[data-path^="home.hero.subheadline"]::before{content:"\f036";} /* align */
+.nav-item[data-path^="home.hero.primary_cta"]::before{content:"\f14a";} /* check-square */
+.nav-item[data-path^="home.hero.secondary_cta"]::before{content:"\f0c8";} /* square */
+.nav-item[data-path^="home.hero.pills"]::before{content:"\f03a";} /* list */
 
 /* ABOUT */
 .nav-item[data-path^="about.title"]::before{content:"\f1dc";}
-.nav-item[data-path^="about.tagline"]::before{content:"\f10d";}
-.nav-item[data-path^="about.paragraphs"]::before{content:"\f1dd";}
-.nav-item[data-path^="about.why_badge"]::before{content:"\f559";}
+.nav-item[data-path^="about.tagline"]::before{content:"\f10d";} /* quote */
+.nav-item[data-path^="about.paragraphs"]::before{content:"\f1dd";} /* paragraphs */
+.nav-item[data-path^="about.why_badge"]::before{content:"\f005";} /* star */
 .nav-item[data-path^="about.why_title"]::before{content:"\f1dc";}
-.nav-item[data-path^="about.why_points"]::before{content:"\f058";}
+.nav-item[data-path^="about.why_points"]::before{content:"\f058";} /* check-circle */
 
 /* OFFERS */
 .nav-item[data-path^="offers.title"]::before{content:"\f1dc";}
 .nav-item[data-path^="offers.subtitle"]::before{content:"\f036";}
-.nav-item[data-path^="offers.deals"]::before{content:"\f02c";}
+.nav-item[data-path^="offers.deals"]::before{content:"\f02c";} /* tags */
 
 /* MENU */
 .nav-item[data-path^="menu.title"]::before{content:"\f1dc";}
 .nav-item[data-path^="menu.subtitle"]::before{content:"\f036";}
-.nav-item[data-path^="menu.pizzas"]::before{content:"\f818";}
+.nav-item[data-path^="menu.pizzas"]::before{content:"\f2e7";} /* utensils */
 
 /* SERVICES */
 .nav-item[data-path^="services.title"]::before{content:"\f1dc";}
 .nav-item[data-path^="services.subtitle"]::before{content:"\f036";}
-.nav-item[data-path^="services.items"]::before{content:"\f468";}
+.nav-item[data-path^="services.items"]::before{content:"\f0ad";} /* wrench */
 
 /* CONTACT */
 .nav-item[data-path^="contact.title"]::before{content:"\f1dc";}
@@ -134,3 +136,4 @@
 .nav-item[data-path^="contact.hours_title"]::before{content:"\f017";}
 .nav-item[data-path^="contact.hours_lines"]::before{content:"\f03a";}
 .nav-item[data-path^="contact.cta_pills"]::before{content:"\f0a1";}
+
