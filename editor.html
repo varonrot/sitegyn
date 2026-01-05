@@ -470,7 +470,6 @@ function loadTemplateLeftSidebarCSS(templateId) {
   link.id = cssId;
   link.rel = "stylesheet";
   link.href = `/sitegyn/templates/${templateId}/editor_left_sidebar.css`;
-
   document.head.appendChild(link);
 }
 
@@ -480,7 +479,6 @@ function loadTemplateLeftSidebarCSS(templateId) {
 async function loadEditorSite() {
   const iframe = document.getElementById("site-preview");
   const canvas = document.getElementById("editor-canvas");
-
   if (!iframe) return;
 
   const projectId = getProjectId();
@@ -505,9 +503,7 @@ async function loadEditorSite() {
   const subdomain = data.subdomain;
 
   const sitePill = document.querySelector(".site-pill");
-  if (sitePill) {
-    sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
-  }
+  if (sitePill) sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
 
   iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
 
@@ -517,7 +513,7 @@ async function loadEditorSite() {
 loadEditorSite();
 
 /* =========================
-   Load template schema
+   Load template schema (ICON VERSION)
 ========================= */
 async function loadTemplateSidebar(projectId) {
   const { data, error } = await supabase
@@ -532,7 +528,8 @@ async function loadTemplateSidebar(projectId) {
 
   loadTemplateLeftSidebarCSS(templateId);
 
-  const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema.json`;
+  // ✅ changed to _schema_icon.json
+  const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema_icon.json`;
   const schema = await fetch(schemaUrl).then(r => r.json());
 
   buildSidebarFromSchema(schema);
@@ -541,6 +538,37 @@ async function loadTemplateSidebar(projectId) {
 /* =========================
    Sidebar builder
 ========================= */
+const DEFAULT_ICON = "fa-circle";
+
+function getIconFromSchema(propSchema) {
+  if (!propSchema) return DEFAULT_ICON;
+
+  // support ui:icon
+  if (typeof propSchema["ui:icon"] === "string" && propSchema["ui:icon"].trim()) {
+    return propSchema["ui:icon"].trim();
+  }
+
+  // optional: support ui.icon if you ever use that style
+  if (propSchema.ui && typeof propSchema.ui.icon === "string" && propSchema.ui.icon.trim()) {
+    return propSchema.ui.icon.trim();
+  }
+
+  return DEFAULT_ICON;
+}
+
+function renderNavItem({ label, path, iconClass, nested = false }) {
+  const item = document.createElement("div");
+  item.className = nested ? "nav-item nested" : "nav-item";
+  item.dataset.path = path;
+
+  item.innerHTML = `
+    <span class="nav-ico"><i class="fa-solid ${iconClass}"></i></span>
+    <span class="nav-label">${label}</span>
+  `;
+
+  return item;
+}
+
 function buildSidebarFromSchema(schema) {
   const container = document.getElementById("sidebar-dynamic");
   if (!container) return;
@@ -570,20 +598,24 @@ function buildSidebarFromSchema(schema) {
       continue;
     }
 
- // Regular fields
-const list = document.createElement("div");
-list.className = "nav-list";
+    // Regular fields
+    const list = document.createElement("div");
+    list.className = "nav-list";
 
-for (const fieldKey in sectionProps) {
-  const item = document.createElement("div");
-  item.className = "nav-item";
-  item.textContent = humanize(fieldKey);
-  item.dataset.path = `${sectionKey}.${fieldKey}`;
-  list.appendChild(item);
-}
+    for (const fieldKey in sectionProps) {
+      const fieldSchema = sectionProps[fieldKey]; // <- contains ui:icon
+      const iconClass = getIconFromSchema(fieldSchema);
 
-container.appendChild(list);
+      const item = renderNavItem({
+        label: humanize(fieldKey),
+        path: `${sectionKey}.${fieldKey}`,
+        iconClass
+      });
 
+      list.appendChild(item);
+    }
+
+    container.appendChild(list);
   }
 }
 
@@ -593,19 +625,24 @@ function buildNestedSection(container, titleText, fields, basePath) {
   subtitle.textContent = titleText;
   container.appendChild(subtitle);
 
-const list = document.createElement("div");
-list.className = "nav-list";
+  const list = document.createElement("div");
+  list.className = "nav-list";
 
-for (const fieldKey in fields) {
-  const item = document.createElement("div");
-  item.className = "nav-item nested";
-  item.textContent = humanize(fieldKey);
-  item.dataset.path = `${basePath}.${fieldKey}`;
-  list.appendChild(item);
-}
+  for (const fieldKey in fields) {
+    const fieldSchema = fields[fieldKey]; // <- contains ui:icon
+    const iconClass = getIconFromSchema(fieldSchema);
 
-container.appendChild(list);
+    const item = renderNavItem({
+      label: humanize(fieldKey),
+      path: `${basePath}.${fieldKey}`,
+      iconClass,
+      nested: true
+    });
 
+    list.appendChild(item);
+  }
+
+  container.appendChild(list);
 }
 
 /* =========================
