@@ -534,7 +534,6 @@ async function loadTemplateSidebar(projectId) {
 
   const templateId = data.selected_template_id;
 
-  /* 👉 טעינת CSS של סרגל שמאל */
   loadTemplateLeftSidebarCSS(templateId);
 
   const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema.json`;
@@ -575,14 +574,20 @@ function buildSidebarFromSchema(schema) {
       continue;
     }
 
-    // Regular fields
-    for (const fieldKey in sectionProps) {
-      const item = document.createElement("div");
-      item.className = "nav-item";
-      item.textContent = humanize(fieldKey);
-      item.dataset.path = `${sectionKey}.${fieldKey}`;
-      container.appendChild(item);
-    }
+ // Regular fields
+const list = document.createElement("div");
+list.className = "nav-list";
+
+for (const fieldKey in sectionProps) {
+  const item = document.createElement("div");
+  item.className = "nav-item";
+  item.textContent = humanize(fieldKey);
+  item.dataset.path = `${sectionKey}.${fieldKey}`;
+  list.appendChild(item);
+}
+
+container.appendChild(list);
+
   }
 }
 
@@ -592,13 +597,19 @@ function buildNestedSection(container, titleText, fields, basePath) {
   subtitle.textContent = titleText;
   container.appendChild(subtitle);
 
-  for (const fieldKey in fields) {
-    const item = document.createElement("div");
-    item.className = "nav-item nested";
-    item.textContent = humanize(fieldKey);
-    item.dataset.path = `${basePath}.${fieldKey}`;
-    container.appendChild(item);
-  }
+const list = document.createElement("div");
+list.className = "nav-list";
+
+for (const fieldKey in fields) {
+  const item = document.createElement("div");
+  item.className = "nav-item nested";
+  item.textContent = humanize(fieldKey);
+  item.dataset.path = `${basePath}.${fieldKey}`;
+  list.appendChild(item);
+}
+
+container.appendChild(list);
+
 }
 
 /* =========================
