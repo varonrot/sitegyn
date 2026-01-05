@@ -604,6 +604,7 @@ function getProjectId() {
 
   const localId = localStorage.getItem("sitegyn_project_id");
   if (localId) {
+
     const url = new URL(window.location.href);
     url.searchParams.set("project_id", localId);
     window.history.replaceState({}, "", url.toString());
@@ -611,29 +612,6 @@ function getProjectId() {
   }
 
   return null;
-}
-
-/* ===============================
-   NEW: load editor capabilities
-================================ */
-async function loadEditorCapabilities(templateId) {
-  try {
-    const res = await fetch(
-      `/templates/${templateId}/editor_capabilities.json`
-    );
-
-    if (!res.ok) {
-      console.warn("editor_capabilities.json not found");
-      return null;
-    }
-
-    const json = await res.json();
-    return json;
-
-  } catch (e) {
-    console.error("Failed to load editor capabilities", e);
-    return null;
-  }
 }
 
 async function loadEditorSite() {
@@ -675,21 +653,11 @@ async function loadEditorSite() {
 
   iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
 
-  /* ===============================
-     NEW: load template capabilities
-  ================================ */
-  const templateId = "template_pizza_01"; // כרגע קשיח
-  const capabilities = await loadEditorCapabilities(templateId);
-
-  console.log("Editor capabilities loaded:", capabilities);
-  window.__EDITOR_CAPABILITIES__ = capabilities;
-
   console.log("Editor loaded project:", subdomain);
 }
 
 loadEditorSite();
 </script>
-
 
 </body>
 </html>
