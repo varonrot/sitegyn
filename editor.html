@@ -554,10 +554,19 @@ function buildSidebarFromSchema(schema) {
     const sectionProps = sectionSchema.properties || {};
 
     // Section title
-    const title = document.createElement("div");
-    title.className = "section-title";
-    title.textContent = capitalize(sectionKey);
-    container.appendChild(title);
+const item = document.createElement("div");
+item.className = "nav-item";
+item.dataset.path = `${sectionKey}.${fieldKey}`;
+
+item.innerHTML = `
+  <span class="icon">
+    <i class="fa-solid fa-circle"></i>
+  </span>
+  <span class="label">${humanize(fieldKey)}</span>
+`;
+
+list.appendChild(item);
+
 
     // Special: home.hero
     if (sectionKey === "home" && sectionProps.hero) {
@@ -597,11 +606,19 @@ const list = document.createElement("div");
 list.className = "nav-list";
 
 for (const fieldKey in fields) {
-  const item = document.createElement("div");
-  item.className = "nav-item nested";
-  item.textContent = humanize(fieldKey);
-  item.dataset.path = `${basePath}.${fieldKey}`;
-  list.appendChild(item);
+const item = document.createElement("div");
+item.className = "nav-item nested";
+item.dataset.path = `${basePath}.${fieldKey}`;
+
+item.innerHTML = `
+  <span class="icon">
+    <i class="fa-solid fa-circle"></i>
+  </span>
+  <span class="label">${humanize(fieldKey)}</span>
+`;
+
+list.appendChild(item);
+
 }
 
 container.appendChild(list);
