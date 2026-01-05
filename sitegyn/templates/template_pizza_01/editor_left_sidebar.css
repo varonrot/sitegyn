@@ -5,26 +5,29 @@
 /* ===== SIDEBAR BASE ===== */
 .sidebar.left{
   width:280px;
-  background:linear-gradient(180deg,#041831,#064893,#0f8fff);
-  padding:16px 14px;
-  overflow:auto;
+  background:linear-gradient(180deg,#041831 0%, #064893 60%, #0f8fff 100%);
+  padding:18px 14px 22px;
+  overflow-y:auto;
+  border-right:1px solid rgba(255,255,255,.06);
 }
 
 /* ===== SECTION TITLES ===== */
 .sidebar.left .section-title{
   font-size:11px;
-  margin:18px 6px 8px;
+  margin:22px 8px 10px;
   text-transform:uppercase;
-  letter-spacing:.8px;
-  opacity:.85;
-  color:#e7f5ff;
+  letter-spacing:.08em;
+  font-weight:700;
+  color:#a7c7ff;
+  opacity:.9;
 }
 
 /* ===== LIST WRAPPER ===== */
 .sidebar.left .nav-list{
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:8px; /* יותר אוויר */
+  margin-bottom:8px;
 }
 
 /* ===== NAV ITEM ===== */
@@ -32,27 +35,33 @@
   display:flex;
   align-items:center;
   gap:12px;
-  padding:10px 12px;
-  border-radius:12px;
+  padding:12px 14px;
+  border-radius:14px;
   background:rgba(0,0,0,.22);
   cursor:pointer;
   font-size:14px;
+  font-weight:500;
   color:#e7f5ff;
-  transition:background .15s ease, transform .1s ease;
+  transition:
+    background .15s ease,
+    transform .1s ease,
+    box-shadow .15s ease;
 }
 
 /* hover */
 .sidebar.left .nav-item:hover{
-  background:rgba(0,0,0,.35);
+  background:rgba(0,0,0,.38);
+  transform:translateX(1px);
 }
 
 /* active */
 .sidebar.left .nav-item.active{
   background:linear-gradient(
     90deg,
-    rgba(21,128,255,.9),
-    rgba(67,56,202,.9)
+    rgba(21,128,255,.95),
+    rgba(67,56,202,.95)
   );
+  box-shadow:0 6px 18px rgba(21,128,255,.35);
 }
 
 /* ===== ICON CONTAINER ===== */
@@ -60,10 +69,12 @@
   content:"";
   width:34px;
   height:34px;
+  min-width:34px;
   border-radius:10px;
   display:grid;
   place-items:center;
   background:rgba(0,0,0,.35);
+  color:#ffffff;
   font-family:"Font Awesome 6 Free";
   font-weight:900;
   font-size:14px;
