@@ -587,16 +587,27 @@ function buildSidebarFromSchema(schema) {
     title.textContent = capitalize(sectionKey);
     container.appendChild(title);
 
-    // Special: home.hero
-    if (sectionKey === "home" && sectionProps.hero) {
-      buildNestedSection(
-        container,
-        "Hero",
-        sectionProps.hero.properties || {},
-        "home.hero"
-      );
-      continue;
-    }
+// Special: home.hero (NO "Hero" title)
+if (sectionKey === "home" && sectionProps.hero) {
+  const list = document.createElement("div");
+  list.className = "nav-list";
+
+  for (const fieldKey in sectionProps.hero.properties) {
+    const fieldSchema = sectionProps.hero.properties[fieldKey];
+    const iconClass = getIconFromSchema(fieldSchema);
+
+    const item = renderNavItem({
+      label: humanize(fieldKey),
+      path: `home.hero.${fieldKey}`,
+      iconClass
+    });
+
+    list.appendChild(item);
+  }
+
+  container.appendChild(list);
+  continue;
+}
 
     // Regular fields
     const list = document.createElement("div");
