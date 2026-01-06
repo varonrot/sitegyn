@@ -241,31 +241,26 @@ body{
   height: 100%;
   display: block;
 }
-/* =========================
-   Bottom Preview Panel
-========================= */
 #bottom-preview{
   position: fixed;
   bottom: 0;
-
-  /* שלא יכסה את הסרגלים */
   left: var(--sidebar-w);
   right: var(--sidebar-w);
 
-  height: 140px;
-  padding: 14px 18px;
+  max-height: 220px;
+  padding: 16px 20px;
 
-  background: rgba(255, 120, 60, 0.85); /* כתום חצי שקוף */
+  background: rgba(255,120,60,.88);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 
   color: #2a1206;
-  z-index: 550;
+  z-index: 500;
 
-  border-top: 1px solid rgba(255,255,255,.3);
-  box-shadow: 0 -12px 30px rgba(0,0,0,.35);
+  border-top: 1px solid rgba(255,255,255,.25);
+  box-shadow: 0 -10px 30px rgba(0,0,0,.35);
 
   transition: transform .2s ease, opacity .2s ease;
+  overflow: hidden;
 }
 
 #bottom-preview.hidden{
@@ -274,33 +269,20 @@ body{
   pointer-events: none;
 }
 
-#bottom-preview:not(.hidden){
-  transform: translateY(0);
-  opacity: 1;
-}
-
-/* inner layout */
 #bottom-preview .bp-header{
   display:flex;
   justify-content:space-between;
   font-size:13px;
   opacity:.9;
-  margin-bottom:6px;
+  margin-bottom:8px;
 }
 
 #bottom-preview .bp-content{
-  font-size:14px;
-  line-height:1.4;
-  max-height:80px;
+  max-height:140px;
   overflow:auto;
-}
-
-/* mobile */
-@media (max-width: 980px){
-  #bottom-preview{
-    left:0;
-    right:0;
-  }
+  font-size:14px;
+  line-height:1.45;
+  white-space:pre-wrap;
 }
 
 </style>
@@ -728,15 +710,12 @@ function humanize(str) {
   return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
 }
 </script>
-<!-- Bottom Preview Panel -->
 <div id="bottom-preview" class="hidden">
   <div class="bp-header">
-    <strong id="bp-label">Kicker</strong>
-    <span id="bp-path">home.hero.kicker</span>
+    <span class="bp-title" id="bp-title"></span>
+    <span class="bp-path" id="bp-path"></span>
   </div>
-  <div class="bp-content" id="bp-content">
-    Preview text will appear here
-  </div>
+  <div class="bp-content" id="bp-content"></div>
 </div>
 
 </body>
