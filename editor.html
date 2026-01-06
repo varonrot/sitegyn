@@ -809,6 +809,9 @@ function humanize(str) {
    Bottom Preview – click handler
 ========================= */
 document.addEventListener("click", async (e) => {
+
+  if (e.target.closest("#bottom-preview")) return;
+
   const item = e.target.closest(".nav-item");
   if (!item) return;
 
@@ -817,6 +820,7 @@ document.addEventListener("click", async (e) => {
 
   openBottomPreview(path);
 });
+
 
 async function openBottomPreview(path) {
 currentEditPath = path;
@@ -873,24 +877,58 @@ async function saveBottomPreview() {
   const editor = document.getElementById("bp-editor");
   if (!editor) return;
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("projects")
     .select("content_json")
     .eq("id", projectId)
     .single();
 
-  if (error || !data?.content_json) return;
+  if (!data?.content_json) return;
 
   const updatedJson = structuredClone(data.content_json);
-
   setValueByPath(updatedJson, currentEditPath, editor.value);
 
   await supabase
     .from("projects")
     .update({ content_json: updatedJson })
     .eq("id", projectId);
+
+  const iframe = document.getElementById("site-preview");
+  if (iframe) {
+    iframe.src = iframe.src;
+  }
 }
+
+window.saveBottomPreview = saveBottomPreview;
+
 document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview);
+
+
+     function subscribeToProjectRealtime(projectId) {
+  supabase
+    .channel("projects-live-" + projectId)
+    .on(
+      "postgres_changes",
+      {
+        event: "UPDATE",
+        schema: "public",
+        table: "projects",
+        filter: `id=eq.${projectId}`,
+      },
+      (payload) => {
+        console.log("Realtime update", payload);
+
+        const iframe = document.getElementById("site-preview");
+        if (iframe) {
+          iframe.contentWindow.postMessage(
+            { type: "content-updated" },
+            "*"
+          );
+        }
+      }
+    )
+    .subscribe();
+}
 
 </script>
 
@@ -901,35 +939,65 @@ document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview
       <span class="bp-path" id="bp-path"></span>
     </div>
 
-    <button id="bp-close" style="
-      background:none;
-      border:none;
-      font-size:18px;
-      cursor:pointer;
-      color:#3a1b0a;
-    ">✕</button>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button
+        id="bp-preview"
+        style="
+          background:#111;
+          color:#fff;
+          border:1px solid rgba(255,255,255,.25);
+          border-radius:6px;
+          padding:4px 10px;
+          font-size:12px;
+          cursor:pointer;
+        "
+      >
+        Preview
+      </button>
+
+      <button
+        id="bp-close"
+        style="
+          background:none;
+          border:none;
+          font-size:18px;
+          cursor:pointer;
+          color:#3a1b0a;
+        "
+      >✕</button>
+    </div>
   </div>
 
   <textarea
-  class="bp-editor"
-  id="bp-editor"
-  placeholder="Edit content here..."
-></textarea>
-
+    class="bp-editor"
+    id="bp-editor"
+    placeholder="Edit content here..."
+  ></textarea>
 </div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.getElementById("bp-close");
+  const previewBtn = document.getElementById("bp-preview");
   const preview = document.getElementById("bottom-preview");
 
   if (closeBtn && preview) {
-    closeBtn.addEventListener("click", () => {
-      preview.classList.add("hidden");
+    closeBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();          // ⛔ חובה
+      await saveBottomPreview();    // שמירה ל־DB
+      preview.classList.add("hidden"); // סגירה אמיתית
+    });
+  }
+
+  if (previewBtn) {
+    previewBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();          // ⛔ חובה
+      await saveBottomPreview();    // שמירה בלבד
     });
   }
 });
-</script>
 
+</script>
 
 </body>
 </html>
