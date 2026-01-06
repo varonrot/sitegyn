@@ -977,14 +977,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (closeBtn && preview) {
     closeBtn.addEventListener("click", async () => {
-      await saveBottomPreview();   // ✅ שמירה
-      preview.classList.add("hidden"); // ✅ סגירה
+      await saveBottomPreview();
+      preview.classList.add("hidden");
     });
   }
 
   if (previewBtn) {
     previewBtn.addEventListener("click", async () => {
-      await saveBottomPreview();   // ✅ שמירה + רענון iframe
+      await saveBottomPreview();   
     });
   }
 });
