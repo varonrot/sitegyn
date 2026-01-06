@@ -892,6 +892,33 @@ async function saveBottomPreview() {
 }
 document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview);
 
+
+     function subscribeToProjectRealtime(projectId) {
+  supabase
+    .channel("projects-live-" + projectId)
+    .on(
+      "postgres_changes",
+      {
+        event: "UPDATE",
+        schema: "public",
+        table: "projects",
+        filter: `id=eq.${projectId}`,
+      },
+      (payload) => {
+        console.log("Realtime update", payload);
+ 
+        const iframe = document.getElementById("site-preview");
+        if (iframe) {
+          iframe.contentWindow.postMessage(
+            { type: "content-updated" },
+            "*"
+          );
+        }
+      }
+    )
+    .subscribe();
+}
+
 </script>
 
 <div id="bottom-preview" class="hidden">
