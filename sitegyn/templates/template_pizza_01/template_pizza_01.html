@@ -193,5 +193,16 @@
     </section>
 
   </div>
+  <script>
+  window.addEventListener("message", (e) => {
+    if (e.data?.type === "content-updated") {
+      console.log("iframe received update");
+      
+      window.location.reload();
+    }
+  });
+</script>
+</body>
+
 </body>
 </html>
