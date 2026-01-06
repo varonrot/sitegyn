@@ -899,6 +899,8 @@ async function saveBottomPreview() {
   }
 }
 
+window.saveBottomPreview = saveBottomPreview;
+
 document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview);
 
 
