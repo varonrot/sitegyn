@@ -241,143 +241,6 @@ body{
   height: 100%;
   display: block;
 }
-/* =========================
-   Bottom Preview (Floating)
-========================= */
-#bottom-preview{
-  position: fixed;
-  bottom: 18px;                 /* חשוב: px */
-  left: calc(var(--sidebar-w) + 16px);
-  right: calc(var(--sidebar-w) + 16px);
-
-  max-height: 240px;
-  padding: 14px 18px 16px;
-
-  background: linear-gradient(
-    180deg,
-    rgba(255,140,90,0.95),
-    rgba(255,120,60,0.92)
-  );
-  backdrop-filter: blur(10px);
-
-  color: #2a1206;
-  z-index: 600;
-
-  border-radius: 16px;
-  box-shadow:
-    0 12px 28px rgba(0,0,0,.35),
-    0 2px 0 rgba(255,255,255,.25) inset;
-
-  transition:
-    transform .25s ease,
-    opacity .25s ease;
-
-  overflow: hidden;
-}
-
-/* Hidden state */
-#bottom-preview.hidden{
-  transform: translateY(120%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* =========================
-   Header
-========================= */
-#bottom-preview .bp-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  margin-bottom:8px;
-  font-size:13px;
-  opacity:.95;
-}
-
-#bottom-preview .bp-title{
-  font-weight:600;
-  letter-spacing:.02em;
-}
-
-#bottom-preview .bp-path{
-  display:block;
-  font-size:11px;
-  opacity:.7;
-  margin-top:2px;
-}
-
-/* Close button */
-#bp-close{
-  background:rgba(0,0,0,.15);
-  border:none;
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  cursor:pointer;
-  color:#3a1b0a;
-  font-size:14px;
-  line-height:26px;
-  text-align:center;
-
-  transition: background .15s ease, transform .15s ease;
-}
-
-#bp-close:hover{
-  background:rgba(0,0,0,.25);
-  transform: scale(1.05);
-}
-
-/* =========================
-   Content
-========================= */
-#bottom-preview .bp-content{
-  max-height:150px;
-  overflow:auto;
-  font-size:14px;
-  line-height:1.5;
-  white-space:pre-wrap;
-  padding-right:4px;
-}
-
-/* Scrollbar (nice touch) */
-#bottom-preview .bp-content::-webkit-scrollbar{
-  width:6px;
-}
-#bottom-preview .bp-content::-webkit-scrollbar-thumb{
-  background:rgba(0,0,0,.25);
-  border-radius:6px;
-}
-
-    /* =========================
-   Mobile Bottom Preview
-========================= */
-@media (max-width: 900px){
-  #bottom-preview{
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-
-    max-height: 45vh;
-    padding: 14px 16px 18px;
-
-    border-radius: 18px;
-    box-shadow:
-      0 16px 40px rgba(0,0,0,.45),
-      0 1px 0 rgba(255,255,255,.25) inset;
-  }
-
-  #bottom-preview .bp-header{
-    font-size:14px;
-  }
-
-  #bottom-preview .bp-content{
-    max-height: 30vh;
-    font-size:15px;
-  }
-}
-
-
 
 </style>
 </head>
@@ -569,7 +432,6 @@ function toggleRight(){
 </script>
  <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-let currentEditPath = null;
 
 /* =========================
    Supabase
@@ -608,6 +470,7 @@ function loadTemplateLeftSidebarCSS(templateId) {
   link.id = cssId;
   link.rel = "stylesheet";
   link.href = `/sitegyn/templates/${templateId}/editor_left_sidebar.css`;
+
   document.head.appendChild(link);
 }
 
@@ -617,6 +480,7 @@ function loadTemplateLeftSidebarCSS(templateId) {
 async function loadEditorSite() {
   const iframe = document.getElementById("site-preview");
   const canvas = document.getElementById("editor-canvas");
+
   if (!iframe) return;
 
   const projectId = getProjectId();
@@ -641,7 +505,9 @@ async function loadEditorSite() {
   const subdomain = data.subdomain;
 
   const sitePill = document.querySelector(".site-pill");
-  if (sitePill) sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
+  if (sitePill) {
+    sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
+  }
 
   iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
 
@@ -651,7 +517,7 @@ async function loadEditorSite() {
 loadEditorSite();
 
 /* =========================
-   Load template schema (ICON VERSION)
+   Load template schema
 ========================= */
 async function loadTemplateSidebar(projectId) {
   const { data, error } = await supabase
@@ -666,10 +532,8 @@ async function loadTemplateSidebar(projectId) {
 
   loadTemplateLeftSidebarCSS(templateId);
 
-  // ✅ changed to _schema_icon.json
-  const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema_icon.json`;
+  const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema.json`;
   const schema = await fetch(schemaUrl).then(r => r.json());
-
 
   buildSidebarFromSchema(schema);
 }
@@ -677,37 +541,6 @@ async function loadTemplateSidebar(projectId) {
 /* =========================
    Sidebar builder
 ========================= */
-const DEFAULT_ICON = "fa-circle";
-
-function getIconFromSchema(propSchema) {
-  if (!propSchema) return DEFAULT_ICON;
-
-  // support ui:icon
-  if (typeof propSchema["ui:icon"] === "string" && propSchema["ui:icon"].trim()) {
-    return propSchema["ui:icon"].trim();
-  }
-
-  // optional: support ui.icon if you ever use that style
-  if (propSchema.ui && typeof propSchema.ui.icon === "string" && propSchema.ui.icon.trim()) {
-    return propSchema.ui.icon.trim();
-  }
-
-  return DEFAULT_ICON;
-}
-
-function renderNavItem({ label, path, iconClass, nested = false }) {
-  const item = document.createElement("div");
-  item.className = nested ? "nav-item nested" : "nav-item";
-  item.dataset.path = path;
-
-  item.innerHTML = `
-    <span class="nav-ico"><i class="fa-solid ${iconClass}"></i></span>
-    <span class="nav-label">${label}</span>
-  `;
-
-  return item;
-}
-
 function buildSidebarFromSchema(schema) {
   const container = document.getElementById("sidebar-dynamic");
   if (!container) return;
@@ -726,46 +559,31 @@ function buildSidebarFromSchema(schema) {
     title.textContent = capitalize(sectionKey);
     container.appendChild(title);
 
-// Special: home.hero (NO "Hero" title)
-if (sectionKey === "home" && sectionProps.hero) {
-  const list = document.createElement("div");
-  list.className = "nav-list";
-
-  for (const fieldKey in sectionProps.hero.properties) {
-    const fieldSchema = sectionProps.hero.properties[fieldKey];
-    const iconClass = getIconFromSchema(fieldSchema);
-
-    const item = renderNavItem({
-      label: humanize(fieldKey),
-      path: `home.hero.${fieldKey}`,
-      iconClass
-    });
-
-    list.appendChild(item);
-  }
-
-  container.appendChild(list);
-  continue;
-}
-
-    // Regular fields
-    const list = document.createElement("div");
-    list.className = "nav-list";
-
-    for (const fieldKey in sectionProps) {
-      const fieldSchema = sectionProps[fieldKey]; // <- contains ui:icon
-      const iconClass = getIconFromSchema(fieldSchema);
-
-      const item = renderNavItem({
-        label: humanize(fieldKey),
-        path: `${sectionKey}.${fieldKey}`,
-        iconClass
-      });
-
-      list.appendChild(item);
+    // Special: home.hero
+    if (sectionKey === "home" && sectionProps.hero) {
+      buildNestedSection(
+        container,
+        "Hero",
+        sectionProps.hero.properties || {},
+        "home.hero"
+      );
+      continue;
     }
 
-    container.appendChild(list);
+ // Regular fields
+const list = document.createElement("div");
+list.className = "nav-list";
+
+for (const fieldKey in sectionProps) {
+  const item = document.createElement("div");
+  item.className = "nav-item";
+  item.textContent = humanize(fieldKey);
+  item.dataset.path = `${sectionKey}.${fieldKey}`;
+  list.appendChild(item);
+}
+
+container.appendChild(list);
+
   }
 }
 
@@ -775,24 +593,19 @@ function buildNestedSection(container, titleText, fields, basePath) {
   subtitle.textContent = titleText;
   container.appendChild(subtitle);
 
-  const list = document.createElement("div");
-  list.className = "nav-list";
+const list = document.createElement("div");
+list.className = "nav-list";
 
-  for (const fieldKey in fields) {
-    const fieldSchema = fields[fieldKey]; // <- contains ui:icon
-    const iconClass = getIconFromSchema(fieldSchema);
+for (const fieldKey in fields) {
+  const item = document.createElement("div");
+  item.className = "nav-item nested";
+  item.textContent = humanize(fieldKey);
+  item.dataset.path = `${basePath}.${fieldKey}`;
+  list.appendChild(item);
+}
 
-    const item = renderNavItem({
-      label: humanize(fieldKey),
-      path: `${basePath}.${fieldKey}`,
-      iconClass,
-      nested: true
-    });
+container.appendChild(list);
 
-    list.appendChild(item);
-  }
-
-  container.appendChild(list);
 }
 
 /* =========================
@@ -805,198 +618,6 @@ function capitalize(str) {
 function humanize(str) {
   return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
 }
-   /* =========================
-   Bottom Preview – click handler
-========================= */
-document.addEventListener("click", async (e) => {
-
-  if (e.target.closest("#bottom-preview")) return;
-
-  const item = e.target.closest(".nav-item");
-  if (!item) return;
-
-  const path = item.dataset.path;
-  if (!path) return;
-
-  openBottomPreview(path);
-});
-
-
-async function openBottomPreview(path) {
-currentEditPath = path;
-  const projectId = getProjectId();
-  if (!projectId) return;
-
-  const { data, error } = await supabase
-    .from("projects")
-    .select("content_json")
-    .eq("id", projectId)
-    .single();
-
-  if (error || !data?.content_json) return;
-
-  const value = getValueByPath(data.content_json, path);
-
-  document.getElementById("bp-title").innerText =
-    path.split(".").slice(-1)[0];
-
-  document.getElementById("bp-path").innerText = path;
-
-  const editor = document.getElementById("bp-editor");
-  if (editor) {
-    editor.value = Array.isArray(value)
-      ? value.join("\n\n")
-      : (value ?? "");
-  }
-
-  document.getElementById("bottom-preview").classList.remove("hidden");
-}
-
-
-function getValueByPath(obj, path) {
-  return path.split(".").reduce((acc, key) => acc?.[key], obj);
-}
-
-function setValueByPath(obj, path, value) {
-  const keys = path.split(".");
-  let curr = obj;
-
-  for (let i = 0; i < keys.length - 1; i++) {
-    if (!curr[keys[i]]) curr[keys[i]] = {};
-    curr = curr[keys[i]];
-  }
-
-  curr[keys[keys.length - 1]] = value;
-}
-async function saveBottomPreview() {
-  if (!currentEditPath) return;
-
-  const projectId = getProjectId();
-  if (!projectId) return;
-
-  const editor = document.getElementById("bp-editor");
-  if (!editor) return;
-
-  const { data } = await supabase
-    .from("projects")
-    .select("content_json")
-    .eq("id", projectId)
-    .single();
-
-  if (!data?.content_json) return;
-
-  const updatedJson = structuredClone(data.content_json);
-  setValueByPath(updatedJson, currentEditPath, editor.value);
-
-  await supabase
-    .from("projects")
-    .update({ content_json: updatedJson })
-    .eq("id", projectId);
-
-  const iframe = document.getElementById("site-preview");
-  if (iframe) {
-    iframe.src = iframe.src;
-  }
-}
-
-window.saveBottomPreview = saveBottomPreview;
-
-document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview);
-
-
-     function subscribeToProjectRealtime(projectId) {
-  supabase
-    .channel("projects-live-" + projectId)
-    .on(
-      "postgres_changes",
-      {
-        event: "UPDATE",
-        schema: "public",
-        table: "projects",
-        filter: `id=eq.${projectId}`,
-      },
-      (payload) => {
-        console.log("Realtime update", payload);
-
-        const iframe = document.getElementById("site-preview");
-        if (iframe) {
-          iframe.contentWindow.postMessage(
-            { type: "content-updated" },
-            "*"
-          );
-        }
-      }
-    )
-    .subscribe();
-}
-
-</script>
-
-<div id="bottom-preview" class="hidden">
-  <div class="bp-header">
-    <div>
-      <span class="bp-title" id="bp-title"></span>
-      <span class="bp-path" id="bp-path"></span>
-    </div>
-
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button
-        id="bp-preview"
-        style="
-          background:#111;
-          color:#fff;
-          border:1px solid rgba(255,255,255,.25);
-          border-radius:6px;
-          padding:4px 10px;
-          font-size:12px;
-          cursor:pointer;
-        "
-      >
-        Preview
-      </button>
-
-      <button
-        id="bp-close"
-        style="
-          background:none;
-          border:none;
-          font-size:18px;
-          cursor:pointer;
-          color:#3a1b0a;
-        "
-      >✕</button>
-    </div>
-  </div>
-
-  <textarea
-    class="bp-editor"
-    id="bp-editor"
-    placeholder="Edit content here..."
-  ></textarea>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const closeBtn = document.getElementById("bp-close");
-  const previewBtn = document.getElementById("bp-preview");
-  const preview = document.getElementById("bottom-preview");
-
-  if (closeBtn && preview) {
-    closeBtn.addEventListener("click", async (e) => {
-      e.stopPropagation();          // ⛔ חובה
-      await saveBottomPreview();    // שמירה ל־DB
-      preview.classList.add("hidden"); // סגירה אמיתית
-    });
-  }
-
-  if (previewBtn) {
-    previewBtn.addEventListener("click", async (e) => {
-      e.stopPropagation();          // ⛔ חובה
-      await saveBottomPreview();    // שמירה בלבד
-    });
-  }
-});
-
 </script>
 
 </body>
