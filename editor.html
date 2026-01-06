@@ -241,9 +241,13 @@ body{
   height: 100%;
   display: block;
 }
+/* =========================
+   Bottom Preview – Floating Panel
+========================= */
+
 #bottom-preview{
   position: fixed;
-  bottom: 16;
+  bottom: 16px; /* ← FIX */
   left: var(--sidebar-w);
   right: var(--sidebar-w);
 
@@ -260,31 +264,68 @@ body{
   border-top: 1px solid rgba(255,255,255,.25);
   box-shadow: 0 -10px 30px rgba(0,0,0,.35);
 
-  transition: transform .2s ease, opacity .2s ease;
+  transform: translateY(0);
+  opacity: 1;
+
+  transition:
+    transform .25s ease,
+    opacity .2s ease;
+
   overflow: hidden;
 }
 
+/* Hidden state */
 #bottom-preview.hidden{
-  transform: translateY(100%);
+  transform: translateY(120%);
   opacity: 0;
   pointer-events: none;
 }
 
+/* Header */
 #bottom-preview .bp-header{
-  display:flex;
-  justify-content:space-between;
-  font-size:13px;
-  opacity:.9;
-  margin-bottom:8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 13px;
+  font-weight: 600;
+  opacity: .9;
+  margin-bottom: 8px;
 }
 
-#bottom-preview .bp-content{
-  max-height:140px;
-  overflow:auto;
-  font-size:14px;
-  line-height:1.45;
-  white-space:pre-wrap;
+/* Path text */
+#bottom-preview .bp-path{
+  font-size: 11px;
+  opacity: .7;
+  margin-left: 8px;
 }
+
+/* Content */
+#bottom-preview .bp-content{
+  max-height: 140px;
+  overflow-y: auto;
+
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+/* Close button */
+#bp-close{
+  background: none;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+
+  color: #3a1b0a;
+  opacity: .8;
+}
+
+#bp-close:hover{
+  opacity: 1;
+}
+
 
 </style>
 </head>
@@ -773,9 +814,18 @@ function getValueByPath(obj, path) {
 
   <div class="bp-content" id="bp-content"></div>
 </div>
-document.getElementById("bp-close")?.addEventListener("click", () => {
-  document.getElementById("bottom-preview").classList.add("hidden");
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const closeBtn = document.getElementById("bp-close");
+  const preview = document.getElementById("bottom-preview");
+
+  if (closeBtn && preview) {
+    closeBtn.addEventListener("click", () => {
+      preview.classList.add("hidden");
+    });
+  }
 });
+</script>
 
 
 </body>
