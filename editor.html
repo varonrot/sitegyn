@@ -349,6 +349,34 @@ body{
   border-radius:6px;
 }
 
+    /* =========================
+   Mobile Bottom Preview
+========================= */
+@media (max-width: 900px){
+  #bottom-preview{
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+
+    max-height: 45vh;
+    padding: 14px 16px 18px;
+
+    border-radius: 18px;
+    box-shadow:
+      0 16px 40px rgba(0,0,0,.45),
+      0 1px 0 rgba(255,255,255,.25) inset;
+  }
+
+  #bottom-preview .bp-header{
+    font-size:14px;
+  }
+
+  #bottom-preview .bp-content{
+    max-height: 30vh;
+    font-size:15px;
+  }
+}
+
 
 
 </style>
@@ -808,11 +836,16 @@ async function openBottomPreview(path) {
 
   document.getElementById("bp-path").innerText = path;
 
-  document.getElementById("bp-content").innerText =
-    Array.isArray(value) ? value.join("\n\n") : (value ?? "");
+  const editor = document.getElementById("bp-editor");
+  if (editor) {
+    editor.value = Array.isArray(value)
+      ? value.join("\n\n")
+      : (value ?? "");
+  }
 
   document.getElementById("bottom-preview").classList.remove("hidden");
 }
+
 
 function getValueByPath(obj, path) {
   return path.split(".").reduce((acc, key) => acc?.[key], obj);
@@ -836,7 +869,12 @@ function getValueByPath(obj, path) {
     ">✕</button>
   </div>
 
-  <div class="bp-content" id="bp-content"></div>
+  <textarea
+  class="bp-editor"
+  id="bp-editor"
+  placeholder="Edit content here..."
+></textarea>
+
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
