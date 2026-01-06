@@ -376,6 +376,19 @@ body{
     font-size:15px;
   }
 }
+.bp-editor{
+  width:100%;
+  height:120px;
+  resize:none;
+  border-radius:12px;
+  border:none;
+  padding:12px;
+  font-size:14px;
+  line-height:1.45;
+  outline:none;
+  background:#fff3ec;
+  color:#2a1206;
+}
 
 
 </style>
@@ -838,12 +851,20 @@ async function openBottomPreview(path) {
   document.getElementById("bp-content").innerText =
     Array.isArray(value) ? value.join("\n\n") : (value ?? "");
 
+    const editor = document.getElementById("bp-editor");
+  if (editor) {
+    editor.value = Array.isArray(value)
+      ? value.join("\n\n")
+      : (value ?? "");
+  }
+
   document.getElementById("bottom-preview").classList.remove("hidden");
 }
 
 function getValueByPath(obj, path) {
   return path.split(".").reduce((acc, key) => acc?.[key], obj);
 }
+
 
 </script>
 
@@ -863,7 +884,12 @@ function getValueByPath(obj, path) {
     ">✕</button>
   </div>
 
-  <div class="bp-content" id="bp-content"></div>
+ <textarea
+  class="bp-editor"
+  id="bp-editor"
+  placeholder="Edit content here..."
+></textarea>
+
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
