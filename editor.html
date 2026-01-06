@@ -569,6 +569,7 @@ function toggleRight(){
 </script>
  <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+let currentEditPath = null;
 
 /* =========================
    Supabase
@@ -818,6 +819,7 @@ document.addEventListener("click", async (e) => {
 });
 
 async function openBottomPreview(path) {
+currentEditPath = path;
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -850,6 +852,45 @@ async function openBottomPreview(path) {
 function getValueByPath(obj, path) {
   return path.split(".").reduce((acc, key) => acc?.[key], obj);
 }
+
+function setValueByPath(obj, path, value) {
+  const keys = path.split(".");
+  let curr = obj;
+
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (!curr[keys[i]]) curr[keys[i]] = {};
+    curr = curr[keys[i]];
+  }
+
+  curr[keys[keys.length - 1]] = value;
+}
+async function saveBottomPreview() {
+  if (!currentEditPath) return;
+
+  const projectId = getProjectId();
+  if (!projectId) return;
+
+  const editor = document.getElementById("bp-editor");
+  if (!editor) return;
+
+  const { data, error } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.content_json) return;
+
+  const updatedJson = structuredClone(data.content_json);
+
+  setValueByPath(updatedJson, currentEditPath, editor.value);
+
+  await supabase
+    .from("projects")
+    .update({ content_json: updatedJson })
+    .eq("id", projectId);
+}
+document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview);
 
 </script>
 
