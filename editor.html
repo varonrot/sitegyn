@@ -751,15 +751,64 @@ async function openBottomPreview(path) {
 function getValueByPath(obj, path) {
   return path.split(".").reduce((acc, key) => acc?.[key], obj);
 }
+#bottom-preview {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  max-width: 900px;
+  background: linear-gradient(180deg, #ff7a45, #e35d2f);
+  color: #111;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  padding: 16px 20px 20px;
+  z-index: 9999;
+}
+
+#bottom-preview.hidden {
+  display: none;
+}
+
+.bp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bp-title {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.bp-path {
+  font-size: 11px;
+  opacity: .6;
+}
+
+.bp-close {
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
 
 </script>
 <div id="bottom-preview" class="hidden">
   <div class="bp-header">
-    <span class="bp-title" id="bp-title"></span>
-    <span class="bp-path" id="bp-path"></span>
+    <div>
+      <span class="bp-title" id="bp-title"></span>
+      <span class="bp-path" id="bp-path"></span>
+    </div>
+    <span class="bp-close" id="bp-close">✕</span>
   </div>
+
   <div class="bp-content" id="bp-content"></div>
 </div>
+document.getElementById("bp-close")?.addEventListener("click", () => {
+  document.getElementById("bottom-preview").classList.add("hidden");
+});
+
 
 </body>
 </html>
