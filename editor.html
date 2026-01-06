@@ -976,18 +976,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const preview = document.getElementById("bottom-preview");
 
   if (closeBtn && preview) {
-    closeBtn.addEventListener("click", async () => {
-      await saveBottomPreview();
-      preview.classList.add("hidden");
+    closeBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();          // ⛔ חובה
+      await saveBottomPreview();    // שמירה ל־DB
+      preview.classList.add("hidden"); // סגירה אמיתית
     });
   }
 
   if (previewBtn) {
-    previewBtn.addEventListener("click", async () => {
-      await saveBottomPreview();   
+    previewBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();          // ⛔ חובה
+      await saveBottomPreview();    // שמירה בלבד
     });
   }
 });
+
 </script>
 
 </body>
