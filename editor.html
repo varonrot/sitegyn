@@ -575,6 +575,7 @@ async function loadTemplateSidebar(projectId) {
   const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema_icon.json`;
   const schema = await fetch(schemaUrl).then(r => r.json());
 
+
   buildSidebarFromSchema(schema);
 }
 
@@ -709,6 +710,48 @@ function capitalize(str) {
 function humanize(str) {
   return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
 }
+   /* =========================
+   Bottom Preview – click handler
+========================= */
+document.addEventListener("click", async (e) => {
+  const item = e.target.closest(".nav-item");
+  if (!item) return;
+
+  const path = item.dataset.path;
+  if (!path) return;
+
+  openBottomPreview(path);
+});
+
+async function openBottomPreview(path) {
+  const projectId = getProjectId();
+  if (!projectId) return;
+
+  const { data, error } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.content_json) return;
+
+  const value = getValueByPath(data.content_json, path);
+
+  document.getElementById("bp-title").innerText =
+    path.split(".").slice(-1)[0];
+
+  document.getElementById("bp-path").innerText = path;
+
+  document.getElementById("bp-content").innerText =
+    Array.isArray(value) ? value.join("\n\n") : (value ?? "");
+
+  document.getElementById("bottom-preview").classList.remove("hidden");
+}
+
+function getValueByPath(obj, path) {
+  return path.split(".").reduce((acc, key) => acc?.[key], obj);
+}
+
 </script>
 <div id="bottom-preview" class="hidden">
   <div class="bp-header">
