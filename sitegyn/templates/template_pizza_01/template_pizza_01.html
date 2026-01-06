@@ -193,15 +193,54 @@
     </section>
 
   </div>
-  <script>
-  window.addEventListener("message", (e) => {
-    if (e.data?.type === "content-updated") {
-      console.log("iframe received update");
-      
-      window.location.reload();
-    }
-  });
-</script>
+   <script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const supabase = createClient(
+  "https://xkchlqcwntcoakmyicqb.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
+);
+async function reloadContentFromDB() {
+  const params = new URLSearchParams(window.location.search);
+  const projectId = params.get("project_id");
+  if (!projectId) return;
+
+  const { data } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  if (!data?.content_json) return;
+
+  applyContentToDOM(data.content_json);
+}
+  function applyContentToDOM(c) {
+  // HERO
+  document.getElementById("hero-kicker").innerText = c.home.hero.kicker;
+  document.getElementById("hero-headline").innerText = c.home.hero.headline;
+  document.getElementById("hero-subheadline").innerText = c.home.hero.subheadline;
+  document.getElementById("hero-cta-primary").innerText = c.home.hero.primary_cta;
+  document.getElementById("hero-cta-secondary").innerText = c.home.hero.secondary_cta;
+
+  document.getElementById("hero-pill-1").innerText = c.home.hero.pills?.[0] ?? "";
+  document.getElementById("hero-pill-2").innerText = c.home.hero.pills?.[1] ?? "";
+  document.getElementById("hero-pill-3").innerText = c.home.hero.pills?.[2] ?? "";
+
+  // ABOUT
+  document.getElementById("about-title").innerText = c.about.title;
+  document.getElementById("about-tagline").innerText = c.about.tagline;
+  document.getElementById("about-paragraph-1").innerText = c.about.paragraphs?.[0] ?? "";
+  document.getElementById("about-paragraph-2").innerText = c.about.paragraphs?.[1] ?? "";
+  document.getElementById("about-paragraph-3").innerText = c.about.paragraphs?.[2] ?? "";
+}
+window.addEventListener("message", (e) => {
+  if (e.data?.type === "content-updated") {
+    console.log("iframe received update");
+    reloadContentFromDB();
+  }
+});
+
 </body>
 
 </body>
