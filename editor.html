@@ -906,7 +906,7 @@ document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview
       },
       (payload) => {
         console.log("Realtime update", payload);
- 
+
         const iframe = document.getElementById("site-preview");
         if (iframe) {
           iframe.contentWindow.postMessage(
