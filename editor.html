@@ -889,7 +889,6 @@ async function saveBottomPreview() {
     .update({ content_json: updatedJson })
     .eq("id", projectId);
 
-  // ✅ זה מה שהיה חסר
   const iframe = document.getElementById("site-preview");
   if (iframe) {
     iframe.src = iframe.src;
@@ -934,35 +933,62 @@ document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview
       <span class="bp-path" id="bp-path"></span>
     </div>
 
-    <button id="bp-close" style="
-      background:none;
-      border:none;
-      font-size:18px;
-      cursor:pointer;
-      color:#3a1b0a;
-    ">✕</button>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button
+        id="bp-preview"
+        style="
+          background:#111;
+          color:#fff;
+          border:1px solid rgba(255,255,255,.25);
+          border-radius:6px;
+          padding:4px 10px;
+          font-size:12px;
+          cursor:pointer;
+        "
+      >
+        Preview
+      </button>
+
+      <button
+        id="bp-close"
+        style="
+          background:none;
+          border:none;
+          font-size:18px;
+          cursor:pointer;
+          color:#3a1b0a;
+        "
+      >✕</button>
+    </div>
   </div>
 
   <textarea
-  class="bp-editor"
-  id="bp-editor"
-  placeholder="Edit content here..."
-></textarea>
-
+    class="bp-editor"
+    id="bp-editor"
+    placeholder="Edit content here..."
+  ></textarea>
 </div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.getElementById("bp-close");
+  const previewBtn = document.getElementById("bp-preview");
   const preview = document.getElementById("bottom-preview");
 
   if (closeBtn && preview) {
-    closeBtn.addEventListener("click", () => {
-      preview.classList.add("hidden");
+    closeBtn.addEventListener("click", async () => {
+      await saveBottomPreview();   // ✅ שמירה
+      preview.classList.add("hidden"); // ✅ סגירה
+    });
+  }
+
+  if (previewBtn) {
+    previewBtn.addEventListener("click", async () => {
+      await saveBottomPreview();   // ✅ שמירה + רענון iframe
     });
   }
 });
 </script>
-
 
 </body>
 </html>
