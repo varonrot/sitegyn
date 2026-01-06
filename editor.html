@@ -809,6 +809,9 @@ function humanize(str) {
    Bottom Preview – click handler
 ========================= */
 document.addEventListener("click", async (e) => {
+
+  if (e.target.closest("#bottom-preview")) return;
+
   const item = e.target.closest(".nav-item");
   if (!item) return;
 
@@ -817,6 +820,7 @@ document.addEventListener("click", async (e) => {
 
   openBottomPreview(path);
 });
+
 
 async function openBottomPreview(path) {
 currentEditPath = path;
