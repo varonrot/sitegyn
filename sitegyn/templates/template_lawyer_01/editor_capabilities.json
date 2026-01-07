@@ -2,219 +2,227 @@
   "home": {
     "hero": {
       "kicker": {
-        "type": "text",
-        "editable": true,
-        "maxLength": 80
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "text"
       },
       "headline": {
-        "type": "text",
-        "editable": true,
-        "maxLength": 120
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "headline"
       },
       "subheadline": {
-        "type": "textarea",
-        "editable": true,
-        "maxLength": 240
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "paragraph"
       },
       "primary_cta": {
-        "type": "text",
-        "editable": true,
-        "maxLength": 40
+        "inline_edit": true,
+        "ai_edit": false,
+        "input_type": "button_label"
       },
       "secondary_cta": {
-        "type": "text",
-        "editable": true,
-        "maxLength": 40
+        "inline_edit": true,
+        "ai_edit": false,
+        "input_type": "button_label"
       },
       "pills": {
-        "type": "list",
-        "editable": true,
-        "items": {
-          "type": "text",
-          "maxLength": 30
-        },
-        "limit": 3
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "short_list",
+        "reorder": false,
+        "add_remove": false
       }
     }
   },
 
   "about": {
     "title": {
-      "type": "text",
-      "editable": true,
-      "maxLength": 80
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
     },
     "tagline": {
-      "type": "textarea",
-      "editable": true,
-      "maxLength": 180
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
     },
     "paragraphs": {
-      "type": "list",
-      "editable": true,
-      "items": {
-        "type": "textarea",
-        "maxLength": 400
-      },
-      "limit": 3
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "multi_paragraph",
+      "reorder": false,
+      "add_remove": false
     },
-    "why": {
-      "badge": {
-        "type": "text",
-        "editable": true,
-        "maxLength": 40
-      },
-      "title": {
-        "type": "text",
-        "editable": true,
-        "maxLength": 80
-      },
-      "texts": {
-        "type": "list",
-        "editable": true,
-        "items": {
-          "type": "textarea",
-          "maxLength": 200
-        },
-        "limit": 3
-      }
+    "why_badge": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "badge"
+    },
+    "why_title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "why_points": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "bullet_list",
+      "reorder": false,
+      "add_remove": false
     }
   },
 
   "offers": {
     "title": {
-      "type": "text",
-      "editable": true,
-      "maxLength": 80
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
     },
     "subtitle": {
-      "type": "textarea",
-      "editable": true,
-      "maxLength": 200
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
     },
-    "items": {
-      "type": "repeater",
-      "editable": true,
-      "limit": 3,
-      "fields": {
+    "deals": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "cards",
+      "per_item": {
         "badge": {
-          "type": "text",
-          "maxLength": 30
+          "inline_edit": true,
+          "ai_edit": false,
+          "input_type": "badge"
         },
         "name": {
-          "type": "text",
-          "maxLength": 80
+          "inline_edit": true,
+          "ai_edit": true,
+          "input_type": "text"
         },
-        "meta": {
-          "type": "text",
-          "maxLength": 40
+        "price_text": {
+          "inline_edit": true,
+          "ai_edit": false,
+          "input_type": "price"
         },
         "description": {
-          "type": "textarea",
-          "maxLength": 300
+          "inline_edit": false,
+          "ai_edit": true,
+          "input_type": "paragraph"
         }
-      }
+      },
+      "reorder": false,
+      "add_remove": false
     }
   },
 
   "menu": {
     "title": {
-      "type": "text",
-      "editable": true,
-      "maxLength": 80
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
     },
     "subtitle": {
-      "type": "textarea",
-      "editable": true,
-      "maxLength": 200
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
     },
-    "items": {
-      "type": "repeater",
-      "editable": true,
-      "limit": 3,
-      "fields": {
+    "pizzas": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "menu_items",
+      "per_item": {
         "name": {
-          "type": "text",
-          "maxLength": 80
+          "inline_edit": true,
+          "ai_edit": true,
+          "input_type": "text"
         },
         "tags": {
-          "type": "text",
-          "maxLength": 60
+          "inline_edit": true,
+          "ai_edit": false,
+          "input_type": "tags"
         },
         "description": {
-          "type": "textarea",
-          "maxLength": 300
+          "inline_edit": false,
+          "ai_edit": true,
+          "input_type": "paragraph"
         }
-      }
+      },
+      "reorder": false,
+      "add_remove": false
     }
   },
 
   "services": {
     "title": {
-      "type": "text",
-      "editable": true,
-      "maxLength": 80
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
     },
     "subtitle": {
-      "type": "textarea",
-      "editable": true,
-      "maxLength": 200
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
     },
     "items": {
-      "type": "repeater",
-      "editable": true,
-      "limit": 3,
-      "fields": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "cards",
+      "per_item": {
         "title": {
-          "type": "text",
-          "maxLength": 80
+          "inline_edit": true,
+          "ai_edit": true,
+          "input_type": "text"
         },
         "description": {
-          "type": "textarea",
-          "maxLength": 300
+          "inline_edit": false,
+          "ai_edit": true,
+          "input_type": "paragraph"
         }
-      }
+      },
+      "reorder": false,
+      "add_remove": false
     }
   },
 
   "contact": {
     "title": {
-      "type": "text",
-      "editable": true,
-      "maxLength": 80
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
     },
     "subtitle": {
-      "type": "textarea",
-      "editable": true,
-      "maxLength": 200
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
     },
     "phone": {
-      "type": "text",
-      "editable": true,
-      "maxLength": 30
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "phone"
     },
     "address": {
-      "type": "text",
-      "editable": true,
-      "maxLength": 120
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "address"
     },
-    "hours": {
-      "type": "list",
-      "editable": true,
-      "items": {
-        "type": "text",
-        "maxLength": 60
-      },
-      "limit": 3
+    "hours_title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
     },
-    "ctas": {
-      "type": "list",
-      "editable": true,
-      "items": {
-        "type": "text",
-        "maxLength": 40
-      },
-      "limit": 2
+    "hours_lines": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "list",
+      "reorder": false,
+      "add_remove": false
+    },
+    "cta_pills": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "short_list",
+      "reorder": false,
+      "add_remove": false
     }
   }
 }
