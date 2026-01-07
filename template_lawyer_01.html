@@ -81,9 +81,9 @@
       padding: 32px 16px 80px;
     }
 
-    section {
-      display: none;
-    }
+section[data-page] {
+  display: none;
+}
 
     /* ===== HERO ===== */
     .hero {
@@ -231,6 +231,11 @@
     @media (max-width: 640px) {
       .hero-title { font-size: 2rem; }
     }
+
+      .hero {
+  display: block;
+}
+
   </style>
 </head>
 
@@ -456,7 +461,22 @@ window.addEventListener("message", (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  renderPage();
+  function renderPage() {
+  const page = getCurrentPage();
+
+  document.querySelectorAll("section[data-page]").forEach(section => {
+    section.style.display =
+      section.dataset.page === page ? "block" : "none";
+  });
+
+  document.querySelectorAll(".nav-link").forEach(link => {
+    link.classList.toggle(
+      "active",
+      link.dataset.page === page
+    );
+  });
+}
+
   reloadContentFromDB();
 });
 </script>
