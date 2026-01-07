@@ -894,9 +894,11 @@ async function saveBottomPreview() {
     .eq("id", projectId);
 
   const iframe = document.getElementById("site-preview");
-  if (iframe) {
-    iframe.src = iframe.src;
-  }
+ if (iframe) {
+  const baseSrc = iframe.src.split("?")[0];
+  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+}
+
 }
 
 window.saveBottomPreview = saveBottomPreview;
@@ -983,16 +985,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (closeBtn && preview) {
     closeBtn.addEventListener("click", async (e) => {
-      e.stopPropagation();          // ⛔ חובה
-      await saveBottomPreview();    // שמירה ל־DB
-      preview.classList.add("hidden"); // סגירה אמיתית
+      e.stopPropagation();
+      await saveBottomPreview();
+      preview.classList.add("hidden");
     });
   }
 
   if (previewBtn) {
     previewBtn.addEventListener("click", async (e) => {
-      e.stopPropagation();          // ⛔ חובה
-      await saveBottomPreview();    // שמירה בלבד
+  e.stopPropagation();
+  await saveBottomPreview();
+
+  const iframe = document.getElementById("site-preview");
+  if (!iframe) return;
+
+  const url = iframe.src.split("?")[0].replace("?editor=true", "");
+  window.open(url + "?preview=" + Date.now(), "_blank");
+});
+
+      e.stopPropagation();
+      await saveBottomPreview();
     });
   }
 });
