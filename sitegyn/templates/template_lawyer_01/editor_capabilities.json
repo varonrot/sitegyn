@@ -1,124 +1,27 @@
 {
-  "template": "template_pizza_multi_01",
-  "version": 2,
+  "template": "template_lawyer_01",
+  "ai_enabled": true,
+  "supports_multi_page": true,
+  "supports_navigation": true,
 
-  "global": {
-    "editable": true,
-    "supports_multi_page": true,
-    "supports_navigation": true
-  },
-
-  "navigation": {
-    "logo": {
-      "type": "text",
-      "label": "Business Name / Logo Text",
-      "maxLength": 40
-    }
-  },
-
-  "pages": {
-    "home": {
-      "label": "Home",
-      "enabled": true,
-      "sections": {
-
-        "hero": {
-          "kicker": { "type": "text", "maxLength": 80 },
-          "headline": { "type": "text", "maxLength": 120 },
-          "subheadline": { "type": "textarea", "maxLength": 240 },
-          "primary_cta": { "type": "text", "maxLength": 40 },
-          "secondary_cta": { "type": "text", "maxLength": 40 },
-          "pills": {
-            "type": "list",
-            "maxItems": 3,
-            "item": { "type": "text", "maxLength": 30 }
-          }
-        },
-
-        "about": {
-          "title": { "type": "text", "maxLength": 80 },
-          "tagline": { "type": "textarea", "maxLength": 180 },
-          "paragraphs": {
-            "type": "list",
-            "maxItems": 3,
-            "item": { "type": "textarea", "maxLength": 400 }
-          },
-          "why_badge": { "type": "text", "maxLength": 30 },
-          "why_title": { "type": "text", "maxLength": 60 },
-          "why_points": {
-            "type": "list",
-            "maxItems": 3,
-            "item": { "type": "textarea", "maxLength": 200 }
-          }
-        },
-
-        "offers": {
-          "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 },
-          "deals": {
-            "type": "list",
-            "maxItems": 3,
-            "item": {
-              "badge": { "type": "text", "maxLength": 30 },
-              "name": { "type": "text", "maxLength": 60 },
-              "price_text": { "type": "text", "maxLength": 40 },
-              "description": { "type": "textarea", "maxLength": 240 }
-            }
-          }
-        },
-
-        "menu": {
-          "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 },
-          "pizzas": {
-            "type": "list",
-            "maxItems": 3,
-            "item": {
-              "name": { "type": "text", "maxLength": 60 },
-              "tags": { "type": "text", "maxLength": 60 },
-              "description": { "type": "textarea", "maxLength": 240 }
-            }
-          }
-        },
-
-        "services": {
-          "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 },
-          "items": {
-            "type": "list",
-            "maxItems": 3,
-            "item": {
-              "title": { "type": "text", "maxLength": 60 },
-              "description": { "type": "textarea", "maxLength": 240 }
-            }
-          }
-        }
-      }
+  "sections": {
+    "hero": {
+      "actions": ["rewrite_kicker", "rewrite_headline", "rewrite_subheadline", "improve_pills"]
     },
-
+    "about": {
+      "actions": ["rewrite_title", "rewrite_tagline", "rewrite_paragraphs"]
+    },
+    "why": {
+      "actions": ["rewrite_badge", "improve_points"]
+    },
+    "services": {
+      "actions": ["rewrite_section_title", "rewrite_section_subtitle", "improve_items"]
+    },
+    "offers": {
+      "actions": ["rewrite_section_title", "rewrite_section_subtitle", "improve_deals"]
+    },
     "contact": {
-      "label": "Contact",
-      "enabled": true,
-      "sections": {
-
-        "contact": {
-          "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 },
-          "phone": { "type": "text", "maxLength": 40 },
-          "address": { "type": "textarea", "maxLength": 200 },
-          "hours_title": { "type": "text", "maxLength": 60 },
-          "hours_lines": {
-            "type": "list",
-            "maxItems": 3,
-            "item": { "type": "text", "maxLength": 60 }
-          },
-          "cta_pills": {
-            "type": "list",
-            "maxItems": 2,
-            "item": { "type": "text", "maxLength": 40 }
-          }
-        }
-      }
+      "actions": ["rewrite_section_title", "rewrite_section_subtitle"]
     }
   }
 }
