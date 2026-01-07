@@ -42,46 +42,83 @@
     @media (max-width: 640px) {
       .hero-title { font-size: 2rem; }
     }
-      section[data-page] {
-  display: none;
-}
-#main-nav {
+      /* ===== TOP NAV – MULTI PAGE READY ===== */
+.site-header{
   position: sticky;
   top: 0;
-  z-index: 50;
-
-  padding: 12px 0;
-  background: rgba(11,11,16,0.6);
-  backdrop-filter: blur(6px);
+  z-index: 100;
+  background: rgba(11,11,16,0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
-#main-nav a {
-  color: #fff;
+.nav-inner{
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo{
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: .04em;
+}
+
+.nav-links{
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a{
   text-decoration: none;
-  font-weight: 500;
-  opacity: 0.85;
+  color: #f5f5f5;
+  font-size: .9rem;
+  opacity: .85;
 }
 
-#main-nav a:hover {
+.nav-links a:hover{
   opacity: 1;
+}
+
+.nav-cta{
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #ff5c3b;
+  color: #fff !important;
+  font-size: .85rem;
+}
+
+/* Mobile */
+@media (max-width: 720px){
+  .nav-links{
+    gap: 12px;
+  }
 }
 
   </style>
 </head>
 <body>
+<header class="site-header">
+  <div class="nav-inner">
+    <div class="logo">🍕 Pizza</div>
+
+    <nav class="nav-links">
+      <a href="?page=home">Home</a>
+      <a href="?page=about">About</a>
+      <a href="?page=menu">Menu</a>
+      <a href="?page=services">Services</a>
+      <a href="?page=contact" class="nav-cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
   <div class="page">
-<nav id="main-nav" style="display:flex; gap:16px; margin-bottom:24px;">
-  <a href="#" data-page="home">Home</a>
-  <a href="#" data-page="about">About</a>
-  <a href="#" data-page="offers">Offers</a>
-  <a href="#" data-page="menu">Menu</a>
-  <a href="#" data-page="services">Services</a>
-  <a href="#" data-page="contact">Contact</a>
-</nav>
 
     <!-- HERO -->
-    <section class="section hero" data-page="home">
-
+   <section class="hero" data-page="home">
       <div class="hero-kicker" id="hero-kicker">
         <!-- e.g. "Fresh, Hand-Tossed Pizza in Tel Aviv" -->
       </div>
@@ -130,7 +167,7 @@
     </section>
 
     <!-- SPECIAL OFFERS -->
-   <section class="section" id="section-offers" data-page="offers">
+    <section class="section" id="section-offers" data-page="home">
       <h2 class="section-title" id="offers-title"></h2>
       <p class="section-subtitle" id="offers-subtitle"></p>
 
@@ -159,7 +196,7 @@
     </section>
 
     <!-- OUR PIZZAS / MENU HIGHLIGHTS -->
-   <section class="section" id="section-menu" data-page="menu">
+    <section class="section" id="section-menu" data-page="menu">
       <h2 class="section-title" id="menu-title"></h2>
       <p class="section-subtitle" id="menu-subtitle"></p>
 
@@ -229,177 +266,63 @@
    <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-/* ======================
-   SUPABASE
-====================== */
 const supabase = createClient(
   "https://xkchlqcwntcoakmyicqb.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
-
-/* ======================
-   HELPERS
-====================== */
-function getProjectId() {
-  return new URLSearchParams(window.location.search).get("project_id");
-}
-
-function getPage() {
-  return new URLSearchParams(window.location.search).get("page") || "home";
-}
-
-function renderPage(page) {
-  document.querySelectorAll("section[data-page]").forEach(section => {
-    section.style.display =
-      section.dataset.page === page ? "block" : "none";
-  });
-}
-
-/* ======================
-   LOAD CONTENT
-====================== */
 async function reloadContentFromDB() {
-  const projectId = getProjectId();
-  if (!projectId) {
-    console.warn("No project_id in URL");
-    return;
-  }
+  const params = new URLSearchParams(window.location.search);
+  const projectId = params.get("project_id");
+  if (!projectId) return;
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("projects")
     .select("content_json")
     .eq("id", projectId)
     .single();
 
-  if (error || !data?.content_json) {
-    console.error("Failed loading content", error);
-    return;
-  }
+  if (!data?.content_json) return;
 
   applyContentToDOM(data.content_json);
 }
+  function applyContentToDOM(c) {
+  // HERO
+  document.getElementById("hero-kicker").innerText = c.home.hero.kicker;
+  document.getElementById("hero-headline").innerText = c.home.hero.headline;
+  document.getElementById("hero-subheadline").innerText = c.home.hero.subheadline;
+  document.getElementById("hero-cta-primary").innerText = c.home.hero.primary_cta;
+  document.getElementById("hero-cta-secondary").innerText = c.home.hero.secondary_cta;
 
-/* ======================
-   APPLY CONTENT
-====================== */
-function applyContentToDOM(c) {
+  document.getElementById("hero-pill-1").innerText = c.home.hero.pills?.[0] ?? "";
+  document.getElementById("hero-pill-2").innerText = c.home.hero.pills?.[1] ?? "";
+  document.getElementById("hero-pill-3").innerText = c.home.hero.pills?.[2] ?? "";
 
-  /* HERO */
-  set("hero-kicker", c.home?.hero?.kicker);
-  set("hero-headline", c.home?.hero?.headline);
-  set("hero-subheadline", c.home?.hero?.subheadline);
-  set("hero-cta-primary", c.home?.hero?.primary_cta);
-  set("hero-cta-secondary", c.home?.hero?.secondary_cta);
-
-  c.home?.hero?.pills?.forEach((t, i) =>
-    set(`hero-pill-${i + 1}`, t)
-  );
-
-  /* ABOUT */
-  set("about-title", c.about?.title);
-  set("about-tagline", c.about?.tagline);
-
-  c.about?.paragraphs?.forEach((t, i) =>
-    set(`about-paragraph-${i + 1}`, t)
-  );
-
-  set("why-badge", c.about?.why?.badge);
-  set("why-title", c.about?.why?.title);
-
-  c.about?.why?.texts?.forEach((t, i) =>
-    set(`why-text-${i + 1}`, t)
-  );
-
-  /* OFFERS */
-  set("offers-title", c.offers?.title);
-  set("offers-subtitle", c.offers?.subtitle);
-
-  c.offers?.items?.forEach((item, i) => {
-    const n = i + 1;
-    set(`offer-${n}-badge`, item.badge);
-    set(`offer-${n}-name`, item.name);
-    set(`offer-${n}-price`, item.meta);
-    set(`offer-${n}-description`, item.description);
-  });
-
-  /* MENU */
-  set("menu-title", c.menu?.title);
-  set("menu-subtitle", c.menu?.subtitle);
-
-  c.menu?.items?.forEach((item, i) => {
-    const n = i + 1;
-    set(`pizza-${n}-name`, item.name);
-    set(`pizza-${n}-tags`, item.tags);
-    set(`pizza-${n}-description`, item.description);
-  });
-
-  /* SERVICES */
-  set("services-title", c.services?.title);
-  set("services-subtitle", c.services?.subtitle);
-
-  c.services?.items?.forEach((item, i) => {
-    const n = i + 1;
-    set(`service-${n}-title`, item.title);
-    set(`service-${n}-description`, item.description);
-  });
-
-  /* CONTACT */
-  set("contact-title", c.contact?.title);
-  set("contact-subtitle", c.contact?.subtitle);
-  set("contact-phone", c.contact?.phone);
-  set("contact-address", c.contact?.address);
-
-  c.contact?.hours?.forEach((t, i) =>
-    set(`contact-hours-line-${i + 1}`, t)
-  );
-
-  c.contact?.ctas?.forEach((t, i) =>
-    set(`contact-cta-${i + 1}`, t)
-  );
+  // ABOUT
+  document.getElementById("about-title").innerText = c.about.title;
+  document.getElementById("about-tagline").innerText = c.about.tagline;
+  document.getElementById("about-paragraph-1").innerText = c.about.paragraphs?.[0] ?? "";
+  document.getElementById("about-paragraph-2").innerText = c.about.paragraphs?.[1] ?? "";
+  document.getElementById("about-paragraph-3").innerText = c.about.paragraphs?.[2] ?? "";
 }
-
-/* ======================
-   UTIL
-====================== */
-function set(id, value) {
-  const el = document.getElementById(id);
-  if (el && value !== undefined) el.innerText = value;
-}
-function setupMenu() {
-  const projectId = getProjectId();
-
-  document.querySelectorAll("#main-nav a[data-page]").forEach(link => {
-    link.style.cursor = "pointer";
-
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      const page = link.dataset.page;
-      const url = new URL(window.location.href);
-
-      url.searchParams.set("page", page);
-      if (projectId) url.searchParams.set("project_id", projectId);
-
-      window.history.pushState({}, "", url);
-      renderPage(page);
-    });
-  });
-}
-
-/* ======================
-   BOOT
-====================== */
-window.addEventListener("DOMContentLoaded", async () => {
-  const page = getPage();
-  renderPage(page);
-  setupMenu();
-  await reloadContentFromDB();
-});
-window.addEventListener("popstate", () => {
-  renderPage(getPage());
+window.addEventListener("message", (e) => {
+  if (e.data?.type === "content-updated") {
+    console.log("iframe received update");
+    reloadContentFromDB();
+  }
 });
 
+<script>
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get("page") || "home";
+
+  document.querySelectorAll("[data-page]").forEach(sec => {
+    const pages = sec.dataset.page.split(",");
+    sec.style.display = pages.includes(page) ? "" : "none";
+  });
+})();
 </script>
+
 
 </body>
 </html>
