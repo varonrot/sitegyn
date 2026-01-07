@@ -241,40 +241,7 @@ window.addEventListener("message", (e) => {
   }
 });
 
-<script type="module">
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const supabase = createClient(
-  "https://xkchlqcwntcoakmyicqb.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
-);
-
-const params = new URLSearchParams(window.location.search);
-const projectId = params.get("project_id");
-
-let lastUpdatedAt = null;
-
-async function checkForUpdate() {
-  if (!projectId) return;
-
-  const { data } = await supabase
-    .from("projects")
-    .select("updated_at")
-    .eq("id", projectId)
-    .single();
-
-  if (!data) return;
-
-  if (lastUpdatedAt && data.updated_at !== lastUpdatedAt) {
-    console.log("Content changed → reloading");
-    await reloadContentFromDB();
-  }
-
-  lastUpdatedAt = data.updated_at;
-}
-
-setInterval(checkForUpdate, 3000); 
-</script>
+ 
 
 </body>
 </html>
