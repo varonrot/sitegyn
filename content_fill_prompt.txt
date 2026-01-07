@@ -4,60 +4,79 @@ Your task is to generate ALL the website copy for a business as a SINGLE JSON ob
 
 CRITICAL RULES
 ==============
-- You MUST follow exactly the JSON schema provided below.
-- You MUST return ONLY valid JSON. No comments, no markdown, no explanations.
-- Do NOT include any HTML tags in the text values.
-- Every string must be natural, friendly, high-quality marketing copy written in clear English.
-- Make the copy specific, vivid and convincing — not generic or vague.
-- If some details are missing in the business data, invent realistic details that fit the business niche and location.
-- Use ONLY the sections and structure defined in the schema. Do not add or remove fields.
+- You MUST follow EXACTLY the JSON schema provided below.
+- You MUST return ONLY valid JSON. No markdown, no explanations, no comments.
+- The output MUST match the schema structure EXACTLY.
+- Do NOT add new fields.
+- Do NOT remove fields.
+- Do NOT rename fields.
+
+VERY IMPORTANT (READ CAREFULLY)
+===============================
+- This is a CONTENT schema, NOT an editor schema.
+- You MUST populate the schema with FINAL WEBSITE CONTENT.
+- DO NOT describe fields.
+- DO NOT return objects like:
+  { "type": "text", "label": "..." }
+- DO NOT return metadata such as: type, label, max, options, placeholder, etc.
+- Every leaf value MUST be one of the following:
+  - string
+  - number
+  - boolean
+  - array of strings
+  - array of objects containing ONLY content values
+
+If a field represents text on the website → return the actual text.
+If a field represents a list → return a list with realistic items.
+If a field represents a structured object → fill all its inner fields with content.
+
+NO EMPTY FIELDS
+===============
+- Do NOT leave fields empty unless the schema explicitly allows null.
+- If business data is missing, invent realistic details that fit the business niche.
 
 SCHEMA
 ======
-Here is the JSON schema that defines the exact structure of content_json:
+Here is the JSON schema that defines the EXACT structure of content_json:
 
 {{SCHEMA_JSON}}
 
 BUSINESS DATA
 =============
-Here is the data we know about the business. Use it to make the copy feel real, relevant and specific:
+Here is the data we know about the business.
+Use it to make the content specific, realistic and consistent:
 
 {{BUSINESS_DATA_JSON}}
 
-NICHE GUIDELINES
-================
-- Use the business niche provided in BUSINESS_DATA_JSON to guide tone, terminology, examples and emphasis.
-- Adapt all text naturally to the niche:
-  - Restaurants → food quality, service, atmosphere, convenience
-  - Professional services → trust, experience, clarity, reliability
-  - Local services → availability, speed, local knowledge, personal service
-- Choose calls-to-action that make sense for the niche (e.g., order, book, contact, schedule, visit).
-- If the schema includes sections such as menu, services, offers, gallery or contact:
-  - Populate them in a way that fits the niche logically.
-- Do NOT assume any specific niche unless it is explicitly provided in BUSINESS_DATA_JSON.
+NICHE & STYLE GUIDELINES
+========================
+- Use the business niche provided in BUSINESS_DATA_JSON.
+- Adapt tone, wording and examples to the niche:
+  - Restaurants → food quality, atmosphere, speed, convenience
+  - Professional services → trust, experience, clarity, expertise
+  - Local services → availability, responsiveness, local knowledge
+- Choose calls-to-action that make sense for the niche (order, book, contact, schedule, visit).
 
-SECTION WRITING GUIDELINES
-=========================
+SECTION GUIDELINES
+=================
 - Hero section:
-  - Clear headline with a strong value promise.
-  - Subheadline that explains why customers should choose this business.
+  - Clear, confident headline with a strong value promise.
+  - Subheadline explaining why customers should choose this business.
   - Primary CTA aligned with the business goal.
-  - Optional secondary CTA if relevant.
+  - Secondary CTA only if relevant.
 - About section:
-  - Short, human story about the business.
-  - Explain what makes it special and trustworthy.
-  - Keep it warm, authentic and easy to read.
-- Offers / Services / Products (if present in schema):
+  - Short human story.
+  - Explain what makes the business trustworthy and different.
+  - Warm, professional, easy-to-read tone.
+- Services / Menu / Offers (if present in schema):
   - Use realistic names and benefits.
-  - Focus on customer value and clarity.
+  - Be concrete, not vague.
 - Contact section:
-  - Use realistic phone number and address formats based on location.
-  - Include clear opening hours if relevant.
-  - Encourage action (call, visit, message, order).
+  - Use realistic phone number and address formats.
+  - Include opening hours if relevant.
+  - Encourage action clearly.
 
 OUTPUT FORMAT
 =============
-Respond with a single JSON object that matches the schema exactly.
-
-Do NOT wrap the output in any other text.
-Return ONLY the JSON.
+Return ONLY the JSON object matching the schema.
+Do NOT wrap it in any other text.
