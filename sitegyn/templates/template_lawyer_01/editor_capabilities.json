@@ -1,6 +1,6 @@
 {
-  "template": "template_lawyer_01",
-  "version": 1,
+  "template": "template_pizza_multi_01",
+  "version": 2,
 
   "global": {
     "editable": true,
@@ -11,7 +11,7 @@
   "navigation": {
     "logo": {
       "type": "text",
-      "label": "Firm Name / Logo Text",
+      "label": "Business Name / Logo Text",
       "maxLength": 40
     }
   },
@@ -21,6 +21,7 @@
       "label": "Home",
       "enabled": true,
       "sections": {
+
         "hero": {
           "kicker": { "type": "text", "maxLength": 80 },
           "headline": { "type": "text", "maxLength": 120 },
@@ -32,69 +33,64 @@
             "maxItems": 3,
             "item": { "type": "text", "maxLength": 30 }
           }
-        }
-      }
-    },
+        },
 
-    "about": {
-      "label": "About",
-      "enabled": true,
-      "sections": {
-        "content": {
+        "about": {
           "title": { "type": "text", "maxLength": 80 },
           "tagline": { "type": "textarea", "maxLength": 180 },
           "paragraphs": {
             "type": "list",
             "maxItems": 3,
             "item": { "type": "textarea", "maxLength": 400 }
-          }
-        },
-        "why": {
-          "badge": { "type": "text", "maxLength": 30 },
-          "title": { "type": "text", "maxLength": 60 },
-          "points": {
+          },
+          "why_badge": { "type": "text", "maxLength": 30 },
+          "why_title": { "type": "text", "maxLength": 60 },
+          "why_points": {
             "type": "list",
             "maxItems": 3,
             "item": { "type": "textarea", "maxLength": 200 }
           }
-        }
-      }
-    },
-
-    "services": {
-      "label": "Services",
-      "enabled": true,
-      "sections": {
-        "header": {
-          "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 }
         },
-        "items": {
-          "type": "list",
-          "maxItems": 6,
-          "item": {
-            "title": { "type": "text", "maxLength": 60 },
-            "description": { "type": "textarea", "maxLength": 300 }
+
+        "offers": {
+          "title": { "type": "text", "maxLength": 80 },
+          "subtitle": { "type": "textarea", "maxLength": 180 },
+          "deals": {
+            "type": "list",
+            "maxItems": 3,
+            "item": {
+              "badge": { "type": "text", "maxLength": 30 },
+              "name": { "type": "text", "maxLength": 60 },
+              "price_text": { "type": "text", "maxLength": 40 },
+              "description": { "type": "textarea", "maxLength": 240 }
+            }
           }
-        }
-      }
-    },
-
-    "team": {
-      "label": "Team",
-      "enabled": true,
-      "sections": {
-        "header": {
-          "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 }
         },
-        "members": {
-          "type": "list",
-          "maxItems": 6,
-          "item": {
-            "name": { "type": "text", "maxLength": 60 },
-            "role": { "type": "text", "maxLength": 60 },
-            "bio": { "type": "textarea", "maxLength": 400 }
+
+        "menu": {
+          "title": { "type": "text", "maxLength": 80 },
+          "subtitle": { "type": "textarea", "maxLength": 180 },
+          "pizzas": {
+            "type": "list",
+            "maxItems": 3,
+            "item": {
+              "name": { "type": "text", "maxLength": 60 },
+              "tags": { "type": "text", "maxLength": 60 },
+              "description": { "type": "textarea", "maxLength": 240 }
+            }
+          }
+        },
+
+        "services": {
+          "title": { "type": "text", "maxLength": 80 },
+          "subtitle": { "type": "textarea", "maxLength": 180 },
+          "items": {
+            "type": "list",
+            "maxItems": 3,
+            "item": {
+              "title": { "type": "text", "maxLength": 60 },
+              "description": { "type": "textarea", "maxLength": 240 }
+            }
           }
         }
       }
@@ -104,19 +100,23 @@
       "label": "Contact",
       "enabled": true,
       "sections": {
-        "header": {
+
+        "contact": {
           "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 }
-        },
-        "details": {
+          "subtitle": { "type": "textarea", "maxLength": 180 },
           "phone": { "type": "text", "maxLength": 40 },
-          "email": { "type": "text", "maxLength": 80 },
-          "address": { "type": "textarea", "maxLength": 200 }
-        },
-        "ctas": {
-          "type": "list",
-          "maxItems": 2,
-          "item": { "type": "text", "maxLength": 40 }
+          "address": { "type": "textarea", "maxLength": 200 },
+          "hours_title": { "type": "text", "maxLength": 60 },
+          "hours_lines": {
+            "type": "list",
+            "maxItems": 3,
+            "item": { "type": "text", "maxLength": 60 }
+          },
+          "cta_pills": {
+            "type": "list",
+            "maxItems": 2,
+            "item": { "type": "text", "maxLength": 40 }
+          }
         }
       }
     }
