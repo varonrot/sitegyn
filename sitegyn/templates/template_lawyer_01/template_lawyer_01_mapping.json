@@ -1,87 +1,67 @@
 {
-  "hero": {
-    "kicker": "#hero-kicker",
-    "headline": "#hero-headline",
-    "subheadline": "#hero-subheadline",
-    "primary_cta": "#hero-cta-primary",
-    "secondary_cta": "#hero-cta-secondary",
-    "pills": [
-      "#hero-pill-1",
-      "#hero-pill-2",
-      "#hero-pill-3"
-    ]
-  },
+  "home.hero.kicker": "hero-kicker",
+  "home.hero.headline": "hero-headline",
+  "home.hero.subheadline": "hero-subheadline",
+  "home.hero.primary_cta": "hero-cta-primary",
+  "home.hero.secondary_cta": "hero-cta-secondary",
+  "home.hero.pills.0": "hero-pill-1",
+  "home.hero.pills.1": "hero-pill-2",
+  "home.hero.pills.2": "hero-pill-3",
 
-  "about": {
-    "title": "#about-title",
-    "tagline": "#about-tagline",
-    "paragraphs": [
-      "#about-paragraph-1",
-      "#about-paragraph-2",
-      "#about-paragraph-3"
-    ],
-    "why_badge": "#why-badge",
-    "why_title": "#why-title",
-    "why_points": [
-      "#why-text-1",
-      "#why-text-2",
-      "#why-text-3"
-    ]
-  },
+  "about.title": "about-title",
+  "about.tagline": "about-tagline",
+  "about.paragraphs.0": "about-paragraph-1",
+  "about.paragraphs.1": "about-paragraph-2",
+  "about.paragraphs.2": "about-paragraph-3",
+  "about.why.badge": "why-badge",
+  "about.why.title": "why-title",
+  "about.why.texts.0": "why-text-1",
+  "about.why.texts.1": "why-text-2",
+  "about.why.texts.2": "why-text-3",
 
-  "services": {
-    "title": "#services-title",
-    "subtitle": "#services-subtitle",
-    "items": [
-      {
-        "title": "#service-1-title",
-        "description": "#service-1-description"
-      },
-      {
-        "title": "#service-2-title",
-        "description": "#service-2-description"
-      },
-      {
-        "title": "#service-3-title",
-        "description": "#service-3-description"
-      }
-    ]
-  },
+  "offers.title": "offers-title",
+  "offers.subtitle": "offers-subtitle",
+  "offers.items.0.badge": "offer-1-badge",
+  "offers.items.0.name": "offer-1-name",
+  "offers.items.0.meta": "offer-1-price",
+  "offers.items.0.description": "offer-1-description",
+  "offers.items.1.badge": "offer-2-badge",
+  "offers.items.1.name": "offer-2-name",
+  "offers.items.1.meta": "offer-2-price",
+  "offers.items.1.description": "offer-2-description",
+  "offers.items.2.badge": "offer-3-badge",
+  "offers.items.2.name": "offer-3-name",
+  "offers.items.2.meta": "offer-3-price",
+  "offers.items.2.description": "offer-3-description",
 
-  "offers": {
-    "title": "#offers-title",
-    "subtitle": "#offers-subtitle",
-    "deals": [
-      {
-        "badge": "#offer-1-badge",
-        "name": "#offer-1-name",
-        "price_text": "#offer-1-price",
-        "description": "#offer-1-description"
-      },
-      {
-        "badge": "#offer-2-badge",
-        "name": "#offer-2-name",
-        "price_text": "#offer-2-price",
-        "description": "#offer-2-description"
-      },
-      {
-        "badge": "#offer-3-badge",
-        "name": "#offer-3-name",
-        "price_text": "#offer-3-price",
-        "description": "#offer-3-description"
-      }
-    ]
-  },
+  "menu.title": "menu-title",
+  "menu.subtitle": "menu-subtitle",
+  "menu.items.0.name": "pizza-1-name",
+  "menu.items.0.tags": "pizza-1-tags",
+  "menu.items.0.description": "pizza-1-description",
+  "menu.items.1.name": "pizza-2-name",
+  "menu.items.1.tags": "pizza-2-tags",
+  "menu.items.1.description": "pizza-2-description",
+  "menu.items.2.name": "pizza-3-name",
+  "menu.items.2.tags": "pizza-3-tags",
+  "menu.items.2.description": "pizza-3-description",
 
-  "contact": {
-    "title": "#contact-title",
-    "subtitle": "#contact-subtitle",
-    "phone": "#contact-phone",
-    "address": "#contact-address",
-    "hours_lines": [
-      "#contact-hours-line-1",
-      "#contact-hours-line-2",
-      "#contact-hours-line-3"
-    ]
-  }
+  "services.title": "services-title",
+  "services.subtitle": "services-subtitle",
+  "services.items.0.title": "service-1-title",
+  "services.items.0.description": "service-1-description",
+  "services.items.1.title": "service-2-title",
+  "services.items.1.description": "service-2-description",
+  "services.items.2.title": "service-3-title",
+  "services.items.2.description": "service-3-description",
+
+  "contact.title": "contact-title",
+  "contact.subtitle": "contact-subtitle",
+  "contact.phone": "contact-phone",
+  "contact.address": "contact-address",
+  "contact.hours.0": "contact-hours-line-1",
+  "contact.hours.1": "contact-hours-line-2",
+  "contact.hours.2": "contact-hours-line-3",
+  "contact.ctas.0": "contact-cta-1",
+  "contact.ctas.1": "contact-cta-2"
 }
