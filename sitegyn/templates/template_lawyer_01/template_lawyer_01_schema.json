@@ -1,60 +1,93 @@
 {
-  "template": "template_lawyer_01",
-  "version": 1,
-
-  "pages": {
-    "home": ["hero", "about", "services", "offers", "contact"],
-    "about": ["about", "services", "contact"],
-    "services": ["services", "offers", "contact"],
-    "contact": ["contact"]
-  },
-
   "home": {
     "hero": {
-      "kicker": "string",
-      "headline": "string",
-      "subheadline": "string",
-      "primary_cta": "string",
-      "secondary_cta": "string",
-      "pills": ["string"]
+      "kicker": "",
+      "headline": "",
+      "subheadline": "",
+      "primary_cta": "",
+      "secondary_cta": "",
+      "pills": ["", "", ""]
     }
   },
-
   "about": {
-    "title": "string",
-    "tagline": "string",
-    "paragraphs": ["string"],
-    "why_badge": "string",
-    "why_title": "string",
-    "why_points": ["string"]
+    "title": "",
+    "tagline": "",
+    "paragraphs": ["", "", ""],
+    "why": {
+      "badge": "",
+      "title": "",
+      "texts": ["", "", ""]
+    }
   },
-
-  "services": {
-    "title": "string",
-    "subtitle": "string",
-    "items": [
-      { "title": "string", "description": "string" }
-    ]
-  },
-
   "offers": {
-    "title": "string",
-    "subtitle": "string",
-    "deals": [
+    "title": "",
+    "subtitle": "",
+    "items": [
       {
-        "badge": "string",
-        "name": "string",
-        "price_text": "string",
-        "description": "string"
+        "badge": "",
+        "name": "",
+        "meta": "",
+        "description": ""
+      },
+      {
+        "badge": "",
+        "name": "",
+        "meta": "",
+        "description": ""
+      },
+      {
+        "badge": "",
+        "name": "",
+        "meta": "",
+        "description": ""
       }
     ]
   },
-
+  "menu": {
+    "title": "",
+    "subtitle": "",
+    "items": [
+      {
+        "name": "",
+        "tags": "",
+        "description": ""
+      },
+      {
+        "name": "",
+        "tags": "",
+        "description": ""
+      },
+      {
+        "name": "",
+        "tags": "",
+        "description": ""
+      }
+    ]
+  },
+  "services": {
+    "title": "",
+    "subtitle": "",
+    "items": [
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      }
+    ]
+  },
   "contact": {
-    "title": "string",
-    "subtitle": "string",
-    "phone": "string",
-    "address": "string",
-    "hours_lines": ["string"]
+    "title": "",
+    "subtitle": "",
+    "phone": "",
+    "address": "",
+    "hours": ["", "", ""],
+    "ctas": ["", ""]
   }
 }
