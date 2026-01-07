@@ -1,178 +1,60 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Pizza Website Content (Multi Page)",
-  "type": "object",
+  "template": "template_lawyer_01",
+  "version": 1,
 
-  "properties": {
-    "pages": {
-      "type": "object",
-      "properties": {
-        "home": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["hero", "about", "offers", "menu", "services"]
-          }
-        },
-        "contact": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["contact"]
-          }
-        }
-      },
-      "required": ["home", "contact"]
-    },
+  "pages": {
+    "home": ["hero", "about", "services", "offers", "contact"],
+    "about": ["about", "services", "contact"],
+    "services": ["services", "offers", "contact"],
+    "contact": ["contact"]
+  },
 
-    "home": {
-      "type": "object",
-      "properties": {
-        "hero": {
-          "type": "object",
-          "properties": {
-            "kicker": { "type": "string" },
-            "headline": { "type": "string" },
-            "subheadline": { "type": "string" },
-            "primary_cta": { "type": "string" },
-            "secondary_cta": { "type": "string" },
-            "pills": {
-              "type": "array",
-              "items": { "type": "string" },
-              "minItems": 3,
-              "maxItems": 3
-            }
-          },
-          "required": ["headline", "subheadline", "primary_cta"]
-        }
-      },
-      "required": ["hero"]
-    },
-
-    "about": {
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "tagline": { "type": "string" },
-        "paragraphs": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 3,
-          "maxItems": 3
-        },
-        "why_badge": { "type": "string" },
-        "why_title": { "type": "string" },
-        "why_points": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 3,
-          "maxItems": 3
-        }
-      },
-      "required": ["title", "paragraphs"]
-    },
-
-    "offers": {
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "subtitle": { "type": "string" },
-        "deals": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "badge": { "type": "string" },
-              "name": { "type": "string" },
-              "price_text": { "type": "string" },
-              "description": { "type": "string" }
-            },
-            "required": ["name", "description"]
-          },
-          "minItems": 3,
-          "maxItems": 3
-        }
-      },
-      "required": ["title", "deals"]
-    },
-
-    "menu": {
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "subtitle": { "type": "string" },
-        "pizzas": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string" },
-              "tags": { "type": "string" },
-              "description": { "type": "string" }
-            },
-            "required": ["name", "description"]
-          },
-          "minItems": 3,
-          "maxItems": 3
-        }
-      },
-      "required": ["title", "pizzas"]
-    },
-
-    "services": {
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "subtitle": { "type": "string" },
-        "items": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "title": { "type": "string" },
-              "description": { "type": "string" }
-            },
-            "required": ["title", "description"]
-          },
-          "minItems": 3,
-          "maxItems": 3
-        }
-      },
-      "required": ["title", "items"]
-    },
-
-    "contact": {
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "subtitle": { "type": "string" },
-        "phone": { "type": "string" },
-        "address": { "type": "string" },
-        "hours_title": { "type": "string" },
-        "hours_lines": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 3,
-          "maxItems": 3
-        },
-        "cta_pills": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 2,
-          "maxItems": 2
-        }
-      },
-      "required": ["title", "phone", "address"]
+  "home": {
+    "hero": {
+      "kicker": "string",
+      "headline": "string",
+      "subheadline": "string",
+      "primary_cta": "string",
+      "secondary_cta": "string",
+      "pills": ["string"]
     }
   },
 
-  "required": [
-    "pages",
-    "home",
-    "about",
-    "offers",
-    "menu",
-    "services",
-    "contact"
-  ]
+  "about": {
+    "title": "string",
+    "tagline": "string",
+    "paragraphs": ["string"],
+    "why_badge": "string",
+    "why_title": "string",
+    "why_points": ["string"]
+  },
+
+  "services": {
+    "title": "string",
+    "subtitle": "string",
+    "items": [
+      { "title": "string", "description": "string" }
+    ]
+  },
+
+  "offers": {
+    "title": "string",
+    "subtitle": "string",
+    "deals": [
+      {
+        "badge": "string",
+        "name": "string",
+        "price_text": "string",
+        "description": "string"
+      }
+    ]
+  },
+
+  "contact": {
+    "title": "string",
+    "subtitle": "string",
+    "phone": "string",
+    "address": "string",
+    "hours_lines": ["string"]
+  }
 }
