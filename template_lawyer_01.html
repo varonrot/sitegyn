@@ -51,12 +51,12 @@
 <body>
   <div class="page">
 <nav id="main-nav" style="display:flex; gap:16px; margin-bottom:24px;">
-  <a data-page="home">Home</a>
-  <a data-page="about">About</a>
-  <a data-page="offers">Offers</a>
-  <a data-page="menu">Menu</a>
-  <a data-page="services">Services</a>
-  <a data-page="contact">Contact</a>
+  <a href="#" data-page="home">Home</a>
+  <a href="#" data-page="about">About</a>
+  <a href="#" data-page="offers">Offers</a>
+  <a href="#" data-page="menu">Menu</a>
+  <a href="#" data-page="services">Services</a>
+  <a href="#" data-page="contact">Contact</a>
 </nav>
 
     <!-- HERO -->
@@ -351,6 +351,7 @@ function setupMenu() {
     link.style.cursor = "pointer";
 
     link.addEventListener("click", () => {
+      e.preventDefault();
       const page = link.dataset.page;
       const url = new URL(window.location.href);
 
@@ -371,6 +372,9 @@ window.addEventListener("DOMContentLoaded", async () => {
   renderPage(page);
   setupMenu();
   await reloadContentFromDB();
+});
+window.addEventListener("popstate", () => {
+  renderPage(getPage());
 });
 
 </script>
