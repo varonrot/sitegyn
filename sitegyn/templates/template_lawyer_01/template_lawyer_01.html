@@ -200,129 +200,151 @@
    <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+/* ======================
+   SUPABASE
+====================== */
 const supabase = createClient(
   "https://xkchlqcwntcoakmyicqb.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
-async function reloadContentFromDB() {
-  const params = new URLSearchParams(window.location.search);
-  const projectId = params.get("project_id");
-  if (!projectId) return;
 
-  const { data } = await supabase
-    .from("projects")
-    .select("content_json")
-    .eq("id", projectId)
-    .single();
-
-  if (!data?.content_json) return;
-
-  applyContentToDOM(data.content_json);
-}
-function applyContentToDOM(c) {
-  /* ======================
-     HERO
-  ====================== */
-  document.getElementById("hero-kicker").innerText = c.home?.hero?.kicker ?? "";
-  document.getElementById("hero-headline").innerText = c.home?.hero?.headline ?? "";
-  document.getElementById("hero-subheadline").innerText = c.home?.hero?.subheadline ?? "";
-  document.getElementById("hero-cta-primary").innerText = c.home?.hero?.primary_cta ?? "";
-  document.getElementById("hero-cta-secondary").innerText = c.home?.hero?.secondary_cta ?? "";
-
-  document.getElementById("hero-pill-1").innerText = c.home?.hero?.pills?.[0] ?? "";
-  document.getElementById("hero-pill-2").innerText = c.home?.hero?.pills?.[1] ?? "";
-  document.getElementById("hero-pill-3").innerText = c.home?.hero?.pills?.[2] ?? "";
-
-  /* ======================
-     ABOUT
-  ====================== */
-  document.getElementById("about-title").innerText = c.about?.title ?? "";
-  document.getElementById("about-tagline").innerText = c.about?.tagline ?? "";
-
-  document.getElementById("about-paragraph-1").innerText = c.about?.paragraphs?.[0] ?? "";
-  document.getElementById("about-paragraph-2").innerText = c.about?.paragraphs?.[1] ?? "";
-  document.getElementById("about-paragraph-3").innerText = c.about?.paragraphs?.[2] ?? "";
-
-  document.getElementById("why-badge").innerText = c.about?.why?.badge ?? "";
-  document.getElementById("why-title").innerText = c.about?.why?.title ?? "";
-  document.getElementById("why-text-1").innerText = c.about?.why?.texts?.[0] ?? "";
-  document.getElementById("why-text-2").innerText = c.about?.why?.texts?.[1] ?? "";
-  document.getElementById("why-text-3").innerText = c.about?.why?.texts?.[2] ?? "";
-
-  /* ======================
-     OFFERS
-  ====================== */
-  document.getElementById("offers-title").innerText = c.offers?.title ?? "";
-  document.getElementById("offers-subtitle").innerText = c.offers?.subtitle ?? "";
-
-  c.offers?.items?.forEach((item, i) => {
-    const n = i + 1;
-    document.getElementById(`offer-${n}-badge`).innerText = item?.badge ?? "";
-    document.getElementById(`offer-${n}-name`).innerText = item?.name ?? "";
-    document.getElementById(`offer-${n}-price`).innerText = item?.meta ?? "";
-    document.getElementById(`offer-${n}-description`).innerText = item?.description ?? "";
-  });
-
-  /* ======================
-     MENU
-  ====================== */
-  document.getElementById("menu-title").innerText = c.menu?.title ?? "";
-  document.getElementById("menu-subtitle").innerText = c.menu?.subtitle ?? "";
-
-  c.menu?.items?.forEach((item, i) => {
-    const n = i + 1;
-    document.getElementById(`pizza-${n}-name`).innerText = item?.name ?? "";
-    document.getElementById(`pizza-${n}-tags`).innerText = item?.tags ?? "";
-    document.getElementById(`pizza-${n}-description`).innerText = item?.description ?? "";
-  });
-
-  /* ======================
-     SERVICES
-  ====================== */
-  document.getElementById("services-title").innerText = c.services?.title ?? "";
-  document.getElementById("services-subtitle").innerText = c.services?.subtitle ?? "";
-
-  c.services?.items?.forEach((item, i) => {
-    const n = i + 1;
-    document.getElementById(`service-${n}-title`).innerText = item?.title ?? "";
-    document.getElementById(`service-${n}-description`).innerText = item?.description ?? "";
-  });
-
-  /* ======================
-     CONTACT
-  ====================== */
-  document.getElementById("contact-title").innerText = c.contact?.title ?? "";
-  document.getElementById("contact-subtitle").innerText = c.contact?.subtitle ?? "";
-  document.getElementById("contact-phone").innerText = c.contact?.phone ?? "";
-  document.getElementById("contact-address").innerText = c.contact?.address ?? "";
-
-  document.getElementById("contact-hours-line-1").innerText = c.contact?.hours?.[0] ?? "";
-  document.getElementById("contact-hours-line-2").innerText = c.contact?.hours?.[1] ?? "";
-  document.getElementById("contact-hours-line-3").innerText = c.contact?.hours?.[2] ?? "";
-
-  document.getElementById("contact-cta-1").innerText = c.contact?.ctas?.[0] ?? "";
-  document.getElementById("contact-cta-2").innerText = c.contact?.ctas?.[1] ?? "";
+/* ======================
+   HELPERS
+====================== */
+function getProjectId() {
+  return new URLSearchParams(window.location.search).get("project_id");
 }
 
-});
-
-<script>
 function getPage() {
   return new URLSearchParams(window.location.search).get("page") || "home";
 }
 
-function renderPage() {
-  const page = getPage();
-
+function renderPage(page) {
   document.querySelectorAll("section[data-page]").forEach(section => {
     section.style.display =
       section.dataset.page === page ? "block" : "none";
   });
 }
 
-window.addEventListener("DOMContentLoaded", renderPage);
-</script>
+/* ======================
+   LOAD CONTENT
+====================== */
+async function reloadContentFromDB() {
+  const projectId = getProjectId();
+  if (!projectId) {
+    console.warn("No project_id in URL");
+    return;
+  }
 
+  const { data, error } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.content_json) {
+    console.error("Failed loading content", error);
+    return;
+  }
+
+  applyContentToDOM(data.content_json);
+}
+
+/* ======================
+   APPLY CONTENT
+====================== */
+function applyContentToDOM(c) {
+
+  /* HERO */
+  set("hero-kicker", c.home?.hero?.kicker);
+  set("hero-headline", c.home?.hero?.headline);
+  set("hero-subheadline", c.home?.hero?.subheadline);
+  set("hero-cta-primary", c.home?.hero?.primary_cta);
+  set("hero-cta-secondary", c.home?.hero?.secondary_cta);
+
+  c.home?.hero?.pills?.forEach((t, i) =>
+    set(`hero-pill-${i + 1}`, t)
+  );
+
+  /* ABOUT */
+  set("about-title", c.about?.title);
+  set("about-tagline", c.about?.tagline);
+
+  c.about?.paragraphs?.forEach((t, i) =>
+    set(`about-paragraph-${i + 1}`, t)
+  );
+
+  set("why-badge", c.about?.why?.badge);
+  set("why-title", c.about?.why?.title);
+
+  c.about?.why?.texts?.forEach((t, i) =>
+    set(`why-text-${i + 1}`, t)
+  );
+
+  /* OFFERS */
+  set("offers-title", c.offers?.title);
+  set("offers-subtitle", c.offers?.subtitle);
+
+  c.offers?.items?.forEach((item, i) => {
+    const n = i + 1;
+    set(`offer-${n}-badge`, item.badge);
+    set(`offer-${n}-name`, item.name);
+    set(`offer-${n}-price`, item.meta);
+    set(`offer-${n}-description`, item.description);
+  });
+
+  /* MENU */
+  set("menu-title", c.menu?.title);
+  set("menu-subtitle", c.menu?.subtitle);
+
+  c.menu?.items?.forEach((item, i) => {
+    const n = i + 1;
+    set(`pizza-${n}-name`, item.name);
+    set(`pizza-${n}-tags`, item.tags);
+    set(`pizza-${n}-description`, item.description);
+  });
+
+  /* SERVICES */
+  set("services-title", c.services?.title);
+  set("services-subtitle", c.services?.subtitle);
+
+  c.services?.items?.forEach((item, i) => {
+    const n = i + 1;
+    set(`service-${n}-title`, item.title);
+    set(`service-${n}-description`, item.description);
+  });
+
+  /* CONTACT */
+  set("contact-title", c.contact?.title);
+  set("contact-subtitle", c.contact?.subtitle);
+  set("contact-phone", c.contact?.phone);
+  set("contact-address", c.contact?.address);
+
+  c.contact?.hours?.forEach((t, i) =>
+    set(`contact-hours-line-${i + 1}`, t)
+  );
+
+  c.contact?.ctas?.forEach((t, i) =>
+    set(`contact-cta-${i + 1}`, t)
+  );
+}
+
+/* ======================
+   UTIL
+====================== */
+function set(id, value) {
+  const el = document.getElementById(id);
+  if (el && value !== undefined) el.innerText = value;
+}
+
+/* ======================
+   BOOT
+====================== */
+window.addEventListener("DOMContentLoaded", async () => {
+  renderPage(getPage());
+  await reloadContentFromDB();
+});
+</script>
 
 </body>
 </html>
