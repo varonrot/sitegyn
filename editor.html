@@ -985,7 +985,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (closeBtn && preview) {
     closeBtn.addEventListener("click", async (e) => {
-      e.stopPropagation();
+      e.stopPropagation();       
       await saveBottomPreview();
       preview.classList.add("hidden");
     });
@@ -993,16 +993,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (previewBtn) {
     previewBtn.addEventListener("click", async (e) => {
-  e.stopPropagation();
-  await saveBottomPreview();
-
-  const iframe = document.getElementById("site-preview");
-  if (!iframe) return;
-
-  const url = iframe.src.split("?")[0].replace("?editor=true", "");
-  window.open(url + "?preview=" + Date.now(), "_blank");
-});
-
       e.stopPropagation();
       await saveBottomPreview();
     });
