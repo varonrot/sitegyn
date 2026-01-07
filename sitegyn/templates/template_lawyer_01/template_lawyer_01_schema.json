@@ -1,114 +1,55 @@
 {
-  "nav.logo": {
-    "label": "Firm Name / Logo Text",
-    "type": "text"
+  "nav": {
+    "logo": "string"
   },
 
-  "home.hero.kicker": {
-    "label": "Hero Kicker",
-    "type": "text"
-  },
-  "home.hero.headline": {
-    "label": "Hero Headline",
-    "type": "text"
-  },
-  "home.hero.subheadline": {
-    "label": "Hero Subheadline",
-    "type": "textarea"
-  },
-  "home.hero.primary_cta": {
-    "label": "Primary CTA Button",
-    "type": "text"
-  },
-  "home.hero.secondary_cta": {
-    "label": "Secondary CTA Button",
-    "type": "text"
-  },
-  "home.hero.pills": {
-    "label": "Hero Pills",
-    "type": "list",
-    "max": 3
+  "home": {
+    "hero": {
+      "kicker": "string",
+      "headline": "string",
+      "subheadline": "string",
+      "primary_cta": "string",
+      "secondary_cta": "string",
+      "pills": ["string", "string", "string"]
+    }
   },
 
-  "about.title": {
-    "label": "About Title",
-    "type": "text"
-  },
-  "about.tagline": {
-    "label": "About Tagline",
-    "type": "textarea"
-  },
-  "about.paragraphs": {
-    "label": "About Paragraphs",
-    "type": "list",
-    "max": 3
+  "about": {
+    "title": "string",
+    "tagline": "string",
+    "paragraphs": ["string", "string", "string"],
+    "why": {
+      "badge": "string",
+      "title": "string",
+      "texts": ["string", "string", "string"]
+    }
   },
 
-  "about.why.badge": {
-    "label": "Why Us Badge",
-    "type": "text"
-  },
-  "about.why.title": {
-    "label": "Why Us Title",
-    "type": "text"
-  },
-  "about.why.texts": {
-    "label": "Why Us Bullet Points",
-    "type": "list",
-    "max": 3
+  "services": {
+    "title": "string",
+    "subtitle": "string",
+    "items": [
+      { "title": "string", "description": "string" },
+      { "title": "string", "description": "string" },
+      { "title": "string", "description": "string" }
+    ]
   },
 
-  "services.title": {
-    "label": "Services Title",
-    "type": "text"
-  },
-  "services.subtitle": {
-    "label": "Services Subtitle",
-    "type": "textarea"
-  },
-  "services.items": {
-    "label": "Services",
-    "type": "list",
-    "max": 3
+  "team": {
+    "title": "string",
+    "subtitle": "string",
+    "members": [
+      { "name": "string", "role": "string", "bio": "string" },
+      { "name": "string", "role": "string", "bio": "string" }
+    ]
   },
 
-  "team.title": {
-    "label": "Team Title",
-    "type": "text"
-  },
-  "team.subtitle": {
-    "label": "Team Subtitle",
-    "type": "textarea"
-  },
-  "team.members": {
-    "label": "Team Members",
-    "type": "list",
-    "max": 2
-  },
-
-  "contact.title": {
-    "label": "Contact Title",
-    "type": "text"
-  },
-  "contact.subtitle": {
-    "label": "Contact Subtitle",
-    "type": "textarea"
-  },
-  "contact.phone": {
-    "label": "Phone Number",
-    "type": "text"
-  },
-  "contact.email": {
-    "label": "Email Address",
-    "type": "text"
-  },
-  "contact.address": {
-    "label": "Office Address",
-    "type": "textarea"
-  },
-  "contact.ctas": {
-    "label": "Contact Pills",
-    "type": "list",
-    "max": 2
+  "contact": {
+    "title": "string",
+    "subtitle": "string",
+    "phone": "string",
+    "email": "string",
+    "address": "string",
+    "ctas": ["string", "string"]
   }
 }
