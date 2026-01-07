@@ -1,27 +1,220 @@
 {
-  "template": "template_lawyer_01",
-  "ai_enabled": true,
-  "supports_multi_page": true,
-  "supports_navigation": true,
-
-  "sections": {
+  "home": {
     "hero": {
-      "actions": ["rewrite_kicker", "rewrite_headline", "rewrite_subheadline", "improve_pills"]
+      "kicker": {
+        "type": "text",
+        "editable": true,
+        "maxLength": 80
+      },
+      "headline": {
+        "type": "text",
+        "editable": true,
+        "maxLength": 120
+      },
+      "subheadline": {
+        "type": "textarea",
+        "editable": true,
+        "maxLength": 240
+      },
+      "primary_cta": {
+        "type": "text",
+        "editable": true,
+        "maxLength": 40
+      },
+      "secondary_cta": {
+        "type": "text",
+        "editable": true,
+        "maxLength": 40
+      },
+      "pills": {
+        "type": "list",
+        "editable": true,
+        "items": {
+          "type": "text",
+          "maxLength": 30
+        },
+        "limit": 3
+      }
+    }
+  },
+
+  "about": {
+    "title": {
+      "type": "text",
+      "editable": true,
+      "maxLength": 80
     },
-    "about": {
-      "actions": ["rewrite_title", "rewrite_tagline", "rewrite_paragraphs"]
+    "tagline": {
+      "type": "textarea",
+      "editable": true,
+      "maxLength": 180
+    },
+    "paragraphs": {
+      "type": "list",
+      "editable": true,
+      "items": {
+        "type": "textarea",
+        "maxLength": 400
+      },
+      "limit": 3
     },
     "why": {
-      "actions": ["rewrite_badge", "improve_points"]
+      "badge": {
+        "type": "text",
+        "editable": true,
+        "maxLength": 40
+      },
+      "title": {
+        "type": "text",
+        "editable": true,
+        "maxLength": 80
+      },
+      "texts": {
+        "type": "list",
+        "editable": true,
+        "items": {
+          "type": "textarea",
+          "maxLength": 200
+        },
+        "limit": 3
+      }
+    }
+  },
+
+  "offers": {
+    "title": {
+      "type": "text",
+      "editable": true,
+      "maxLength": 80
     },
-    "services": {
-      "actions": ["rewrite_section_title", "rewrite_section_subtitle", "improve_items"]
+    "subtitle": {
+      "type": "textarea",
+      "editable": true,
+      "maxLength": 200
     },
-    "offers": {
-      "actions": ["rewrite_section_title", "rewrite_section_subtitle", "improve_deals"]
+    "items": {
+      "type": "repeater",
+      "editable": true,
+      "limit": 3,
+      "fields": {
+        "badge": {
+          "type": "text",
+          "maxLength": 30
+        },
+        "name": {
+          "type": "text",
+          "maxLength": 80
+        },
+        "meta": {
+          "type": "text",
+          "maxLength": 40
+        },
+        "description": {
+          "type": "textarea",
+          "maxLength": 300
+        }
+      }
+    }
+  },
+
+  "menu": {
+    "title": {
+      "type": "text",
+      "editable": true,
+      "maxLength": 80
     },
-    "contact": {
-      "actions": ["rewrite_section_title", "rewrite_section_subtitle"]
+    "subtitle": {
+      "type": "textarea",
+      "editable": true,
+      "maxLength": 200
+    },
+    "items": {
+      "type": "repeater",
+      "editable": true,
+      "limit": 3,
+      "fields": {
+        "name": {
+          "type": "text",
+          "maxLength": 80
+        },
+        "tags": {
+          "type": "text",
+          "maxLength": 60
+        },
+        "description": {
+          "type": "textarea",
+          "maxLength": 300
+        }
+      }
+    }
+  },
+
+  "services": {
+    "title": {
+      "type": "text",
+      "editable": true,
+      "maxLength": 80
+    },
+    "subtitle": {
+      "type": "textarea",
+      "editable": true,
+      "maxLength": 200
+    },
+    "items": {
+      "type": "repeater",
+      "editable": true,
+      "limit": 3,
+      "fields": {
+        "title": {
+          "type": "text",
+          "maxLength": 80
+        },
+        "description": {
+          "type": "textarea",
+          "maxLength": 300
+        }
+      }
+    }
+  },
+
+  "contact": {
+    "title": {
+      "type": "text",
+      "editable": true,
+      "maxLength": 80
+    },
+    "subtitle": {
+      "type": "textarea",
+      "editable": true,
+      "maxLength": 200
+    },
+    "phone": {
+      "type": "text",
+      "editable": true,
+      "maxLength": 30
+    },
+    "address": {
+      "type": "text",
+      "editable": true,
+      "maxLength": 120
+    },
+    "hours": {
+      "type": "list",
+      "editable": true,
+      "items": {
+        "type": "text",
+        "maxLength": 60
+      },
+      "limit": 3
+    },
+    "ctas": {
+      "type": "list",
+      "editable": true,
+      "items": {
+        "type": "text",
+        "maxLength": 40
+      },
+      "limit": 2
     }
   }
 }
