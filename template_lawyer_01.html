@@ -350,8 +350,9 @@ function setupMenu() {
   document.querySelectorAll("#main-nav a[data-page]").forEach(link => {
     link.style.cursor = "pointer";
 
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (e) => {
       e.preventDefault();
+
       const page = link.dataset.page;
       const url = new URL(window.location.href);
 
