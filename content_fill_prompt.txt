@@ -5,30 +5,56 @@ Your task is to generate ALL the website copy for a business as a SINGLE JSON ob
 CRITICAL RULES
 ==============
 - You MUST follow EXACTLY the JSON schema provided below.
-- You MUST return ONLY valid JSON. No markdown, no explanations, no comments.
+- You MUST return ONLY valid JSON.
+- Do NOT return markdown, explanations, comments, or extra text.
 - The output MUST match the schema structure EXACTLY.
-- Do NOT add new fields.
+- Do NOT add fields.
 - Do NOT remove fields.
 - Do NOT rename fields.
 
-VERY IMPORTANT (READ CAREFULLY)
-===============================
+STRUCTURE RULES (EXTREMELY IMPORTANT)
+====================================
+- You MUST return a NESTED JSON object.
+- NEVER use dotted keys such as:
+  "home.hero.headline"
+  "about.title"
+  "services.items"
+- Dotted keys are STRICTLY FORBIDDEN.
+
+VALID EXAMPLE:
+{
+  "home": {
+    "hero": {
+      "headline": "Example headline"
+    }
+  }
+}
+
+INVALID EXAMPLE (DO NOT DO THIS):
+{
+  "home.hero.headline": "Example headline"
+}
+
+CONTENT RULES
+=============
 - This is a CONTENT schema, NOT an editor schema.
-- You MUST populate the schema with FINAL WEBSITE CONTENT.
+- Populate the schema with FINAL WEBSITE CONTENT only.
 - DO NOT describe fields.
 - DO NOT return objects like:
   { "type": "text", "label": "..." }
-- DO NOT return metadata such as: type, label, max, options, placeholder, etc.
-- Every leaf value MUST be one of the following:
-  - string
-  - number
-  - boolean
-  - array of strings
-  - array of objects containing ONLY content values
+- DO NOT return metadata such as:
+  type, label, max, options, placeholder, hint, description
 
-If a field represents text on the website → return the actual text.
-If a field represents a list → return a list with realistic items.
-If a field represents a structured object → fill all its inner fields with content.
+Every leaf value MUST be one of:
+- string
+- number
+- boolean
+- array of strings
+- array of objects containing ONLY content values
+
+If a field represents website text → return the actual text.
+If a field represents a list → return realistic items.
+If a field represents a structured object → fill ALL inner fields.
 
 NO EMPTY FIELDS
 ===============
@@ -51,11 +77,12 @@ Use it to make the content specific, realistic and consistent:
 NICHE & STYLE GUIDELINES
 ========================
 - Use the business niche provided in BUSINESS_DATA_JSON.
-- Adapt tone, wording and examples to the niche:
+- Adapt tone, terminology and examples to the niche:
   - Restaurants → food quality, atmosphere, speed, convenience
   - Professional services → trust, experience, clarity, expertise
   - Local services → availability, responsiveness, local knowledge
-- Choose calls-to-action that make sense for the niche (order, book, contact, schedule, visit).
+- Choose calls-to-action that make sense for the niche:
+  order, book, contact, schedule, visit
 
 SECTION GUIDELINES
 =================
@@ -69,14 +96,13 @@ SECTION GUIDELINES
   - Explain what makes the business trustworthy and different.
   - Warm, professional, easy-to-read tone.
 - Services / Menu / Offers (if present in schema):
-  - Use realistic names and benefits.
-  - Be concrete, not vague.
+  - Use realistic names and concrete benefits.
 - Contact section:
   - Use realistic phone number and address formats.
   - Include opening hours if relevant.
   - Encourage action clearly.
 
-OUTPUT FORMAT
-=============
-Return ONLY the JSON object matching the schema.
-Do NOT wrap it in any other text.
+FINAL OUTPUT RULE
+=================
+Return ONLY the JSON object that matches the schema.
+No text before or after the JSON.
