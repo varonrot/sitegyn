@@ -7,19 +7,14 @@
   <style>
     body { font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; background:#0b0b10; color:#f5f5f5; }
     .page { max-width: 1080px; margin: 0 auto; padding: 24px 16px 64px; }
-
-    nav { display:flex; gap:16px; margin-bottom:24px; }
-    nav a { color:#fff; text-decoration:none; opacity:.7; }
-    nav a.active { opacity:1; text-decoration:underline; }
-
-    section[data-page] { display:none; }
-
     .hero { padding: 40px 24px; border-radius: 16px; background: radial-gradient(circle at top left, #ff5c3b, #2b0b10 60%, #0b0b10); }
     .hero-kicker { font-size: 0.9rem; text-transform: uppercase; letter-spacing: .12em; opacity: .8; }
     .hero-title { font-size: 2.4rem; margin: 12px 0 8px; }
     .hero-subtitle { font-size: 1.05rem; max-width: 540px; opacity: .9; }
     .hero-cta { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn-primary, .btn-secondary { border-radius: 999px; padding: 10px 22px; font-size: 0.95rem; cursor: pointer; border: none; }
+    .btn-primary, .btn-secondary {
+      border-radius: 999px; padding: 10px 22px; font-size: 0.95rem; cursor: pointer; border: none;
+    }
     .btn-primary { background:#ff5c3b; color:#fff; }
     .btn-secondary { background:transparent; border:1px solid rgba(255,255,255,.2); color:#fff; }
 
@@ -35,27 +30,45 @@
 
     .grid-3 { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-top: 10px; }
     .card { padding:14px 12px; border-radius: 14px; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.06); }
+    .card-title { font-size:1rem; margin-bottom:4px; }
+    .card-meta { font-size:.86rem; opacity:.8; margin-bottom:6px; }
+    .card-text { font-size:.9rem; opacity:.9; }
 
     .contact-list { list-style:none; padding:0; margin:10px 0 0; font-size:.95rem; }
+    .contact-list li { margin-bottom:4px; }
+
+    .badge { font-size:.75rem; text-transform:uppercase; letter-spacing:.16em; opacity:.8; }
+
+    @media (max-width: 640px) {
+      .hero-title { font-size: 2rem; }
+    }
+      section[data-page] {
+  display: none;
+}
+
   </style>
 </head>
 <body>
   <div class="page">
 
-    <!-- NAV -->
-    <nav>
-      <a href="?page=home" data-page="home" class="nav-link">Home</a>
-      <a href="?page=contact" data-page="contact" class="nav-link">Contact</a>
-    </nav>
-
-    <!-- HOME -->
+    <!-- HERO -->
     <section class="hero" data-page="home">
-      <div class="hero-kicker" id="hero-kicker"></div>
-      <h1 class="hero-title" id="hero-headline"></h1>
-      <p class="hero-subtitle" id="hero-subheadline"></p>
+      <div class="hero-kicker" id="hero-kicker">
+        <!-- e.g. "Fresh, Hand-Tossed Pizza in Tel Aviv" -->
+      </div>
+      <h1 class="hero-title" id="hero-headline">
+        <!-- Main headline -->
+      </h1>
+      <p class="hero-subtitle" id="hero-subheadline">
+        <!-- Subheadline -->
+      </p>
       <div class="hero-cta">
-        <button class="btn-primary" id="hero-cta-primary"></button>
-        <button class="btn-secondary" id="hero-cta-secondary"></button>
+        <button class="btn-primary" id="hero-cta-primary">
+          <!-- Primary CTA -->
+        </button>
+        <button class="btn-secondary" id="hero-cta-secondary">
+          <!-- Secondary CTA -->
+        </button>
       </div>
       <div class="pill-row">
         <span class="pill" id="hero-pill-1"></span>
@@ -64,52 +77,136 @@
       </div>
     </section>
 
-    <section class="section" data-page="home">
+    <!-- ABOUT -->
+    <section class="section" id="section-about" data-page="about">
       <h2 class="section-title" id="about-title"></h2>
       <p class="section-subtitle" id="about-tagline"></p>
-      <p id="about-paragraph-1"></p>
-      <p id="about-paragraph-2"></p>
-      <p id="about-paragraph-3"></p>
+
+      <div class="two-col">
+        <div>
+          <p id="about-paragraph-1"></p>
+          <p id="about-paragraph-2"></p>
+          <p id="about-paragraph-3"></p>
+        </div>
+        <div>
+          <div class="card">
+            <div class="badge" id="why-badge"></div>
+            <h3 class="card-title" id="why-title"></h3>
+            <p class="card-text" id="why-text-1"></p>
+            <p class="card-text" id="why-text-2"></p>
+            <p class="card-text" id="why-text-3"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPECIAL OFFERS -->
+   <section class="section" id="section-offers">
+      <h2 class="section-title" id="offers-title"></h2>
+      <p class="section-subtitle" id="offers-subtitle"></p>
+
+      <div class="grid-3">
+        <article class="card">
+          <div class="badge" id="offer-1-badge"></div>
+          <h3 class="card-title" id="offer-1-name"></h3>
+          <div class="card-meta" id="offer-1-price"></div>
+          <p class="card-text" id="offer-1-description"></p>
+        </article>
+
+        <article class="card">
+          <div class="badge" id="offer-2-badge"></div>
+          <h3 class="card-title" id="offer-2-name"></h3>
+          <div class="card-meta" id="offer-2-price"></div>
+          <p class="card-text" id="offer-2-description"></p>
+        </article>
+
+        <article class="card">
+          <div class="badge" id="offer-3-badge"></div>
+          <h3 class="card-title" id="offer-3-name"></h3>
+          <div class="card-meta" id="offer-3-price"></div>
+          <p class="card-text" id="offer-3-description"></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- OUR PIZZAS / MENU HIGHLIGHTS -->
+   <section class="section" id="section-menu">
+      <h2 class="section-title" id="menu-title"></h2>
+      <p class="section-subtitle" id="menu-subtitle"></p>
+
+      <div class="grid-3">
+        <article class="card">
+          <h3 class="card-title" id="pizza-1-name"></h3>
+          <div class="card-meta" id="pizza-1-tags"></div>
+          <p class="card-text" id="pizza-1-description"></p>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title" id="pizza-2-name"></h3>
+          <div class="card-meta" id="pizza-2-tags"></div>
+          <p class="card-text" id="pizza-2-description"></p>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title" id="pizza-3-name"></h3>
+          <div class="card-meta" id="pizza-3-tags"></div>
+          <p class="card-text" id="pizza-3-description"></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SERVICES (DELIVERY / TAKE AWAY / CATERING) -->
+    <section class="section" id="section-services">
+      <h2 class="section-title" id="services-title"></h2>
+      <p class="section-subtitle" id="services-subtitle"></p>
+
+      <div class="grid-3">
+        <article class="card">
+          <h3 class="card-title" id="service-1-title"></h3>
+          <p class="card-text" id="service-1-description"></p>
+        </article>
+        <article class="card">
+          <h3 class="card-title" id="service-2-title"></h3>
+          <p class="card-text" id="service-2-description"></p>
+        </article>
+        <article class="card">
+          <h3 class="card-title" id="service-3-title"></h3>
+          <p class="card-text" id="service-3-description"></p>
+        </article>
+      </div>
     </section>
 
     <!-- CONTACT -->
-    <section class="section" data-page="contact">
+    <section class="section" id="section-contact">
       <h2 class="section-title" id="contact-title"></h2>
       <p class="section-subtitle" id="contact-subtitle"></p>
+
       <ul class="contact-list">
         <li id="contact-phone"></li>
         <li id="contact-address"></li>
+        <li id="contact-hours-title"></li>
         <li id="contact-hours-line-1"></li>
         <li id="contact-hours-line-2"></li>
+        <li id="contact-hours-line-3"></li>
       </ul>
+
+      <div class="pill-row" style="margin-top:14px;">
+        <span class="pill" id="contact-cta-1"></span>
+        <span class="pill" id="contact-cta-2"></span>
+      </div>
     </section>
 
   </div>
-
-<script type="module">
+   <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase = createClient(
   "https://xkchlqcwntcoakmyicqb.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
-
-function getPage() {
-  return new URLSearchParams(location.search).get("page") || "home";
-}
-
-function renderPage() {
-  const page = getPage();
-  document.querySelectorAll("section[data-page]").forEach(s =>
-    s.style.display = s.dataset.page === page ? "block" : "none"
-  );
-  document.querySelectorAll(".nav-link").forEach(a =>
-    a.classList.toggle("active", a.dataset.page === page)
-  );
-}
-
 async function reloadContentFromDB() {
-  const projectId = new URLSearchParams(location.search).get("project_id");
+  const params = new URLSearchParams(window.location.search);
+  const projectId = params.get("project_id");
   if (!projectId) return;
 
   const { data } = await supabase
@@ -120,25 +217,112 @@ async function reloadContentFromDB() {
 
   if (!data?.content_json) return;
 
-  const c = data.content_json;
-  hero-kicker.innerText = c.home.hero.kicker;
-  hero-headline.innerText = c.home.hero.headline;
-  hero-subheadline.innerText = c.home.hero.subheadline;
-  hero-cta-primary.innerText = c.home.hero.primary_cta;
-  hero-cta-secondary.innerText = c.home.hero.secondary_cta;
+  applyContentToDOM(data.content_json);
+}
+function applyContentToDOM(c) {
+  /* ======================
+     HERO
+  ====================== */
+  document.getElementById("hero-kicker").innerText = c.home?.hero?.kicker ?? "";
+  document.getElementById("hero-headline").innerText = c.home?.hero?.headline ?? "";
+  document.getElementById("hero-subheadline").innerText = c.home?.hero?.subheadline ?? "";
+  document.getElementById("hero-cta-primary").innerText = c.home?.hero?.primary_cta ?? "";
+  document.getElementById("hero-cta-secondary").innerText = c.home?.hero?.secondary_cta ?? "";
+
+  document.getElementById("hero-pill-1").innerText = c.home?.hero?.pills?.[0] ?? "";
+  document.getElementById("hero-pill-2").innerText = c.home?.hero?.pills?.[1] ?? "";
+  document.getElementById("hero-pill-3").innerText = c.home?.hero?.pills?.[2] ?? "";
+
+  /* ======================
+     ABOUT
+  ====================== */
+  document.getElementById("about-title").innerText = c.about?.title ?? "";
+  document.getElementById("about-tagline").innerText = c.about?.tagline ?? "";
+
+  document.getElementById("about-paragraph-1").innerText = c.about?.paragraphs?.[0] ?? "";
+  document.getElementById("about-paragraph-2").innerText = c.about?.paragraphs?.[1] ?? "";
+  document.getElementById("about-paragraph-3").innerText = c.about?.paragraphs?.[2] ?? "";
+
+  document.getElementById("why-badge").innerText = c.about?.why?.badge ?? "";
+  document.getElementById("why-title").innerText = c.about?.why?.title ?? "";
+  document.getElementById("why-text-1").innerText = c.about?.why?.texts?.[0] ?? "";
+  document.getElementById("why-text-2").innerText = c.about?.why?.texts?.[1] ?? "";
+  document.getElementById("why-text-3").innerText = c.about?.why?.texts?.[2] ?? "";
+
+  /* ======================
+     OFFERS
+  ====================== */
+  document.getElementById("offers-title").innerText = c.offers?.title ?? "";
+  document.getElementById("offers-subtitle").innerText = c.offers?.subtitle ?? "";
+
+  c.offers?.items?.forEach((item, i) => {
+    const n = i + 1;
+    document.getElementById(`offer-${n}-badge`).innerText = item?.badge ?? "";
+    document.getElementById(`offer-${n}-name`).innerText = item?.name ?? "";
+    document.getElementById(`offer-${n}-price`).innerText = item?.meta ?? "";
+    document.getElementById(`offer-${n}-description`).innerText = item?.description ?? "";
+  });
+
+  /* ======================
+     MENU
+  ====================== */
+  document.getElementById("menu-title").innerText = c.menu?.title ?? "";
+  document.getElementById("menu-subtitle").innerText = c.menu?.subtitle ?? "";
+
+  c.menu?.items?.forEach((item, i) => {
+    const n = i + 1;
+    document.getElementById(`pizza-${n}-name`).innerText = item?.name ?? "";
+    document.getElementById(`pizza-${n}-tags`).innerText = item?.tags ?? "";
+    document.getElementById(`pizza-${n}-description`).innerText = item?.description ?? "";
+  });
+
+  /* ======================
+     SERVICES
+  ====================== */
+  document.getElementById("services-title").innerText = c.services?.title ?? "";
+  document.getElementById("services-subtitle").innerText = c.services?.subtitle ?? "";
+
+  c.services?.items?.forEach((item, i) => {
+    const n = i + 1;
+    document.getElementById(`service-${n}-title`).innerText = item?.title ?? "";
+    document.getElementById(`service-${n}-description`).innerText = item?.description ?? "";
+  });
+
+  /* ======================
+     CONTACT
+  ====================== */
+  document.getElementById("contact-title").innerText = c.contact?.title ?? "";
+  document.getElementById("contact-subtitle").innerText = c.contact?.subtitle ?? "";
+  document.getElementById("contact-phone").innerText = c.contact?.phone ?? "";
+  document.getElementById("contact-address").innerText = c.contact?.address ?? "";
+
+  document.getElementById("contact-hours-line-1").innerText = c.contact?.hours?.[0] ?? "";
+  document.getElementById("contact-hours-line-2").innerText = c.contact?.hours?.[1] ?? "";
+  document.getElementById("contact-hours-line-3").innerText = c.contact?.hours?.[2] ?? "";
+
+  document.getElementById("contact-cta-1").innerText = c.contact?.ctas?.[0] ?? "";
+  document.getElementById("contact-cta-2").innerText = c.contact?.ctas?.[1] ?? "";
 }
 
-window.addEventListener("message", e => {
-  if (e.data?.type === "content-updated") {
-    reloadContentFromDB();
-    renderPage();
-  }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  renderPage();
-  reloadContentFromDB();
-});
+<script>
+function getPage() {
+  return new URLSearchParams(window.location.search).get("page") || "home";
+}
+
+function renderPage() {
+  const page = getPage();
+
+  document.querySelectorAll("section[data-page]").forEach(section => {
+    section.style.display =
+      section.dataset.page === page ? "block" : "none";
+  });
+}
+
+window.addEventListener("DOMContentLoaded", renderPage);
 </script>
+
+
 </body>
 </html>
