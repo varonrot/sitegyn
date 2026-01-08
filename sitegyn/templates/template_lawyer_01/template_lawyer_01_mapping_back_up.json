@@ -1,1 +1,50 @@
+{
+  "nav-logo": "nav.logo",
 
+  "hero-kicker": "home.hero.kicker",
+  "hero-headline": "home.hero.headline",
+  "hero-subheadline": "home.hero.subheadline",
+  "hero-cta-primary": "home.hero.primary_cta",
+  "hero-cta-secondary": "home.hero.secondary_cta",
+  "hero-pill-1": "home.hero.pills.0",
+  "hero-pill-2": "home.hero.pills.1",
+  "hero-pill-3": "home.hero.pills.2",
+
+  "about-title": "about.title",
+  "about-tagline": "about.tagline",
+  "about-paragraph-1": "about.paragraphs.0",
+  "about-paragraph-2": "about.paragraphs.1",
+  "about-paragraph-3": "about.paragraphs.2",
+
+  "why-badge": "about.why.badge",
+  "why-title": "about.why.title",
+  "why-text-1": "about.why.texts.0",
+  "why-text-2": "about.why.texts.1",
+  "why-text-3": "about.why.texts.2",
+
+  "services-title": "services.title",
+  "services-subtitle": "services.subtitle",
+  "service-1-title": "services.items.0.title",
+  "service-1-description": "services.items.0.description",
+  "service-2-title": "services.items.1.title",
+  "service-2-description": "services.items.1.description",
+  "service-3-title": "services.items.2.title",
+  "service-3-description": "services.items.2.description",
+
+  "team-title": "team.title",
+  "team-subtitle": "team.subtitle",
+  "team-1-name": "team.members.0.name",
+  "team-1-role": "team.members.0.role",
+  "team-1-bio": "team.members.0.bio",
+  "team-2-name": "team.members.1.name",
+  "team-2-role": "team.members.1.role",
+  "team-2-bio": "team.members.1.bio",
+
+  "contact-title": "contact.title",
+  "contact-subtitle": "contact.subtitle",
+  "contact-phone": "contact.phone",
+  "contact-email": "contact.email",
+  "contact-address": "contact.address",
+  "contact-cta-1": "contact.ctas.0",
+  "contact-cta-2": "contact.ctas.1"
+}
