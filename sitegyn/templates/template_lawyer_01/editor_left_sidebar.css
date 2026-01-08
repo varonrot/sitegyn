@@ -1,71 +1,81 @@
-/* =========================================================
-   EDITOR – LEFT SIDEBAR (NO ICONS)
-   ========================================================= */
+/* ===============================
+   EDITOR – LEFT SIDEBAR (AI)
+   =============================== */
 
-/* ===== SIDEBAR BASE ===== */
-.sidebar.left{
-  width:280px;
-  background:linear-gradient(180deg,#041831 0%, #064893 60%, #0f8fff 100%);
-  padding:18px 14px 22px;
-  overflow-y:auto;
-  border-right:1px solid rgba(255,255,255,.06);
+.editor-sidebar {
+  width: 300px;
+  background: linear-gradient(180deg, #0f3d26 0%, #1f9d55 60%, #22c55e 100%);
+  padding: 18px 14px 22px;
+  overflow-y: auto;
+  border-left: 1px solid rgba(255,255,255,.08);
+  color: #eafff4;
 }
 
-/* ===== SECTION TITLES ===== */
-.sidebar.left .section-title{
-  font-size:11px;
-  margin:22px 8px 10px;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  font-weight:700;
-  color:#a7c7ff;
-  opacity:.9;
+/* ===== SECTION GROUP ===== */
+.editor-sidebar .ai-group {
+  margin-bottom: 18px;
 }
 
-/* ===== LIST WRAPPER ===== */
-.sidebar.left .nav-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  margin-bottom:8px;
+.editor-sidebar .ai-group-title {
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .85;
+  margin: 14px 8px 10px;
 }
 
-/* ===== NAV ITEM ===== */
-.sidebar.left .nav-item{
-  display:flex;
-  align-items:center;
-  padding:12px 14px;
-  border-radius:14px;
-  background:rgba(0,0,0,.22);
-  cursor:pointer;
-  font-size:14px;
-  font-weight:500;
-  color:#e7f5ff;
-  transition:
-    background .15s ease,
-    transform .1s ease,
-    box-shadow .15s ease;
+/* ===== BUTTON LIST ===== */
+.editor-sidebar .ai-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* hover */
-.sidebar.left .nav-item:hover{
-  background:rgba(0,0,0,.38);
-  transform:translateX(1px);
+/* ===== AI BUTTON ===== */
+.editor-sidebar .ai-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  color: #eafff4;
+  font-size: 14px;
+  transition: all .2s ease;
 }
 
-/* active */
-.sidebar.left .nav-item.active{
-  background:linear-gradient(
-    90deg,
-    rgba(21,128,255,.95),
-    rgba(67,56,202,.95)
-  );
-  box-shadow:0 6px 18px rgba(21,128,255,.35);
+.editor-sidebar .ai-btn:hover {
+  background: rgba(0,0,0,.35);
+  transform: translateY(-1px);
 }
 
-/* ===== REMOVE ALL ICON PLACEHOLDERS ===== */
-.sidebar.left .nav-item::before,
-.sidebar.left .nav-item::after{
-  display:none !important;
-  content:none !important;
+/* ===== ICON ===== */
+.editor-sidebar .ai-btn .icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ===== LABEL ===== */
+.editor-sidebar .ai-btn .label {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* ===== SCROLLBAR ===== */
+.editor-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.editor-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.25);
+  border-radius: 10px;
 }
