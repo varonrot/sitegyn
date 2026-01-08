@@ -1,1 +1,125 @@
+{
+  "template": "template_lawyer_01",
+  "version": 1,
+
+  "global": {
+    "editable": true,
+    "supports_multi_page": true,
+    "supports_navigation": true
+  },
+
+  "navigation": {
+    "logo": {
+      "type": "text",
+      "label": "Firm Name / Logo Text",
+      "maxLength": 40
+    }
+  },
+
+  "pages": {
+    "home": {
+      "label": "Home",
+      "enabled": true,
+      "sections": {
+        "hero": {
+          "kicker": { "type": "text", "maxLength": 80 },
+          "headline": { "type": "text", "maxLength": 120 },
+          "subheadline": { "type": "textarea", "maxLength": 240 },
+          "primary_cta": { "type": "text", "maxLength": 40 },
+          "secondary_cta": { "type": "text", "maxLength": 40 },
+          "pills": {
+            "type": "list",
+            "maxItems": 3,
+            "item": { "type": "text", "maxLength": 30 }
+          }
+        }
+      }
+    },
+
+    "about": {
+      "label": "About",
+      "enabled": true,
+      "sections": {
+        "content": {
+          "title": { "type": "text", "maxLength": 80 },
+          "tagline": { "type": "textarea", "maxLength": 180 },
+          "paragraphs": {
+            "type": "list",
+            "maxItems": 3,
+            "item": { "type": "textarea", "maxLength": 400 }
+          }
+        },
+        "why": {
+          "badge": { "type": "text", "maxLength": 30 },
+          "title": { "type": "text", "maxLength": 60 },
+          "points": {
+            "type": "list",
+            "maxItems": 3,
+            "item": { "type": "textarea", "maxLength": 200 }
+          }
+        }
+      }
+    },
+
+    "services": {
+      "label": "Services",
+      "enabled": true,
+      "sections": {
+        "header": {
+          "title": { "type": "text", "maxLength": 80 },
+          "subtitle": { "type": "textarea", "maxLength": 180 }
+        },
+        "items": {
+          "type": "list",
+          "maxItems": 6,
+          "item": {
+            "title": { "type": "text", "maxLength": 60 },
+            "description": { "type": "textarea", "maxLength": 300 }
+          }
+        }
+      }
+    },
+
+    "team": {
+      "label": "Team",
+      "enabled": true,
+      "sections": {
+        "header": {
+          "title": { "type": "text", "maxLength": 80 },
+          "subtitle": { "type": "textarea", "maxLength": 180 }
+        },
+        "members": {
+          "type": "list",
+          "maxItems": 6,
+          "item": {
+            "name": { "type": "text", "maxLength": 60 },
+            "role": { "type": "text", "maxLength": 60 },
+            "bio": { "type": "textarea", "maxLength": 400 }
+          }
+        }
+      }
+    },
+
+    "contact": {
+      "label": "Contact",
+      "enabled": true,
+      "sections": {
+        "header": {
+          "title": { "type": "text", "maxLength": 80 },
+          "subtitle": { "type": "textarea", "maxLength": 180 }
+        },
+        "details": {
+          "phone": { "type": "text", "maxLength": 40 },
+          "email": { "type": "text", "maxLength": 80 },
+          "address": { "type": "textarea", "maxLength": 200 }
+        },
+        "ctas": {
+          "type": "list",
+          "maxItems": 2,
+          "item": { "type": "text", "maxLength": 40 }
+        }
+      }
+    }
+  }
+}
 
