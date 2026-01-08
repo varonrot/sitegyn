@@ -1,228 +1,166 @@
 {
   "home": {
-    "hero": {
-      "kicker": {
-        "inline_edit": true,
-        "ai_edit": true,
-        "input_type": "text"
+    "label": "HOME",
+    "items": [
+      {
+        "label": "Kicker",
+        "path": "home.hero.kicker",
+        "type": "text"
       },
-      "headline": {
-        "inline_edit": true,
-        "ai_edit": true,
-        "input_type": "headline"
+      {
+        "label": "Headline",
+        "path": "home.hero.headline",
+        "type": "text"
       },
-      "subheadline": {
-        "inline_edit": true,
-        "ai_edit": true,
-        "input_type": "paragraph"
+      {
+        "label": "Subheadline",
+        "path": "home.hero.subheadline",
+        "type": "textarea"
       },
-      "primary_cta": {
-        "inline_edit": true,
-        "ai_edit": false,
-        "input_type": "button_label"
+      {
+        "label": "Primary CTA",
+        "path": "home.hero.primary_cta",
+        "type": "text"
       },
-      "secondary_cta": {
-        "inline_edit": true,
-        "ai_edit": false,
-        "input_type": "button_label"
+      {
+        "label": "Secondary CTA",
+        "path": "home.hero.secondary_cta",
+        "type": "text"
       },
-      "pills": {
-        "inline_edit": true,
-        "ai_edit": true,
-        "input_type": "short_list",
-        "reorder": false,
-        "add_remove": false
+      {
+        "label": "Pills",
+        "path": "home.hero.pills",
+        "type": "list",
+        "limit": 3
       }
-    }
+    ]
   },
 
   "about": {
-    "title": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "headline"
-    },
-    "tagline": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "text"
-    },
-    "paragraphs": {
-      "inline_edit": false,
-      "ai_edit": true,
-      "input_type": "multi_paragraph",
-      "reorder": false,
-      "add_remove": false
-    },
-    "why_badge": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "badge"
-    },
-    "why_title": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "headline"
-    },
-    "why_points": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "bullet_list",
-      "reorder": false,
-      "add_remove": false
-    }
-  },
-
-  "offers": {
-    "title": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "headline"
-    },
-    "subtitle": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "text"
-    },
-    "deals": {
-      "inline_edit": false,
-      "ai_edit": true,
-      "input_type": "cards",
-      "per_item": {
-        "badge": {
-          "inline_edit": true,
-          "ai_edit": false,
-          "input_type": "badge"
-        },
-        "name": {
-          "inline_edit": true,
-          "ai_edit": true,
-          "input_type": "text"
-        },
-        "price_text": {
-          "inline_edit": true,
-          "ai_edit": false,
-          "input_type": "price"
-        },
-        "description": {
-          "inline_edit": false,
-          "ai_edit": true,
-          "input_type": "paragraph"
-        }
+    "label": "ABOUT",
+    "items": [
+      {
+        "label": "Title",
+        "path": "about.title",
+        "type": "text"
       },
-      "reorder": false,
-      "add_remove": false
-    }
-  },
-
-  "menu": {
-    "title": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "headline"
-    },
-    "subtitle": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "text"
-    },
-    "pizzas": {
-      "inline_edit": false,
-      "ai_edit": true,
-      "input_type": "menu_items",
-      "per_item": {
-        "name": {
-          "inline_edit": true,
-          "ai_edit": true,
-          "input_type": "text"
-        },
-        "tags": {
-          "inline_edit": true,
-          "ai_edit": false,
-          "input_type": "tags"
-        },
-        "description": {
-          "inline_edit": false,
-          "ai_edit": true,
-          "input_type": "paragraph"
-        }
+      {
+        "label": "Tagline",
+        "path": "about.tagline",
+        "type": "text"
       },
-      "reorder": false,
-      "add_remove": false
-    }
+      {
+        "label": "Paragraphs",
+        "path": "about.paragraphs",
+        "type": "list",
+        "limit": 3
+      },
+      {
+        "label": "Why Badge",
+        "path": "about.why.badge",
+        "type": "text"
+      },
+      {
+        "label": "Why Title",
+        "path": "about.why.title",
+        "type": "text"
+      },
+      {
+        "label": "Why Points",
+        "path": "about.why.texts",
+        "type": "list",
+        "limit": 3
+      }
+    ]
   },
 
   "services": {
-    "title": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "headline"
-    },
-    "subtitle": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "text"
-    },
-    "items": {
-      "inline_edit": false,
-      "ai_edit": true,
-      "input_type": "cards",
-      "per_item": {
-        "title": {
-          "inline_edit": true,
-          "ai_edit": true,
-          "input_type": "text"
-        },
-        "description": {
-          "inline_edit": false,
-          "ai_edit": true,
-          "input_type": "paragraph"
-        }
+    "label": "SERVICES",
+    "items": [
+      {
+        "label": "Section Title",
+        "path": "services.title",
+        "type": "text"
       },
-      "reorder": false,
-      "add_remove": false
-    }
+      {
+        "label": "Section Subtitle",
+        "path": "services.subtitle",
+        "type": "text"
+      },
+      {
+        "label": "Service Items",
+        "path": "services.items",
+        "type": "cards",
+        "fields": [
+          { "label": "Title", "key": "title" },
+          { "label": "Description", "key": "description" }
+        ],
+        "limit": 3
+      }
+    ]
+  },
+
+  "team": {
+    "label": "TEAM",
+    "items": [
+      {
+        "label": "Section Title",
+        "path": "team.title",
+        "type": "text"
+      },
+      {
+        "label": "Section Subtitle",
+        "path": "team.subtitle",
+        "type": "text"
+      },
+      {
+        "label": "Members",
+        "path": "team.members",
+        "type": "cards",
+        "fields": [
+          { "label": "Name", "key": "name" },
+          { "label": "Role", "key": "role" },
+          { "label": "Bio", "key": "bio" }
+        ],
+        "limit": 3
+      }
+    ]
   },
 
   "contact": {
-    "title": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "headline"
-    },
-    "subtitle": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "text"
-    },
-    "phone": {
-      "inline_edit": true,
-      "ai_edit": false,
-      "input_type": "phone"
-    },
-    "address": {
-      "inline_edit": true,
-      "ai_edit": false,
-      "input_type": "address"
-    },
-    "hours_title": {
-      "inline_edit": true,
-      "ai_edit": true,
-      "input_type": "text"
-    },
-    "hours_lines": {
-      "inline_edit": true,
-      "ai_edit": false,
-      "input_type": "list",
-      "reorder": false,
-      "add_remove": false
-    },
-    "cta_pills": {
-      "inline_edit": true,
-      "ai_edit": false,
-      "input_type": "short_list",
-      "reorder": false,
-      "add_remove": false
-    }
+    "label": "CONTACT",
+    "items": [
+      {
+        "label": "Title",
+        "path": "contact.title",
+        "type": "text"
+      },
+      {
+        "label": "Subtitle",
+        "path": "contact.subtitle",
+        "type": "text"
+      },
+      {
+        "label": "Phone",
+        "path": "contact.phone",
+        "type": "text"
+      },
+      {
+        "label": "Email",
+        "path": "contact.email",
+        "type": "text"
+      },
+      {
+        "label": "Address",
+        "path": "contact.address",
+        "type": "textarea"
+      },
+      {
+        "label": "CTAs",
+        "path": "contact.ctas",
+        "type": "list",
+        "limit": 2
+      }
+    ]
   }
 }
