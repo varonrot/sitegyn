@@ -1,125 +1,228 @@
 {
-  "template": "template_lawyer_01",
-  "version": 1,
-
-  "global": {
-    "editable": true,
-    "supports_multi_page": true,
-    "supports_navigation": true
-  },
-
-  "navigation": {
-    "logo": {
-      "type": "text",
-      "label": "Firm Name / Logo Text",
-      "maxLength": 40
+  "home": {
+    "hero": {
+      "kicker": {
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "text"
+      },
+      "headline": {
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "headline"
+      },
+      "subheadline": {
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "paragraph"
+      },
+      "primary_cta": {
+        "inline_edit": true,
+        "ai_edit": false,
+        "input_type": "button_label"
+      },
+      "secondary_cta": {
+        "inline_edit": true,
+        "ai_edit": false,
+        "input_type": "button_label"
+      },
+      "pills": {
+        "inline_edit": true,
+        "ai_edit": true,
+        "input_type": "short_list",
+        "reorder": false,
+        "add_remove": false
+      }
     }
   },
 
-  "pages": {
-    "home": {
-      "label": "Home",
-      "enabled": true,
-      "sections": {
-        "hero": {
-          "kicker": { "type": "text", "maxLength": 80 },
-          "headline": { "type": "text", "maxLength": 120 },
-          "subheadline": { "type": "textarea", "maxLength": 240 },
-          "primary_cta": { "type": "text", "maxLength": 40 },
-          "secondary_cta": { "type": "text", "maxLength": 40 },
-          "pills": {
-            "type": "list",
-            "maxItems": 3,
-            "item": { "type": "text", "maxLength": 30 }
-          }
-        }
-      }
+  "about": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
     },
-
-    "about": {
-      "label": "About",
-      "enabled": true,
-      "sections": {
-        "content": {
-          "title": { "type": "text", "maxLength": 80 },
-          "tagline": { "type": "textarea", "maxLength": 180 },
-          "paragraphs": {
-            "type": "list",
-            "maxItems": 3,
-            "item": { "type": "textarea", "maxLength": 400 }
-          }
-        },
-        "why": {
-          "badge": { "type": "text", "maxLength": 30 },
-          "title": { "type": "text", "maxLength": 60 },
-          "points": {
-            "type": "list",
-            "maxItems": 3,
-            "item": { "type": "textarea", "maxLength": 200 }
-          }
-        }
-      }
+    "tagline": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
     },
-
-    "services": {
-      "label": "Services",
-      "enabled": true,
-      "sections": {
-        "header": {
-          "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 }
-        },
-        "items": {
-          "type": "list",
-          "maxItems": 6,
-          "item": {
-            "title": { "type": "text", "maxLength": 60 },
-            "description": { "type": "textarea", "maxLength": 300 }
-          }
-        }
-      }
+    "paragraphs": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "multi_paragraph",
+      "reorder": false,
+      "add_remove": false
     },
-
-    "team": {
-      "label": "Team",
-      "enabled": true,
-      "sections": {
-        "header": {
-          "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 }
-        },
-        "members": {
-          "type": "list",
-          "maxItems": 6,
-          "item": {
-            "name": { "type": "text", "maxLength": 60 },
-            "role": { "type": "text", "maxLength": 60 },
-            "bio": { "type": "textarea", "maxLength": 400 }
-          }
-        }
-      }
+    "why_badge": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "badge"
     },
+    "why_title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "why_points": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "bullet_list",
+      "reorder": false,
+      "add_remove": false
+    }
+  },
 
-    "contact": {
-      "label": "Contact",
-      "enabled": true,
-      "sections": {
-        "header": {
-          "title": { "type": "text", "maxLength": 80 },
-          "subtitle": { "type": "textarea", "maxLength": 180 }
+  "offers": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "subtitle": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "deals": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "cards",
+      "per_item": {
+        "badge": {
+          "inline_edit": true,
+          "ai_edit": false,
+          "input_type": "badge"
         },
-        "details": {
-          "phone": { "type": "text", "maxLength": 40 },
-          "email": { "type": "text", "maxLength": 80 },
-          "address": { "type": "textarea", "maxLength": 200 }
+        "name": {
+          "inline_edit": true,
+          "ai_edit": true,
+          "input_type": "text"
         },
-        "ctas": {
-          "type": "list",
-          "maxItems": 2,
-          "item": { "type": "text", "maxLength": 40 }
+        "price_text": {
+          "inline_edit": true,
+          "ai_edit": false,
+          "input_type": "price"
+        },
+        "description": {
+          "inline_edit": false,
+          "ai_edit": true,
+          "input_type": "paragraph"
         }
-      }
+      },
+      "reorder": false,
+      "add_remove": false
+    }
+  },
+
+  "menu": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "subtitle": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "pizzas": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "menu_items",
+      "per_item": {
+        "name": {
+          "inline_edit": true,
+          "ai_edit": true,
+          "input_type": "text"
+        },
+        "tags": {
+          "inline_edit": true,
+          "ai_edit": false,
+          "input_type": "tags"
+        },
+        "description": {
+          "inline_edit": false,
+          "ai_edit": true,
+          "input_type": "paragraph"
+        }
+      },
+      "reorder": false,
+      "add_remove": false
+    }
+  },
+
+  "services": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "subtitle": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "items": {
+      "inline_edit": false,
+      "ai_edit": true,
+      "input_type": "cards",
+      "per_item": {
+        "title": {
+          "inline_edit": true,
+          "ai_edit": true,
+          "input_type": "text"
+        },
+        "description": {
+          "inline_edit": false,
+          "ai_edit": true,
+          "input_type": "paragraph"
+        }
+      },
+      "reorder": false,
+      "add_remove": false
+    }
+  },
+
+  "contact": {
+    "title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "headline"
+    },
+    "subtitle": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "phone": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "phone"
+    },
+    "address": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "address"
+    },
+    "hours_title": {
+      "inline_edit": true,
+      "ai_edit": true,
+      "input_type": "text"
+    },
+    "hours_lines": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "list",
+      "reorder": false,
+      "add_remove": false
+    },
+    "cta_pills": {
+      "inline_edit": true,
+      "ai_edit": false,
+      "input_type": "short_list",
+      "reorder": false,
+      "add_remove": false
     }
   }
 }
-
