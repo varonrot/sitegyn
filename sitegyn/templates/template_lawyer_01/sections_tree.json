@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "template": "template_lawyer_01",
+  "sections": [
+    {
+      "id": "hero",
+      "label": "Hero",
+      "path": "home.hero",
+      "order": 1,
+      "editable": false
+    },
+    {
+      "id": "about",
+      "label": "About",
+      "path": "about",
+      "order": 2,
+      "editable": false
+    },
+    {
+      "id": "services",
+      "label": "Services",
+      "path": "services",
+      "order": 3,
+      "editable": false
+    },
+    {
+      "id": "practice_areas",
+      "label": "Practice Areas",
+      "path": "practice_areas",
+      "order": 4,
+      "editable": false
+    },
+    {
+      "id": "team",
+      "label": "Team",
+      "path": "team",
+      "order": 5,
+      "editable": false
+    },
+    {
+      "id": "contact",
+      "label": "Contact",
+      "path": "contact",
+      "order": 6,
+      "editable": false
+    }
+  ]
+}
