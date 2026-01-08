@@ -1,1 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Law Firm Template</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0b0b10;
+      color: #f5f5f5;
+    }
+
+    /* ===== NAV ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10,10,15,.9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: .05em;
+    }
+
+    nav a {
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      margin-left: 18px;
+      font-size: .9rem;
+      position: relative;
+    }
+
+    nav a.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -6px;
+      height: 2px;
+      background: #4f8cff;
+    }
+
+    /* ===== PAGE ===== */
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 16px 80px;
+    }
+
+    section[data-page] {
+      display: none;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 48px 32px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top left, #2a3f63, #0b1220 60%);
+    }
+
+    .hero-kicker {
+      font-size: .85rem;
+      letter-spacing: .14em;
+      opacity: .8;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: 2.3rem;
+      margin: 12px 0 8px;
+    }
+
+    .hero-subtitle {
+      max-width: 560px;
+      opacity: .9;
+    }
+
+    .hero-cta {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border-radius: 999px;
+      padding: 10px 22px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #4f8cff;
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff;
+    }
+
+    .pill-row {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      font-size: .8rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      margin-top: 40px;
+      padding: 28px 24px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .section-subtitle {
+      opacity: .8;
+      margin-bottom: 18px;
+    }
+
+    .two-col {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .two-col > div {
+      flex: 1 1 300px;
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .badge {
+      font-size: .7rem;
+      letter-spacing: .16em;
+      opacity: .7;
+      margin-bottom: 6px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+      gap: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav-inner">
+    <div class="logo" id="nav-logo"></div>
+    <nav>
+      <a href="?page=home" data-page="home" class="nav-link">Home</a>
+      <a href="?page=about" data-page="about" class="nav-link">About</a>
+      <a href="?page=services" data-page="services" class="nav-link">Services</a>
+      <a href="?page=team" data-page="team" class="nav-link">Team</a>
+      <a href="?page=contact" data-page="contact" class="nav-link">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <section class="hero" data-page="home">
+    <div class="hero-kicker" id="hero-kicker"></div>
+    <h1 class="hero-title" id="hero-headline"></h1>
+    <p class="hero-subtitle" id="hero-subheadline"></p>
+
+    <div class="hero-cta">
+      <button class="btn-primary" id="hero-cta-primary"></button>
+      <button class="btn-secondary" id="hero-cta-secondary"></button>
+    </div>
+
+    <div class="pill-row">
+      <span class="pill" id="hero-pill-1"></span>
+      <span class="pill" id="hero-pill-2"></span>
+      <span class="pill" id="hero-pill-3"></span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" data-page="about">
+    <h2 class="section-title" id="about-title"></h2>
+    <p class="section-subtitle" id="about-tagline"></p>
+
+    <div class="two-col">
+      <div>
+        <p id="about-paragraph-1"></p>
+        <p id="about-paragraph-2"></p>
+        <p id="about-paragraph-3"></p>
+      </div>
+
+      <div class="card">
+        <div class="badge" id="why-badge"></div>
+        <h3 id="why-title"></h3>
+        <p id="why-text-1"></p>
+        <p id="why-text-2"></p>
+        <p id="why-text-3"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section" data-page="services">
+    <h2 class="section-title" id="services-title"></h2>
+    <p class="section-subtitle" id="services-subtitle"></p>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3 id="service-1-title"></h3>
+        <p id="service-1-description"></p>
+      </div>
+      <div class="card">
+        <h3 id="service-2-title"></h3>
+        <p id="service-2-description"></p>
+      </div>
+      <div class="card">
+        <h3 id="service-3-title"></h3>
+        <p id="service-3-description"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="section" data-page="team">
+    <h2 class="section-title" id="team-title"></h2>
+    <p class="section-subtitle" id="team-subtitle"></p>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3 id="team-1-name"></h3>
+        <p id="team-1-role"></p>
+        <p id="team-1-bio"></p>
+      </div>
+      <div class="card">
+        <h3 id="team-2-name"></h3>
+        <p id="team-2-role"></p>
+        <p id="team-2-bio"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" data-page="contact">
+    <h2 class="section-title" id="contact-title"></h2>
+    <p class="section-subtitle" id="contact-subtitle"></p>
+
+    <p id="contact-phone"></p>
+    <p id="contact-email"></p>
+    <p id="contact-address"></p>
+
+    <div class="pill-row">
+      <span class="pill" id="contact-cta-1"></span>
+      <span class="pill" id="contact-cta-2"></span>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function getCurrentPage() {
+  return new URLSearchParams(location.search).get("page") || "home";
+}
+
+function renderPage() {
+  const page = getCurrentPage();
+
+  document.querySelectorAll("section[data-page]").forEach(s => {
+    s.style.display = s.dataset.page === page ? "block" : "none";
+  });
+
+  document.querySelectorAll(".nav-link").forEach(l => {
+    l.classList.toggle("active", l.dataset.page === page);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", renderPage);
+</script>
+
+</body>
+</html>
 
