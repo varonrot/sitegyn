@@ -1,17 +1,23 @@
 /* =========================================================
-   EDITOR – LEFT SIDEBAR (NO ICONS)
+   EDITOR – LEFT SIDEBAR (LAWYER TEMPLATE)
+   Clean / No Icons / Safe
    ========================================================= */
 
 /* ===== SIDEBAR BASE ===== */
 .sidebar.left{
   width:280px;
-  background:linear-gradient(180deg,#041831 0%, #064893 60%, #0f8fff 100%);
+  background:linear-gradient(
+    180deg,
+    #041831 0%,
+    #064893 60%,
+    #0f8fff 100%
+  );
   padding:18px 14px 22px;
   overflow-y:auto;
   border-right:1px solid rgba(255,255,255,.06);
 }
 
-/* ===== SECTION TITLES ===== */
+/* ===== SECTION TITLE ===== */
 .sidebar.left .section-title{
   font-size:11px;
   margin:22px 8px 10px;
@@ -22,12 +28,12 @@
   opacity:.9;
 }
 
-/* ===== LIST WRAPPER ===== */
+/* ===== NAV LIST ===== */
 .sidebar.left .nav-list{
   display:flex;
   flex-direction:column;
   gap:8px;
-  margin-bottom:8px;
+  margin-bottom:6px;
 }
 
 /* ===== NAV ITEM ===== */
@@ -38,9 +44,11 @@
   border-radius:14px;
   background:rgba(0,0,0,.22);
   cursor:pointer;
+
   font-size:14px;
   font-weight:500;
   color:#e7f5ff;
+
   transition:
     background .15s ease,
     transform .1s ease,
@@ -63,9 +71,21 @@
   box-shadow:0 6px 18px rgba(21,128,255,.35);
 }
 
-/* ===== REMOVE ALL ICON PLACEHOLDERS ===== */
+/* ===== HARD RESET: NO ICONS / DECORATORS ===== */
 .sidebar.left .nav-item::before,
-.sidebar.left .nav-item::after{
+.sidebar.left .nav-item::after,
+.sidebar.left .section-title::before,
+.sidebar.left .section-title::after{
   display:none !important;
   content:none !important;
+}
+
+/* ===== SCROLLBAR (OPTIONAL, SAFE) ===== */
+.sidebar.left::-webkit-scrollbar{
+  width:6px;
+}
+
+.sidebar.left::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.18);
+  border-radius:6px;
 }
