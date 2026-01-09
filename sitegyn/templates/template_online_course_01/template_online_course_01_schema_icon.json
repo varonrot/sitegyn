@@ -1,51 +1,20 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Online Course Hero Content",
-  "type": "object",
-  "properties": {
-    "home": {
-      "type": "object",
-      "ui:icon": "fa-house",
-      "properties": {
-        "hero": {
-          "type": "object",
-          "ui:icon": "fa-star",
-          "properties": {
-            "kicker": {
-              "type": "string",
-              "ui:icon": "fa-tag"
-            },
-            "headline": {
-              "type": "string",
-              "ui:icon": "fa-heading"
-            },
-            "subheadline": {
-              "type": "string",
-              "ui:icon": "fa-align-left"
-            },
-            "primary_cta": {
-              "type": "string",
-              "ui:icon": "fa-circle-check"
-            },
-            "secondary_cta": {
-              "type": "string",
-              "ui:icon": "fa-circle"
-            },
-            "pills": {
-              "type": "array",
-              "ui:icon": "fa-list",
-              "items": {
-                "type": "string"
-              },
-              "minItems": 3,
-              "maxItems": 3
-            }
-          },
-          "required": ["headline", "subheadline", "primary_cta"]
-        }
+  "home": {
+    "ui:icon": "fa-house",
+    "hero": {
+      "ui:icon": "fa-star",
+      "title": {
+        "ui:icon": "fa-heading"
       },
-      "required": ["hero"]
+      "subtitle": {
+        "ui:icon": "fa-align-left"
+      },
+      "primary_cta": {
+        "ui:icon": "fa-tag",
+        "price": {
+          "ui:icon": "fa-dollar-sign"
+        }
+      }
     }
-  },
-  "required": ["home"]
+  }
 }
