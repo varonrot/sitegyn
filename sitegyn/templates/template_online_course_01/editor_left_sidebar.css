@@ -1,71 +1,15 @@
-/* =========================================================
-   EDITOR – LEFT SIDEBAR (NO ICONS)
-   ========================================================= */
-
-/* ===== SIDEBAR BASE ===== */
-.sidebar.left{
-  width:280px;
-  background:linear-gradient(180deg,#041831 0%, #064893 60%, #0f8fff 100%);
-  padding:18px 14px 22px;
-  overflow-y:auto;
-  border-right:1px solid rgba(255,255,255,.06);
+.nav-item[data-path^="home.hero"] {
+  border-left: 3px solid rgba(255,255,255,0.25);
 }
 
-/* ===== SECTION TITLES ===== */
-.sidebar.left .section-title{
-  font-size:11px;
-  margin:22px 8px 10px;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  font-weight:700;
-  color:#a7c7ff;
-  opacity:.9;
+.nav-item[data-path="home.hero.headline"] .nav-label::after {
+  content: " H1";
+  opacity: .6;
+  font-size: 11px;
 }
 
-/* ===== LIST WRAPPER ===== */
-.sidebar.left .nav-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  margin-bottom:8px;
-}
-
-/* ===== NAV ITEM ===== */
-.sidebar.left .nav-item{
-  display:flex;
-  align-items:center;
-  padding:12px 14px;
-  border-radius:14px;
-  background:rgba(0,0,0,.22);
-  cursor:pointer;
-  font-size:14px;
-  font-weight:500;
-  color:#e7f5ff;
-  transition:
-    background .15s ease,
-    transform .1s ease,
-    box-shadow .15s ease;
-}
-
-/* hover */
-.sidebar.left .nav-item:hover{
-  background:rgba(0,0,0,.38);
-  transform:translateX(1px);
-}
-
-/* active */
-.sidebar.left .nav-item.active{
-  background:linear-gradient(
-    90deg,
-    rgba(21,128,255,.95),
-    rgba(67,56,202,.95)
-  );
-  box-shadow:0 6px 18px rgba(21,128,255,.35);
-}
-
-/* ===== REMOVE ALL ICON PLACEHOLDERS ===== */
-.sidebar.left .nav-item::before,
-.sidebar.left .nav-item::after{
-  display:none !important;
-  content:none !important;
+.nav-item[data-path="home.hero.price"] .nav-label::after {
+  content: " $";
+  opacity: .6;
+  font-size: 11px;
 }
