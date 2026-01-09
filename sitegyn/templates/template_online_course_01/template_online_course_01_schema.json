@@ -9,37 +9,21 @@
         "hero": {
           "type": "object",
           "properties": {
-            "title": {
-              "type": "string",
-              "description": "Main hero headline"
-            },
-            "subtitle": {
-              "type": "string",
-              "description": "Hero supporting text"
-            },
+            "title": { "type": "string" },
+            "subtitle": { "type": "string" },
             "primary_cta": {
               "type": "object",
               "properties": {
-                "text": {
-                  "type": "string",
-                  "description": "Primary CTA label"
-                },
-                "price": {
-                  "type": "string",
-                  "description": "Optional price text"
-                }
+                "text": { "type": "string" },
+                "price": { "type": "string" }
               },
               "required": ["text"]
             },
             "secondary_cta": {
               "type": "object",
               "properties": {
-                "text": {
-                  "type": "string",
-                  "description": "Secondary CTA label"
-                }
-              },
-              "required": ["text"]
+                "text": { "type": "string" }
+              }
             }
           },
           "required": ["title", "subtitle", "primary_cta"]
