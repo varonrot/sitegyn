@@ -1,33 +1,25 @@
 {
   "home": {
-    "hero": {
-      "title": {
-        "inline_edit": true,
-        "ai_edit": true,
-        "input_type": "headline"
-      },
-      "subtitle": {
-        "inline_edit": true,
-        "ai_edit": true,
-        "input_type": "paragraph"
-      },
-      "primary_cta": {
-        "text": {
-          "inline_edit": true,
-          "ai_edit": false,
-          "input_type": "button_label"
-        },
-        "price": {
-          "inline_edit": true,
-          "ai_edit": false,
-          "input_type": "price"
-        }
-      },
-      "secondary_cta": {
-        "text": {
-          "inline_edit": true,
-          "ai_edit": false,
-          "input_type": "button_label"
+    "label": "Home",
+    "sections": {
+      "hero": {
+        "label": "Hero",
+        "items": {
+          "headline": {
+            "label": "Headline",
+            "type": "heading",
+            "path": "home.hero.title"
+          },
+          "subheadline": {
+            "label": "Subheadline",
+            "type": "text",
+            "path": "home.hero.subtitle"
+          },
+          "price": {
+            "label": "Price",
+            "type": "text",
+            "path": "home.hero.primary_cta.price"
+          }
         }
       }
     }
