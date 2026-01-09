@@ -1,14 +1,9 @@
 {
-  "home.hero.headline": {
-    "selector": "[data-section='home.hero'] [data-field='headline']",
-    "type": "text"
-  },
-  "home.hero.subheadline": {
-    "selector": "[data-section='home.hero'] [data-field='subheadline']",
-    "type": "text"
-  },
-  "home.hero.price": {
-    "selector": "[data-section='home.hero'] [data-field='price']",
-    "type": "text"
-  }
+  "hero-headline": "home.hero.title",
+  "hero-subheadline": "home.hero.subtitle",
+
+  "hero-cta-primary": "home.hero.primary_cta.text",
+  "hero-price": "home.hero.primary_cta.price",
+
+  "hero-cta-secondary": "home.hero.secondary_cta.text"
 }
