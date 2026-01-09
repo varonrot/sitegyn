@@ -389,6 +389,137 @@ body {
     border-radius: 20px;
   }
 }
+.course-meta{
+  margin:48px auto;
+  padding:0 16px;
+}
+
+.course-meta-inner{
+  display:flex;
+  align-items:center;
+  background:#f7f7f7;
+  border-radius:40px;
+  padding:30px 28px;
+  gap:18px;
+}
+
+.meta-item{
+  text-align:center;
+  min-width:130px;
+}
+
+.meta-icon{
+  margin-bottom:8px;
+}
+
+.meta-icon svg{
+  width:26px;
+  height:26px;
+  stroke:#fe580f;
+  fill:none;
+  stroke-width:2;
+}
+
+.meta-label{
+  font-size:14px;
+  color:#6b7280;
+}
+
+.meta-value{
+  margin-top:2px;
+  font-size:15px;
+  font-weight:700;
+  color:#111827;
+}
+
+.meta-divider{
+  width:1px;
+  height:64px;
+  background:rgba(0,0,0,0.08);
+}
+.course-meta-footer{
+  margin:18px auto 0;
+  padding:0 16px;
+}
+
+.meta-footer-inner{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:24px;
+  font-size:14px;
+  color:#6b7280;
+}
+
+.meta-footer-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.meta-footer-icon svg{
+  width:18px;
+  height:18px;
+  stroke:#6b7280;
+  fill:none;
+  stroke-width:2;
+}
+
+.meta-footer-text{
+  display:flex;
+  gap:4px;
+}
+
+.meta-footer-label{
+  font-weight:500;
+}
+
+.meta-footer-value{
+  font-weight:600;
+  color:#111827;
+}
+
+.meta-footer-divider{
+  width:1px;
+  height:20px;
+  background:rgba(0,0,0,0.12);
+}
+@media (max-width: 768px){
+
+  /* ===== COURSE META (TOP) ===== */
+  .course-meta-inner{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px 16px;
+    padding:32px 24px;
+  }
+
+  .meta-item{
+    min-width:auto;
+  }
+
+  .meta-divider{
+    display:none;
+  }
+
+  /* ===== COURSE META FOOTER (BOTTOM) ===== */
+  .course-meta-footer{
+    margin-top:24px;
+  }
+
+  .meta-footer-inner{
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .meta-footer-divider{
+    display:none;
+  }
+
+  .meta-footer-item{
+    justify-content:center;
+  }
+}
 
 </style>
 
@@ -408,42 +539,195 @@ body {
 </nav>
 
 <!-- HERO COURSE -->
- <section class="hero-showcase" data-section="home.hero">
+      <section class="hero-showcase" data-section="home.hero">
 
   <div class="hero-showcase-overlay"></div>
 
   <div class="hero-showcase-content">
 
-    <!-- HEADLINE -->
-    <h1 class="hero-showcase-title" id="hero-headline">
-      <!-- injected headline -->
-    </h1>
+    <!-- HEADLINE (from AI) -->
+    <h1 class="hero-showcase-title" id="hero-headline"></h1>
 
-    <!-- SUBHEADLINE -->
-    <p class="hero-showcase-subtitle" id="hero-subheadline">
-      <!-- injected subheadline -->
-    </p>
+    <!-- SUBHEADLINE (from AI) -->
+    <p class="hero-showcase-subtitle" id="hero-subheadline"></p>
 
     <div class="hero-showcase-actions">
 
-      <!-- PRIMARY CTA -->
-      <button class="btn-hero-primary" id="hero-cta-primary">
+      <!-- PRIMARY CTA (FIXED) -->
+      <button class="btn-hero-primary">
+        <span class="cta-text">Start Course</span>
         <span class="price" id="hero-price"></span>
       </button>
 
-      <!-- LIKE (STATIC, NOT INJECTED) -->
-      <button class="btn-hero-like" aria-hidden="true">
-        ♡
-      </button>
+      <!-- LIKE (STATIC UI) -->
+      <button class="btn-hero-like" aria-hidden="true">♡</button>
 
-      <!-- SECONDARY CTA -->
-      <button class="btn-hero-secondary" id="hero-cta-secondary">
-        <!-- injected secondary cta -->
+      <!-- SECONDARY CTA (FIXED) -->
+      <button class="btn-hero-secondary">
+        Learn More
       </button>
 
     </div>
 
   </div>
+</section>
+
+<!-- <section class="hero-showcase" data-section="home.hero">-->
+
+<!--  <div class="hero-showcase-overlay"></div>-->
+
+<!--  <div class="hero-showcase-content">-->
+
+<!--    &lt;!&ndash; HEADLINE &ndash;&gt;-->
+<!--    <h1 class="hero-showcase-title" id="hero-headline"></h1>-->
+
+<!--    &lt;!&ndash; SUBHEADLINE &ndash;&gt;-->
+<!--    <p class="hero-showcase-subtitle" id="hero-subheadline"></p>-->
+
+<!--    <div class="hero-showcase-actions">-->
+
+<!--      &lt;!&ndash; PRIMARY CTA &ndash;&gt;-->
+<!--      <button class="btn-hero-primary" id="hero-cta-primary">-->
+<!--        <span class="cta-text">התחל קורס</span>-->
+<!--        <span class="price" id="hero-price"></span>-->
+<!--      </button>-->
+
+<!--      &lt;!&ndash; LIKE &ndash;&gt;-->
+<!--      <button class="btn-hero-like" aria-hidden="true">♡</button>-->
+
+<!--      &lt;!&ndash; SECONDARY CTA &ndash;&gt;-->
+<!--      <button class="btn-hero-secondary" id="hero-cta-secondary">-->
+<!--        למד עוד-->
+<!--      </button>-->
+
+<!--    </div>-->
+
+<!--  </div>-->
+<!--</section>-->
+
+<section class="course-meta">
+  <div class="course-meta-inner">
+
+    <div class="meta-item">
+      <div class="meta-icon">
+        <!-- clock -->
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v6l4 2"/>
+        </svg>
+      </div>
+      <div class="meta-label">Duration</div>
+      <div class="meta-value">13 hours</div>
+    </div>
+
+    <div class="meta-divider"></div>
+
+    <div class="meta-item">
+      <div class="meta-icon">
+        <!-- book -->
+        <svg viewBox="0 0 24 24">
+          <path d="M4 6a3 3 0 0 1 3-3h11v16H7a3 3 0 0 0-3 3z"/>
+          <path d="M18 3v16"/>
+        </svg>
+      </div>
+      <div class="meta-label">Lectures</div>
+      <div class="meta-value">23</div>
+    </div>
+
+    <div class="meta-divider"></div>
+
+    <div class="meta-item">
+      <div class="meta-icon">
+        <!-- play -->
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"/>
+          <polygon points="10,8 16,12 10,16"/>
+        </svg>
+      </div>
+      <div class="meta-label">Video</div>
+      <div class="meta-value">12 hours</div>
+    </div>
+
+    <div class="meta-divider"></div>
+
+    <div class="meta-item">
+      <div class="meta-icon">
+        <!-- check -->
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="4" width="16" height="16" rx="3"/>
+          <path d="M8 12l3 3 5-6"/>
+        </svg>
+      </div>
+      <div class="meta-label">Quizzes</div>
+      <div class="meta-value">2</div>
+    </div>
+
+    <div class="meta-divider"></div>
+
+    <div class="meta-item">
+      <div class="meta-icon">
+        <!-- level -->
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="4" width="16" height="16" rx="3"/>
+          <path d="M10 16V8l6 4z"/>
+        </svg>
+      </div>
+      <div class="meta-label">Level</div>
+      <div class="meta-value">Advanced</div>
+    </div>
+
+    <div class="meta-divider"></div>
+
+    <div class="meta-item">
+      <div class="meta-icon">
+        <!-- infinity -->
+        <svg viewBox="0 0 24 24">
+          <path d="M7 12c2-4 8-4 10 0s-2 6-5 3-3-3-5-3z"/>
+        </svg>
+      </div>
+      <div class="meta-label">Lifetime access</div>
+    </div>
+
+  </div>
+</section>
+<section class="course-meta-footer" data-section="course.meta_footer">
+
+  <div class="meta-footer-inner">
+
+    <!-- Updated -->
+    <div class="meta-footer-item">
+      <div class="meta-footer-icon">
+        <!-- refresh -->
+        <svg viewBox="0 0 24 24">
+          <path d="M21 12a9 9 0 1 1-2.6-6.4"/>
+          <path d="M21 3v6h-6"/>
+        </svg>
+      </div>
+      <div class="meta-footer-text">
+        <span class="meta-footer-label">Updated:</span>
+        <span class="meta-footer-value">June 11, 2025 9:53 am</span>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="meta-footer-divider"></div>
+
+    <!-- Category -->
+    <div class="meta-footer-item">
+      <div class="meta-footer-icon">
+        <!-- bookmark -->
+        <svg viewBox="0 0 24 24">
+          <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/>
+        </svg>
+      </div>
+      <div class="meta-footer-text">
+        <span class="meta-footer-label">Category:</span>
+        <span class="meta-footer-value">Fashion</span>
+      </div>
+    </div>
+
+  </div>
+
 </section>
 
 
