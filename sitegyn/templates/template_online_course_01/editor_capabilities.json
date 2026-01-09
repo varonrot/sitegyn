@@ -1,27 +1,14 @@
- {
-  "home": {
-    "label": "Home",
-    "sections": {
-      "hero": {
-        "label": "Hero",
-        "items": {
-          "headline": {
-            "label": "Headline",
-            "type": "heading",
-            "path": "home.hero.title"
-          },
-          "subheadline": {
-            "label": "Subheadline",
-            "type": "text",
-            "path": "home.hero.subtitle"
-          },
-          "price": {
-            "label": "Price",
-            "type": "text",
-            "path": "home.hero.primary_cta.price"
-          }
-        }
-      }
-    }
+{
+  "home.hero.headline": {
+    "type": "text",
+    "ai": ["rewrite"]
+  },
+  "home.hero.subheadline": {
+    "type": "text",
+    "ai": ["rewrite"]
+  },
+  "home.hero.price": {
+    "type": "text",
+    "ai": ["rewrite"]
   }
 }
