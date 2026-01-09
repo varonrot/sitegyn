@@ -959,6 +959,68 @@
         display:none;
       }
     }
+/* ===== HERO BASE ===== */
+.hero {
+  position: relative;
+  padding: 120px 0 100px;
+  overflow: hidden;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 64px;
+}
+
+/* ===== VIDEO WRAPPER ===== */
+.hero-video-wrap {
+  position: relative;
+  width: 520px;
+  aspect-ratio: 16 / 10;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.45);
+}
+
+.hero-video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none; /* אין שליטה */
+}
+
+/* ===== FLOAT EFFECT (DESKTOP) ===== */
+@media (min-width: 1024px) {
+  .hero-media {
+    transform: translateY(-18px);
+  }
+}
+
+/* ===== MOBILE BEHAVIOR ===== */
+@media (max-width: 900px) {
+  .hero {
+    padding: 96px 0 80px;
+  }
+
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .hero-video-wrap {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+  }
+}
 
   </style>
 </head>
@@ -1027,50 +1089,59 @@
   <main>
     <!-- HERO -->
     <section class="hero" id="product">
-      <div class="hero-inner">
-        <div class="hero-copy">
-          <div class="hero-pill">
-            <span class="tag">AI websites</span>
-            <span>From idea to live site in under a minute</span>
-          </div>
-          <h1 class="hero-title">
-            Create <span id="typed"></span><br>without touching a line of code.
-          </h1>
-          <p class="hero-sub">
-            Sitegyn turns a short chat into a complete website – sections, copy and layout
-            tailored to your business. No templates, no drag-and-drop builders, just answer a few questions.
-          </p>
+  <div class="hero-inner">
 
-          <div class="hero-actions">
-            <button class="btn-primary" onclick="openChat();">
-              Create your AI website
-            </button>
-            <button class="btn-ghost" onclick="location.href='#education'">
-              <span class="icon">▶</span>
-              <span>See how it works</span>
-            </button>
-          </div>
-
-          <div class="hero-avatars">
-            <img src="https://i.pravatar.cc/60?img=32" alt="">
-            <img src="https://i.pravatar.cc/60?img=45" alt="">
-            <img src="https://i.pravatar.cc/60?img=12" alt="">
-            <img src="https://i.pravatar.cc/60?img=5" alt="">
-          </div>
-          <div class="hero-meta">
-            Early creators already building AI-made sites with Sitegyn
-          </div>
-        </div>
-
-        <div class="hero-media">
-          <div class="hero-card">
-            <div class="hero-card-inner">
-              <img src="analyst44-dashboard.png" alt="Sitegyn AI website builder preview">
-            </div>
-          </div>
-        </div>
+    <div class="hero-copy">
+      <div class="hero-pill">
+        <span class="tag">AI websites</span>
+        <span>From idea to live site in under a minute</span>
       </div>
-    </section>
+
+      <h1 class="hero-title">
+        Create <span id="typed"></span><br>without touching a line of code.
+      </h1>
+
+      <p class="hero-sub">
+        Sitegyn turns a short chat into a complete website – sections, copy and layout
+        tailored to your business. No templates, no drag-and-drop builders, just answer a few questions.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="openChat();">
+          Create your AI website
+        </button>
+        <button class="btn-ghost" onclick="location.href='#education'">
+          <span class="icon">▶</span>
+          <span>See how it works</span>
+        </button>
+      </div>
+
+      <div class="hero-avatars">
+        <img src="https://i.pravatar.cc/60?img=32" alt="">
+        <img src="https://i.pravatar.cc/60?img=45" alt="">
+        <img src="https://i.pravatar.cc/60?img=12" alt="">
+        <img src="https://i.pravatar.cc/60?img=5" alt="">
+      </div>
+
+      <div class="hero-meta">
+        Early creators already building AI-made sites with Sitegyn
+      </div>
+    </div>
+
+    <div class="hero-media">
+      <div class="hero-video-wrap">
+        <iframe
+          src="https://player.vimeo.com/video/906617475?autoplay=1&loop=1&muted=1&background=1&playsinline=1"
+          frameborder="0"
+          allow="autoplay; fullscreen"
+          aria-hidden="true">
+        </iframe>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
     <!-- WHY SITEGYN -->
     <section class="section" id="features">
