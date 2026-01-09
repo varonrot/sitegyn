@@ -5,13 +5,24 @@
   "properties": {
     "home": {
       "type": "object",
+      "ui:icon": "fa-house",
       "properties": {
         "hero": {
           "type": "object",
+          "ui:icon": "fa-star",
           "properties": {
-            "headline": { "type": "string" },
-            "subheadline": { "type": "string" },
-            "price": { "type": "string" }
+            "headline": {
+              "type": "string",
+              "ui:icon": "fa-heading"
+            },
+            "subheadline": {
+              "type": "string",
+              "ui:icon": "fa-align-left"
+            },
+            "price": {
+              "type": "string",
+              "ui:icon": "fa-tag"
+            }
           },
           "required": ["headline", "subheadline"]
         }
