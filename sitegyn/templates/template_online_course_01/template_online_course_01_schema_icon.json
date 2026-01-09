@@ -1,32 +1,30 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Online Course Hero Content",
+  "title": "Online Course Content",
   "type": "object",
   "properties": {
     "home": {
       "type": "object",
+      "ui:icon": "fa-house",
       "properties": {
         "hero": {
           "type": "object",
+          "ui:icon": "fa-star",
           "properties": {
-            "title": { "type": "string" },
-            "subtitle": { "type": "string" },
-            "primary_cta": {
-              "type": "object",
-              "properties": {
-                "text": { "type": "string" },
-                "price": { "type": "string" }
-              },
-              "required": ["text"]
+            "headline": {
+              "type": "string",
+              "ui:icon": "fa-heading"
             },
-            "secondary_cta": {
-              "type": "object",
-              "properties": {
-                "text": { "type": "string" }
-              }
+            "subheadline": {
+              "type": "string",
+              "ui:icon": "fa-align-left"
+            },
+            "price": {
+              "type": "string",
+              "ui:icon": "fa-tag"
             }
           },
-          "required": ["title", "subtitle", "primary_cta"]
+          "required": ["headline", "subheadline"]
         }
       },
       "required": ["hero"]
