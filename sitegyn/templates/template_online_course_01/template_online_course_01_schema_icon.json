@@ -1,17 +1,34 @@
 {
-  "home": {
-    "ui:icon": "fa-house",
-    "hero": {
-      "ui:icon": "fa-star",
-      "headline": {
-        "ui:icon": "fa-heading"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Online Course Content",
+  "type": "object",
+  "properties": {
+    "home": {
+      "type": "object",
+      "ui:icon": "fa-house",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "ui:icon": "fa-star",
+          "properties": {
+            "headline": {
+              "type": "string",
+              "ui:icon": "fa-heading"
+            },
+            "subheadline": {
+              "type": "string",
+              "ui:icon": "fa-align-left"
+            },
+            "price": {
+              "type": "string",
+              "ui:icon": "fa-tag"
+            }
+          },
+          "required": ["headline", "subheadline"]
+        }
       },
-      "subheadline": {
-        "ui:icon": "fa-align-left"
-      },
-      "price": {
-        "ui:icon": "fa-dollar-sign"
-      }
+      "required": ["hero"]
     }
-  }
+  },
+  "required": ["home"]
 }
