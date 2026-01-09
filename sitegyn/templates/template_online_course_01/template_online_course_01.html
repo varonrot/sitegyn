@@ -408,32 +408,37 @@ body {
 </nav>
 
 <!-- HERO COURSE -->
-<section class="hero-showcase" data-section="home.hero">
+ <section class="hero-showcase" data-section="home.hero">
 
   <div class="hero-showcase-overlay"></div>
 
   <div class="hero-showcase-content">
 
-    <h1 class="hero-showcase-title"
-        data-field="home.hero.headline">
+    <!-- HEADLINE -->
+    <h1 class="hero-showcase-title" id="hero-headline">
+      <!-- injected headline -->
     </h1>
 
-    <p class="hero-showcase-subtitle"
-       data-field="home.hero.subheadline">
+    <!-- SUBHEADLINE -->
+    <p class="hero-showcase-subtitle" id="hero-subheadline">
+      <!-- injected subheadline -->
     </p>
 
     <div class="hero-showcase-actions">
 
-      <button class="btn-hero-primary"
-              data-field="home.hero.primary_cta">
+      <!-- PRIMARY CTA -->
+      <button class="btn-hero-primary" id="hero-cta-primary">
+        <span class="price" id="hero-price"></span>
       </button>
 
+      <!-- LIKE (STATIC, NOT INJECTED) -->
       <button class="btn-hero-like" aria-hidden="true">
         ♡
       </button>
 
-      <button class="btn-hero-secondary"
-              data-field="home.hero.secondary_cta">
+      <!-- SECONDARY CTA -->
+      <button class="btn-hero-secondary" id="hero-cta-secondary">
+        <!-- injected secondary cta -->
       </button>
 
     </div>
