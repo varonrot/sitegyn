@@ -1,35 +1,32 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Online Course Meta Content",
+  "title": "Online Course Website Content",
   "type": "object",
   "properties": {
-    "course": {
+    "home": {
       "type": "object",
       "properties": {
-        "meta": {
+        "hero": {
           "type": "object",
           "properties": {
-            "duration": { "type": "string" },
-            "lectures": { "type": "string" },
-            "video_hours": { "type": "string" },
-            "quizzes": { "type": "string" },
-            "level": { "type": "string" },
-            "lifetime_access": { "type": "string" }
+            "headline": {
+              "type": "string",
+              "description": "Main hero headline"
+            },
+            "subheadline": {
+              "type": "string",
+              "description": "Hero supporting subtitle"
+            },
+            "price": {
+              "type": "string",
+              "description": "Price text displayed inside the primary CTA"
+            }
           },
-          "required": ["duration", "lectures", "level"]
-        },
-
-        "meta_footer": {
-          "type": "object",
-          "properties": {
-            "updated": { "type": "string" },
-            "category": { "type": "string" }
-          },
-          "required": ["updated", "category"]
+          "required": ["headline", "subheadline"]
         }
       },
-      "required": ["meta", "meta_footer"]
+      "required": ["hero"]
     }
   },
-  "required": ["course"]
+  "required": ["home"]
 }
