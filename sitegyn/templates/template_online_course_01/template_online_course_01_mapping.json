@@ -1,5 +1,14 @@
 {
-  "home.hero.headline": "#hero-headline",
-  "home.hero.subheadline": "#hero-subheadline",
-  "home.hero.price": "#hero-price"
+  "home.hero.headline": {
+    "selector": "[data-section='home.hero'] [data-field='headline']",
+    "type": "text"
+  },
+  "home.hero.subheadline": {
+    "selector": "[data-section='home.hero'] [data-field='subheadline']",
+    "type": "text"
+  },
+  "home.hero.price": {
+    "selector": "[data-section='home.hero'] [data-field='price']",
+    "type": "text"
+  }
 }
