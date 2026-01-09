@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Online Course Content",
+  "title": "Online Course Website Content",
   "type": "object",
   "properties": {
     "home": {
@@ -9,9 +9,18 @@
         "hero": {
           "type": "object",
           "properties": {
-            "headline": { "type": "string" },
-            "subheadline": { "type": "string" },
-            "price": { "type": "string" }
+            "headline": {
+              "type": "string",
+              "description": "Main hero headline"
+            },
+            "subheadline": {
+              "type": "string",
+              "description": "Hero supporting subtitle"
+            },
+            "price": {
+              "type": "string",
+              "description": "Price text displayed inside the primary CTA"
+            }
           },
           "required": ["headline", "subheadline"]
         }
