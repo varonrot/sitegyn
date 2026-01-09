@@ -1,20 +1,26 @@
 {
-  "home": {
-    "ui:icon": "fa-house",
-    "hero": {
-      "ui:icon": "fa-star",
-      "title": {
-        "ui:icon": "fa-heading"
-      },
-      "subtitle": {
-        "ui:icon": "fa-align-left"
-      },
-      "primary_cta": {
-        "ui:icon": "fa-tag",
-        "price": {
-          "ui:icon": "fa-dollar-sign"
-        }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Online Course Content",
+  "type": "object",
+  "properties": {
+    "course_meta": {
+      "type": "object",
+      "properties": {
+        "duration": { "type": "string" },
+        "lectures": { "type": "string" },
+        "video_hours": { "type": "string" },
+        "quizzes": { "type": "string" },
+        "level": { "type": "string" },
+        "lifetime_access": { "type": "string" }
+      }
+    },
+    "course_meta_footer": {
+      "type": "object",
+      "properties": {
+        "updated": { "type": "string" },
+        "category": { "type": "string" }
       }
     }
-  }
+  },
+  "required": ["course_meta", "course_meta_footer"]
 }
