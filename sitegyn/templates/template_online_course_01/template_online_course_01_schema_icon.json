@@ -1,26 +1,36 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Online Course Content",
+  "title": "Online Course Hero Content",
   "type": "object",
   "properties": {
-    "course_meta": {
+    "home": {
       "type": "object",
       "properties": {
-        "duration": { "type": "string" },
-        "lectures": { "type": "string" },
-        "video_hours": { "type": "string" },
-        "quizzes": { "type": "string" },
-        "level": { "type": "string" },
-        "lifetime_access": { "type": "string" }
-      }
-    },
-    "course_meta_footer": {
-      "type": "object",
-      "properties": {
-        "updated": { "type": "string" },
-        "category": { "type": "string" }
-      }
+        "hero": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "subtitle": { "type": "string" },
+            "primary_cta": {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "price": { "type": "string" }
+              },
+              "required": ["text"]
+            },
+            "secondary_cta": {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" }
+              }
+            }
+          },
+          "required": ["title", "subtitle", "primary_cta"]
+        }
+      },
+      "required": ["hero"]
     }
   },
-  "required": ["course_meta", "course_meta_footer"]
+  "required": ["home"]
 }
