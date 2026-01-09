@@ -40,6 +40,7 @@ You MUST select the niche ONLY from this list:
 10. "real_estate"
 11. "lawyer"
 12. "local_business"
+13. "online_course"
 
 Rules:
 - Convert common variations into one of the above:
@@ -55,6 +56,8 @@ Rules:
   - realtor → “real_estate”
   - attorney → “lawyer”
   - general shop/service → “local_business”
+  - online course, online academy, digital course, training program, e-learning → "online_course"
+
 - NEVER invent new niches.
 
 QUESTION MODEL (NEW — WITHOUT CONTENT GENERATION)
