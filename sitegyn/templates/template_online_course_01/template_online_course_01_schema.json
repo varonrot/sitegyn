@@ -1,27 +1,25 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Online Course Content",
+  "title": "Online Course Website Content",
   "type": "object",
   "properties": {
     "home": {
       "type": "object",
-      "ui:icon": "fa-house",
       "properties": {
         "hero": {
           "type": "object",
-          "ui:icon": "fa-star",
           "properties": {
             "headline": {
               "type": "string",
-              "ui:icon": "fa-heading"
+              "description": "Main hero headline"
             },
             "subheadline": {
               "type": "string",
-              "ui:icon": "fa-align-left"
+              "description": "Hero supporting subtitle"
             },
             "price": {
               "type": "string",
-              "ui:icon": "fa-tag"
+              "description": "Price text displayed inside the primary CTA"
             }
           },
           "required": ["headline", "subheadline"]
