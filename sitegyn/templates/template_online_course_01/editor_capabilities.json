@@ -1,14 +1,16 @@
 {
   "home.hero.headline": {
+    "editable": true,
     "type": "text",
     "ai": ["rewrite"]
   },
   "home.hero.subheadline": {
+    "editable": true,
     "type": "text",
     "ai": ["rewrite"]
   },
   "home.hero.price": {
-    "type": "text",
-    "ai": ["rewrite"]
+    "editable": true,
+    "type": "text"
   }
 }
