@@ -1,0 +1,162 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pizza Website Content",
+  "type": "object",
+  "properties": {
+    "home": {
+      "type": "object",
+      "ui:icon": "fa-house",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "ui:icon": "fa-star",
+          "properties": {
+            "kicker": { "type": "string", "ui:icon": "fa-tag" },
+            "headline": { "type": "string", "ui:icon": "fa-heading" },
+            "subheadline": { "type": "string", "ui:icon": "fa-align-left" },
+            "primary_cta": { "type": "string", "ui:icon": "fa-circle-check" },
+            "secondary_cta": { "type": "string", "ui:icon": "fa-circle" },
+            "pills": {
+              "type": "array",
+              "ui:icon": "fa-list",
+              "items": { "type": "string" },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          },
+          "required": ["headline", "subheadline", "primary_cta"]
+        }
+      },
+      "required": ["hero"]
+    },
+
+    "about": {
+      "type": "object",
+      "ui:icon": "fa-circle-info",
+      "properties": {
+        "title": { "type": "string", "ui:icon": "fa-heading" },
+        "tagline": { "type": "string", "ui:icon": "fa-quote-left" },
+        "paragraphs": {
+          "type": "array",
+          "ui:icon": "fa-paragraph",
+          "items": { "type": "string" },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "why_badge": { "type": "string", "ui:icon": "fa-certificate" },
+        "why_title": { "type": "string", "ui:icon": "fa-heading" },
+        "why_points": {
+          "type": "array",
+          "ui:icon": "fa-list-check",
+          "items": { "type": "string" },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": ["title", "paragraphs"]
+    },
+
+    "offers": {
+      "type": "object",
+      "ui:icon": "fa-tags",
+      "properties": {
+        "title": { "type": "string", "ui:icon": "fa-heading" },
+        "subtitle": { "type": "string", "ui:icon": "fa-align-left" },
+        "deals": {
+          "type": "array",
+          "ui:icon": "fa-ticket",
+          "items": {
+            "type": "object",
+            "properties": {
+              "badge": { "type": "string", "ui:icon": "fa-certificate" },
+              "name": { "type": "string", "ui:icon": "fa-tag" },
+              "price_text": { "type": "string", "ui:icon": "fa-dollar-sign" },
+              "description": { "type": "string", "ui:icon": "fa-align-left" }
+            },
+            "required": ["name", "description"]
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": ["title", "deals"]
+    },
+
+    "menu": {
+      "type": "object",
+      "ui:icon": "fa-pizza-slice",
+      "properties": {
+        "title": { "type": "string", "ui:icon": "fa-heading" },
+        "subtitle": { "type": "string", "ui:icon": "fa-align-left" },
+        "pizzas": {
+          "type": "array",
+          "ui:icon": "fa-pizza-slice",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string", "ui:icon": "fa-tag" },
+              "tags": { "type": "string", "ui:icon": "fa-hashtag" },
+              "description": { "type": "string", "ui:icon": "fa-align-left" }
+            },
+            "required": ["name", "description"]
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": ["title", "pizzas"]
+    },
+
+    "services": {
+      "type": "object",
+      "ui:icon": "fa-boxes-stacked",
+      "properties": {
+        "title": { "type": "string", "ui:icon": "fa-heading" },
+        "subtitle": { "type": "string", "ui:icon": "fa-align-left" },
+        "items": {
+          "type": "array",
+          "ui:icon": "fa-box",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string", "ui:icon": "fa-heading" },
+              "description": { "type": "string", "ui:icon": "fa-align-left" }
+            },
+            "required": ["title", "description"]
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": ["title", "items"]
+    },
+
+    "contact": {
+      "type": "object",
+      "ui:icon": "fa-phone",
+      "properties": {
+        "title": { "type": "string", "ui:icon": "fa-heading" },
+        "subtitle": { "type": "string", "ui:icon": "fa-align-left" },
+        "phone": { "type": "string", "ui:icon": "fa-phone" },
+        "address": { "type": "string", "ui:icon": "fa-location-dot" },
+        "hours_title": { "type": "string", "ui:icon": "fa-clock" },
+        "hours_lines": {
+          "type": "array",
+          "ui:icon": "fa-list",
+          "items": { "type": "string" },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "cta_pills": {
+          "type": "array",
+          "ui:icon": "fa-bullhorn",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "required": ["title", "phone", "address"]
+    }
+  },
+  "required": ["home", "about", "offers", "menu", "services", "contact"]
+}
