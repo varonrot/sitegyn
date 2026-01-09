@@ -14,19 +14,11 @@
             "primary_cta": {
               "type": "object",
               "properties": {
-                "text": { "type": "string" },
                 "price": { "type": "string" }
-              },
-              "required": ["text"]
-            },
-            "secondary_cta": {
-              "type": "object",
-              "properties": {
-                "text": { "type": "string" }
               }
             }
           },
-          "required": ["title", "subtitle", "primary_cta"]
+          "required": ["title", "subtitle"]
         }
       },
       "required": ["hero"]
