@@ -1,1 +1,1477 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Sitegyn — AI website builder</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    :root{
+      --bg-main:#050713;
+      --bg-panel:#111322;
+      --bg-panel-soft:#141728;
+      --accent:#22e38b;
+      --accent-soft:#2fe6ff;
+      --text:#f7f8ff;
+      --muted:#9ca3c7;
+      --border-soft:rgba(255,255,255,0.06);
+      --radius-xl:22px;
+      --radius-lg:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:#02030a;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+    body.nav-open{overflow:hidden;}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
 
+    .page-wrap{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* TOP NAV */
+    .nav{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:50;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 36px;
+      background:linear-gradient(90deg,rgba(5,7,19,0.96),rgba(5,7,19,0.8));
+      border-bottom:1px solid rgba(255,255,255,0.03);
+      backdrop-filter:blur(16px);
+    }
+    .nav-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .nav-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .nav-toggle{
+      display:none;
+      width:32px;
+      height:32px;
+      margin-right:8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.35);
+      background:rgba(8,11,24,0.95);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+
+    .nav-toggle span{
+      display:block;
+      width:16px;
+      height:2px;
+      border-radius:999px;
+      background:#f9fbff;
+      position:relative;
+    }
+
+    .nav-toggle span::before,
+    .nav-toggle span::after{
+      content:"";
+      position:absolute;
+      left:0;
+      width:16px;
+      height:2px;
+      border-radius:999px;
+      background:#f9fbff;
+    }
+
+    .nav-toggle span::before{ top:-5px; }
+    .nav-toggle span::after{ top:5px; }
+
+    .nav-toggle.is-open span{
+      background:transparent;
+    }
+
+    .nav-toggle.is-open span::before{
+      top:0;
+      transform:rotate(45deg);
+    }
+
+    .nav-toggle.is-open span::after{
+      top:0;
+      transform:rotate(-45deg);
+    }
+
+    /* פאנל מובייל */
+    .nav-mobile{
+      position:fixed;
+      top:64px;
+      left:0;
+      right:0;
+      background:rgba(5,7,19,0.98);
+      backdrop-filter:blur(20px);
+      transform:translateY(-100%);
+      opacity:0;
+      pointer-events:none;
+      transition:transform .25s ease, opacity .25s ease;
+      z-index:40;
+    }
+
+    .nav-mobile.open{
+      transform:translateY(0);
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .nav-mobile-inner{
+      padding:18px 24px 32px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .nav-mobile-link{
+      font-size:16px;
+      color:#f4f5ff;
+      text-align:left;
+      background:transparent;
+      border:none;
+      padding:6px 0;
+      cursor:pointer;
+    }
+
+    .nav-mobile-link.secondary{
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .nav-mobile-divider{
+      height:1px;
+      background:rgba(255,255,255,0.06);
+      margin:10px 0;
+    }
+
+    .logo-circle{
+      width:34px;height:34px;
+      border-radius:999px;
+      background:radial-gradient(circle at 30% 0,#45b6ff 0,#0050ff 40%,#2600ff 100%);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;
+      font-weight:800;
+      font-size:18px;
+      box-shadow:0 0 20px rgba(46,163,255,0.5);
+    }
+    .logo-text{
+      font-weight:600;
+      font-size:18px;
+    }
+    .logo-text span{color:#2fd9ff;font-weight:700;}
+
+    .nav-links{
+      display:flex;
+      gap:24px;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .nav-links a{position:relative;padding:4px 0;}
+    .nav-links a:hover{color:#f5f5ff;}
+    .nav-links a::after{
+      content:"";position:absolute;left:0;bottom:-4px;
+      width:0;height:2px;border-radius:999px;
+      background:linear-gradient(90deg,#32e28c,#37e1ff);
+      transition:width .18s ease;
+    }
+    .nav-links a:hover::after{width:100%;}
+
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .btn-outline{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.16);
+      padding:8px 14px;
+      font-size:13px;
+      color:var(--muted);
+      background:rgba(8,11,24,0.9);
+      display:flex;align-items:center;gap:6px;
+      cursor:pointer;
+    }
+    .btn-outline span.icon{
+      font-size:14px;
+    }
+    .btn-outline:hover{
+      border-color:rgba(255,255,255,0.4);
+      color:#fff;
+    }
+    .btn-primary{
+      border-radius:999px;
+      padding:9px 20px;
+      font-size:14px;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      color:#02030a;
+      background:linear-gradient(130deg,#18e57c,#2fe1ff);
+      box-shadow:0 0 25px rgba(24,229,124,0.5);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 0 30px rgba(24,229,124,0.7);
+    }
+
+    /* MOBILE NAV TOGGLE */
+    .nav-toggle{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      width:34px;
+      height:34px;
+      margin-left:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(6,9,22,0.95);
+      cursor:pointer;
+    }
+    .nav-toggle-line{
+      width:18px;
+      height:2px;
+      border-radius:999px;
+      background:#f9fafb;
+      display:block;
+      margin:2px 0;
+      transition:transform .18s ease, opacity .18s ease;
+    }
+
+    .mobile-menu{
+      position:fixed;
+      top:64px;
+      left:0;
+      right:0;
+      padding:12px 20px 16px;
+      background:rgba(5,7,19,0.98);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      display:none;
+      flex-direction:column;
+      gap:8px;
+      z-index:40;
+    }
+    .mobile-menu a{
+      font-size:14px;
+      color:var(--muted);
+      padding:6px 2px;
+    }
+    .mobile-menu a:hover{color:#fff;}
+    .mobile-divider{
+      border:none;
+      border-top:1px solid rgba(255,255,255,0.08);
+      margin:6px 0 4px;
+    }
+
+    body.nav-open .mobile-menu{display:flex;}
+    body.nav-open .nav-toggle-line:nth-child(1){
+      transform:translateY(4px) rotate(45deg);
+    }
+    body.nav-open .nav-toggle-line:nth-child(2){
+      opacity:0;
+    }
+    body.nav-open .nav-toggle-line:nth-child(3){
+      transform:translateY(-4px) rotate(-45deg);
+    }
+
+    /* MAIN CONTENT */
+    main{
+      flex:1;
+      padding-top:64px;
+    }
+
+    /* HERO + JELLYFISH */
+    .hero{
+      position:relative;
+      padding:140px 0 190px;
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 0 0,rgba(181,53,255,0.4) 0,transparent 45%),
+        linear-gradient(180deg,rgba(2,5,18,0.2) 0,rgba(2,5,18,0.96) 65%,#02030a 100%),
+        url("jellyfish-hero.jpg") center top/cover no-repeat;
+      opacity:0.9;
+      z-index:-2;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;inset:0;
+      background:radial-gradient(circle at 80% 0,rgba(0,195,255,0.25),transparent 50%);
+      z-index:-1;
+    }
+
+    .hero-inner{
+      max-width:1180px;
+      margin:0 auto;
+      padding:0 32px;
+      display:flex;
+      gap:56px;
+      align-items:center;
+    }
+    .hero-copy{
+      flex:1.1;
+      max-width:520px;
+    }
+    .hero-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:5px 12px;
+      border-radius:999px;
+      background:rgba(4,10,32,0.85);
+      border:1px solid rgba(123,181,255,0.45);
+      font-size:11px;
+      color:#c9d2ff;
+      margin-bottom:16px;
+    }
+    .hero-pill span.tag{
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(29,185,105,0.18);
+      color:#57f0a2;
+      font-weight:600;
+    }
+
+    .hero-title{
+      font-size:44px;
+      line-height:1.05;
+      letter-spacing:-0.03em;
+      margin-bottom:14px;
+    }
+    @media (min-width:1280px){
+      .hero-title{font-size:52px;}
+    }
+
+    /* typing word */
+    #typed{
+      color:#ff48d3;
+      font-weight:800;
+      border-right:2px solid rgba(255,255,255,0.7);
+      padding-right:4px;
+      animation:blink .8s infinite;
+    }
+    @keyframes blink{
+      0%{border-color:rgba(255,255,255,0.7);}
+      50%{border-color:transparent;}
+      100%{border-color:rgba(255,255,255,0.7);}
+    }
+
+    .hero-sub{
+      font-size:15px;
+      color:var(--muted);
+      max-width:410px;
+      line-height:1.6;
+      margin-bottom:20px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-bottom:18px;
+    }
+    .btn-ghost{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.22);
+      padding:9px 16px;
+      font-size:13px;
+      color:var(--text);
+      background:rgba(4,8,25,0.9);
+      display:flex;align-items:center;gap:8px;
+      cursor:pointer;
+    }
+    .btn-ghost span.icon{
+      font-size:14px;
+    }
+    .btn-ghost:hover{
+      background:rgba(10,16,38,0.95);
+      border-color:rgba(255,255,255,0.45);
+    }
+
+    .hero-avatars{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      margin-top:6px;
+      margin-bottom:4px;
+    }
+    .hero-avatars img{
+      width:26px;height:26px;
+      border-radius:999px;
+      border:2px solid #050713;
+      box-shadow:0 0 10px rgba(0,0,0,0.5);
+    }
+    .hero-avatars img:not(:first-child){margin-left:-10px;}
+    .hero-meta{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .hero-media{
+      flex:1.1;
+      position:relative;
+      display:flex;
+      justify-content:center;
+    }
+    .hero-card{
+      width:100%;
+      max-width:640px;
+      border-radius:26px;
+      background:radial-gradient(circle at 0 0,rgba(67,203,255,0.5),transparent 55%),
+                 radial-gradient(circle at 100% 100%,rgba(91,255,168,0.35),transparent 55%),
+                 #050814;
+      padding:14px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.7);
+      transform-origin:center;
+      transition:transform .35s ease, box-shadow .35s ease, translate .35s ease;
+    }
+    .hero-card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 40px 90px rgba(0,0,0,0.85);
+    }
+    .hero-card-inner{
+      border-radius:22px;
+      overflow:hidden;
+      background:#050713;
+    }
+
+    /* WHY SECTION */
+    .section{
+      padding:0 32px;
+      margin-top:60px; /* רווח מהמדוזות */
+    }
+    .section-inner{
+      max-width:1180px;
+      margin:0 auto;
+    }
+    .section-header{
+      margin-bottom:16px;
+    }
+    .section-kicker{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .section-title{
+      font-size:24px;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    .section-sub{
+      font-size:14px;
+      color:var(--muted);
+      max-width:520px;
+    }
+
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+      margin-top:26px;
+      margin-bottom:80px;
+    }
+    .feature-card{
+      background:radial-gradient(circle at 0 0,rgba(88,187,255,0.24),transparent 60%),var(--bg-panel-soft);
+      border-radius:var(--radius-lg);
+      border:1px solid var(--border-soft);
+      padding:18px 18px 20px;
+      min-height:170px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .feature-card:nth-child(2){
+      background:radial-gradient(circle at 0 0,rgba(255,72,211,0.25),transparent 60%),var(--bg-panel-soft);
+    }
+    .feature-card:nth-child(3){
+      background:radial-gradient(circle at 0 0,rgba(153,102,255,0.3),transparent 60%),var(--bg-panel-soft);
+    }
+    .feature-card:nth-child(4){
+      background:radial-gradient(circle at 0 0,rgba(62,215,130,0.28),transparent 60%),var(--bg-panel-soft);
+    }
+
+    .feature-icon{
+      width:26px;height:26px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:15px;
+      background:rgba(0,0,0,0.35);
+    }
+    .feature-title{
+      font-size:15px;
+      font-weight:600;
+      margin-top:8px;
+      margin-bottom:6px;
+    }
+    .feature-text{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    /* PRICING SECTION */
+    .pricing-section{
+      padding:0 32px 80px;
+    }
+    .pricing-layout{
+      max-width:1180px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+      gap:26px;
+      align-items:start;
+    }
+    .pricing-card{
+      background:var(--bg-panel);
+      border-radius:var(--radius-xl);
+      padding:26px 24px 24px;
+      border:1px solid var(--border-soft);
+      box-shadow:0 24px 60px rgba(0,0,0,0.7);
+    }
+    .pricing-label{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .pricing-headline{
+      font-size:23px;
+      font-weight:600;
+      margin-bottom:12px;
+    }
+    .pricing-price{
+      font-size:28px;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    .pricing-sub{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .pricing-list{
+      list-style:none;
+      padding:0;
+      margin:0 0 18px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .pricing-list li{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      margin-bottom:6px;
+    }
+    .pricing-list span.bullet{
+      color:#37e18e;
+      margin-top:1px;
+    }
+    .pricing-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .btn-pill-primary{
+      border-radius:999px;
+      padding:10px 18px;
+      border:none;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      color:#02030a;
+      background:linear-gradient(130deg,#18e57c,#2fe1ff);
+    }
+    .btn-pill-secondary{
+      border-radius:999px;
+      padding:9px 16px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(10,12,29,0.95);
+      font-size:13px;
+      color:var(--muted);
+      cursor:pointer;
+    }
+    .btn-pill-secondary:hover{color:#fff;border-color:rgba(255,255,255,0.4);}
+
+    .pricing-copy{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    /* CTA BAND */
+    .cta-band{
+      padding:0 32px 80px;
+    }
+    .cta-inner{
+      max-width:1180px;
+      margin:0 auto;
+      background:var(--bg-panel-soft);
+      border:1px solid var(--border-soft);
+      border-radius:var(--radius-xl);
+      padding:22px 24px;
+      display:grid;
+      grid-template-columns:minmax(0,1.2fr) minmax(0,0.9fr);
+      gap:20px;
+      align-items:center;
+    }
+    .cta-kicker{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .cta-title{
+      font-size:20px;
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .cta-text{
+      font-size:13px;color:var(--muted);
+    }
+    .cta-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .btn-gradient-big{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:12px 24px;
+      font-size:14px;
+      font-weight:600;
+      color:#02030a;
+      background:linear-gradient(130deg,#21e57d,#33e0ff);
+      box-shadow:0 0 25px rgba(51,224,255,0.4);
+    }
+    .btn-outline-soft{
+      border-radius:999px;
+      padding:11px 20px;
+      font-size:13px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.22);
+      background:rgba(9,11,26,0.95);
+      cursor:pointer;
+    }
+    .btn-outline-soft:hover{color:#fff;border-color:rgba(255,255,255,0.45);}
+
+    /* BIG CTA BACKGROUND (GRID) + FOOTER */
+    .cta-banner{
+      position:relative;
+      margin-top:30px;
+      padding:90px 24px;
+      text-align:center;
+      color:#f9fbff;
+      overflow:hidden;
+      border-radius:0;
+      background:#010309;
+      z-index:0;
+    }
+
+    .cta-banner::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:url("grid-footer.jpg") center/cover no-repeat;
+      opacity:0.9;
+      z-index:-1;
+    }
+
+    .cta-banner::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at 50% 80%,rgba(0,0,0,0.5),transparent 60%);
+      z-index:0;
+    }
+
+    .cta-banner-inner{
+      max-width:960px;
+      margin:0 auto;
+    }
+    .cta-banner-title{
+      font-size:28px;
+      font-weight:600;
+      margin-bottom:18px;
+    }
+    .cta-banner-text{
+      font-size:16px;
+      color:#cdd5ff;
+      margin-bottom:26px;
+    }
+    .cta-banner button{
+      border-radius:999px;
+      padding:11px 26px;
+      border:1px solid rgba(255,255,255,0.7);
+      background:transparent;
+      color:#fdfdff;
+      font-size:14px;
+      font-weight:500;
+      cursor:pointer;
+    }
+    .cta-banner button:hover{
+      background:rgba(4,10,32,0.85);
+    }
+
+    /* FOOTER */
+    footer{
+      background:#050713;
+      border-top:1px solid rgba(255,255,255,0.05);
+      padding:36px 32px 20px;
+      color:var(--muted);
+    }
+    .footer-inner{
+      max-width:1180px;
+      margin:0 auto;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:2.2fr repeat(3,1fr);
+      gap:26px;
+      margin-bottom:28px;
+      font-size:13px;
+    }
+    .footer-title{
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+      color:#e4e7ff;
+    }
+    .footer-text{line-height:1.7;}
+    .footer-links{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .footer-links li{margin-bottom:6px;}
+    .footer-links a{color:var(--muted);}
+    .footer-links a:hover{color:#f5f6ff;}
+
+    .footer-bottom{
+      border-top:1px solid rgba(255,255,255,0.06);
+      padding-top:10px;
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      color:#6b7285;
+    }
+
+    /* ===== CHAT PANEL (חדש) ===== */
+    #sitegyn-chat-wrapper{
+      position:fixed;
+      right:32px;
+      bottom:32px;
+      width:420px;
+      max-height:560px;
+      background:rgba(8,11,26,0.98);
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.16);
+      box-shadow:0 24px 60px rgba(0,0,0,0.75);
+      display:none;
+      flex-direction:column;
+      overflow:hidden;
+      z-index:60;
+    }
+
+    #sitegyn-chat-wrapper.open{
+      display:flex;
+    }
+    .sitegyn-chat-header{
+      padding:10px 12px 8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      background:linear-gradient(120deg,rgba(32,226,141,0.12),rgba(50,224,255,0.08));
+    }
+    .sitegyn-chat-title{
+      font-size:13px;
+      font-weight:600;
+    }
+    .sitegyn-chat-subtitle{
+      font-size:11px;
+      color:var(--muted);
+    }
+    #sitegyn-chat-close{
+      border:none;
+      background:transparent;
+      color:var(--muted);
+      font-size:18px;
+      cursor:pointer;
+    }
+    #sitegyn-chat-messages{
+      padding:10px 12px;
+      flex:1;
+      overflow-y:auto;
+      font-size:12px;
+    }
+    .sg-msg{
+      margin-bottom:8px;
+      max-width:90%;
+      line-height:1.4;
+    }
+    .sg-msg-user{
+      margin-left:auto;
+      text-align:right;
+    }
+    .sg-msg-bubble{
+      display:inline-block;
+      padding:6px 9px;
+      border-radius:12px;
+    }
+    .sg-msg-user .sg-msg-bubble{
+      background:#2563eb;
+    }
+    .sg-msg-bot .sg-msg-bubble{
+      background:#111827;
+      border:1px solid rgba(255,255,255,0.1);
+    }
+    #sitegyn-chat-form{
+      border-top:1px solid rgba(255,255,255,0.08);
+      padding:8px 10px;
+      display:flex;
+      gap:6px;
+    }
+    #sitegyn-chat-input{
+      flex:1;
+      resize:none;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.12);
+      padding:6px 8px;
+      font-size:12px;
+      font-family:inherit;
+      background:#020617;
+      color:var(--text);
+    }
+    #sitegyn-chat-send{
+      border:none;
+      border-radius:999px;
+      padding:6px 12px;
+      font-size:12px;
+      font-weight:600;
+      cursor:pointer;
+      background:linear-gradient(130deg,#18e57c,#2fe1ff);
+      color:#02030a;
+    }
+
+    @media (max-width:980px){
+      .hero-inner{
+        flex-direction:column;
+        padding-top:40px;
+      }
+      .hero{
+        padding-top:110px;
+        padding-bottom:140px;
+      }
+      .hero-media{
+        margin-top:16px;
+      }
+      .hero-copy{order:0;}
+      .hero-media{order:1;}
+      .hero-card{max-width:520px;}
+      .feature-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .pricing-layout{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-inner{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-actions{justify-content:flex-start;}
+      .cta-banner-title{font-size:24px;}
+    }
+
+    @media (max-width:720px){
+      .nav{
+        padding:0 16px;
+      }
+
+      .nav-links{
+        display:none;
+      }
+
+      .nav-toggle{
+        display:flex;
+      }
+
+      .btn-outline{
+        display:none;
+      }
+
+      .hero-inner{
+        padding:0 18px;
+      }
+      .section,.pricing-section,.cta-band{
+        padding:0 18px 60px;
+      }
+      .feature-grid{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .footer-grid{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-banner{
+        padding:70px 18px;
+      }
+
+      #sitegyn-chat-wrapper{
+        right:12px;
+        left:12px;
+        width:auto;
+        bottom:12px;
+      }
+    }
+
+    @media (min-width:721px){
+      .nav-mobile{
+        display:none;
+      }
+    }
+
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- TOP NAV -->
+  <header class="nav">
+    <div class="nav-left">
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation">
+        <span></span>
+      </button>
+
+      <a href="landing.html" class="nav-brand">
+        <div class="logo-circle">A</div>
+        <div class="logo-text">sitegyn<span>.com</span></div>
+      </a>
+    </div>
+
+    <nav class="nav-links">
+      <a href="landing.html#product">Product</a>
+      <a href="features.html">Features</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="landing.html#education">Education</a>
+    </nav>
+
+    <div class="nav-right">
+      <button class="btn-outline" onclick="location.href='help.html'">
+        <span class="icon">?</span>
+        <span>Help</span>
+      </button>
+      <button class="btn-primary" onclick="location.href='editor.html'">
+        Editor →
+      </button>
+    </div>
+  </header>
+
+  <!-- תפריט מובייל -->
+  <div class="nav-mobile" id="navMobile">
+    <div class="nav-mobile-inner">
+      <button class="nav-mobile-link" onclick="location.href='landing.html#product'">Product</button>
+      <button class="nav-mobile-link" onclick="location.href='features.html'">Features</button>
+      <button class="nav-mobile-link" onclick="location.href='pricing.html'">Pricing</button>
+      <button class="nav-mobile-link" onclick="location.href='about.html'">About</button>
+      <button class="nav-mobile-link" onclick="location.href='landing.html#education'">Education</button>
+
+      <div class="nav-mobile-divider"></div>
+
+      <button class="nav-mobile-link secondary" onclick="location.href='help.html'">Help center</button>
+      <button class="nav-mobile-link" onclick="location.href='dashboard.html'">Open dashboard →</button>
+    </div>
+  </div>
+
+  <div class="mobile-menu">
+    <a href="#product" onclick="document.body.classList.remove('nav-open');">Product</a>
+    <a href="#features" onclick="document.body.classList.remove('nav-open');">Features</a>
+    <a href="#pricing" onclick="document.body.classList.remove('nav-open');">Pricing</a>
+    <a href="#education" onclick="document.body.classList.remove('nav-open');">Education</a>
+    <hr class="mobile-divider">
+    <a href="help.html" onclick="document.body.classList.remove('nav-open');">Help center</a>
+    <a href="dashboard.html" onclick="document.body.classList.remove('nav-open');">Open dashboard</a>
+  </div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="product">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <div class="hero-pill">
+            <span class="tag">AI websites</span>
+            <span>From idea to live site in under a minute</span>
+          </div>
+          <h1 class="hero-title">
+            Create <span id="typed"></span><br>without touching a line of code.
+          </h1>
+          <p class="hero-sub">
+            Sitegyn turns a short chat into a complete website – sections, copy and layout
+            tailored to your business. No templates, no drag-and-drop builders, just answer a few questions.
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="openChat();">
+              Create your AI website
+            </button>
+            <button class="btn-ghost" onclick="location.href='#education'">
+              <span class="icon">▶</span>
+              <span>See how it works</span>
+            </button>
+          </div>
+
+          <div class="hero-avatars">
+            <img src="https://i.pravatar.cc/60?img=32" alt="">
+            <img src="https://i.pravatar.cc/60?img=45" alt="">
+            <img src="https://i.pravatar.cc/60?img=12" alt="">
+            <img src="https://i.pravatar.cc/60?img=5" alt="">
+          </div>
+          <div class="hero-meta">
+            Early creators already building AI-made sites with Sitegyn
+          </div>
+        </div>
+
+        <div class="hero-media">
+          <div class="hero-card">
+            <div class="hero-card-inner">
+              <img src="analyst44-dashboard.png" alt="Sitegyn AI website builder preview">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY SITEGYN -->
+    <section class="section" id="features">
+      <div class="section-inner">
+        <div class="section-header">
+          <div class="section-kicker">WHY SITEGYN</div>
+          <h2 class="section-title">Built for people who hate building websites.</h2>
+          <p class="section-sub">
+            Describe your business once, let the AI handle structure, copy and design.
+            You edit the result instead of staring at a blank page or wrestling with templates.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div>
+              <div class="feature-icon">⚡</div>
+              <h3 class="feature-title">From chat to full layout</h3>
+              <p class="feature-text">
+                Answer a few guided questions and Sitegyn generates a complete multi-section layout
+                that matches your goals – hero, services, testimonials and more.
+              </p>
+            </div>
+          </article>
+
+          <article class="feature-card">
+            <div>
+              <div class="feature-icon">✍️</div>
+              <h3 class="feature-title">AI copy that sounds like you</h3>
+              <p class="feature-text">
+                Tone, audience and language tuned to your answers, so every section feels on-brand
+                and explains what you do in clear English.
+              </p>
+            </div>
+          </article>
+
+          <article class="feature-card">
+            <div>
+              <div class="feature-icon">🎨</div>
+              <h3 class="feature-title">Design presets & color themes</h3>
+              <p class="feature-text">
+                Smart color palettes, backgrounds and layouts inspired by modern SaaS and landing pages,
+                ready to export into your favorite builder.
+              </p>
+            </div>
+          </article>
+
+          <article class="feature-card">
+            <div>
+              <div class="feature-icon">🔁</div>
+              <h3 class="feature-title">Regenerate & refine</h3>
+              <p class="feature-text">
+                Not happy with a section? Regenerate only that block, tweak the prompt,
+                and keep the parts you like – until the whole page feels right.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing-section" id="pricing">
+      <div class="pricing-layout">
+        <div class="pricing-card">
+          <div class="pricing-label">PRICING</div>
+          <h2 class="pricing-headline">Simple early-access pricing.</h2>
+          <div class="pricing-price">$ — / month</div>
+          <div class="pricing-sub">
+            Start with a single AI-generated site. Upgrade only when Sitegyn becomes
+            your default way to start new projects.
+          </div>
+          <ul class="pricing-list">
+            <li><span class="bullet">✔</span><span>Unlimited drafts for one main website.</span></li>
+            <li><span class="bullet">✔</span><span>Export-ready copy, sections and structure.</span></li>
+            <li><span class="bullet">✔</span><span>Support for multiple languages and tones.</span></li>
+            <li><span class="bullet">✔</span><span>Priority access to new layout & design presets.</span></li>
+          </ul>
+          <div class="pricing-actions">
+            <button class="btn-pill-primary" onclick="location.href='pricing.html'">View full pricing →</button>
+            <button class="btn-pill-secondary" onclick="location.href='#education'">Learn the workflow</button>
+          </div>
+        </div>
+
+        <div class="pricing-copy" id="education">
+          <p>
+            Use Sitegyn as your private AI web studio. Capture your positioning once, then reuse it
+            whenever you need a new landing page, product page or portfolio.
+          </p>
+          <p style="margin-top:12px;">
+            The goal is simple: stop wasting hours fighting builders and templates.
+            Let the AI assemble a complete first version, then spend your energy on fine-tuning.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BAND -->
+    <section class="cta-banner">
+      <div class="cta-banner-inner">
+        <h2 class="cta-banner-title">
+          Ready to create your first AI website with Sitegyn?
+        </h2>
+        <p class="cta-banner-text">
+          Join the early-access list and be among the first to turn a short conversation
+          into a complete website draft you can launch or export.
+        </p>
+        <button onclick="location.href='signup.html'">
+          Join the early-access list
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">OUR MISSION</div>
+          <p class="footer-text">
+            Sitegyn helps founders, freelancers and small teams turn ideas into websites in minutes,
+            not weeks – with AI-generated copy, structure and design they can actually edit.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-title">COMPANY</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="blog.html">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">PRODUCT</div>
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="status.html">System status</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">FROM THE BLOG</div>
+          <ul class="footer-links">
+            <li><a href="blog-dashboard.html">Designing AI-first landing pages</a></li>
+            <li><a href="blog-scoring-stack.html">How to brief your AI for better copy</a></li>
+            <li><a href="blog-earnings-season.html">From idea to website in one sitting</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>Thank you for creating with Sitegyn · 2025</div>
+        <div>v0.1.0</div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ===== Sitegyn Chat Panel ===== -->
+<div id="sitegyn-chat-wrapper">
+  <div class="sitegyn-chat-header">
+    <div>
+      <div class="sitegyn-chat-title">Sitegyn Assistant</div>
+      <div class="sitegyn-chat-subtitle" id="sitegyn-chat-status">Getting your project ready…</div>
+    </div>
+    <button id="sitegyn-chat-close" aria-label="Close chat">×</button>
+  </div>
+
+  <div id="sitegyn-chat-messages"></div>
+
+  <form id="sitegyn-chat-form">
+    <textarea id="sitegyn-chat-input" rows="2"
+      placeholder="First, what is your business name and what does your business do?"></textarea>
+    <button type="submit" id="sitegyn-chat-send">Send</button>
+  </form>
+</div>
+
+<!-- TYPING SCRIPT + NAV -->
+<script>
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+const words = ["AI website","landing page","portfolio site","course hub"];
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function type() {
+  const tgt = document.getElementById("typed");
+  if (!tgt) return;
+
+  const current = words[wordIndex];
+  let speed = isDeleting ? 50 : 85;
+
+  if (!isDeleting) {
+    charIndex++;
+    tgt.textContent = current.slice(0, charIndex);
+    if (charIndex === current.length) {
+      isDeleting = true;
+      speed = 900;
+    }
+  } else {
+    charIndex--;
+    tgt.textContent = current.slice(0, Math.max(charIndex, 0));
+    if (charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+      speed = 400;
+    }
+  }
+
+  setTimeout(type, speed);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  window.scrollTo(0, 0);
+
+  type();
+
+  const toggle = document.querySelector(".nav-toggle");
+  const mobile = document.getElementById("navMobile");
+
+  if (toggle && mobile) {
+    toggle.addEventListener("click", () => {
+      const open = mobile.classList.toggle("open");
+      toggle.classList.toggle("is-open", open);
+    });
+
+    const mobileLinks = document.querySelectorAll(".nav-mobile-link");
+    mobileLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        if (mobile.classList.contains("open")) {
+          mobile.classList.remove("open");
+          toggle.classList.remove("is-open");
+        }
+      });
+    });
+  }
+});
+</script>
+
+<!-- CHAT + BACKEND LOGIC -->
+<script>
+  const API_BASE = 'https://sitegyn-backend.onrender.com';
+
+  function createClientId() {
+    let id = localStorage.getItem('sitegyn_client_id');
+    if (!id) {
+      id = 'client_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem('sitegyn_client_id', id);
+      console.log('[Sitegyn] New client_id created:', id);
+    } else {
+      console.log('[Sitegyn] Existing client_id:', id);
+    }
+    return id;
+  }
+
+  async function initProjectIfNeeded() {
+    const existing = localStorage.getItem('sitegyn_project_id');
+    if (existing) {
+      return existing;
+    }
+
+    const clientId = createClientId();
+
+    const payload = {
+      client_id: clientId,
+      language: 'en',
+      business_type: 'consulting',
+      business_name: 'Demo Biz'
+    };
+
+    try {
+      console.log('[Sitegyn] Starting project, payload:', payload);
+
+      const res = await fetch(`${API_BASE}/api/start_project`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        console.error('[Sitegyn] start_project failed:', res.status, await res.text());
+        throw new Error('start_project failed');
+      }
+
+      const data = await res.json();
+      console.log('[Sitegyn] Project started:', data);
+
+      if (data.project_id) {
+        localStorage.setItem('sitegyn_project_id', data.project_id);
+        return data.project_id;
+      }
+      throw new Error('No project_id in response');
+    } catch (err) {
+      console.error('[Sitegyn] Error calling /api/start_project:', err);
+      throw err;
+    }
+  }
+
+  async function pingBackend() {
+    try {
+      const res = await fetch(`${API_BASE}/`);
+      const data = await res.json();
+      console.log('[Sitegyn] Backend OK:', data);
+    } catch (err) {
+      console.error('[Sitegyn] Backend ping failed:', err);
+    }
+  }
+
+  async function openChat() {
+    const wrapper = document.getElementById('sitegyn-chat-wrapper');
+    const statusEl = document.getElementById('sitegyn-chat-status');
+
+    if (!wrapper) return;
+
+    wrapper.classList.add('open');
+    statusEl.textContent = 'Creating your project…';
+
+    try {
+      const projectId = await initProjectIfNeeded();
+      statusEl.textContent = 'Project ready · ID ' + projectId;
+      console.log('[Sitegyn] Chat using project_id:', projectId);
+    } catch (err) {
+      statusEl.textContent = 'Problem creating project. Try again.';
+    }
+  }
+
+  function appendMessage(text, who) {
+    const box = document.getElementById('sitegyn-chat-messages');
+    if (!box) return;
+    const msg = document.createElement('div');
+    msg.className = 'sg-msg ' + (who === 'user' ? 'sg-msg-user' : 'sg-msg-bot');
+    const bubble = document.createElement('div');
+    bubble.className = 'sg-msg-bubble';
+    bubble.textContent = text;
+    msg.appendChild(bubble);
+    box.appendChild(msg);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    pingBackend();
+
+    const closeBtn = document.getElementById('sitegyn-chat-close');
+    const wrapper = document.getElementById('sitegyn-chat-wrapper');
+    const form = document.getElementById('sitegyn-chat-form');
+    const input = document.getElementById('sitegyn-chat-input');
+
+    if (closeBtn && wrapper) {
+      closeBtn.addEventListener('click', () => {
+        wrapper.classList.remove('open');
+      });
+    }
+
+    if (form && input) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        appendMessage(text, 'user');
+        input.value = '';
+
+        const projectId = localStorage.getItem('sitegyn_project_id');
+        if (!projectId) {
+          appendMessage("Couldn't find project id. Please close and reopen the chat.", 'bot');
+          return;
+        }
+
+        try {
+          const res = await fetch(`${API_BASE}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ project_id: projectId, message: text })
+          });
+
+          if (!res.ok) {
+            const errText = await res.text();
+            console.error('Chat API error:', errText);
+            appendMessage('Something went wrong. Try again in a moment.', 'bot');
+            return;
+          }
+
+          const data = await res.json();
+          appendMessage(data.reply || '(no reply)', 'bot');
+        } catch (err) {
+          console.error('Chat fetch error:', err);
+          appendMessage('Network error. Please try again later.', 'bot');
+        }
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
