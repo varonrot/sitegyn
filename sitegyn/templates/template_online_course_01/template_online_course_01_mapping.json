@@ -1,9 +1,7 @@
 {
-  "hero-headline": "home.hero.title",
-  "hero-subheadline": "home.hero.subtitle",
-
-  "hero-cta-primary": "home.hero.primary_cta.text",
+  "hero-headline": "home.hero.headline",
+  "hero-subheadline": "home.hero.subheadline",
   "hero-price": "home.hero.primary_cta.price",
-
+  "hero-cta-primary": "home.hero.primary_cta.text",
   "hero-cta-secondary": "home.hero.secondary_cta.text"
 }
