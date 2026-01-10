@@ -19,9 +19,37 @@
             }
           },
           "required": ["headline", "subheadline"]
+        },
+
+        "features": {
+          "type": "object",
+          "description": "Key course features / value propositions",
+          "properties": {
+            "items": {
+              "type": "array",
+              "minItems": 6,
+              "maxItems": 6,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Feature title"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Short feature description"
+                  }
+                },
+                "required": ["title", "description"]
+              }
+            }
+          },
+          "required": ["items"]
         }
+
       },
-      "required": ["hero"]
+      "required": ["hero", "features"]
     }
   },
   "required": ["home"]
