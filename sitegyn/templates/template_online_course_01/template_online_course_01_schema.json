@@ -9,34 +9,19 @@
         "hero": {
           "type": "object",
           "properties": {
-            "headline": { "type": "string" },
-            "subheadline": { "type": "string" }
+            "headline": {
+              "type": "string",
+              "description": "Main hero headline"
+            },
+            "subheadline": {
+              "type": "string",
+              "description": "Hero supporting subtitle"
+            }
           },
           "required": ["headline", "subheadline"]
-        },
-
-        "features": {
-          "type": "array",
-          "minItems": 6,
-          "maxItems": 6,
-          "items": {
-            "type": "object",
-            "properties": {
-              "title": {
-                "type": "string",
-                "description": "Short feature title (uppercase recommended)"
-              },
-              "description": {
-                "type": "string",
-                "description": "One–two sentence explanation"
-              }
-            },
-            "required": ["title", "description"]
-          }
         }
-
       },
-      "required": ["hero", "features"]
+      "required": ["hero"]
     }
   },
   "required": ["home"]
