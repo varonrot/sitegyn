@@ -650,81 +650,6 @@ body {
     display: none;
   }
 }
-.course-features {
-  padding: 96px 24px;
-  background: #fff;
-}
-
-.course-features-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 64px 72px;
-}
-
-/* -------- Feature Item -------- */
-
-.feature-item {
-  display: flex;
-  flex-direction: column;
-}
-
-.feature-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.feature-check {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid #ff5a1f;
-  color: #ff5a1f;
-  font-weight: 700;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.feature-title {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: #000;
-}
-
-.feature-description {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.7;
-  color: #555;
-  max-width: 95%;
-}
-
-/* -------- Responsive -------- */
-
-@media (max-width: 900px) {
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 48px;
-  }
-}
-
-@media (max-width: 600px) {
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
-}
 
 </style>
 
@@ -946,24 +871,6 @@ body {
   </div>
 </section>
 
-      <section class="course-features" data-section="home.features">
-  <div class="course-features-inner">
-
-    <div class="features-grid" data-repeat="features">
-
-      <div class="feature-item">
-        <div class="feature-header">
-          <span class="feature-check">✓</span>
-          <h3 class="feature-title" data-bind="title"></h3>
-        </div>
-
-        <p class="feature-description" data-bind="description"></p>
-      </div>
-
-    </div>
-
-  </div>
-</section>
 
 
   </div>
