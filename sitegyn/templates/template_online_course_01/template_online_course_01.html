@@ -651,6 +651,58 @@ body {
   }
 }
 
+      .course-features {
+  padding: 80px 24px;
+}
+
+.course-features-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px 56px;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feature-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.feature-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #ff5a1f;
+  color: #ff5a1f;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.feature-description {
+  color: #555;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+@media (max-width: 900px) {
+  .course-features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 
 </head>
@@ -871,6 +923,19 @@ body {
   </div>
 </section>
 
+<section class="course-features">
+  <div class="course-features-grid">
+
+    <div class="feature-item">
+      <div class="feature-title">
+        <span class="feature-check">✓</span>
+        <span data-bind="feature-title"></span>
+      </div>
+      <p class="feature-description" data-bind="feature-description"></p>
+    </div>
+
+  </div>
+</section>
 
 
   </div>
