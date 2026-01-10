@@ -10,5 +10,14 @@
   "home.hero.price": {
     "type": "text",
     "ai": ["rewrite"]
+  },
+
+  "home.features.items.*.title": {
+    "type": "text",
+    "ai": ["rewrite"]
+  },
+  "home.features.items.*.description": {
+    "type": "text",
+    "ai": ["rewrite"]
   }
 }
