@@ -16,6 +16,29 @@
             "subheadline": {
               "type": "string",
               "description": "Hero supporting subtitle"
+            },
+            "features": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "minItems": 6,
+                  "maxItems": 6,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["title", "description"]
+                  }
+                }
+              },
+              "required": ["items"]
             }
           },
           "required": ["headline", "subheadline"]
