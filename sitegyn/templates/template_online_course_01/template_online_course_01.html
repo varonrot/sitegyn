@@ -584,6 +584,72 @@ body {
     gap: 12px;
   }
 }
+.course-meta {
+  margin: 48px auto;
+  max-width: 1100px;
+  padding: 0 20px;
+}
+
+.course-meta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f7f7f7;
+  border-radius: 999px;
+  padding: 28px 32px;
+  gap: 18px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 120px;
+}
+
+.meta-icon {
+  margin-bottom: 8px;
+}
+
+.meta-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke: #ff6a00;
+  stroke-width: 2;
+  fill: none;
+}
+
+.meta-label {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 2px;
+}
+
+.meta-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+}
+
+.meta-divider {
+  width: 1px;
+  height: 42px;
+  background: #e5e7eb;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .course-meta-inner {
+    flex-wrap: wrap;
+    border-radius: 24px;
+    justify-content: center;
+  }
+
+  .meta-divider {
+    display: none;
+  }
+}
 
 </style>
 
@@ -641,7 +707,13 @@ body {
   <div class="course-meta-inner">
 
     <div class="meta-item">
-      <div class="meta-icon">…</div>
+      <div class="meta-icon">
+        <!-- clock -->
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v6l4 2"/>
+        </svg>
+      </div>
       <div class="meta-label">Duration</div>
       <div class="meta-value">Self-paced</div>
     </div>
@@ -649,7 +721,13 @@ body {
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">…</div>
+      <div class="meta-icon">
+        <!-- book -->
+        <svg viewBox="0 0 24 24">
+          <path d="M4 6a3 3 0 0 1 3-3h11v16H7a3 3 0 0 0-3 3z"/>
+          <path d="M18 3v16"/>
+        </svg>
+      </div>
       <div class="meta-label">Lectures</div>
       <div class="meta-value">Multiple lessons</div>
     </div>
@@ -657,7 +735,13 @@ body {
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">…</div>
+      <div class="meta-icon">
+        <!-- play -->
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"/>
+          <polygon points="10,8 16,12 10,16"/>
+        </svg>
+      </div>
       <div class="meta-label">Video</div>
       <div class="meta-value">On-demand videos</div>
     </div>
@@ -665,7 +749,13 @@ body {
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">…</div>
+      <div class="meta-icon">
+        <!-- check -->
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="4" width="16" height="16" rx="3"/>
+          <path d="M8 12l3 3 5-6"/>
+        </svg>
+      </div>
       <div class="meta-label">Quizzes</div>
       <div class="meta-value">Practice included</div>
     </div>
@@ -673,7 +763,13 @@ body {
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">…</div>
+      <div class="meta-icon">
+        <!-- level -->
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="4" width="16" height="16" rx="3"/>
+          <path d="M10 16V8l6 4z"/>
+        </svg>
+      </div>
       <div class="meta-label">Level</div>
       <div class="meta-value">All levels</div>
     </div>
@@ -681,12 +777,18 @@ body {
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">…</div>
+      <div class="meta-icon">
+        <!-- infinity -->
+        <svg viewBox="0 0 24 24">
+          <path d="M7 12c2-4 8-4 10 0s-2 6-5 3-3-3-5-3z"/>
+        </svg>
+      </div>
       <div class="meta-label">Lifetime access</div>
     </div>
 
   </div>
 </section>
+
 
       <section class="course-meta-footer">
   <div class="course-meta-footer-inner">
