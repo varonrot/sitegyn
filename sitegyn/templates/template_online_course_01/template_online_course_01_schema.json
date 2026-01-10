@@ -16,10 +16,6 @@
             "subheadline": {
               "type": "string",
               "description": "Hero supporting subtitle"
-            },
-            "price": {
-              "type": "string",
-              "description": "Price text displayed inside the primary CTA"
             }
           },
           "required": ["headline", "subheadline"]
