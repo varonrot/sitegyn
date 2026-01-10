@@ -1,1 +1,14 @@
-
+{
+  "home.hero.headline": {
+    "type": "text",
+    "ai": ["rewrite"]
+  },
+  "home.hero.subheadline": {
+    "type": "text",
+    "ai": ["rewrite"]
+  },
+  "home.hero.price": {
+    "type": "text",
+    "ai": ["rewrite"]
+  }
+}
