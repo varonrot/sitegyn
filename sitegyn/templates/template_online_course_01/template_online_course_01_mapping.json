@@ -1,4 +1,22 @@
 {
   "hero-headline": "home.hero.headline",
-  "hero-subheadline": "home.hero.subheadline"
+  "hero-subheadline": "home.hero.subheadline",
+
+  "feature-1-title": "home.features.items[0].title",
+  "feature-1-description": "home.features.items[0].description",
+
+  "feature-2-title": "home.features.items[1].title",
+  "feature-2-description": "home.features.items[1].description",
+
+  "feature-3-title": "home.features.items[2].title",
+  "feature-3-description": "home.features.items[2].description",
+
+  "feature-4-title": "home.features.items[3].title",
+  "feature-4-description": "home.features.items[3].description",
+
+  "feature-5-title": "home.features.items[4].title",
+  "feature-5-description": "home.features.items[4].description",
+
+  "feature-6-title": "home.features.items[5].title",
+  "feature-6-description": "home.features.items[5].description"
 }
