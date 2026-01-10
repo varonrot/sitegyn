@@ -650,9 +650,13 @@ body {
     display: none;
   }
 }
+/* =========================
+   COURSE FEATURES
+========================= */
 
-      .course-features {
+.course-features {
   padding: 80px 24px;
+  background: #ffffff;
 }
 
 .course-features-grid {
@@ -660,46 +664,73 @@ body {
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 48px 56px;
+  gap: 56px 48px;
 }
 
+/* Feature item */
 .feature-item {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
+/* Title row */
 .feature-title {
   display: flex;
   align-items: center;
   gap: 12px;
   font-weight: 800;
   font-size: 18px;
+  letter-spacing: .02em;
   text-transform: uppercase;
+  color: #000;
 }
 
+/* Check icon */
 .feature-check {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  border: 2px solid #ff5a1f;
-  color: #ff5a1f;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
+  border: 2px solid #ff6a00;
+  color: #ff6a00;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
   flex-shrink: 0;
 }
 
+/* Description */
 .feature-description {
-  color: #555;
+  margin: 0;
+  font-size: 16px;
   line-height: 1.6;
-  font-size: 15px;
+  color: #444;
+  max-width: 360px;
 }
 
-@media (max-width: 900px) {
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1024px) {
+  .course-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 48px 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .course-features {
+    padding: 60px 20px;
+  }
+
   .course-features-grid {
     grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .feature-description {
+    max-width: 100%;
   }
 }
 
@@ -929,9 +960,49 @@ body {
     <div class="feature-item">
       <div class="feature-title">
         <span class="feature-check">✓</span>
-        <span data-bind="feature-title"></span>
+        <span data-bind="feature-1-title"></span>
       </div>
-      <p class="feature-description" data-bind="feature-description"></p>
+      <p class="feature-description" data-bind="feature-1-description"></p>
+    </div>
+
+    <div class="feature-item">
+      <div class="feature-title">
+        <span class="feature-check">✓</span>
+        <span data-bind="feature-2-title"></span>
+      </div>
+      <p class="feature-description" data-bind="feature-2-description"></p>
+    </div>
+
+    <div class="feature-item">
+      <div class="feature-title">
+        <span class="feature-check">✓</span>
+        <span data-bind="feature-3-title"></span>
+      </div>
+      <p class="feature-description" data-bind="feature-3-description"></p>
+    </div>
+
+    <div class="feature-item">
+      <div class="feature-title">
+        <span class="feature-check">✓</span>
+        <span data-bind="feature-4-title"></span>
+      </div>
+      <p class="feature-description" data-bind="feature-4-description"></p>
+    </div>
+
+    <div class="feature-item">
+      <div class="feature-title">
+        <span class="feature-check">✓</span>
+        <span data-bind="feature-5-title"></span>
+      </div>
+      <p class="feature-description" data-bind="feature-5-description"></p>
+    </div>
+
+    <div class="feature-item">
+      <div class="feature-title">
+        <span class="feature-check">✓</span>
+        <span data-bind="feature-6-title"></span>
+      </div>
+      <p class="feature-description" data-bind="feature-6-description"></p>
     </div>
 
   </div>
@@ -987,7 +1058,7 @@ window.addEventListener("message", (e) => {
   }
 });
 
- 
+
 
 </body>
 </html>
