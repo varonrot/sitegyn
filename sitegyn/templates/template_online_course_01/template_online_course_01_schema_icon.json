@@ -18,16 +18,39 @@
             "subheadline": {
               "type": "string",
               "ui:icon": "fa-align-left"
-            },
-            "price": {
-              "type": "string",
-              "ui:icon": "fa-tag"
             }
           },
           "required": ["headline", "subheadline"]
+        },
+
+        "features": {
+          "type": "object",
+          "ui:icon": "fa-list-check",
+          "properties": {
+            "items": {
+              "type": "array",
+              "ui:icon": "fa-check-circle",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "ui:icon": "fa-check"
+                  },
+                  "description": {
+                    "type": "string",
+                    "ui:icon": "fa-align-left"
+                  }
+                },
+                "required": ["title", "description"]
+              }
+            }
+          },
+          "required": ["items"]
         }
+
       },
-      "required": ["hero"]
+      "required": ["hero", "features"]
     }
   },
   "required": ["home"]
