@@ -509,6 +509,81 @@ body {
     height: 1px;
   }
 }
+/* =========================
+   WHY COURSE SECTION
+========================= */
+
+.why-course {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.why-course-title {
+  font-size: 34px;
+  font-weight: 800;
+  margin-bottom: 32px;
+  letter-spacing: -0.02em;
+}
+
+.why-course-media {
+  margin-bottom: 48px;
+}
+
+.why-course-media img {
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 18px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Stats grid */
+.why-course-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 60px;
+  text-align: left;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.why-stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.why-stat-value {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  color: #000;
+  min-width: 80px;
+}
+
+.why-stat-text {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .why-course-title {
+    font-size: 26px;
+  }
+
+  .why-course-stats {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .why-stat {
+    gap: 12px;
+  }
+}
 
 </style>
 
@@ -650,6 +725,49 @@ body {
   </div>
 </section>
 
+<section class="why-course">
+  <h2 class="why-course-title">
+    Why Choose This Online Course?
+  </h2>
+
+  <div class="why-course-media">
+    <img
+      src="/assets/template_online_course_02.png"
+      alt="Course preview"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="why-course-stats">
+    <div class="why-stat">
+      <div class="why-stat-value">100+</div>
+      <div class="why-stat-text">
+        In-depth lessons designed to build real skills
+      </div>
+    </div>
+
+    <div class="why-stat">
+      <div class="why-stat-value">500+</div>
+      <div class="why-stat-text">
+        Learners from around the world
+      </div>
+    </div>
+
+    <div class="why-stat">
+      <div class="why-stat-value">200+</div>
+      <div class="why-stat-text">
+        Practical examples and hands-on exercises
+      </div>
+    </div>
+
+    <div class="why-stat">
+      <div class="why-stat-value">50+</div>
+      <div class="why-stat-text">
+        Insights based on real-world experience
+      </div>
+    </div>
+  </div>
+</section>
 
 
   </div>
