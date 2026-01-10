@@ -437,6 +437,78 @@ body {
   height:64px;
   background:rgba(0,0,0,0.08);
 }
+.course-meta-footer {
+  background: #ffffff;
+  border-top: 1px solid #edf0f4;
+  padding: 28px 16px;
+}
+
+.course-meta-footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.meta-footer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.meta-footer-icon {
+  width: 28px;
+  height: 28px;
+  color: #6b7280;
+}
+
+.meta-footer-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.meta-footer-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.meta-footer-label {
+  font-size: 12px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.meta-footer-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.meta-footer-divider {
+  width: 1px;
+  height: 28px;
+  background: #e5e7eb;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .course-meta-footer-inner {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .meta-footer-divider {
+    width: 40px;
+    height: 1px;
+  }
+}
 
 </style>
 
@@ -490,124 +562,94 @@ body {
   </div>
 </section>
 
-<!-- <section class="hero-showcase" data-section="home.hero">-->
-
-<!--  <div class="hero-showcase-overlay"></div>-->
-
-<!--  <div class="hero-showcase-content">-->
-
-<!--    &lt;!&ndash; HEADLINE &ndash;&gt;-->
-<!--    <h1 class="hero-showcase-title" id="hero-headline"></h1>-->
-
-<!--    &lt;!&ndash; SUBHEADLINE &ndash;&gt;-->
-<!--    <p class="hero-showcase-subtitle" id="hero-subheadline"></p>-->
-
-<!--    <div class="hero-showcase-actions">-->
-
-<!--      &lt;!&ndash; PRIMARY CTA &ndash;&gt;-->
-<!--      <button class="btn-hero-primary" id="hero-cta-primary">-->
-<!--        <span class="cta-text">התחל קורס</span>-->
-<!--        <span class="price" id="hero-price"></span>-->
-<!--      </button>-->
-
-<!--      &lt;!&ndash; LIKE &ndash;&gt;-->
-<!--      <button class="btn-hero-like" aria-hidden="true">♡</button>-->
-
-<!--      &lt;!&ndash; SECONDARY CTA &ndash;&gt;-->
-<!--      <button class="btn-hero-secondary" id="hero-cta-secondary">-->
-<!--        למד עוד-->
-<!--      </button>-->
-
-<!--    </div>-->
-
-<!--  </div>-->
-<!--</section>-->
-
-<section class="course-meta">
+      <section class="course-meta">
   <div class="course-meta-inner">
 
     <div class="meta-item">
-      <div class="meta-icon">
-        <!-- clock -->
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 7v6l4 2"/>
-        </svg>
-      </div>
+      <div class="meta-icon">…</div>
       <div class="meta-label">Duration</div>
-      <div class="meta-value">13 hours</div>
+      <div class="meta-value">Self-paced</div>
     </div>
 
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">
-        <!-- book -->
-        <svg viewBox="0 0 24 24">
-          <path d="M4 6a3 3 0 0 1 3-3h11v16H7a3 3 0 0 0-3 3z"/>
-          <path d="M18 3v16"/>
-        </svg>
-      </div>
+      <div class="meta-icon">…</div>
       <div class="meta-label">Lectures</div>
-      <div class="meta-value">23</div>
+      <div class="meta-value">Multiple lessons</div>
     </div>
 
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">
-        <!-- play -->
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9"/>
-          <polygon points="10,8 16,12 10,16"/>
-        </svg>
-      </div>
+      <div class="meta-icon">…</div>
       <div class="meta-label">Video</div>
-      <div class="meta-value">12 hours</div>
+      <div class="meta-value">On-demand videos</div>
     </div>
 
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">
-        <!-- check -->
-        <svg viewBox="0 0 24 24">
-          <rect x="4" y="4" width="16" height="16" rx="3"/>
-          <path d="M8 12l3 3 5-6"/>
-        </svg>
-      </div>
+      <div class="meta-icon">…</div>
       <div class="meta-label">Quizzes</div>
-      <div class="meta-value">2</div>
+      <div class="meta-value">Practice included</div>
     </div>
 
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">
-        <!-- level -->
-        <svg viewBox="0 0 24 24">
-          <rect x="4" y="4" width="16" height="16" rx="3"/>
-          <path d="M10 16V8l6 4z"/>
-        </svg>
-      </div>
+      <div class="meta-icon">…</div>
       <div class="meta-label">Level</div>
-      <div class="meta-value">Advanced</div>
+      <div class="meta-value">All levels</div>
     </div>
 
     <div class="meta-divider"></div>
 
     <div class="meta-item">
-      <div class="meta-icon">
-        <!-- infinity -->
-        <svg viewBox="0 0 24 24">
-          <path d="M7 12c2-4 8-4 10 0s-2 6-5 3-3-3-5-3z"/>
-        </svg>
-      </div>
+      <div class="meta-icon">…</div>
       <div class="meta-label">Lifetime access</div>
     </div>
 
   </div>
 </section>
+
+      <section class="course-meta-footer">
+  <div class="course-meta-footer-inner">
+
+    <!-- Updated -->
+    <div class="meta-footer-item">
+      <div class="meta-footer-icon">
+        <!-- refresh icon -->
+        <svg viewBox="0 0 24 24">
+          <path d="M21 12a9 9 0 1 1-2.6-6.4"/>
+          <path d="M21 3v6h-6"/>
+        </svg>
+      </div>
+      <div class="meta-footer-text">
+        <span class="meta-footer-label">Updated</span>
+        <span class="meta-footer-value">Regularly maintained</span>
+      </div>
+    </div>
+
+    <div class="meta-footer-divider"></div>
+
+    <!-- Category -->
+    <div class="meta-footer-item">
+      <div class="meta-footer-icon">
+        <!-- bookmark icon -->
+        <svg viewBox="0 0 24 24">
+          <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/>
+        </svg>
+      </div>
+      <div class="meta-footer-text">
+        <span class="meta-footer-label">Category</span>
+        <span class="meta-footer-value">Online Education</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
 
   </div>
