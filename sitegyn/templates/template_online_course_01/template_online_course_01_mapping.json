@@ -1,4 +1,13 @@
 {
   "hero-headline": "home.hero.headline",
-  "hero-subheadline": "home.hero.subheadline"
+  "hero-subheadline": "home.hero.subheadline",
+
+  "features": {
+    "type": "repeat",
+    "source": "home.features.items",
+    "map": {
+      "feature-title": "title",
+      "feature-description": "description"
+    }
+  }
 }
