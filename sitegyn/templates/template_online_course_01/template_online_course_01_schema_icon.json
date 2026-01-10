@@ -19,9 +19,33 @@
               "type": "string",
               "ui:icon": "fa-align-left"
             },
-            "price": {
-              "type": "string",
-              "ui:icon": "fa-tag"
+            "features": {
+              "type": "object",
+              "ui:icon": "fa-list",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "minItems": 6,
+                  "maxItems": 6,
+                  "ui:icon": "fa-layer-group",
+                  "items": {
+                    "type": "object",
+                    "ui:icon": "fa-check",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "ui:icon": "fa-heading"
+                      },
+                      "description": {
+                        "type": "string",
+                        "ui:icon": "fa-align-left"
+                      }
+                    },
+                    "required": ["title", "description"]
+                  }
+                }
+              },
+              "required": ["items"]
             }
           },
           "required": ["headline", "subheadline"]
