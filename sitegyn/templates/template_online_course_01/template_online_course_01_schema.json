@@ -9,43 +9,30 @@
         "hero": {
           "type": "object",
           "properties": {
-            "headline": {
-              "type": "string",
-              "description": "Main hero headline"
-            },
-            "subheadline": {
-              "type": "string",
-              "description": "Hero supporting subtitle"
-            }
+            "headline": { "type": "string" },
+            "subheadline": { "type": "string" }
           },
           "required": ["headline", "subheadline"]
         },
 
         "features": {
-          "type": "object",
-          "description": "Key course features / value propositions",
-          "properties": {
-            "items": {
-              "type": "array",
-              "minItems": 6,
-              "maxItems": 6,
-              "items": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "description": "Feature title"
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Short feature description"
-                  }
-                },
-                "required": ["title", "description"]
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Short feature title (uppercase recommended)"
+              },
+              "description": {
+                "type": "string",
+                "description": "One–two sentence explanation"
               }
-            }
-          },
-          "required": ["items"]
+            },
+            "required": ["title", "description"]
+          }
         }
 
       },
