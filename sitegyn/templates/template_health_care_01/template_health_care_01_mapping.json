@@ -1,24 +1,17 @@
 {
-  "hero-kicker": "home.hero.kicker",
-  "hero-headline": "home.hero.headline",
-  "hero-subheadline": "home.hero.subheadline",
-  "hero-cta-primary": "home.hero.primary_cta",
-  "hero-cta-secondary": "home.hero.secondary_cta",
-  "hero-pill-1": "home.hero.pills[0]",
-  "hero-pill-2": "home.hero.pills[1]",
-  "hero-pill-3": "home.hero.pills[2]",
-  "hero-image": "home.hero.image",
+  "about-image": "about.image",
+  "about-badge": "about.badge",
 
-  "about-badge": "home.about.badge",
-  "about-title": "home.about.title",
-  "about-description": "home.about.description",
-  "about-point-1": "home.about.points[0]",
-  "about-point-2": "home.about.points[1]",
-  "about-point-3": "home.about.points[2]",
-  "about-point-4": "home.about.points[3]",
-  "about-availability": "home.about.availability_badge",
-  "about-founder-name": "home.about.founder_name",
-  "about-founder-role": "home.about.founder_role",
-  "about-cta": "home.about.cta",
-  "about-image": "home.about.image"
+  "about-kicker": "about.kicker",
+  "about-title": "about.title",
+  "about-description": "about.description",
+
+  "about-points": "about.points",
+
+  "about-person-avatar": "about.person.avatar",
+  "about-person-name": "about.person.name",
+  "about-person-role": "about.person.role",
+
+  "about-cta-text": "about.cta.text",
+  "about-cta-href": "about.cta.href"
 }
