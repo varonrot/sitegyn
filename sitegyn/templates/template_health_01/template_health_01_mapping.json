@@ -1,44 +1,14 @@
 {
-  "home": {
-    "hero": {
-      "kicker": {
-        "selector": "#hero-kicker",
-        "type": "text"
-      },
-      "headline": {
-        "selector": "#hero-headline",
-        "type": "text"
-      },
-      "subheadline": {
-        "selector": "#hero-subheadline",
-        "type": "text"
-      },
-      "cta_primary": {
-        "selector": "#hero-cta-primary",
-        "type": "text"
-      },
-      "cta_secondary": {
-        "selector": "#hero-cta-secondary",
-        "type": "text"
-      },
-      "pills": [
-        {
-          "selector": "#hero-pill-1",
-          "type": "text"
-        },
-        {
-          "selector": "#hero-pill-2",
-          "type": "text"
-        },
-        {
-          "selector": "#hero-pill-3",
-          "type": "text"
-        }
-      ],
-      "image": {
-        "selector": "#hero-image",
-        "type": "image"
-      }
-    }
-  }
+  "hero-kicker": "home.hero.kicker",
+  "hero-headline": "home.hero.headline",
+  "hero-subheadline": "home.hero.subheadline",
+
+  "hero-cta-primary": "home.hero.primary_cta",
+  "hero-cta-secondary": "home.hero.secondary_cta",
+
+  "hero-pill-1": "home.hero.pills[0]",
+  "hero-pill-2": "home.hero.pills[1]",
+  "hero-pill-3": "home.hero.pills[2]",
+
+  "hero-image": "home.hero.image"
 }
