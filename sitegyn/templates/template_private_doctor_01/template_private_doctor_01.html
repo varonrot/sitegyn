@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>template_online_course</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+/* =========================
+   BASE
+========================= */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  background: #ffffff;
+  color: #111;
+}
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+/* =========================
+   HERO (Light)
+========================= */
+.hero {
+  padding: 40px 24px;
+  border-radius: 16px;
+  background: #f7f7f8;
+}
+
+.hero-kicker {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: #666;
+}
+
+.hero-title {
+  font-size: 2.4rem;
+  margin: 12px 0 8px;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  max-width: 540px;
+  color: #444;
+}
+
+.hero-cta {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn-primary,
+.btn-secondary {
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: #ff5c3b;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #111;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+.section {
+  margin-top: 40px;
+  padding: 24px 20px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #eee;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.section-subtitle {
+  font-size: .98rem;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.two-col {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.two-col > div {
+  flex: 1 1 260px;
+}
+
+/* =========================
+   PILLS
+========================= */
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pill {
+  font-size: .85rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f0f0f0;
+  color: #111;
+}
+
+/* =========================
+   CARDS
+========================= */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.card {
+  padding: 14px 12px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+}
+
+.card-title {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.card-meta {
+  font-size: .86rem;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.card-text {
+  font-size: .9rem;
+  color: #333;
+}
+
+/* =========================
+   CONTACT
+========================= */
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  font-size: .95rem;
+}
+
+.contact-list li {
+  margin-bottom: 4px;
+}
+
+/* =========================
+   BADGE
+========================= */
+.badge {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: #777;
+}
+
+/* =========================
+   TOP NAV (Light)
+========================= */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e5e5e5;
+
+  padding: 14px 28px;
+}
+
+.top-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.top-nav a {
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  transition: color .2s ease;
+}
+
+.top-nav a:hover {
+  color: #000;
+}
+
+.top-nav .nav-cta {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg,#6cf2c2,#3bb2ff);
+  color: #0b0b10 !important;
+  font-weight: 600;
+}
+
+.top-nav ul li:last-child {
+  margin-left: auto;
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 12px 16px;
+  }
+
+  .top-nav ul {
+    gap: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .top-nav ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  .top-nav a {
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+}
+
+      /* =========================
+   HERO SHOWCASE (STATIC DEMO)
+========================= */
+
+.hero-showcase {
+  position: relative;
+
+  max-width: 1280px;
+  margin: 32px auto;
+
+  min-height: 45vh;
+
+  border-radius: 28px;
+  overflow: hidden;
+
+  background-image: url("/assets/template_online_course_01.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* Overlay for readability */
+.hero-showcase-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+/* Content */
+.hero-showcase-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 48px 24px;
+  color: #fff;
+}
+
+/* Title */
+.hero-showcase-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Subtitle */
+.hero-showcase-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 720px;
+  margin: 0 auto 36px;
+  opacity: 0.95;
+}
+
+/* Actions */
+.hero-showcase-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn-hero-primary {
+  background: #ff6a00;
+  color: #fff;
+  border: none;
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-hero-primary .price {
+  margin-left: 10px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.btn-hero-secondary {
+  background: #fff;
+  color: #111;
+  border: none;
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-hero-like {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.5);
+  background: transparent;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .hero-showcase-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-showcase {
+    border-radius: 20px;
+  }
+}
+.course-meta{
+  margin:48px auto;
+  padding:0 16px;
+}
+
+.course-meta-inner{
+  display:flex;
+  align-items:center;
+  background:#f7f7f7;
+  border-radius:40px;
+  padding:30px 28px;
+  gap:18px;
+}
+
+.meta-item{
+  text-align:center;
+  min-width:130px;
+}
+
+.meta-icon{
+  margin-bottom:8px;
+}
+
+.meta-icon svg{
+  width:26px;
+  height:26px;
+  stroke:#fe580f;
+  fill:none;
+  stroke-width:2;
+}
+
+.meta-label{
+  font-size:14px;
+  color:#6b7280;
+}
+
+.meta-value{
+  margin-top:2px;
+  font-size:15px;
+  font-weight:700;
+  color:#111827;
+}
+
+.meta-divider{
+  width:1px;
+  height:64px;
+  background:rgba(0,0,0,0.08);
+}
+.course-meta-footer {
+  background: #ffffff;
+  border-top: 1px solid #edf0f4;
+  padding: 28px 16px;
+}
+
+.course-meta-footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.meta-footer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.meta-footer-icon {
+  width: 28px;
+  height: 28px;
+  color: #6b7280;
+}
+
+.meta-footer-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.meta-footer-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.meta-footer-label {
+  font-size: 12px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.meta-footer-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.meta-footer-divider {
+  width: 1px;
+  height: 28px;
+  background: #e5e7eb;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .course-meta-footer-inner {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .meta-footer-divider {
+    width: 40px;
+    height: 1px;
+  }
+}
+/* =========================
+   WHY COURSE SECTION
+========================= */
+
+.why-course {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.why-course-title {
+  font-size: 34px;
+  font-weight: 800;
+  margin-bottom: 32px;
+  letter-spacing: -0.02em;
+}
+
+.why-course-media {
+  margin-bottom: 48px;
+}
+
+.why-course-media img {
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 18px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Stats grid */
+.why-course-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 60px;
+  text-align: left;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.why-stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.why-stat-value {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  color: #000;
+  min-width: 80px;
+}
+
+.why-stat-text {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .why-course-title {
+    font-size: 26px;
+  }
+
+  .why-course-stats {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .why-stat {
+    gap: 12px;
+  }
+}
+.course-meta {
+  margin: 48px auto;
+  max-width: 1100px;
+  padding: 0 20px;
+}
+
+.course-meta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f7f7f7;
+  border-radius: 999px;
+  padding: 28px 32px;
+  gap: 18px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 120px;
+}
+
+.meta-icon {
+  margin-bottom: 8px;
+}
+
+.meta-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke: #ff6a00;
+  stroke-width: 2;
+  fill: none;
+}
+
+.meta-label {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 2px;
+}
+
+.meta-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+}
+
+.meta-divider {
+  width: 1px;
+  height: 42px;
+  background: #e5e7eb;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .course-meta-inner {
+    flex-wrap: wrap;
+    border-radius: 24px;
+    justify-content: center;
+  }
+
+  .meta-divider {
+    display: none;
+  }
+}
+/* =========================
+   COURSE FEATURES
+========================= */
+
+.course-features {
+  padding: 80px 24px;
+  background: #ffffff;
+}
+
+.course-features-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 56px 48px;
+}
+
+/* Feature item */
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Title row */
+.feature-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: #000;
+}
+
+/* Check icon */
+.feature-check {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #ff6a00;
+  color: #ff6a00;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Description */
+.feature-description {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #444;
+  max-width: 360px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1024px) {
+  .course-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 48px 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .course-features {
+    padding: 60px 20px;
+  }
+
+  .course-features-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .feature-description {
+    max-width: 100%;
+  }
+}
+/* =========================
+   HERO – HEALTH & CARE
+   ========================= */
+
+.hero {
+  padding: 96px 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+}
+
+.hero-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px;
+  align-items: center;
+}
+
+/* LEFT CONTENT */
+.hero-content {
+  max-width: 560px;
+}
+
+.hero-kicker {
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: 46px;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  color: #1f2937;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #6b7280;
+  margin-bottom: 28px;
+}
+
+/* CTA */
+.hero-cta {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+}
+
+/* TRUST PILLS */
+.pill-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+/* RIGHT IMAGE */
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .hero-content {
+    max-width: none;
+    text-align: center;
+  }
+
+  .hero-cta {
+    justify-content: center;
+  }
+
+  .pill-row {
+    justify-content: center;
+  }
+}
+
+</style>
+
+</head>
+<body>
+  <div class="page">
+<nav class="top-nav">
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#treatments">Treatment Areas</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nav-cta">Book Appointment</a></li>
+  </ul>
+</nav>
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+
+    <!-- LEFT: CONTENT -->
+    <div class="hero-content">
+
+      <div class="hero-kicker" id="hero-kicker">
+        <!-- e.g. "Health & Care Services" -->
+      </div>
+
+      <h1 class="hero-title" id="hero-headline">
+        <!-- Main headline -->
+      </h1>
+
+      <p class="hero-subtitle" id="hero-subheadline">
+        <!-- Subheadline -->
+      </p>
+
+      <div class="hero-cta">
+        <button class="btn-primary" id="hero-cta-primary">
+          <!-- e.g. Book Appointment -->
+        </button>
+
+        <button class="btn-secondary" id="hero-cta-secondary">
+          <!-- e.g. Learn More -->
+        </button>
+      </div>
+
+      <div class="pill-row">
+        <span class="pill" id="hero-pill-1"></span>
+        <span class="pill" id="hero-pill-2"></span>
+        <span class="pill" id="hero-pill-3"></span>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: IMAGE -->
+    <div class="hero-media">
+      <img
+        id="hero-image"
+        src="assets/placeholder/hero-health.jpg"
+        alt=""
+      />
+    </div>
+
+  </div>
+</section>
+
+
+
+  </div>
+   <script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const supabase = createClient(
+  "https://xkchlqcwntcoakmyicqb.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
+);
+async function reloadContentFromDB() {
+  const params = new URLSearchParams(window.location.search);
+  const projectId = params.get("project_id");
+  if (!projectId) return;
+
+  const { data } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  if (!data?.content_json) return;
+
+  applyContentToDOM(data.content_json);
+}
+  function applyContentToDOM(c) {
+  // HERO
+  document.getElementById("hero-kicker").innerText = c.home.hero.kicker;
+  document.getElementById("hero-headline").innerText = c.home.hero.headline;
+  document.getElementById("hero-subheadline").innerText = c.home.hero.subheadline;
+  document.getElementById("hero-cta-primary").innerText = c.home.hero.primary_cta;
+  document.getElementById("hero-cta-secondary").innerText = c.home.hero.secondary_cta;
+
+  document.getElementById("hero-pill-1").innerText = c.home.hero.pills?.[0] ?? "";
+  document.getElementById("hero-pill-2").innerText = c.home.hero.pills?.[1] ?? "";
+  document.getElementById("hero-pill-3").innerText = c.home.hero.pills?.[2] ?? "";
+
+  // ABOUT
+  document.getElementById("about-title").innerText = c.about.title;
+  document.getElementById("about-tagline").innerText = c.about.tagline;
+  document.getElementById("about-paragraph-1").innerText = c.about.paragraphs?.[0] ?? "";
+  document.getElementById("about-paragraph-2").innerText = c.about.paragraphs?.[1] ?? "";
+  document.getElementById("about-paragraph-3").innerText = c.about.paragraphs?.[2] ?? "";
+}
+window.addEventListener("message", (e) => {
+  if (e.data?.type === "content-updated") {
+    console.log("iframe received update");
+    reloadContentFromDB();
+  }
+});
+
+
+
+</body>
+</html>
