@@ -1,38 +1,75 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Health & Care Website Content",
+  "title": "Health Care Website Content",
   "type": "object",
   "properties": {
     "home": {
       "type": "object",
       "properties": {
+
         "hero": {
           "type": "object",
           "properties": {
             "kicker": { "type": "string" },
             "headline": { "type": "string" },
             "subheadline": { "type": "string" },
+
             "primary_cta": { "type": "string" },
             "secondary_cta": { "type": "string" },
+
             "pills": {
               "type": "array",
               "items": { "type": "string" },
-              "minItems": 0,
               "maxItems": 3
             },
-            "image": {
-              "type": "string",
-              "description": "Hero image filename or URL"
+
+            "image": { "type": "string" }
+          },
+          "required": ["headline", "subheadline", "primary_cta"]
+        },
+
+        "about": {
+          "type": "object",
+          "properties": {
+            "kicker": { "type": "string" },
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+
+            "image": { "type": "string" },
+            "badge": { "type": "string" },
+
+            "points": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" }
+                },
+                "required": ["text"]
+              }
+            },
+
+            "person": {
+              "type": "object",
+              "properties": {
+                "avatar": { "type": "string" },
+                "name": { "type": "string" },
+                "role": { "type": "string" }
+              }
+            },
+
+            "cta": {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" }
+              }
             }
           },
-          "required": [
-            "headline",
-            "subheadline",
-            "primary_cta"
-          ]
+          "required": ["title", "description"]
         }
+
       },
-      "required": ["hero"]
+      "required": ["hero", "about"]
     }
   },
   "required": ["home"]
