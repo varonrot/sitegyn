@@ -11,4 +11,22 @@
   "hero-pill-3": "home.hero.pills[2]",
 
   "hero-image": "home.hero.image"
+ 
+  "about-kicker": "home.about.kicker",
+  "about-title": "home.about.title",
+  "about-description": "home.about.description",
+
+  "about-image": "home.about.image",
+  "about-badge": "home.about.badge",
+
+  "about-points": "home.about.points",
+
+  "about-person-avatar": "home.about.person.avatar",
+  "about-person-name": "home.about.person.name",
+  "about-person-role": "home.about.person.role",
+
+  "about-cta": "home.about.cta.text"
+ 
+
+  
 }
