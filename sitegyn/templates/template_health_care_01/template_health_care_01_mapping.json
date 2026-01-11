@@ -1,17 +1,14 @@
 {
-  "about-image": "about.image",
-  "about-badge": "about.badge",
+  "hero-kicker": "home.hero.kicker",
+  "hero-headline": "home.hero.headline",
+  "hero-subheadline": "home.hero.subheadline",
 
-  "about-kicker": "about.kicker",
-  "about-title": "about.title",
-  "about-description": "about.description",
+  "hero-cta-primary": "home.hero.primary_cta",
+  "hero-cta-secondary": "home.hero.secondary_cta",
 
-  "about-points": "about.points",
+  "hero-pill-1": "home.hero.pills[0]",
+  "hero-pill-2": "home.hero.pills[1]",
+  "hero-pill-3": "home.hero.pills[2]",
 
-  "about-person-avatar": "about.person.avatar",
-  "about-person-name": "about.person.name",
-  "about-person-role": "about.person.role",
-
-  "about-cta-text": "about.cta.text",
-  "about-cta-href": "about.cta.href"
+  "hero-image": "home.hero.image"
 }
