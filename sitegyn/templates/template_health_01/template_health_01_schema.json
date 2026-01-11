@@ -1,38 +1,39 @@
 {
-  "home": {
-    "hero": {
-      "kicker": {
-        "type": "string",
-        "required": false
-      },
-      "headline": {
-        "type": "string",
-        "required": true
-      },
-      "subheadline": {
-        "type": "string",
-        "required": true
-      },
-      "cta_primary": {
-        "type": "string",
-        "required": true
-      },
-      "cta_secondary": {
-        "type": "string",
-        "required": false
-      },
-      "pills": {
-        "type": "array",
-        "maxItems": 3,
-        "items": {
-          "type": "string"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Health & Care Website Content",
+  "type": "object",
+  "properties": {
+    "home": {
+      "type": "object",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "properties": {
+            "kicker": { "type": "string" },
+            "headline": { "type": "string" },
+            "subheadline": { "type": "string" },
+            "primary_cta": { "type": "string" },
+            "secondary_cta": { "type": "string" },
+            "pills": {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 0,
+              "maxItems": 3
+            },
+            "image": {
+              "type": "string",
+              "description": "Hero image filename or URL"
+            }
+          },
+          "required": [
+            "headline",
+            "subheadline",
+            "primary_cta"
+          ]
         }
       },
-      "image": {
-        "type": "image",
-        "required": false,
-        "description": "Hero image (health / clinic / professional)"
-      }
+      "required": ["hero"]
     }
-  }
+  },
+  "required": ["home"]
 }
