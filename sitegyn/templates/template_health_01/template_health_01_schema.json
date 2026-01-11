@@ -1,0 +1,38 @@
+{
+  "home": {
+    "hero": {
+      "kicker": {
+        "type": "string",
+        "required": false
+      },
+      "headline": {
+        "type": "string",
+        "required": true
+      },
+      "subheadline": {
+        "type": "string",
+        "required": true
+      },
+      "cta_primary": {
+        "type": "string",
+        "required": true
+      },
+      "cta_secondary": {
+        "type": "string",
+        "required": false
+      },
+      "pills": {
+        "type": "array",
+        "maxItems": 3,
+        "items": {
+          "type": "string"
+        }
+      },
+      "image": {
+        "type": "image",
+        "required": false,
+        "description": "Hero image (health / clinic / professional)"
+      }
+    }
+  }
+}
