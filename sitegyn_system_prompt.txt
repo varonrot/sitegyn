@@ -41,6 +41,7 @@ You MUST select the niche ONLY from this list:
 11. "lawyer"
 12. "local_business"
 13. "online_course"
+14. "health_care"
 
 Rules:
 - Convert common variations into one of the above:
@@ -55,6 +56,7 @@ Rules:
   - gym, trainer → “fitness”
   - realtor → “real_estate”
   - attorney → “lawyer”
+  - doctor, clinic, therapist, psychologist, physiotherapist, dietitian → "health_care"
   - general shop/service → “local_business”
   - online course, online academy, digital course, training program, e-learning → "online_course"
 
