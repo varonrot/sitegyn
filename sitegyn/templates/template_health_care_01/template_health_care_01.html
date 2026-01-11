@@ -915,6 +915,46 @@ body {
   </div>
 </section>
 
+<section class="about-main" id="about">
+  <div class="about-inner">
+
+    <!-- LEFT IMAGE -->
+    <div class="about-image">
+      <img data-bind="about.image" alt="" />
+      <div class="about-badge" data-bind="about.badge"></div>
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="about-content">
+
+      <span class="about-pill" data-bind="about.kicker"></span>
+
+      <h2 class="about-title" data-bind="about.title"></h2>
+
+      <p class="about-description" data-bind="about.description"></p>
+
+      <ul class="about-points">
+        <li data-repeat="about.points">
+          <span class="point-icon">+</span>
+          <span data-bind="text"></span>
+        </li>
+      </ul>
+
+      <div class="about-footer">
+        <div class="about-person">
+          <img data-bind="about.person.avatar" />
+          <div>
+            <strong data-bind="about.person.name"></strong>
+            <span data-bind="about.person.role"></span>
+          </div>
+        </div>
+
+        <a class="about-cta" data-bind="about.cta.text"></a>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 
   </div>
