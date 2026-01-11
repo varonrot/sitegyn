@@ -1,0 +1,44 @@
+{
+  "home": {
+    "hero": {
+      "kicker": {
+        "selector": "#hero-kicker",
+        "type": "text"
+      },
+      "headline": {
+        "selector": "#hero-headline",
+        "type": "text"
+      },
+      "subheadline": {
+        "selector": "#hero-subheadline",
+        "type": "text"
+      },
+      "cta_primary": {
+        "selector": "#hero-cta-primary",
+        "type": "text"
+      },
+      "cta_secondary": {
+        "selector": "#hero-cta-secondary",
+        "type": "text"
+      },
+      "pills": [
+        {
+          "selector": "#hero-pill-1",
+          "type": "text"
+        },
+        {
+          "selector": "#hero-pill-2",
+          "type": "text"
+        },
+        {
+          "selector": "#hero-pill-3",
+          "type": "text"
+        }
+      ],
+      "image": {
+        "selector": "#hero-image",
+        "type": "image"
+      }
+    }
+  }
+}
