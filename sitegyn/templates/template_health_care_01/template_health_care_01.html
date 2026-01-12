@@ -2280,57 +2280,52 @@ overlay.onclick = () => {
   overlay.classList.remove('show');
 };
 </script>
- <script>
-const testimonials = [
-  {
-    text: "The doctors were incredibly caring and professional. They took the time to explain every step clearly, making me feel comfortable and confident.",
-    name: "John Doe",
-    role: "Director",
-    rating: "5 ★"
-  },
-  {
-    text: "Outstanding care and attention. The medical team made everything easy and stress-free from start to finish.",
-    name: "Sarah Williams",
-    role: "Patient",
-    rating: "5 ★"
-  },
-  {
-    text: "Professional staff, modern facilities, and truly compassionate treatment. Highly recommended.",
-    name: "Michael Brown",
-    role: "Entrepreneur",
-    rating: "5 ★"
-  }
-];
+ <section class="testimonial" id="testimonials" data-section="testimonials">
+  <div class="testimonial-inner">
 
-let current = 0;
+    <!-- LEFT -->
+    <div class="testimonial-info">
+      <span class="pill" id="testimonials-kicker"></span>
+      <h2 id="testimonials-headline"></h2>
+      <p class="testimonial-sub" id="testimonials-subheadline"></p>
 
-const textEl   = document.getElementById("testimonial-text");
-const nameEl   = document.getElementById("testimonial-name");
-const roleEl   = document.getElementById("testimonial-role");
-const ratingEl = document.getElementById("testimonial-rating");
+      <div class="testimonial-avatars">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg">
+        <img src="https://randomuser.me/api/portraits/men/65.jpg">
+        <img src="https://randomuser.me/api/portraits/women/68.jpg">
+        <img src="https://randomuser.me/api/portraits/men/71.jpg">
+      </div>
 
-function renderTestimonial(index){
-  textEl.style.opacity = 0;
+      <div class="testimonial-count">
+        100+ Clients Reviews
+      </div>
+    </div> <!-- ✅ סוגר LEFT -->
 
-  setTimeout(() => {
-    textEl.textContent   = testimonials[index].text;
-    nameEl.textContent   = testimonials[index].name;
-    roleEl.textContent   = testimonials[index].role;
-    ratingEl.textContent = testimonials[index].rating;
-    textEl.style.opacity = 1;
-  }, 200);
-}
+    <!-- RIGHT -->
+    <div class="testimonial-card">
+      <div class="quote-mark">“</div>
 
-document.getElementById("testimonial-next").onclick = () => {
-  current = (current + 1) % testimonials.length;
-  renderTestimonial(current);
-};
+      <blockquote id="testimonial-text"></blockquote>
 
-document.getElementById("testimonial-prev").onclick = () => {
-  current = (current - 1 + testimonials.length) % testimonials.length;
-  renderTestimonial(current);
-};
-</script>
+      <div class="testimonial-footer">
+        <div class="rating" id="testimonial-rating"></div>
+
+        <div class="author">
+          <strong id="testimonial-name"></strong>
+          <span id="testimonial-role"></span>
+        </div>
+
+        <div class="testimonial-nav">
+          <button id="testimonial-prev">‹</button>
+          <button id="testimonial-next">›</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
 
 </body>
