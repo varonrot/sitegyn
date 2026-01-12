@@ -2279,28 +2279,33 @@ overlay.onclick = () => {
   menu.classList.remove('open');
   overlay.classList.remove('show');
 };
-</script>
- <section class="testimonial" id="testimonials" data-section="testimonials">
+<section class="testimonial" id="testimonials" data-section="testimonials">
+
+  <!-- 🔹 DATA BRIDGE: הצ׳ט מזריק לכאן -->
+  <div id="testimonials-data" hidden></div>
+
   <div class="testimonial-inner">
 
     <!-- LEFT -->
     <div class="testimonial-info">
       <span class="pill" id="testimonials-kicker"></span>
+
       <h2 id="testimonials-headline"></h2>
+
       <p class="testimonial-sub" id="testimonials-subheadline"></p>
 
+      <!-- סטטי – לא קשור לצ׳ט -->
       <div class="testimonial-avatars">
-        <img src="https://randomuser.me/api/portraits/men/32.jpg">
-        <img src="https://randomuser.me/api/portraits/women/44.jpg">
-        <img src="https://randomuser.me/api/portraits/men/65.jpg">
-        <img src="https://randomuser.me/api/portraits/women/68.jpg">
-        <img src="https://randomuser.me/api/portraits/men/71.jpg">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="">
+        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="">
+        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="">
+        <img src="https://randomuser.me/api/portraits/men/71.jpg" alt="">
       </div>
 
-      <div class="testimonial-count">
-        100+ Clients Reviews
-      </div>
-    </div> <!-- ✅ סוגר LEFT -->
+      <!-- מהצ׳ט -->
+      <div class="testimonial-count" id="testimonials-count"></div>
+    </div>
 
     <!-- RIGHT -->
     <div class="testimonial-card">
@@ -2317,14 +2322,15 @@ overlay.onclick = () => {
         </div>
 
         <div class="testimonial-nav">
-          <button id="testimonial-prev">‹</button>
-          <button id="testimonial-next">›</button>
+          <button id="testimonial-prev" aria-label="Previous testimonial">‹</button>
+          <button id="testimonial-next" aria-label="Next testimonial">›</button>
         </div>
       </div>
     </div>
 
   </div>
 </section>
+
 
 
 
@@ -2350,58 +2356,83 @@ setInterval(() => {
 </script>
 
 <script>
-const testimonials = [
-  {
-    text: "The doctors were incredibly caring and professional. They took the time to explain every step clearly, making me feel comfortable and confident.",
-    name: "John Doe",
-    role: "Director",
-    rating: "5 ★"
-  },
-  {
-    text: "Outstanding care and attention. The medical team made everything easy and stress-free from start to finish.",
-    name: "Sarah Williams",
-    role: "Patient",
-    rating: "5 ★"
-  },
-  {
-    text: "Professional staff, modern facilities, and truly compassionate treatment. Highly recommended.",
-    name: "Michael Brown",
-    role: "Entrepreneur",
-    rating: "5 ★"
+(function () {
+
+  /* =========================
+     READ DATA FROM CHAT
+  ========================= */
+
+  const dataEl = document.getElementById("testimonials-data");
+  if (!dataEl || !dataEl.dataset.items) {
+    console.warn("Testimonials: no data found");
+    return;
   }
-];
 
-let current = 0;
+  let testimonials;
+  try {
+    testimonials = JSON.parse(dataEl.dataset.items);
+  } catch (e) {
+    console.error("Testimonials JSON invalid", e);
+    return;
+  }
 
-const textEl   = document.getElementById("testimonial-text");
-const nameEl   = document.getElementById("testimonial-name");
-const roleEl   = document.getElementById("testimonial-role");
-const ratingEl = document.getElementById("testimonial-rating");
+  if (!Array.isArray(testimonials) || testimonials.length === 0) {
+    console.warn("Testimonials: empty array");
+    return;
+  }
 
-function renderTestimonial(index){
-  textEl.style.opacity = 0;
+  /* =========================
+     ELEMENTS
+  ========================= */
 
-  setTimeout(() => {
-    textEl.textContent   = testimonials[index].text;
-    nameEl.textContent   = testimonials[index].name;
-    roleEl.textContent   = testimonials[index].role;
-    ratingEl.textContent = testimonials[index].rating;
-    textEl.style.opacity = 1;
-  }, 150);
-}
+  const textEl   = document.getElementById("testimonial-text");
+  const nameEl   = document.getElementById("testimonial-name");
+  const roleEl   = document.getElementById("testimonial-role");
+  const ratingEl = document.getElementById("testimonial-rating");
+  const nextBtn  = document.getElementById("testimonial-next");
+  const prevBtn  = document.getElementById("testimonial-prev");
 
-document.getElementById("testimonial-next").onclick = () => {
-  current = (current + 1) % testimonials.length;
-  renderTestimonial(current);
-};
+  let current = 0;
 
-document.getElementById("testimonial-prev").onclick = () => {
-  current = (current - 1 + testimonials.length) % testimonials.length;
-  renderTestimonial(current);
-};
+  /* =========================
+     RENDER
+  ========================= */
 
- 
-renderTestimonial(0);
+  function renderTestimonial(index) {
+    const t = testimonials[index];
+
+    textEl.style.opacity = 0;
+
+    setTimeout(() => {
+      textEl.textContent   = t.text || "";
+      nameEl.textContent   = t.name || "";
+      roleEl.textContent   = t.role || "";
+      ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
+      textEl.style.opacity = 1;
+    }, 150);
+  }
+
+  /* =========================
+     NAVIGATION
+  ========================= */
+
+  nextBtn?.addEventListener("click", () => {
+    current = (current + 1) % testimonials.length;
+    renderTestimonial(current);
+  });
+
+  prevBtn?.addEventListener("click", () => {
+    current = (current - 1 + testimonials.length) % testimonials.length;
+    renderTestimonial(current);
+  });
+
+  /* =========================
+     INITIAL RENDER (CRITICAL)
+  ========================= */
+
+  renderTestimonial(0);
+
+})();
 </script>
 
 
