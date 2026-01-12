@@ -83,6 +83,30 @@
         "cta": { "type": "string" }
       },
       "required": ["headline", "description"]
+    },
+
+    "departments": {
+      "type": "object",
+      "properties": {
+        "kicker": { "type": "string" },
+        "headline": { "type": "string" },
+        "description": { "type": "string" },
+        "cta": { "type": "string" },
+
+        "items": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" }
+            },
+            "required": ["title"]
+          }
+        }
+      },
+      "required": ["headline", "items"]
     }
   },
   "required": ["home"]
