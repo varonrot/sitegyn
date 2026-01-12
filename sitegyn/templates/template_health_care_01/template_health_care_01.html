@@ -2280,61 +2280,7 @@ overlay.onclick = () => {
   menu.classList.remove('open');
   overlay.classList.remove('show');
 };
-<section class="testimonial" id="testimonials" data-section="testimonials">
-
-  <!-- 🔹 DATA BRIDGE: הצ׳ט מזריק לכאן -->
-  <div id="testimonials-data" hidden></div>
-
-  <div class="testimonial-inner">
-
-    <!-- LEFT -->
-    <div class="testimonial-info">
-      <span class="pill" id="testimonials-kicker"></span>
-
-      <h2 id="testimonials-headline"></h2>
-
-      <p class="testimonial-sub" id="testimonials-subheadline"></p>
-
-      <!-- סטטי – לא קשור לצ׳ט -->
-      <div class="testimonial-avatars">
-        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
-        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="">
-        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="">
-        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="">
-        <img src="https://randomuser.me/api/portraits/men/71.jpg" alt="">
-      </div>
-
-      <div class="testimonial-count" id="testimonials-count">
-        100+ Clients Reviews
-      </div>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="testimonial-card">
-      <div class="quote-mark">“</div>
-
-      <blockquote id="testimonial-text"></blockquote>
-
-      <div class="testimonial-footer">
-        <div class="rating" id="testimonial-rating"></div>
-
-        <div class="author">
-          <strong id="testimonial-name"></strong>
-          <span id="testimonial-role"></span>
-        </div>
-
-        <div class="testimonial-nav">
-          <button id="testimonial-prev" aria-label="Previous testimonial">‹</button>
-          <button id="testimonial-next" aria-label="Next testimonial">›</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-
+ 
 
 </body>
 </html>
@@ -2391,10 +2337,10 @@ setInterval(() => {
   render(0);
 })();
 </script>
-<script>
+ <script>
 function initTestimonials() {
   const data = window.content_json?.testimonials;
-  if (!data || !Array.isArray(data.items)) return;
+  if (!data || !Array.isArray(data.items) || !data.items.length) return;
 
   let current = 0;
   const items = data.items;
@@ -2409,7 +2355,7 @@ function initTestimonials() {
     textEl.textContent   = t.text || "";
     nameEl.textContent   = t.name || "";
     roleEl.textContent   = t.role || "";
-    ratingEl.textContent = (t.rating || "") + " ★";
+    ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
   }
 
   document.getElementById("testimonial-next").onclick = () => {
@@ -2425,9 +2371,10 @@ function initTestimonials() {
   render(0);
 }
 
-// ⬅️ קריטי
+// ⬅️ זה הדבר החשוב באמת
 window.addEventListener("content:ready", initTestimonials);
 </script>
+
 
 
 
