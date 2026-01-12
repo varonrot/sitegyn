@@ -2039,11 +2039,11 @@ section[id] {
 
     <!-- LEFT -->
     <div class="testimonial-info">
-      <span class="pill" data-bind="testimonials.kicker"></span>
+      <span class="pill" id="testimonials-kicker"></span>
 
-      <h2 data-bind="testimonials.headline"></h2>
+      <h2 id="testimonials-headline"></h2>
 
-      <p class="testimonial-sub" data-bind="testimonials.subheadline"></p>
+      <p class="testimonial-sub" id="testimonials-subheadline"></p>
 
       <div class="testimonial-avatars">
         <img src="https://randomuser.me/api/portraits/men/32.jpg">
@@ -2053,7 +2053,7 @@ section[id] {
         <img src="https://randomuser.me/api/portraits/men/71.jpg">
       </div>
 
-      <div class="testimonial-count" data-bind="testimonials.count"></div>
+      <div class="testimonial-count" id="testimonials-count"></div>
     </div>
 
     <!-- RIGHT -->
@@ -2061,14 +2061,14 @@ section[id] {
 
       <div class="quote-mark">“</div>
 
-      <blockquote data-bind="testimonials.items.0.text"></blockquote>
+      <blockquote id="testimonials-item-0-text"></blockquote>
 
       <div class="testimonial-footer">
-        <div class="rating" data-bind="testimonials.items.0.rating"></div>
+        <div class="rating" id="testimonials-item-0-rating"></div>
 
         <div class="author">
-          <strong data-bind="testimonials.items.0.name"></strong>
-          <span data-bind="testimonials.items.0.role"></span>
+          <strong id="testimonials-item-0-name"></strong>
+          <span id="testimonials-item-0-role"></span>
         </div>
 
         <div class="testimonial-nav">
@@ -2082,6 +2082,7 @@ section[id] {
 
   </div>
 </section>
+
 <section class="blogs-section" id="blog" data-section="blog">
   <div class="blogs-container">
 
