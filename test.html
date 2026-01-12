@@ -308,11 +308,10 @@ header{
 .service-card.dark p{
   color:#cbd5f5;
 }
-
 @media (max-width: 768px){
 
   .hero{
-    padding-bottom: 360px; 
+    padding-bottom: 360px; /* מקום לכרטיסים */
   }
 
   .hero-inner{
@@ -357,25 +356,13 @@ header{
   }
 
 }
-/* ================= HERO – MOBILE FIX ================= */
-@media (max-width: 768px) {
+/* ===== HIDE MINI STAT ON MOBILE ===== */
+@media (max-width: 900px){
   .mini-stat{
-    display: none !important;
+    display:none !important;
   }
 }
-/* ================= HERO – MOBILE SPACING FIX ================= */
-@media (max-width: 768px) {
- 
-  .hero-cards{
-    margin-top: 48px;
-    position: relative;
-    bottom: auto;
-  }
- 
-  .hero{
-    padding-bottom: 120px;
-  }
-}
+
 
 /* ================= ABOUT ================= */
 .about{
