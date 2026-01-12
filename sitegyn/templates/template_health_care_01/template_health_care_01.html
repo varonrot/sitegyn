@@ -311,7 +311,7 @@ header{
 @media (max-width: 768px){
 
   .hero{
-    padding-bottom: 360px;  
+    padding-bottom: 360px; /* מקום לכרטיסים */
   }
 
   .hero-inner{
@@ -356,7 +356,12 @@ header{
   }
 
 }
-
+/* ===== HIDE MINI STAT ON MOBILE ===== */
+@media (max-width: 900px){
+  .mini-stat{
+    display:none !important;
+  }
+}
 
 
 /* ================= ABOUT ================= */
