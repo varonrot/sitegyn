@@ -2390,6 +2390,43 @@ setInterval(() => {
   render(0);
 })();
 </script>
+<script>
+function initTestimonials() {
+  const data = window.content_json?.testimonials;
+  if (!data || !Array.isArray(data.items)) return;
+
+  let current = 0;
+  const items = data.items;
+
+  const textEl   = document.getElementById("testimonial-text");
+  const nameEl   = document.getElementById("testimonial-name");
+  const roleEl   = document.getElementById("testimonial-role");
+  const ratingEl = document.getElementById("testimonial-rating");
+
+  function render(i) {
+    const t = items[i];
+    textEl.textContent   = t.text || "";
+    nameEl.textContent   = t.name || "";
+    roleEl.textContent   = t.role || "";
+    ratingEl.textContent = (t.rating || "") + " ★";
+  }
+
+  document.getElementById("testimonial-next").onclick = () => {
+    current = (current + 1) % items.length;
+    render(current);
+  };
+
+  document.getElementById("testimonial-prev").onclick = () => {
+    current = (current - 1 + items.length) % items.length;
+    render(current);
+  };
+
+  render(0);
+}
+
+// ⬅️ קריטי
+window.addEventListener("content:ready", initTestimonials);
+</script>
 
 
 
