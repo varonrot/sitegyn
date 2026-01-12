@@ -33,5 +33,14 @@
   "about-author-name": "about.author.name",
   "about-author-role": "about.author.role",
 
-  "about-cta": "about.cta"
+  "about-cta": "about.cta",
+
+  "departments-kicker": "departments.kicker",
+  "departments-headline": "departments.headline",
+  "departments-description": "departments.description",
+  "departments-cta": "departments.cta",
+
+  "departments-item-0-title": "departments.items[0].title",
+  "departments-item-1-title": "departments.items[1].title",
+  "departments-item-2-title": "departments.items[2].title"
 }
