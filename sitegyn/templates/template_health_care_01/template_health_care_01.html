@@ -2280,7 +2280,7 @@ overlay.onclick = () => {
   menu.classList.remove('open');
   overlay.classList.remove('show');
 };
- 
+
 
 </body>
 </html>
@@ -2342,6 +2342,13 @@ function initTestimonials() {
   const data = window.content_json?.testimonials;
   if (!data || !Array.isArray(data.items) || !data.items.length) return;
 
+  // LEFT
+  document.getElementById("testimonials-kicker").textContent = data.kicker || "";
+  document.getElementById("testimonials-headline").textContent = data.headline || "";
+  document.getElementById("testimonials-subheadline").textContent = data.subheadline || "";
+  document.getElementById("testimonials-count").textContent = data.count || "";
+
+  // RIGHT
   let current = 0;
   const items = data.items;
 
@@ -2371,11 +2378,9 @@ function initTestimonials() {
   render(0);
 }
 
-// ⬅️ זה הדבר החשוב באמת
+// ⬅️ זה קריטי
 window.addEventListener("content:ready", initTestimonials);
 </script>
-
-
 
 
 <script>
