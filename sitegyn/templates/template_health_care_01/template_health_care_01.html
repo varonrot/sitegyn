@@ -1,2389 +1,971 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>CiyaCare – Medical Landing</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-:root{
-  --primary:#2dd4d8;
-  --dark:#0f172a;
-  --card:#111827;
-  --text:#e5e7eb;
-  --muted:#64748b;
-  --bg:#020617;
+  <meta charset="UTF-8" />
+  <title>template_online_course</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+/* =========================
+   BASE
+========================= */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  background: #ffffff;
+  color: #111;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-  font-family:system-ui,-apple-system,BlinkMacSystemFont;
-  background:var(--bg);
-  color:#fff;
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
 }
 
-/* ================= NAV ================= */
-header{
-  position:fixed;
-  top:0;left:0;right:0;
-  z-index:100;
-  background:rgba(2,6,23,.8);
-  backdrop-filter:blur(8px);
-}
-.nav{
-  max-width:1200px;
-  margin:auto;
-  padding:16px 20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.logo{font-size:22px;font-weight:800}
-.logo span{color:var(--primary)}
-.nav-links{display:flex;gap:28px}
-.nav-links a{color:#e5e7eb;text-decoration:none;font-size:14px}
-.nav-cta{
-  background:var(--primary);
-  color:#022c22;
-  padding:12px 22px;
-  border-radius:999px;
-  text-decoration:none;
-  font-weight:700;
-}
-.logo a{
-  color:#ffffff;        /* Ciya */
-  text-decoration:none;
-  font-size:22px;
-  font-weight:800;
+/* =========================
+   HERO (Light)
+========================= */
+.hero {
+  padding: 40px 24px;
+  border-radius: 16px;
+  background: #f7f7f8;
 }
 
-.logo a span{
-  color:var(--primary); /* Care */
+.hero-kicker {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: #666;
 }
 
-/* ================= HERO ================= */
-.hero{
-  min-height:100vh;
-  position:relative;
-  overflow:visible; /* ✔️ */
-  padding-top:72px;
-  padding-bottom:260px;
+.hero-title {
+  font-size: 2.4rem;
+  margin: 12px 0 8px;
 }
 
-.hero-bg{position:absolute;inset:0}
-.slide{
-  position:absolute;
-  inset:-6%; /* זה הקסם */
-  background-size:cover;
-  background-position:center;
-  opacity:0;
-  transform:scale(1.08);
-  transition:
-    opacity 1.6s ease,
-    transform 10s ease;
+.hero-subtitle {
+  font-size: 1.05rem;
+  max-width: 540px;
+  color: #444;
 }
 
-.slide.active{
-  opacity:1;
-  transform:scale(1);
+.hero-cta {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.hero-overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(2,6,23,.55);
-  z-index:1;
+/* =========================
+   BUTTONS
+========================= */
+.btn-primary,
+.btn-secondary {
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
 }
 
-
-.hero-inner{
-  position:relative;
-  z-index:2;
-  max-width:1200px;
-  margin:auto;
-  height:100%;
-  padding:100px 20px 160px;
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:60px;
-  align-items:center;
+.btn-primary {
+  background: #ff5c3b;
+  color: #fff;
 }
 
-.hero-pill{
-  display:inline-block;
-  padding:6px 14px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:var(--primary);
-  font-size:13px;
-  margin-bottom:18px;
+.btn-secondary {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #111;
 }
 
-.hero h1{
-  font-size:54px;
-  line-height:1.1;
-  margin-bottom:20px;
+/* =========================
+   SECTIONS
+========================= */
+.section {
+  margin-top: 40px;
+  padding: 24px 20px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #eee;
 }
 
-.hero p{
-  max-width:480px;
-  margin-bottom:32px;
-  color:var(--text);
+.section-title {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
 }
 
-.hero-actions{display:flex;gap:16px}
-.btn-primary{
-  background:var(--primary);
-  color:#022c22;
-  padding:14px 30px;
-  border-radius:999px;
-  text-decoration:none;
-  font-weight:700;
-}
-.btn-outline{
-  border:1px solid rgba(255,255,255,.4);
-  padding:14px 30px;
-  border-radius:999px;
-  color:#fff;
-  text-decoration:none;
+.section-subtitle {
+  font-size: .98rem;
+  color: #555;
+  margin-bottom: 12px;
 }
 
-/* VIDEO CARD – CLEAN */
-.hero-video{
-  position:relative;
-  width:100%;
-  min-height:420px; /* ⬅️ קריטי */
-  z-index:3;
+/* =========================
+   LAYOUT
+========================= */
+.two-col {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
 }
 
-.hero-video video{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:28px;
-}
-.hero-bg{
-  position:absolute;
-  inset:0;
-  overflow:hidden; /* ✔️ כאן כן */
+.two-col > div {
+  flex: 1 1 260px;
 }
 
-
-/* STAT */
-.hero-stat{
-  position:absolute;
-  bottom:18px;
-  left:-36px;
-  background:#fff;
-  color:#0f172a;
-  border-radius:24px;
-  padding:18px 20px;
-  display:flex;
-  gap:18px;
-  align-items:center;
-  box-shadow:0 30px 60px rgba(0,0,0,.25);
+/* =========================
+   PILLS
+========================= */
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
 }
 
-.stat-number{font-size:26px;font-weight:800}
-.stat-label{font-size:14px;color:#6b7280}
-
-.stat-video{
-  width:120px;
-  height:84px;
-  border-radius:16px;
-  overflow:hidden;
-}
-.stat-video video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.pill {
+  font-size: .85rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f0f0f0;
+  color: #111;
 }
 
-/* ================= SERVICE CARDS FIX ================= */
-.hero-cards{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:-140px;
-  z-index:4;
+/* =========================
+   CARDS
+========================= */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 10px;
 }
 
-.cards-inner{
-  max-width:1200px;
-  margin:auto;
-  padding:0 20px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:28px;
+.card {
+  padding: 14px 12px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
 }
 
- /* ===== SERVICE CARDS – PREMIUM ===== */
-.service-card{
-  position:relative;
-  border-radius:26px;
-  padding:36px 34px;
-  min-height:240px;
-  backdrop-filter:blur(10px);
-  box-shadow:
-    0 20px 40px rgba(2,6,23,.15),
-    inset 0 1px 0 rgba(255,255,255,.25);
-  transition:transform .3s ease, box-shadow .3s ease;
+.card-title {
+  font-size: 1rem;
+  margin-bottom: 4px;
 }
 
-.service-card:hover{
-  transform:translateY(-6px);
-  box-shadow:
-    0 30px 60px rgba(2,6,23,.25),
-    inset 0 1px 0 rgba(255,255,255,.35);
+.card-meta {
+  font-size: .86rem;
+  color: #777;
+  margin-bottom: 6px;
 }
 
-/* ICON – CLEAN & MONO */
-.card-icon{
-  width:46px;
-  height:46px;
-  border-radius:14px;
-  display:grid;
-  place-items:center;
-  font-size:20px;
-  margin-bottom:18px;
-  background:rgba(15,23,42,.08);
-  color:#0f172a;
+.card-text {
+  font-size: .9rem;
+  color: #333;
 }
 
-/* TITLES */
-.service-card h3{
-  font-size:20px;
-  font-weight:700;
-  margin-bottom:12px;
+/* =========================
+   CONTACT
+========================= */
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  font-size: .95rem;
 }
 
-/* DIVIDER */
-.card-line{
-  height:1px;
-  width:100%;
-  background:rgba(15,23,42,.15);
-  margin:14px 0 16px;
+.contact-list li {
+  margin-bottom: 4px;
 }
 
-/* TEXT */
-.service-card p{
-  font-size:14px;
-  line-height:1.65;
-  color:#334155;
+/* =========================
+   BADGE
+========================= */
+.badge {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: #777;
 }
 
-/* ===== COLOR VARIANTS ===== */
+/* =========================
+   TOP NAV (Light)
+========================= */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 
-/* LIGHT */
-.service-card.light{
-  background:rgba(240,251,251,.9);
-  color:#0f172a;
-}
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e5e5e5;
 
-/* PRIMARY */
-.service-card.primary{
-  background:rgba(45,212,216,.95);
-  color:#022c22;
-}
-.service-card.primary .card-icon{
-  background:rgba(255,255,255,.35);
-  color:#022c22;
-}
-.service-card.primary p{
-  color:#022c22;
+  padding: 14px 28px;
 }
 
-/* DARK */
-.service-card.dark{
-  background:rgba(17,24,39,.95);
-  color:#fff;
-}
-.service-card.dark .card-icon{
-  background:rgba(255,255,255,.12);
-  color:#fff;
-}
-.service-card.dark p{
-  color:#cbd5f5;
+.top-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 28px;
 }
 
-
-/* ================= ABOUT ================= */
-.about{
-  background:#fff;
-  color:#0f172a;
-  padding:320px 20px 120px; /* ⬅️ נותן מקום אמיתי לכרטיסים */
-  position:relative;
-  z-index:1;
+.top-nav a {
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  transition: color .2s ease;
 }
 
-
-.about-inner{
-  max-width:1200px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:1fr 1.1fr;
-  gap:80px;
-  align-items:center;
+.top-nav a:hover {
+  color: #000;
 }
 
-.about-media{position:relative}
-.about-media img{
-  width:100%;
-  border-radius:24px;
+.top-nav .nav-cta {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg,#6cf2c2,#3bb2ff);
+  color: #0b0b10 !important;
+  font-weight: 600;
 }
 
-.media-card{
-  position:absolute;
-  bottom:24px;
-  right:24px;
-  background:#fff;
-  border-radius:18px;
-  padding:14px 18px;
-  display:flex;
-  gap:12px;
-  box-shadow:0 20px 40px rgba(0,0,0,.2);
+.top-nav ul li:last-child {
+  margin-left: auto;
 }
 
-.about-pill{
-  display:inline-flex;
-  gap:8px;
-  padding:6px 14px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:var(--primary);
-  font-size:13px;
-  margin-bottom:18px;
-}
-
-.about h2{
-  font-size:44px;
-  margin-bottom:20px;
-}
-
-.about p{
-  color:var(--muted);
-  margin-bottom:28px;
-  max-width:520px;
-}
-
-.checklist{list-style:none}
-.checklist li{
-  display:flex;
-  gap:12px;
-  margin-bottom:14px;
-}
-.checklist .plus{
-  width:22px;height:22px;
-  border-radius:50%;
-  background:var(--primary);
-  display:grid;
-  place-items:center;
-  font-weight:700;
-}
-
-.about-footer{
-  margin-top:28px;
-  display:flex;
-  align-items:center;
-  gap:16px;
-}
-
-.about-avatar img{
-  width:52px;
-  height:52px;
-  border-radius:50%;
-}
-
-.about-btn{
-  margin-left:auto;
-  padding:10px 20px;
-  border-radius:999px;
-  border:1px solid var(--primary);
-  color:var(--primary);
-  text-decoration:none;
-}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .hero-inner,
-  .about-inner{
-    grid-template-columns:1fr;
-    text-align:center;
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 12px 16px;
   }
-  .hero-stat{position:static;margin-top:20px}
-  .cards-inner{grid-template-columns:1fr}
-}
-    .hero-cards{
-  pointer-events:auto;
-}
-.mini-stat{
-  position:absolute;
-  right:-40px;
-  bottom:40px;
 
+  .top-nav ul {
+    gap: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .top-nav ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  .top-nav a {
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+}
+
+      /* =========================
+   HERO SHOWCASE (STATIC DEMO)
+========================= */
+
+.hero-showcase {
+  position: relative;
+
+  max-width: 1280px;
+  margin: 32px auto;
+
+  min-height: 45vh;
+
+  border-radius: 28px;
+  overflow: hidden;
+
+  background-image: url("/assets/template_online_course_01.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* Overlay for readability */
+.hero-showcase-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+/* Content */
+.hero-showcase-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 48px 24px;
+  color: #fff;
+}
+
+/* Title */
+.hero-showcase-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Subtitle */
+.hero-showcase-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 720px;
+  margin: 0 auto 36px;
+  opacity: 0.95;
+}
+
+/* Actions */
+.hero-showcase-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn-hero-primary {
+  background: #ff6a00;
+  color: #fff;
+  border: none;
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-hero-primary .price {
+  margin-left: 10px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.btn-hero-secondary {
+  background: #fff;
+  color: #111;
+  border: none;
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-hero-like {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.5);
+  background: transparent;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .hero-showcase-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-showcase {
+    border-radius: 20px;
+  }
+}
+.course-meta{
+  margin:48px auto;
+  padding:0 16px;
+}
+
+.course-meta-inner{
   display:flex;
   align-items:center;
-  gap:24px;
-
-  background:rgba(255,255,255,0.01);
-  backdrop-filter:blur(20px);
-
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-
-  border-radius:28px;
-  padding:20px 22px;
-  width:420px;
-
-  box-shadow:
-    0 18px 40px rgba(0,0,0,.15),
-    inset 0 0 0 1px rgba(255,255,255,.25);
-
-  z-index:5;
-}
-.mini-stat{
-  transform: translateZ(0);
+  background:#f7f7f7;
+  border-radius:40px;
+  padding:30px 28px;
+  gap:18px;
 }
 
-.mini-stat-left{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+.meta-item{
+  text-align:center;
+  min-width:130px;
 }
 
-.avatars{
-  display:flex;
-  align-items:center;
+.meta-icon{
+  margin-bottom:8px;
 }
 
-.avatars img{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  border:2px solid #fff;
-  margin-left:-10px;
+.meta-icon svg{
+  width:26px;
+  height:26px;
+  stroke:#fe580f;
+  fill:none;
+  stroke-width:2;
 }
 
-.avatars img:first-child{margin-left:0}
-
-.avatar-plus{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  background:#2dd4d8;
-  color:#022c22;
-  display:grid;
-  place-items:center;
-  font-weight:800;
-  margin-left:-10px;
-  border:2px solid #fff;
-}
-
-.mini-stat-text strong{
-  font-size:26px;
-  color:#0f172a;
-}
-
-.mini-stat-text span{
+.meta-label{
   font-size:14px;
   color:#6b7280;
 }
 
-.mini-stat-media{
-  width:140px;
-  height:90px;
-  border-radius:16px;
-  overflow:hidden;
-  flex-shrink:0;
-  background:#000; /* fallback */
-}
-
-.mini-stat-media video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-.about-media::before{
-  content:"";
-  position:absolute;
-  left:-40px;
-  top:-40px;
-  width:65%;
-  height:65%;
-  background:#dff6f7;
-  border-radius:24px;
-  z-index:-1;
-}
-
-/* ================= DEPARTMENTS ================= */
-.departments{
-  background:#f0fbfb;
-  padding:120px 20px;
-}
-
-.departments-inner{
-  max-width:1200px;
-  margin:auto;
-}
-
-/* HEADER */
-.departments-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:40px;
-  margin-bottom:48px;
-}
-
-.head-text{
-  max-width:560px;
-}
-
-.pill{
-  display:inline-block;
-  padding:6px 14px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:#0f766e;
-  font-size:13px;
-  margin-bottom:14px;
-}
-
-.departments h2{
-  font-size:40px;
-  line-height:1.15;
-  color:#0f172a;
-  margin-bottom:16px;
-}
-
-.departments p{
-  color:#64748b;
+.meta-value{
+  margin-top:2px;
   font-size:15px;
-}
-
-/* BUTTON */
-.btn-dept{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:12px 22px;
-  border-radius:999px;
-  background:#2dd4d8;
-  color:#022c22;
-  text-decoration:none;
   font-weight:700;
-  white-space:nowrap;
+  color:#111827;
 }
 
-.btn-dept span{
-  background:#fff;
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
+.meta-divider{
+  width:1px;
+  height:64px;
+  background:rgba(0,0,0,0.08);
+}
+.course-meta-footer {
+  background: #ffffff;
+  border-top: 1px solid #edf0f4;
+  padding: 28px 16px;
 }
 
-/* GRID */
-.dept-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:28px;
+.course-meta-footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
 }
 
-/* CARD */
-.dept-card{
-  position:relative;
-  border-radius:22px;
-  overflow:hidden;
-  height:320px;
+.meta-footer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.dept-card img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
+.meta-footer-icon {
+  width: 28px;
+  height: 28px;
+  color: #6b7280;
 }
 
-.dept-card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(
-    to top,
-    rgba(0,0,0,.55),
-    rgba(0,0,0,.1),
-    transparent
-  );
+.meta-footer-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
 }
 
-.dept-title{
-  position:absolute;
-  left:20px;
-  bottom:18px;
-  z-index:2;
-  font-size:22px;
-  font-weight:700;
-  color:#fff;
+.meta-footer-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
 }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  .departments-head{
-    flex-direction:column;
-    align-items:flex-start;
+.meta-footer-label {
+  font-size: 12px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.meta-footer-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.meta-footer-divider {
+  width: 1px;
+  height: 28px;
+  background: #e5e7eb;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .course-meta-footer-inner {
+    flex-direction: column;
+    gap: 20px;
   }
 
-  .dept-grid{
-    grid-template-columns:1fr;
+  .meta-footer-divider {
+    width: 40px;
+    height: 1px;
   }
 }
-/* ===== HAMBURGER BUTTON ===== */
-.nav-toggle{
-  display:none;
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  border:none;
-  background:rgba(255,255,255,.08);
-  backdrop-filter:blur(8px);
-  cursor:pointer;
-  position:relative;
-  z-index:120;
+/* =========================
+   WHY COURSE SECTION
+========================= */
+
+.why-course {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 0 20px;
+  text-align: center;
 }
 
-.nav-toggle span{
-  position:absolute;
-  left:11px;
-  right:11px;
-  height:2px;
-  background:#fff;
-  border-radius:2px;
-  transition:.3s;
+.why-course-title {
+  font-size: 34px;
+  font-weight: 800;
+  margin-bottom: 32px;
+  letter-spacing: -0.02em;
 }
-.nav-toggle span:nth-child(1){top:14px}
-.nav-toggle span:nth-child(2){top:20px}
-.nav-toggle span:nth-child(3){top:26px}
 
-/* ===== MOBILE ===== */
-@media(max-width:900px){
+.why-course-media {
+  margin-bottom: 48px;
+}
 
-  .nav-cta{
-    display:none;
+.why-course-media img {
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 18px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Stats grid */
+.why-course-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 60px;
+  text-align: left;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.why-stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.why-stat-value {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  color: #000;
+  min-width: 80px;
+}
+
+.why-stat-text {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .why-course-title {
+    font-size: 26px;
   }
 
-  .nav-toggle{
-    display:block;
+  .why-course-stats {
+    grid-template-columns: 1fr;
+    gap: 28px;
   }
 
-  .nav-links{
-    position:fixed;
-    top:0;
-    right:-100%;
-    width:78%;
-    max-width:320px;
-    height:100vh;
-    background:rgba(2,6,23,.96);
-    backdrop-filter:blur(14px);
-    padding:100px 28px;
-    display:flex;
-    flex-direction:column;
-    gap:26px;
-    transition:.4s ease;
-    z-index:110;
-  }
-
-  .nav-links a{
-    font-size:18px;
-  }
-
-  .nav-links.open{
-    right:0;
-  }
-
-  .nav-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.45);
-    opacity:0;
-    pointer-events:none;
-    transition:.3s;
-    z-index:100;
-  }
-
-  .nav-overlay.show{
-    opacity:1;
-    pointer-events:auto;
-  }
-
-  /* ANIMATION X */
-  .nav-toggle.active span:nth-child(1){
-    transform:rotate(45deg);
-    top:20px;
-  }
-  .nav-toggle.active span:nth-child(2){
-    opacity:0;
-  }
-  .nav-toggle.active span:nth-child(3){
-    transform:rotate(-45deg);
-    top:20px;
+  .why-stat {
+    gap: 12px;
   }
 }
-@media(max-width:900px){
-
-  .about-inner{
-    display:flex;
-    flex-direction:column;
-    gap:32px;
-  }
-
-  .about-content{
-    order:1;   /* טקסט קודם */
-  }
-
-  .about-media{
-    order:2;   /* תמונה למטה */
-  }
-}
-/* ================= SERVICES ================= */
-.services{
-  background:#fff;
-  padding:120px 20px;
+.course-meta {
+  margin: 48px auto;
+  max-width: 1100px;
+  padding: 0 20px;
 }
 
-.services-inner{
-  max-width:1200px;
-  margin:auto;
+.course-meta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f7f7f7;
+  border-radius: 999px;
+  padding: 28px 32px;
+  gap: 18px;
 }
 
-/* HEADER */
-.services-head{
-  max-width:520px;
-  margin-bottom:70px;
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 120px;
 }
 
-.services-pill{
-  display:inline-block;
-  padding:6px 14px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:#0f766e;
-  font-size:13px;
-  margin-bottom:16px;
+.meta-icon {
+  margin-bottom: 8px;
 }
 
-.services h2{
-  font-size:42px;
-  line-height:1.15;
-  color:#0f172a;
+.meta-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke: #ff6a00;
+  stroke-width: 2;
+  fill: none;
 }
 
-/* LIST */
-.services-list{
-  display:flex;
-  flex-direction:column;
+.meta-label {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 2px;
 }
 
-/* ROW */
-.service-row{
-  display:grid;
-  grid-template-columns:1.2fr 2fr auto;
-  align-items:center;
-  gap:40px;
-  padding:36px 0;
-  border-bottom:1px solid rgba(15,23,42,.08);
+.meta-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
 }
 
-.service-left{
-  display:flex;
-  align-items:center;
-  gap:24px;
+.meta-divider {
+  width: 1px;
+  height: 42px;
+  background: #e5e7eb;
 }
 
-/* NUMBER */
-.service-num{
-  font-size:56px;
-  font-weight:800;
-  color:rgba(45,212,216,.15);
-  min-width:70px;
-}
-
-/* TITLE */
-.service-left h3{
-  font-size:22px;
-  font-weight:700;
-  color:#0f172a;
-}
-
-/* DESCRIPTION */
-.service-desc{
-  font-size:15px;
-  line-height:1.6;
-  color:#64748b;
-  max-width:520px;
-}
-
-/* ARROW */
-.service-arrow{
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  border:1px solid rgba(45,212,216,.5);
-  display:grid;
-  place-items:center;
-  color:#2dd4d8;
-  font-size:20px;
-  text-decoration:none;
-  transition:.3s ease;
-}
-
-.service-row:hover .service-arrow{
-  background:#2dd4d8;
-  color:#022c22;
-}
-
-/* ================= MOBILE ================= */
-@media(max-width:900px){
-  .service-row{
-    grid-template-columns:1fr;
-    gap:16px;
-  }
-
-  .service-arrow{
-    justify-self:flex-start;
-  }
-}
-/* ================= WIDE FEATURE ================= */
-.wide-feature{
-  width:100%;
-  background:#0f1f3a; /* כהה פרימיום */
-}
-
-.wide-feature-inner{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  min-height:520px;
-}
-
-/* IMAGE */
-.wide-feature-media{
-  position:relative;
-}
-
-.wide-feature-media img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-/* CONTENT */
-.wide-feature-content{
-  padding:90px 80px;
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-/* PILL */
-.wide-pill{
-  display:inline-block;
-  align-self:flex-start;
-  padding:6px 16px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:#2dd4d8;
-  font-size:13px;
-  margin-bottom:18px;
-}
-
-/* TITLE */
-.wide-feature-content h2{
-  font-size:40px;
-  line-height:1.15;
-  margin-bottom:18px;
-}
-
-/* DESCRIPTION */
-.wide-desc{
-  max-width:520px;
-  font-size:15px;
-  line-height:1.7;
-  color:#cbd5f5;
-  margin-bottom:48px;
-}
-
-/* STATS */
-.wide-stats{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:28px 40px;
-}
-
-.stat strong{
-  font-size:36px;
-  font-weight:800;
-  display:block;
-  margin-bottom:4px;
-}
-
-.stat span{
-  font-size:14px;
-  color:#9ca3af;
-}
-
-/* ================= RESPONSIVE ================= */
-@media(max-width:900px){
-  .wide-feature-inner{
-    grid-template-columns:1fr;
-  }
-
-  .wide-feature-media{
-    height:320px;
-  }
-
-  .wide-feature-content{
-    padding:60px 24px;
-    text-align:left;
-  }
-
-  .wide-feature-content h2{
-    font-size:32px;
-  }
-
-  .wide-stats{
-    grid-template-columns:1fr 1fr;
-  }
-}
-/* ================= TESTIMONIAL ================= */
-.testimonial{
-  background:#fff;
-  padding:120px 20px;
-}
-
-.testimonial-inner{
-  max-width:1200px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:1fr 1.3fr;
-  gap:80px;
-  align-items:center;
-}
-
-/* LEFT INFO */
-.testimonial-info .pill{
-  display:inline-block;
-  padding:6px 16px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:#0f766e;
-  font-size:13px;
-  margin-bottom:18px;
-}
-
-.testimonial-info h2{
-  font-size:42px;
-  line-height:1.15;
-  margin-bottom:18px;
-  color:#0f172a;
-}
-
-.testimonial-sub{
-  font-size:15px;
-  color:#64748b;
-  max-width:320px;
-  margin-bottom:28px;
-}
-
-/* AVATARS */
-.testimonial-avatars{
-  display:flex;
-  align-items:center;
-  margin-bottom:12px;
-}
-
-.testimonial-avatars img{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  border:2px solid #fff;
-  margin-left:-12px;
-}
-
-.testimonial-avatars img:first-child{
-  margin-left:0;
-}
-
-.testimonial-count{
-  font-size:14px;
-  color:#0f172a;
-  font-weight:600;
-}
-
-/* RIGHT CARD */
-.testimonial-card{
-  position:relative;
-  padding:56px 56px 48px;
-  border-radius:32px;
-  background:#f8fafc;
-  box-shadow:
-    0 30px 60px rgba(2,6,23,.08),
-    inset 0 1px 0 rgba(255,255,255,.6);
-}
-
-/* QUOTE */
-.quote-mark{
-  position:absolute;
-  top:-20px;
-  left:32px;
-  font-size:120px;
-  color:rgba(45,212,216,.25);
-  font-family:serif;
-  line-height:1;
-}
-
-/* TEXT */
-.testimonial-card blockquote{
-  font-size:18px;
-  line-height:1.7;
-  color:#0f172a;
-  margin-bottom:36px;
-  max-width:640px;
-}
-
-/* FOOTER */
-.testimonial-footer{
-  display:flex;
-  align-items:center;
-  gap:24px;
-}
-
-.rating{
-  font-size:16px;
-  font-weight:700;
-  color:#0f172a;
-}
-
-.author strong{
-  display:block;
-  font-size:16px;
-}
-
-.author span{
-  font-size:14px;
-  color:#64748b;
-}
-
-/* NAV */
-.testimonial-nav{
-  margin-left:auto;
-  display:flex;
-  gap:12px;
-}
-
-.testimonial-nav button{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  border:1px solid rgba(15,23,42,.15);
-  background:#fff;
-  cursor:pointer;
-  font-size:18px;
-  transition:.25s ease;
-}
-
-.testimonial-nav button:hover{
-  background:#2dd4d8;
-  color:#022c22;
-  border-color:#2dd4d8;
-}
-
-/* DECORATIVE SHAPE */
-.testimonial-decor{
-  position:absolute;
-  right:-40px;
-  bottom:-40px;
-  width:160px;
-  height:160px;
-  background:radial-gradient(circle, rgba(45,212,216,.35), transparent 70%);
-  border-radius:50%;
-  pointer-events:none;
-}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .testimonial-inner{
-    grid-template-columns:1fr;
-    gap:48px;
-  }
-
-  .testimonial-card{
-    padding:42px 28px;
-  }
-
-  .testimonial-info h2{
-    font-size:34px;
-  }
-}
-#testimonial-text{
-  transition: opacity .3s ease;
-}
-/* SECTION – כמעט Full Width */
-.blogs-section{
-  padding:100px 40px;
-}
-
-.blogs-container{
-  background:#f2fbfb;
-  border-radius:40px;
-  padding:80px 60px 90px;
-  max-width:1400px;
-  margin:0 auto;
-  text-align:center;
-}
-
-/* PILL */
-.blogs-container .pill{
-  display:inline-block;
-  padding:6px 16px;
-  border-radius:999px;
-  background:#dff7f7;
-  color:#14b8a6;
-  font-size:13px;
-  margin-bottom:16px;
-}
-
-/* TITLES */
-.blogs-title{
-  font-size:44px;
-  margin-bottom:16px;
-  color:#0f172a;
-}
-
-.blogs-subtitle{
-  max-width:720px;
-  margin:0 auto 56px;
-  color:#64748b;
-  font-size:16px;
-}
-
-/* GRID */
-.blogs-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:32px;
-  text-align:left;
-}
-
-/* CARD */
-.blog-card img{
-  width:100%;
-  height:220px;
-  object-fit:cover;
-  border-radius:22px;
-  margin-bottom:18px;
-}
-
-.blog-meta{
-  font-size:13px;
-  color:#64748b;
-  margin-bottom:8px;
-}
-
-.blog-card h3{
-  font-size:18px;
-  line-height:1.4;
-  color:#0f172a;
-}
-
-/* ================= MOBILE FIX ================= */
+/* Mobile */
 @media (max-width: 900px) {
-
-  section.blogs,
-  .blogs,
-  .blogs-section{
-    padding-top: 24px !important;
-    margin-top: 0 !important;
+  .course-meta-inner {
+    flex-wrap: wrap;
+    border-radius: 24px;
+    justify-content: center;
   }
 
-  .blogs-container{
-    padding-top: 24px !important;
-    padding-bottom: 24px !important;
-  }
-
-  .blogs-header,
-  .blogs-head{
-    margin-top: 0 !important;
-    margin-bottom: 16px !important;
-  }
-
-  .blogs-pill{
-    margin-bottom: 8px !important;
-  }
-
-  .blogs-title{
-    margin-top: 0 !important;
-    margin-bottom: 12px !important;
-  }
-
-  .blogs-desc{
-    margin-bottom: 20px !important;
-  }
-
-  .blogs-grid{
-    gap: 24px;
-  }
-
-  .blog-card img{
-    margin-top: 0 !important;
-  }
-
-  /* kill large separators from previous section */
-  section::before,
-  section::after{
-    height: 0 !important;
-    margin: 0 !important;
+  .meta-divider {
+    display: none;
   }
 }
+/* =========================
+   COURSE FEATURES
+========================= */
 
-
-.blogs-section{
-  width:100%;
-  background:#f2fbfb;
-  padding:110px 0;
+.course-features {
+  padding: 80px 24px;
+  background: #ffffff;
 }
 
-.blogs-inner{
-  max-width:1300px;
-  margin:0 auto;
-  padding:0 24px;
-  text-align:center;
+.course-features-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 56px 48px;
 }
 
-.blogs-pill{
-  display:inline-block;
-  padding:6px 14px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:#0891b2;
-  font-size:13px;
-  font-weight:600;
-  margin-bottom:18px;
+/* Feature item */
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.blogs-title{
-  font-size:42px;
-  margin-bottom:16px;
-  color:#0f172a;
+/* Title row */
+.feature-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: #000;
 }
 
-.blogs-subtitle{
-  max-width:640px;
-  margin:0 auto 60px;
-  color:#64748b;
-  font-size:16px;
+/* Check icon */
+.feature-check {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #ff6a00;
+  color: #ff6a00;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
-.blogs-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:36px;
+/* Description */
+.feature-description {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #444;
+  max-width: 360px;
 }
 
-.blog-card{
-  text-align:left;
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1024px) {
+  .course-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 48px 32px;
+  }
 }
 
-.blog-image{
-  border-radius:18px;
-  overflow:hidden;
-  margin-bottom:18px;
+@media (max-width: 640px) {
+  .course-features {
+    padding: 60px 20px;
+  }
+
+  .course-features-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .feature-description {
+    max-width: 100%;
+  }
+}
+/* =========================
+   HERO – HEALTH & CARE
+   ========================= */
+
+.hero {
+  padding: 96px 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
 }
 
-.blog-image img{
-  width:100%;
-  height:220px;
-  object-fit:cover;
-  display:block;
+.hero-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px;
+  align-items: center;
 }
 
-.blog-meta{
-  font-size:13px;
-  color:#64748b;
-  margin-bottom:8px;
+/* LEFT CONTENT */
+.hero-content {
+  max-width: 560px;
 }
 
-.blog-card h3{
-  font-size:18px;
-  font-weight:700;
-  line-height:1.4;
-  color:#0f172a;
+.hero-kicker {
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: 46px;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  color: #1f2937;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #6b7280;
+  margin-bottom: 28px;
+}
+
+/* CTA */
+.hero-cta {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+}
+
+/* TRUST PILLS */
+.pill-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+/* RIGHT IMAGE */
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 18px;
 }
 
 /* RESPONSIVE */
-@media(max-width:900px){
-  .blogs-grid{
-    grid-template-columns:1fr;
-  }
-  .blog-image img{
-    height:240px;
-  }
-}
-.appointment-section{
-  width:100%;
-  background:#ffffff;
-  padding:120px 0;
-  position:relative;
-}
-
-.appointment-inner{
-  max-width:1300px;
-  margin:0 auto;
-  padding:0 24px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:80px;
-  align-items:center;
-}
-
-/* LEFT */
-.appointment-pill{
-  display:inline-block;
-  padding:6px 14px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:#0891b2;
-  font-size:13px;
-  font-weight:600;
-  margin-bottom:18px;
-}
-
-.appointment-info h2{
-  font-size:44px;
-  line-height:1.2;
-  margin-bottom:18px;
-  color:#0f172a;
-}
-
-.appointment-sub{
-  max-width:420px;
-  color:#64748b;
-  margin-bottom:32px;
-}
-
-.appointment-call{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.call-icon{
-  width:52px;
-  height:52px;
-  background:#2dd4d8;
-  color:#fff;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-}
-
-.appointment-call small{
-  display:block;
-  color:#64748b;
-}
-
-.appointment-call strong{
-  font-size:18px;
-  color:#0f172a;
-}
-
-/* FORM */
-.appointment-form{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-}
-
-.appointment-form input,
-.appointment-form select{
-  padding:14px 16px;
-  border-radius:10px;
-  border:1px solid #e5e7eb;
-  font-size:14px;
-  width:100%;
-}
-
-.appointment-form input:focus,
-.appointment-form select:focus{
-  outline:none;
-  border-color:#2dd4d8;
-}
-
-.appointment-form button{
-  grid-column:span 2;
-  margin-top:10px;
-  padding:16px;
-  border:none;
-  border-radius:999px;
-  background:#2dd4d8;
-  color:#fff;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  transition:.25s;
-}
-
-.appointment-form button:hover{
-  background:#14b8a6;
-}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .appointment-inner{
-    grid-template-columns:1fr;
-  }
-
-  .appointment-info h2{
-    font-size:34px;
-  }
-}
- /* ================= FOOTER ================= */
-.site-footer{
-  background:#1e2b4f;
-  color:#cbd5e1;
-  padding:80px 20px 30px;
-  position:relative;
-}
-
-/* INNER */
-.footer-inner{
-  max-width:1200px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:1.2fr 1fr 1fr 1fr;
-  gap:60px;
-}
-
-/* BRAND */
-.footer-brand .logo{
-  font-size:28px;
-  font-weight:800;
-  color:#fff;
-  margin-bottom:18px;
-}
-.footer-brand .logo span{
-  color:var(--primary);
-}
-
-.footer-brand p{
-  max-width:320px;
-  line-height:1.7;
-  margin-bottom:22px;
-}
-
-/* SOCIAL */
-.footer-social{
-  display:flex;
-  gap:14px;
-}
-.footer-social a{
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  background:var(--primary);
-  color:#022c22;
-  display:grid;
-  place-items:center;
-  font-weight:700;
-  text-decoration:none;
-  transition:.25s;
-}
-.footer-social a:hover{
-  transform:translateY(-3px);
-}
-
-/* COLUMNS */
-.footer-col h4{
-  font-size:18px;
-  color:#fff;
-  margin-bottom:18px;
-}
-.footer-col ul{
-  list-style:none;
-  padding:0;
-}
-.footer-col ul li{
-  margin-bottom:10px;
-}
-.footer-col p{
-  margin-bottom:10px;
-  line-height:1.6;
-}
-.footer-col .mt{
-  margin-top:26px;
-}
-
-/* SUBSCRIBE */
-.subscribe-box{
-  display:flex;
-  margin:14px 0 26px;
-  border-radius:999px;
-  overflow:hidden;
-  background:#0f172a;
-}
-.subscribe-box input{
-  flex:1;
-  padding:12px 16px;
-  border:none;
-  outline:none;
-  background:transparent;
-  color:#fff;
-}
-.subscribe-box button{
-  background:var(--primary);
-  color:#022c22;
-  border:none;
-  padding:0 18px;
-  cursor:pointer;
-  font-size:18px;
-}
-
-/* BOTTOM */
-.footer-bottom{
-  max-width:1200px;
-  margin:50px auto 0;
-  padding-top:20px;
-  border-top:1px solid rgba(255,255,255,.1);
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  font-size:14px;
-}
-
-/* BACK TO TOP */
-#backToTop{
-  position:absolute;
-  right:30px;
-  bottom:30px;
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  background:var(--primary);
-  color:#022c22;
-  border:none;
-  font-size:20px;
-  cursor:pointer;
-  display:grid;
-  place-items:center;
-  box-shadow:0 10px 25px rgba(0,0,0,.3);
-}
-
-/* ================= MOBILE ================= */
-@media (max-width:768px){
-
-  .footer-inner{
-    display:flex;
-    flex-direction:column;
-    gap:40px;
-  }
-
-  .footer-brand p{
-    max-width:100%;
-  }
-
-  .footer-social{
-    justify-content:flex-start;
-  }
-
-  .footer-col h4{
-    font-size:17px;
-  }
-
-  .footer-col ul li,
-  .footer-col p{
-    font-size:15px;
-  }
-
-  .footer-bottom{
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-    gap:10px;
-  }
-
-  #backToTop{
-    right:18px;
-    bottom:18px;
-    width:42px;
-    height:42px;
-  }
-}
-html {
-  scroll-behavior: smooth;
-}
-section[id] {
-  scroll-margin-top: 90px;
-}
 @media (max-width: 900px) {
-
-
-  .about{
-    padding:120px 20px 80px;
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
   }
 
-  .about-media{
-    margin-top:40px;
+  .hero-content {
+    max-width: none;
+    text-align: center;
   }
 
-  .about-media::before{
-    top:-20px;
-    left:-20px;
-    width:80%;
-    height:80%;
+  .hero-cta {
+    justify-content: center;
   }
 
-  .about-media img{
-    display:block;
+  .pill-row {
+    justify-content: center;
   }
 }
-
 
 </style>
+
 </head>
-
 <body>
+  <div class="page">
+<nav class="top-nav">
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#treatments">Treatment Areas</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nav-cta">Book Appointment</a></li>
+  </ul>
+</nav>
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid">
 
-<header>
-  <div class="nav">
+    <!-- LEFT: CONTENT -->
+    <div class="hero-content">
 
-    <div class="logo">
-      <a href="#home">Ciya<span>Care</span></a>
-    </div>
-
-    <nav class="nav-links" id="navMenu">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#departments">Departments</a>
-      <a href="#services">Services</a>
-      <a href="#blog">Blog</a>
-      <a href="#contact">Contact</a>
-    </nav>
-
-    <a class="nav-cta" href="#appointment">Make Appointment</a>
-
-    <!-- HAMBURGER -->
-    <button class="nav-toggle" id="navToggle" aria-label="Menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-  </div>
-</header>
-
-
-<div class="nav-overlay" id="navOverlay"></div>
-
-<section class="hero" id="home" data-section="home.hero">
-  <div class="hero-bg">
-    <div class="slide active" style="background-image:url('https://images.unsplash.com/photo-1576765607924-3f7b8410a787?auto=format&fit=crop&w=1600&q=80')"></div>
-    <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1579684453423-f84349ef60b0?auto=format&fit=crop&w=1600&q=80')"></div>
-  </div>
-
-  <div class="hero-overlay"></div>
-
-  <div class="hero-inner">
-    <div>
-      <div class="hero-pill" data-bind="hero.kicker"></div>
-
-      <h1 data-bind="hero.headline"></h1>
-
-      <p data-bind="hero.subheadline"></p>
-
-      <div class="hero-actions">
-        <a href="#" class="btn-primary" data-bind="hero.primary_cta"></a>
-        <a href="#" class="btn-outline" data-bind="hero.secondary_cta"></a>
-      </div>
-    </div>
-
-    <div class="hero-video">
-      <video autoplay muted loop playsinline>
-        <source src="assets/video.mp4" type="video/mp4">
-      </video>
-
-      <div class="mini-stat">
-        <div class="mini-stat-left">
-          <div class="avatars">
-            <img src="https://randomuser.me/api/portraits/men/32.jpg">
-            <img src="https://randomuser.me/api/portraits/women/44.jpg">
-            <img src="https://randomuser.me/api/portraits/men/65.jpg">
-            <span class="avatar-plus">+</span>
-          </div>
-
-          <div class="mini-stat-text">
-            <strong data-bind="hero.stats.value"></strong>
-            <span data-bind="hero.stats.label"></span>
-          </div>
-        </div>
-
-        <div class="mini-stat-media">
-          <video autoplay muted loop playsinline>
-            <source src="assets/stat-video.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="hero-cards">
-    <div class="cards-inner">
-
-      <div class="service-card light">
-        <div class="card-icon">📅</div>
-        <h3 data-bind="hero.cards.0.title"></h3>
-        <div class="card-line"></div>
-        <p data-bind="hero.cards.0.text"></p>
+      <div class="hero-kicker" id="hero-kicker">
+        <!-- e.g. "Health & Care Services" -->
       </div>
 
-      <div class="service-card primary">
-        <div class="card-icon">👨‍⚕️</div>
-        <h3 data-bind="hero.cards.1.title"></h3>
-        <div class="card-line"></div>
-        <p data-bind="hero.cards.1.text"></p>
+      <h1 class="hero-title" id="hero-headline">
+        <!-- Main headline -->
+      </h1>
+
+      <p class="hero-subtitle" id="hero-subheadline">
+        <!-- Subheadline -->
+      </p>
+
+      <div class="hero-cta">
+        <button class="btn-primary" id="hero-cta-primary">
+          <!-- e.g. Book Appointment -->
+        </button>
+
+        <button class="btn-secondary" id="hero-cta-secondary">
+          <!-- e.g. Learn More -->
+        </button>
       </div>
 
-      <div class="service-card dark">
-        <div class="card-icon">💬</div>
-        <h3 data-bind="hero.cards.2.title"></h3>
-        <div class="card-line"></div>
-        <p data-bind="hero.cards.2.text"></p>
-        <strong class="card-phone" data-bind="hero.cards.2.phone"></strong>
+      <div class="pill-row">
+        <span class="pill" id="hero-pill-1"></span>
+        <span class="pill" id="hero-pill-2"></span>
+        <span class="pill" id="hero-pill-3"></span>
       </div>
 
     </div>
-  </div>
-</section>
-<section class="about" id="about" data-section="about">
-  <div class="about-inner">
 
-    <!-- LEFT : IMAGE -->
-    <div class="about-media">
+    <!-- RIGHT: IMAGE -->
+    <div class="hero-media">
       <img
-        src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=80"
-        alt="Doctor">
-
-      <div class="media-card">
-        <span style="font-size:20px">🕒</span>
-        <div>
-          <strong data-bind="about.media.title"></strong><br>
-          <span style="font-size:13px;color:#6b7280" data-bind="about.media.subtitle"></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT : CONTENT -->
-    <div style="position:relative">
-
-      <div class="about-pill" data-bind="about.kicker"></div>
-
-      <h2 data-bind="about.headline"></h2>
-
-      <p data-bind="about.description"></p>
-
-      <ul class="checklist">
-        <li>
-          <div class="plus">+</div>
-          <span data-bind="about.points.0"></span>
-        </li>
-        <li>
-          <div class="plus">+</div>
-          <span data-bind="about.points.1"></span>
-        </li>
-        <li>
-          <div class="plus">+</div>
-          <span data-bind="about.points.2"></span>
-        </li>
-        <li>
-          <div class="plus">+</div>
-          <span data-bind="about.points.3"></span>
-        </li>
-      </ul>
-
-      <div class="about-shield"></div>
-
-      <div class="about-footer">
-        <div class="about-avatar">
-          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="CEO">
-        </div>
-
-        <div>
-          <strong data-bind="about.author.name"></strong>
-          <div style="font-size:14px;color:var(--muted)" data-bind="about.author.role"></div>
-        </div>
-
-        <img
-          class="about-signature"
-          src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Signature_of_Michael_Jordan.svg"
-          alt="Signature">
-
-        <a href="#" class="about-btn" data-bind="about.cta"></a>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
-<section class="departments" id="departments" data-section="departments">
-  <div class="departments-inner">
-
-    <!-- HEADER -->
-    <div class="departments-head">
-      <div class="head-text">
-        <span class="pill" data-bind="departments.kicker"></span>
-        <h2 data-bind="departments.headline"></h2>
-        <p data-bind="departments.description"></p>
-      </div>
-
-      <a href="#" class="btn-dept">
-        <span data-bind="departments.cta"></span> <span>→</span>
-      </a>
-    </div>
-
-    <!-- CARDS -->
-    <div class="dept-grid">
-
-      <div class="dept-card">
-        <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=900&q=80" alt="">
-        <span class="dept-title" data-bind="departments.items.0.title"></span>
-      </div>
-
-      <div class="dept-card">
-        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=800&q=80" alt="">
-        <span class="dept-title" data-bind="departments.items.1.title"></span>
-      </div>
-
-      <div class="dept-card">
-        <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=900&q=80" alt="">
-        <span class="dept-title" data-bind="departments.items.2.title"></span>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-<section class="services" id="services" data-section="services">
-  <div class="services-inner">
-
-    <div class="services-head">
-      <span class="services-pill" data-bind="services.kicker"></span>
-      <h2 data-bind="services.headline"></h2>
-    </div>
-
-    <div class="services-list">
-
-      <div class="service-row">
-        <div class="service-left">
-          <span class="service-num" data-bind="services.items.0.number"></span>
-          <h3 data-bind="services.items.0.title"></h3>
-        </div>
-
-        <p class="service-desc" data-bind="services.items.0.description"></p>
-
-        <a href="#" class="service-arrow">→</a>
-      </div>
-
-      <div class="service-row">
-        <div class="service-left">
-          <span class="service-num" data-bind="services.items.1.number"></span>
-          <h3 data-bind="services.items.1.title"></h3>
-        </div>
-
-        <p class="service-desc" data-bind="services.items.1.description"></p>
-
-        <a href="#" class="service-arrow">→</a>
-      </div>
-
-      <div class="service-row">
-        <div class="service-left">
-          <span class="service-num" data-bind="services.items.2.number"></span>
-          <h3 data-bind="services.items.2.title"></h3>
-        </div>
-
-        <p class="service-desc" data-bind="services.items.2.description"></p>
-
-        <a href="#" class="service-arrow">→</a>
-      </div>
-
-      <div class="service-row">
-        <div class="service-left">
-          <span class="service-num" data-bind="services.items.3.number"></span>
-          <h3 data-bind="services.items.3.title"></h3>
-        </div>
-
-        <p class="service-desc" data-bind="services.items.3.description"></p>
-
-        <a href="#" class="service-arrow">→</a>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
-<section class="wide-feature" id="features" data-section="features">
-  <div class="wide-feature-inner">
-
-    <!-- LEFT IMAGE (STATIC) -->
-    <div class="wide-feature-media">
-      <img
-        src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1600&q=80"
-        alt="Medical team"
+        id="hero-image"
+        src="/assets/hero-health.jpg"
+        alt=""
       />
     </div>
 
-    <!-- RIGHT CONTENT (DYNAMIC) -->
-    <div class="wide-feature-content">
-      <span class="wide-pill" data-bind="features.kicker"></span>
-
-      <h2 data-bind="features.headline"></h2>
-
-      <p class="wide-desc" data-bind="features.description"></p>
-
-      <div class="wide-stats">
-        <div class="stat">
-          <strong data-bind="features.stats.0.value"></strong>
-          <span data-bind="features.stats.0.label"></span>
-        </div>
-        <div class="stat">
-          <strong data-bind="features.stats.1.value"></strong>
-          <span data-bind="features.stats.1.label"></span>
-        </div>
-        <div class="stat">
-          <strong data-bind="features.stats.2.value"></strong>
-          <span data-bind="features.stats.2.label"></span>
-        </div>
-        <div class="stat">
-          <strong data-bind="features.stats.3.value"></strong>
-          <span data-bind="features.stats.3.label"></span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-<section class="testimonial" id="testimonials" data-section="testimonials">
-  <div class="testimonial-inner">
-
-    <!-- LEFT -->
-    <div class="testimonial-info">
-      <span class="pill" data-bind="testimonials.kicker"></span>
-
-      <h2 data-bind="testimonials.headline"></h2>
-
-      <p class="testimonial-sub" data-bind="testimonials.subheadline"></p>
-
-      <div class="testimonial-avatars">
-        <img src="https://randomuser.me/api/portraits/men/32.jpg">
-        <img src="https://randomuser.me/api/portraits/women/44.jpg">
-        <img src="https://randomuser.me/api/portraits/men/65.jpg">
-        <img src="https://randomuser.me/api/portraits/women/68.jpg">
-        <img src="https://randomuser.me/api/portraits/men/71.jpg">
-      </div>
-
-      <div class="testimonial-count" data-bind="testimonials.count"></div>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="testimonial-card">
-
-      <div class="quote-mark">“</div>
-
-      <blockquote data-bind="testimonials.items.0.text"></blockquote>
-
-      <div class="testimonial-footer">
-        <div class="rating" data-bind="testimonials.items.0.rating"></div>
-
-        <div class="author">
-          <strong data-bind="testimonials.items.0.name"></strong>
-          <span data-bind="testimonials.items.0.role"></span>
-        </div>
-
-        <div class="testimonial-nav">
-          <button data-action="testimonial-prev" aria-label="Previous">‹</button>
-          <button data-action="testimonial-next" aria-label="Next">›</button>
-        </div>
-      </div>
-
-      <div class="testimonial-decor"></div>
-    </div>
-
-  </div>
-</section>
-<section class="blogs-section" id="blog" data-section="blog">
-  <div class="blogs-container">
-
-    <span class="pill" data-bind="blog.kicker"></span>
-
-    <h2 class="blogs-title" data-bind="blog.headline"></h2>
-
-    <p class="blogs-subtitle" data-bind="blog.subheadline"></p>
-
-    <div class="blogs-grid">
-
-      <article class="blog-card">
-        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=900&q=80">
-        <div class="blog-meta" data-bind="blog.items.0.meta"></div>
-        <h3 data-bind="blog.items.0.title"></h3>
-      </article>
-
-      <article class="blog-card">
-        <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=900&q=80">
-        <div class="blog-meta" data-bind="blog.items.1.meta"></div>
-        <h3 data-bind="blog.items.1.title"></h3>
-      </article>
-
-      <article class="blog-card">
-        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80">
-        <div class="blog-meta" data-bind="blog.items.2.meta"></div>
-        <h3 data-bind="blog.items.2.title"></h3>
-      </article>
-
-    </div>
-
-  </div>
-</section>
-<section class="appointment-section" id="appointment" data-section="appointment">
-  <div class="appointment-inner">
-
-    <!-- LEFT -->
-    <div class="appointment-info">
-      <span class="appointment-pill" data-bind="appointment.pill"></span>
-
-      <h2 data-bind="appointment.title"></h2>
-
-      <p class="appointment-sub" data-bind="appointment.subtitle"></p>
-
-      <div class="appointment-call">
-        <div class="call-icon">📞</div>
-        <div>
-          <small data-bind="appointment.call_label"></small>
-          <strong data-bind="appointment.phone"></strong>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT -->
-    <form class="appointment-form" data-bind-form="appointment.form">
-
-      <select data-bind="appointment.treatment_options">
-        <option></option>
-      </select>
-
-      <select data-bind="appointment.doctor_options">
-        <option></option>
-      </select>
-
-      <input type="text" data-bind-placeholder="appointment.name_placeholder">
-      <input type="tel" data-bind-placeholder="appointment.phone_placeholder">
-
-      <input type="text" data-bind-placeholder="appointment.state_placeholder">
-      <input type="date" data-bind="appointment.date">
-
-      <select data-bind="appointment.time_options">
-        <option></option>
-      </select>
-
-      <button type="submit" data-bind="appointment.submit_label"></button>
-
-    </form>
-
   </div>
 </section>
 
-<footer class="site-footer" id="contact">
 
-  <div class="footer-inner">
-
-    <!-- LEFT -->
-    <div class="footer-brand">
-      <div class="logo">Ciya<span>Care</span></div>
-      <p>
-        Trusted healthcare with expert doctors, advanced treatments,
-        and compassionate care for every patient.
-      </p>
-
-      <div class="footer-social">
-        <a href="#">Fa</a>
-        <a href="#">X</a>
-        <a href="#">Dr</a>
-        <a href="#">Be</a>
-      </div>
-    </div>
-
-    <!-- COL 2 -->
-    <div class="footer-col">
-      <h4>Departments</h4>
-      <ul>
-        <li>Neurology</li>
-        <li>Cardiology</li>
-        <li>Orthopedics</li>
-        <li>Eye Care</li>
-      </ul>
-
-      <h4 class="mt">Opening Hours</h4>
-      <p>Mon – Fri: 08:30 – 18:30</p>
-      <p>Sat – Sun: 09:30 – 19:30</p>
-      <p>Emergency 24 hours</p>
-    </div>
-
-    <!-- COL 3 -->
-    <div class="footer-col">
-      <h4>Useful Links</h4>
-      <ul>
-        <li>Home</li>
-        <li>About Us</li>
-        <li>Pricing</li>
-        <li>Service</li>
-      </ul>
-
-      <h4 class="mt">Inquiry</h4>
-      <p>Phone: +(704) 279-1249</p>
-      <p>Email: info@example.com</p>
-    </div>
-
-    <!-- COL 4 -->
-    <div class="footer-col">
-      <h4>Subscribe</h4>
-      <p>Subscribe to our newsletter.</p>
-
-      <div class="subscribe-box">
-        <input type="email" placeholder="Enter Your Email">
-        <button>➤</button>
-      </div>
-
-      <h4 class="mt">Location</h4>
-      <p>17504 Carlton Cuevas Rd,<br>Gulfport, MS, 39503</p>
-    </div>
 
   </div>
+   <script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  <div class="footer-bottom">
-    <span>© Copyright Sitegyn. All Rights Reserved</span>
-    <span>Develop and design by Sitegyn Global Solutions</span>
-  </div>
+const supabase = createClient(
+  "https://xkchlqcwntcoakmyicqb.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
+);
+async function reloadContentFromDB() {
+  const params = new URLSearchParams(window.location.search);
+  const projectId = params.get("project_id");
+  if (!projectId) return;
 
-  <!-- BACK TO TOP -->
-  <button id="backToTop" aria-label="Back to top">↑</button>
+  const { data } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
 
-</footer>
+  if (!data?.content_json) return;
 
-<script>
-const slides = document.querySelectorAll('.slide');
-let i = 0;
+  applyContentToDOM(data.content_json);
+}
+  function applyContentToDOM(c) {
+  // HERO
+  document.getElementById("hero-kicker").innerText = c.home.hero.kicker;
+  document.getElementById("hero-headline").innerText = c.home.hero.headline;
+  document.getElementById("hero-subheadline").innerText = c.home.hero.subheadline;
+  document.getElementById("hero-cta-primary").innerText = c.home.hero.primary_cta;
+  document.getElementById("hero-cta-secondary").innerText = c.home.hero.secondary_cta;
 
-// force initial animation
-slides.forEach(s => s.classList.remove('active'));
+  document.getElementById("hero-pill-1").innerText = c.home.hero.pills?.[0] ?? "";
+  document.getElementById("hero-pill-2").innerText = c.home.hero.pills?.[1] ?? "";
+  document.getElementById("hero-pill-3").innerText = c.home.hero.pills?.[2] ?? "";
 
-requestAnimationFrame(() => {
-  slides[0].classList.add('active');
+  // ABOUT
+  document.getElementById("about-title").innerText = c.about.title;
+  document.getElementById("about-tagline").innerText = c.about.tagline;
+  document.getElementById("about-paragraph-1").innerText = c.about.paragraphs?.[0] ?? "";
+  document.getElementById("about-paragraph-2").innerText = c.about.paragraphs?.[1] ?? "";
+  document.getElementById("about-paragraph-3").innerText = c.about.paragraphs?.[2] ?? "";
+}
+window.addEventListener("message", (e) => {
+  if (e.data?.type === "content-updated") {
+    console.log("iframe received update");
+    reloadContentFromDB();
+  }
 });
 
-setInterval(() => {
-  slides[i].classList.remove('active');
-  i = (i + 1) % slides.length;
-  slides[i].classList.add('active');
-}, 8000);
-</script>
-
-<script>
-const toggle = document.getElementById('navToggle');
-const menu = document.getElementById('navMenu');
-const overlay = document.getElementById('navOverlay');
-
-toggle.onclick = () => {
-  toggle.classList.toggle('active');
-  menu.classList.toggle('open');
-  overlay.classList.toggle('show');
-};
-
-overlay.onclick = () => {
-  toggle.classList.remove('active');
-  menu.classList.remove('open');
-  overlay.classList.remove('show');
-};
-</script>
- <script>
-const testimonials = [
-  {
-    text: "The doctors were incredibly caring and professional. They took the time to explain every step clearly, making me feel comfortable and confident.",
-    name: "John Doe",
-    role: "Director",
-    rating: "5 ★"
-  },
-  {
-    text: "Outstanding care and attention. The medical team made everything easy and stress-free from start to finish.",
-    name: "Sarah Williams",
-    role: "Patient",
-    rating: "5 ★"
-  },
-  {
-    text: "Professional staff, modern facilities, and truly compassionate treatment. Highly recommended.",
-    name: "Michael Brown",
-    role: "Entrepreneur",
-    rating: "5 ★"
-  }
-];
-
-let current = 0;
-
-const textEl   = document.getElementById("testimonial-text");
-const nameEl   = document.getElementById("testimonial-name");
-const roleEl   = document.getElementById("testimonial-role");
-const ratingEl = document.getElementById("testimonial-rating");
-
-function renderTestimonial(index){
-  textEl.style.opacity = 0;
-
-  setTimeout(() => {
-    textEl.textContent   = testimonials[index].text;
-    nameEl.textContent   = testimonials[index].name;
-    roleEl.textContent   = testimonials[index].role;
-    ratingEl.textContent = testimonials[index].rating;
-    textEl.style.opacity = 1;
-  }, 200);
-}
-
-document.getElementById("testimonial-next").onclick = () => {
-  current = (current + 1) % testimonials.length;
-  renderTestimonial(current);
-};
-
-document.getElementById("testimonial-prev").onclick = () => {
-  current = (current - 1 + testimonials.length) % testimonials.length;
-  renderTestimonial(current);
-};
-</script>
-
-
-</body>
-</html>
-
-<script>
-const slides = document.querySelectorAll('.slide');
-let i = 0;
-
-// force initial animation
-slides.forEach(s => s.classList.remove('active'));
-
-requestAnimationFrame(() => {
-  slides[0].classList.add('active');
-});
-
-setInterval(() => {
-  slides[i].classList.remove('active');
-  i = (i + 1) % slides.length;
-  slides[i].classList.add('active');
-}, 8000);
-</script>
-
-<script>
-const toggle = document.getElementById('navToggle');
-const menu = document.getElementById('navMenu');
-const overlay = document.getElementById('navOverlay');
-
-toggle.onclick = () => {
-  toggle.classList.toggle('active');
-  menu.classList.toggle('open');
-  overlay.classList.toggle('show');
-};
-
-overlay.onclick = () => {
-  toggle.classList.remove('active');
-  menu.classList.remove('open');
-  overlay.classList.remove('show');
-};
-</script>
- <script>
-const testimonials = [
-  {
-    text: "The doctors were incredibly caring and professional. They took the time to explain every step clearly, making me feel comfortable and confident.",
-    name: "John Doe",
-    role: "Director",
-    rating: "5 ★"
-  },
-  {
-    text: "Outstanding care and attention. The medical team made everything easy and stress-free from start to finish.",
-    name: "Sarah Williams",
-    role: "Patient",
-    rating: "5 ★"
-  },
-  {
-    text: "Professional staff, modern facilities, and truly compassionate treatment. Highly recommended.",
-    name: "Michael Brown",
-    role: "Entrepreneur",
-    rating: "5 ★"
-  }
-];
-
-let current = 0;
-
-const textEl   = document.getElementById("testimonial-text");
-const nameEl   = document.getElementById("testimonial-name");
-const roleEl   = document.getElementById("testimonial-role");
-const ratingEl = document.getElementById("testimonial-rating");
-
-function renderTestimonial(index){
-  textEl.style.opacity = 0;
-
-  setTimeout(() => {
-    textEl.textContent   = testimonials[index].text;
-    nameEl.textContent   = testimonials[index].name;
-    roleEl.textContent   = testimonials[index].role;
-    ratingEl.textContent = testimonials[index].rating;
-    textEl.style.opacity = 1;
-  }, 200);
-}
-
-document.getElementById("testimonial-next").onclick = () => {
-  current = (current + 1) % testimonials.length;
-  renderTestimonial(current);
-};
-
-document.getElementById("testimonial-prev").onclick = () => {
-  current = (current - 1 + testimonials.length) % testimonials.length;
-  renderTestimonial(current);
-};
-</script>
-<script>
-  const backToTop = document.getElementById("backToTop");
-
-
-  backToTop.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 400) {
-      backToTop.style.opacity = "1";
-      backToTop.style.pointerEvents = "auto";
-    } else {
-      backToTop.style.opacity = "0";
-      backToTop.style.pointerEvents = "none";
-    }
-  });
-</script>
 
 
 </body>
