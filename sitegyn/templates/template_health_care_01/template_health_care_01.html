@@ -2041,15 +2041,25 @@ section[id] {
 
   </div>
 </section>
-<section class="testimonial" id="testimonials" data-section="testimonials">
+ <section class="testimonial" id="testimonials" data-section="testimonials">
   <div class="testimonial-inner">
 
     <!-- LEFT -->
     <div class="testimonial-info">
-      <span class="pill" id="testimonials-kicker"></span>
-      <h2 id="testimonials-headline"></h2>
-      <p class="testimonial-sub" id="testimonials-subheadline"></p>
+      <span class="pill" id="testimonials-kicker">
+        Testimonial
+      </span>
 
+      <h2 id="testimonials-headline">
+        Clients<br>
+        Feedback
+      </h2>
+
+      <p class="testimonial-sub" id="testimonials-subheadline">
+        From satisfied customers to loyal supporters, our community voices share.
+      </p>
+
+      <!-- סטטי בכוונה – לא מהצ׳ט -->
       <div class="testimonial-avatars">
         <img src="https://randomuser.me/api/portraits/men/32.jpg">
         <img src="https://randomuser.me/api/portraits/women/44.jpg">
@@ -2058,33 +2068,46 @@ section[id] {
         <img src="https://randomuser.me/api/portraits/men/71.jpg">
       </div>
 
-      <div class="testimonial-count">
+      <div class="testimonial-count" id="testimonials-count">
         100+ Clients Reviews
       </div>
+    </div>
 
     <!-- RIGHT -->
     <div class="testimonial-card">
+
       <div class="quote-mark">“</div>
 
-      <blockquote id="testimonial-text"></blockquote>
+      <!-- ⚠️ תוכן fallback חובה -->
+      <blockquote id="testimonial-text">
+        The doctors were incredibly caring and professional. They took the time
+        to explain every step of my treatment clearly, making me feel comfortable
+        and confident.
+      </blockquote>
 
       <div class="testimonial-footer">
-        <div class="rating" id="testimonial-rating"></div>
+
+        <div class="rating" id="testimonial-rating">
+          5 ★
+        </div>
 
         <div class="author">
-          <strong id="testimonial-name"></strong>
-          <span id="testimonial-role"></span>
+          <strong id="testimonial-name">John Doe</strong>
+          <span id="testimonial-role">Director</span>
         </div>
 
         <div class="testimonial-nav">
-          <button id="testimonial-prev">‹</button>
-          <button id="testimonial-next">›</button>
+          <button id="testimonial-prev" aria-label="Previous">‹</button>
+          <button id="testimonial-next" aria-label="Next">›</button>
         </div>
       </div>
+
+      <div class="testimonial-decor"></div>
     </div>
 
   </div>
 </section>
+
 
 
 <section class="blogs-section" id="blog" data-section="blog">
@@ -2355,85 +2378,56 @@ setInterval(() => {
 }, 8000);
 </script>
 
-<script>
+ <script>
 (function () {
+  if (!window.content_json || !content_json.testimonials) return;
 
-  /* =========================
-     READ DATA FROM CHAT
-  ========================= */
+  const data = content_json.testimonials;
+  const items = data.items || [];
 
-  const dataEl = document.getElementById("testimonials-data");
-  if (!dataEl || !dataEl.dataset.items) {
-    console.warn("Testimonials: no data found");
-    return;
-  }
+  if (!items.length) return;
 
-  let testimonials;
-  try {
-    testimonials = JSON.parse(dataEl.dataset.items);
-  } catch (e) {
-    console.error("Testimonials JSON invalid", e);
-    return;
-  }
+  let current = 0;
 
-  if (!Array.isArray(testimonials) || testimonials.length === 0) {
-    console.warn("Testimonials: empty array");
-    return;
-  }
+  // LEFT
+  document.getElementById("testimonials-kicker").textContent = data.kicker || "";
+  document.getElementById("testimonials-headline").innerHTML = (data.headline || "").replace("\n", "<br>");
+  document.getElementById("testimonials-subheadline").textContent = data.subheadline || "";
+  document.getElementById("testimonials-count").textContent = data.count
+    ? `${data.count}+ Clients Reviews`
+    : "";
 
-  /* =========================
-     ELEMENTS
-  ========================= */
-
+  // RIGHT
   const textEl   = document.getElementById("testimonial-text");
   const nameEl   = document.getElementById("testimonial-name");
   const roleEl   = document.getElementById("testimonial-role");
   const ratingEl = document.getElementById("testimonial-rating");
-  const nextBtn  = document.getElementById("testimonial-next");
-  const prevBtn  = document.getElementById("testimonial-prev");
 
-  let current = 0;
+  function render(index) {
+    const t = items[index];
+    if (!t) return;
 
-  /* =========================
-     RENDER
-  ========================= */
-
-  function renderTestimonial(index) {
-    const t = testimonials[index];
-
-    textEl.style.opacity = 0;
-
-    setTimeout(() => {
-      textEl.textContent   = t.text || "";
-      nameEl.textContent   = t.name || "";
-      roleEl.textContent   = t.role || "";
-      ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
-      textEl.style.opacity = 1;
-    }, 150);
+    textEl.textContent   = t.text || "";
+    nameEl.textContent   = t.name || "";
+    roleEl.textContent   = t.role || "";
+    ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
   }
 
-  /* =========================
-     NAVIGATION
-  ========================= */
+  document.getElementById("testimonial-next").onclick = () => {
+    current = (current + 1) % items.length;
+    render(current);
+  };
 
-  nextBtn?.addEventListener("click", () => {
-    current = (current + 1) % testimonials.length;
-    renderTestimonial(current);
-  });
+  document.getElementById("testimonial-prev").onclick = () => {
+    current = (current - 1 + items.length) % items.length;
+    render(current);
+  };
 
-  prevBtn?.addEventListener("click", () => {
-    current = (current - 1 + testimonials.length) % testimonials.length;
-    renderTestimonial(current);
-  });
-
-  /* =========================
-     INITIAL RENDER (CRITICAL)
-  ========================= */
-
-  renderTestimonial(0);
-
+  // init
+  render(0);
 })();
 </script>
+
 
 
 
