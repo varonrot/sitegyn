@@ -6,9 +6,16 @@
   "hero-cta-primary": "home.hero.primary_cta",
   "hero-cta-secondary": "home.hero.secondary_cta",
 
-  "hero-pill-1": "home.hero.pills[0]",
-  "hero-pill-2": "home.hero.pills[1]",
-  "hero-pill-3": "home.hero.pills[2]",
+  "hero-stats-value": "home.hero.stats.value",
+  "hero-stats-label": "home.hero.stats.label",
 
-  "hero-image": "home.hero.image"
+  "hero-card-0-title": "home.hero.cards.card_1.title",
+  "hero-card-0-text": "home.hero.cards.card_1.text",
+
+  "hero-card-1-title": "home.hero.cards.card_2.title",
+  "hero-card-1-text": "home.hero.cards.card_2.text",
+
+  "hero-card-2-title": "home.hero.cards.card_3.title",
+  "hero-card-2-text": "home.hero.cards.card_3.text",
+  "hero-card-2-phone": "home.hero.cards.card_3.phone"
 }
