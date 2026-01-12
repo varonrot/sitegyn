@@ -2047,17 +2047,11 @@ section[id] {
     <!-- LEFT -->
     <div class="testimonial-info">
       <span class="pill" id="testimonials-kicker"></span>
-
       <h2 id="testimonials-headline"></h2>
-
       <p class="testimonial-sub" id="testimonials-subheadline"></p>
 
       <div class="testimonial-avatars">
-        <img src="https://randomuser.me/api/portraits/men/32.jpg">
-        <img src="https://randomuser.me/api/portraits/women/44.jpg">
-        <img src="https://randomuser.me/api/portraits/men/65.jpg">
-        <img src="https://randomuser.me/api/portraits/women/68.jpg">
-        <img src="https://randomuser.me/api/portraits/men/71.jpg">
+        <!-- סטטי, לא קשור לצ׳ט -->
       </div>
 
       <div class="testimonial-count" id="testimonials-count"></div>
@@ -2065,26 +2059,28 @@ section[id] {
 
     <!-- RIGHT -->
     <div class="testimonial-card">
-
       <div class="quote-mark">“</div>
 
-<blockquote id="testimonial-text"></blockquote>
+      <blockquote id="testimonial-text"></blockquote>
 
-<div class="testimonial-footer">
-  <div class="rating" id="testimonial-rating"></div>
+      <div class="testimonial-footer">
+        <div class="rating" id="testimonial-rating"></div>
 
-  <div class="author">
-    <strong id="testimonial-name"></strong>
-    <span id="testimonial-role"></span>
-  </div>
-</div>
+        <div class="author">
+          <strong id="testimonial-name"></strong>
+          <span id="testimonial-role"></span>
+        </div>
 
-
-      <div class="testimonial-decor"></div>
+        <div class="testimonial-nav">
+          <button id="testimonial-prev">‹</button>
+          <button id="testimonial-next">›</button>
+        </div>
+      </div>
     </div>
 
   </div>
 </section>
+
 
 <section class="blogs-section" id="blog" data-section="blog">
   <div class="blogs-container">
@@ -2353,77 +2349,42 @@ setInterval(() => {
 }, 8000);
 </script>
 
-<script>
-const toggle = document.getElementById('navToggle');
-const menu = document.getElementById('navMenu');
-const overlay = document.getElementById('navOverlay');
-
-toggle.onclick = () => {
-  toggle.classList.toggle('active');
-  menu.classList.toggle('open');
-  overlay.classList.toggle('show');
-};
-
-overlay.onclick = () => {
-  toggle.classList.remove('active');
-  menu.classList.remove('open');
-  overlay.classList.remove('show');
-};
-</script>
  <script>
-const testimonialNodes = document.querySelectorAll(
-  '[data-bind^="testimonials.items"]'
-);
+(function () {
+  if (!window.__CONTENT__ || !window.__CONTENT__.testimonials) return;
 
-const testimonials = [];
+  const testimonials = window.__CONTENT__.testimonials.items;
+  if (!Array.isArray(testimonials) || testimonials.length === 0) return;
 
-for (let i = 0; ; i++) {
-  const text = document.querySelector(`[data-bind="testimonials.items.${i}.text"]`);
-  const name = document.querySelector(`[data-bind="testimonials.items.${i}.name"]`);
-  const role = document.querySelector(`[data-bind="testimonials.items.${i}.role"]`);
-  const rating = document.querySelector(`[data-bind="testimonials.items.${i}.rating"]`);
+  let current = 0;
 
-  if (!text || !name) break;
+  const textEl   = document.getElementById("testimonial-text");
+  const nameEl   = document.getElementById("testimonial-name");
+  const roleEl   = document.getElementById("testimonial-role");
+  const ratingEl = document.getElementById("testimonial-rating");
 
-  testimonials.push({
-    text: text.textContent,
-    name: name.textContent,
-    role: role?.textContent || "",
-    rating: rating?.textContent || ""
-  });
-}
+  function render(index) {
+    const t = testimonials[index];
+    textEl.textContent   = t.text;
+    nameEl.textContent   = t.name;
+    roleEl.textContent   = t.role;
+    ratingEl.textContent = t.rating;
+  }
 
-let current = 0;
+  render(current);
 
-const textEl   = document.getElementById("testimonial-text");
-const nameEl   = document.getElementById("testimonial-name");
-const roleEl   = document.getElementById("testimonial-role");
-const ratingEl = document.getElementById("testimonial-rating");
+  document.getElementById("testimonial-next").onclick = () => {
+    current = (current + 1) % testimonials.length;
+    render(current);
+  };
 
-function renderTestimonial(index){
-  textEl.style.opacity = 0;
-
-  setTimeout(() => {
-    textEl.textContent   = testimonials[index].text;
-    nameEl.textContent   = testimonials[index].name;
-    roleEl.textContent   = testimonials[index].role;
-    ratingEl.textContent = testimonials[index].rating;
-    textEl.style.opacity = 1;
-  }, 200);
-}
-
-document.querySelector('[data-action="testimonial-next"]').onclick = () => {
-  current = (current + 1) % testimonials.length;
-  renderTestimonial(current);
-};
-
-document.querySelector('[data-action="testimonial-prev"]').onclick = () => {
-  current = (current - 1 + testimonials.length) % testimonials.length;
-  renderTestimonial(current);
-};
-
-renderTestimonial(0);
+  document.getElementById("testimonial-prev").onclick = () => {
+    current = (current - 1 + testimonials.length) % testimonials.length;
+    render(current);
+  };
+})();
 </script>
+
 
 <script>
   const backToTop = document.getElementById("backToTop");
