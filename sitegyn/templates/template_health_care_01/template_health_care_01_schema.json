@@ -12,8 +12,10 @@
             "kicker": { "type": "string" },
             "headline": { "type": "string" },
             "subheadline": { "type": "string" },
+
             "primary_cta": { "type": "string" },
             "secondary_cta": { "type": "string" },
+
             "stats": {
               "type": "object",
               "properties": {
@@ -22,6 +24,7 @@
               },
               "required": ["value", "label"]
             },
+
             "cards": {
               "type": "array",
               "minItems": 3,
@@ -49,6 +52,7 @@
         "kicker": { "type": "string" },
         "headline": { "type": "string" },
         "description": { "type": "string" },
+
         "media": {
           "type": "object",
           "properties": {
@@ -57,12 +61,14 @@
           },
           "required": ["title", "subtitle"]
         },
+
         "points": {
           "type": "array",
           "minItems": 1,
           "maxItems": 6,
           "items": { "type": "string" }
         },
+
         "author": {
           "type": "object",
           "properties": {
@@ -71,6 +77,7 @@
           },
           "required": ["name", "role"]
         },
+
         "cta": { "type": "string" }
       },
       "required": ["headline", "description"]
@@ -83,6 +90,7 @@
         "headline": { "type": "string" },
         "description": { "type": "string" },
         "cta": { "type": "string" },
+
         "items": {
           "type": "array",
           "minItems": 3,
@@ -104,6 +112,7 @@
       "properties": {
         "kicker": { "type": "string" },
         "headline": { "type": "string" },
+
         "items": {
           "type": "array",
           "minItems": 4,
@@ -116,6 +125,32 @@
               "description": { "type": "string" }
             },
             "required": ["number", "title", "description"]
+          }
+        }
+      },
+      "required": ["headline", "items"]
+    },
+
+    "testimonials": {
+      "type": "object",
+      "properties": {
+        "kicker": { "type": "string" },
+        "headline": { "type": "string" },
+        "subheadline": { "type": "string" },
+        "count": { "type": "string" },
+
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": { "type": "string" },
+              "rating": { "type": "string" },
+              "name": { "type": "string" },
+              "role": { "type": "string" }
+            },
+            "required": ["text", "name"]
           }
         }
       },
