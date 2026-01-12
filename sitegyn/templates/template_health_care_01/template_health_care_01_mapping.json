@@ -1,5 +1,5 @@
 {
-  /* ================= HERO ================= */
+ 
   "hero-kicker": "home.hero.kicker",
   "hero-headline": "home.hero.headline",
   "hero-subheadline": "home.hero.subheadline",
@@ -14,8 +14,7 @@
   "hero-card-2-title": "home.hero.cards[2].title",
   "hero-card-2-text": "home.hero.cards[2].text",
   "hero-card-2-phone": "home.hero.cards[2].phone",
-
-  /* ================= ABOUT ================= */
+ 
   "about-kicker": "about.kicker",
   "about-headline": "about.headline",
   "about-description": "about.description",
