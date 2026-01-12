@@ -6,7 +6,6 @@
     "home": {
       "type": "object",
       "properties": {
-
         "hero": {
           "type": "object",
           "properties": {
@@ -17,60 +16,67 @@
             "primary_cta": { "type": "string" },
             "secondary_cta": { "type": "string" },
 
-            "pills": {
-              "type": "array",
-              "items": { "type": "string" },
-              "maxItems": 3
+            "stats": {
+              "type": "object",
+              "properties": {
+                "value": { "type": "string" },
+                "label": { "type": "string" }
+              }
             },
 
-            "image": { "type": "string" }
-          },
-          "required": ["headline", "subheadline", "primary_cta"]
-        },
-
-        "about": {
-          "type": "object",
-          "properties": {
-            "kicker": { "type": "string" },
-            "title": { "type": "string" },
-            "description": { "type": "string" },
-
-            "image": { "type": "string" },
-            "badge": { "type": "string" },
-
-            "points": {
+            "cards": {
               "type": "array",
+              "maxItems": 3,
               "items": {
                 "type": "object",
                 "properties": {
-                  "text": { "type": "string" }
+                  "title": { "type": "string" },
+                  "text": { "type": "string" },
+                  "phone": { "type": "string" }
                 },
-                "required": ["text"]
-              }
-            },
-
-            "person": {
-              "type": "object",
-              "properties": {
-                "avatar": { "type": "string" },
-                "name": { "type": "string" },
-                "role": { "type": "string" }
-              }
-            },
-
-            "cta": {
-              "type": "object",
-              "properties": {
-                "text": { "type": "string" }
+                "required": ["title", "text"]
               }
             }
           },
-          "required": ["title", "description"]
+          "required": ["headline", "subheadline", "primary_cta"]
         }
-
       },
-      "required": ["hero", "about"]
+      "required": ["hero"]
+    },
+
+    "about": {
+      "type": "object",
+      "properties": {
+        "kicker": { "type": "string" },
+        "headline": { "type": "string" },
+        "description": { "type": "string" },
+
+        "media": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "subtitle": { "type": "string" }
+          }
+        },
+
+        "points": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+
+        "author": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "role": { "type": "string" }
+          }
+        },
+
+        "cta": { "type": "string" }
+      },
+      "required": ["headline", "description"]
     }
   },
-  "required": ["home"]
+  "required": ["home", "about"]
 }
