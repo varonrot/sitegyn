@@ -131,31 +131,33 @@
       "required": ["headline", "items"]
     },
 
-    "testimonials": {
-      "type": "object",
-      "properties": {
-        "kicker": { "type": "string" },
-        "headline": { "type": "string" },
-        "subheadline": { "type": "string" },
-        "count": { "type": "string" },
+"testimonials": {
+  "type": "object",
+  "properties": {
+    "kicker": { "type": "string" },
+    "headline": { "type": "string" },
+    "subheadline": { "type": "string" },
+    "count": { "type": "string" },
 
-        "items": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "object",
-            "properties": {
-              "text": { "type": "string" },
-              "rating": { "type": "string" },
-              "name": { "type": "string" },
-              "role": { "type": "string" }
-            },
-            "required": ["text", "name"]
-          }
-        }
-      },
-      "required": ["headline", "items"]
+    "items": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string" },
+          "rating": { "type": "string" },
+          "name": { "type": "string" },
+          "role": { "type": "string" }
+        },
+        "required": ["text", "name", "role", "rating"]
+      }
     }
+  },
+  "required": ["headline", "items", "count"]
+}
+
   },
   "required": ["home"]
 }
