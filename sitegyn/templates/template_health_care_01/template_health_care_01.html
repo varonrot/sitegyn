@@ -2349,41 +2349,61 @@ setInterval(() => {
 }, 8000);
 </script>
 
- <script>
-(function () {
-  if (!window.__CONTENT__ || !window.__CONTENT__.testimonials) return;
-
-  const testimonials = window.__CONTENT__.testimonials.items;
-  if (!Array.isArray(testimonials) || testimonials.length === 0) return;
-
-  let current = 0;
-
-  const textEl   = document.getElementById("testimonial-text");
-  const nameEl   = document.getElementById("testimonial-name");
-  const roleEl   = document.getElementById("testimonial-role");
-  const ratingEl = document.getElementById("testimonial-rating");
-
-  function render(index) {
-    const t = testimonials[index];
-    textEl.textContent   = t.text;
-    nameEl.textContent   = t.name;
-    roleEl.textContent   = t.role;
-    ratingEl.textContent = t.rating;
+<script>
+const testimonials = [
+  {
+    text: "The doctors were incredibly caring and professional. They took the time to explain every step clearly, making me feel comfortable and confident.",
+    name: "John Doe",
+    role: "Director",
+    rating: "5 ★"
+  },
+  {
+    text: "Outstanding care and attention. The medical team made everything easy and stress-free from start to finish.",
+    name: "Sarah Williams",
+    role: "Patient",
+    rating: "5 ★"
+  },
+  {
+    text: "Professional staff, modern facilities, and truly compassionate treatment. Highly recommended.",
+    name: "Michael Brown",
+    role: "Entrepreneur",
+    rating: "5 ★"
   }
+];
 
-  render(current);
+let current = 0;
 
-  document.getElementById("testimonial-next").onclick = () => {
-    current = (current + 1) % testimonials.length;
-    render(current);
-  };
+const textEl   = document.getElementById("testimonial-text");
+const nameEl   = document.getElementById("testimonial-name");
+const roleEl   = document.getElementById("testimonial-role");
+const ratingEl = document.getElementById("testimonial-rating");
 
-  document.getElementById("testimonial-prev").onclick = () => {
-    current = (current - 1 + testimonials.length) % testimonials.length;
-    render(current);
-  };
-})();
+function renderTestimonial(index){
+  textEl.style.opacity = 0;
+
+  setTimeout(() => {
+    textEl.textContent   = testimonials[index].text;
+    nameEl.textContent   = testimonials[index].name;
+    roleEl.textContent   = testimonials[index].role;
+    ratingEl.textContent = testimonials[index].rating;
+    textEl.style.opacity = 1;
+  }, 150);
+}
+
+document.getElementById("testimonial-next").onclick = () => {
+  current = (current + 1) % testimonials.length;
+  renderTestimonial(current);
+};
+
+document.getElementById("testimonial-prev").onclick = () => {
+  current = (current - 1 + testimonials.length) % testimonials.length;
+  renderTestimonial(current);
+};
+
+ 
+renderTestimonial(0);
 </script>
+
 
 
 <script>
