@@ -2068,21 +2068,17 @@ section[id] {
 
       <div class="quote-mark">“</div>
 
-      <blockquote id="testimonials-item-0-text"></blockquote>
+<blockquote id="testimonial-text"></blockquote>
 
-      <div class="testimonial-footer">
-        <div class="rating" id="testimonials-item-0-rating"></div>
+<div class="testimonial-footer">
+  <div class="rating" id="testimonial-rating"></div>
 
-        <div class="author">
-          <strong id="testimonials-item-0-name"></strong>
-          <span id="testimonials-item-0-role"></span>
-        </div>
+  <div class="author">
+    <strong id="testimonial-name"></strong>
+    <span id="testimonial-role"></span>
+  </div>
+</div>
 
-        <div class="testimonial-nav">
-          <button data-action="testimonial-prev" aria-label="Previous">‹</button>
-          <button data-action="testimonial-next" aria-label="Next">›</button>
-        </div>
-      </div>
 
       <div class="testimonial-decor"></div>
     </div>
@@ -2375,26 +2371,27 @@ overlay.onclick = () => {
 };
 </script>
  <script>
-const testimonials = [
-  {
-    text: "The doctors were incredibly caring and professional. They took the time to explain every step clearly, making me feel comfortable and confident.",
-    name: "John Doe",
-    role: "Director",
-    rating: "5 ★"
-  },
-  {
-    text: "Outstanding care and attention. The medical team made everything easy and stress-free from start to finish.",
-    name: "Sarah Williams",
-    role: "Patient",
-    rating: "5 ★"
-  },
-  {
-    text: "Professional staff, modern facilities, and truly compassionate treatment. Highly recommended.",
-    name: "Michael Brown",
-    role: "Entrepreneur",
-    rating: "5 ★"
-  }
-];
+const testimonialNodes = document.querySelectorAll(
+  '[data-bind^="testimonials.items"]'
+);
+
+const testimonials = [];
+
+for (let i = 0; ; i++) {
+  const text = document.querySelector(`[data-bind="testimonials.items.${i}.text"]`);
+  const name = document.querySelector(`[data-bind="testimonials.items.${i}.name"]`);
+  const role = document.querySelector(`[data-bind="testimonials.items.${i}.role"]`);
+  const rating = document.querySelector(`[data-bind="testimonials.items.${i}.rating"]`);
+
+  if (!text || !name) break;
+
+  testimonials.push({
+    text: text.textContent,
+    name: name.textContent,
+    role: role?.textContent || "",
+    rating: rating?.textContent || ""
+  });
+}
 
 let current = 0;
 
@@ -2415,16 +2412,19 @@ function renderTestimonial(index){
   }, 200);
 }
 
-document.getElementById("testimonial-next").onclick = () => {
+document.querySelector('[data-action="testimonial-next"]').onclick = () => {
   current = (current + 1) % testimonials.length;
   renderTestimonial(current);
 };
 
-document.getElementById("testimonial-prev").onclick = () => {
+document.querySelector('[data-action="testimonial-prev"]').onclick = () => {
   current = (current - 1 + testimonials.length) % testimonials.length;
   renderTestimonial(current);
 };
+
+renderTestimonial(0);
 </script>
+
 <script>
   const backToTop = document.getElementById("backToTop");
 
