@@ -1993,10 +1993,10 @@ section[id] {
 
   </div>
 </section>
-<section class="wide-feature" id="features" data-section="features">
+<section class="wide-feature" id="features">
   <div class="wide-feature-inner">
 
-    <!-- LEFT IMAGE (STATIC) -->
+    <!-- LEFT IMAGE -->
     <div class="wide-feature-media">
       <img
         src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1600&q=80"
@@ -2004,46 +2004,51 @@ section[id] {
       />
     </div>
 
-    <!-- RIGHT CONTENT (DYNAMIC) -->
+    <!-- RIGHT CONTENT -->
     <div class="wide-feature-content">
-      <span class="wide-pill" data-bind="features.kicker"></span>
+      <span class="wide-pill">Enhancing life, excelling in care</span>
 
-      <h2 data-bind="features.headline"></h2>
+      <h2>
+        We’re committed to delivering<br>
+        outstanding healthcare.
+      </h2>
 
-      <p class="wide-desc" data-bind="features.description"></p>
+      <p class="wide-desc">
+        We provide high-quality, patient-focused care supported by experienced
+        professionals and modern medical practices, ensuring trust, safety,
+        and long-term wellbeing.
+      </p>
 
       <div class="wide-stats">
         <div class="stat">
-          <strong data-bind="features.stats.0.value"></strong>
-          <span data-bind="features.stats.0.label"></span>
+          <strong>500+</strong>
+          <span>Healthy Smiles</span>
         </div>
         <div class="stat">
-          <strong data-bind="features.stats.1.value"></strong>
-          <span data-bind="features.stats.1.label"></span>
+          <strong>10+</strong>
+          <span>Years of Care</span>
         </div>
         <div class="stat">
-          <strong data-bind="features.stats.2.value"></strong>
-          <span data-bind="features.stats.2.label"></span>
+          <strong>50+</strong>
+          <span>Lives Supported</span>
         </div>
         <div class="stat">
-          <strong data-bind="features.stats.3.value"></strong>
-          <span data-bind="features.stats.3.label"></span>
+          <strong>15+</strong>
+          <span>Professional Awards</span>
         </div>
       </div>
     </div>
 
   </div>
 </section>
-<section class="testimonial" id="testimonials" data-section="testimonials">
+ <section class="testimonial" id="testimonials" data-section="testimonials">
   <div class="testimonial-inner">
 
     <!-- LEFT -->
     <div class="testimonial-info">
-      <span class="pill" data-bind="testimonials.kicker"></span>
-
-      <h2 data-bind="testimonials.headline"></h2>
-
-      <p class="testimonial-sub" data-bind="testimonials.subheadline"></p>
+      <span class="pill" id="testimonials-kicker"></span>
+      <h2 id="testimonials-headline"></h2>
+      <p class="testimonial-sub" id="testimonials-subheadline"></p>
 
       <div class="testimonial-avatars">
         <img src="https://randomuser.me/api/portraits/men/32.jpg">
@@ -2053,35 +2058,36 @@ section[id] {
         <img src="https://randomuser.me/api/portraits/men/71.jpg">
       </div>
 
-      <div class="testimonial-count" data-bind="testimonials.count"></div>
+      <div class="testimonial-count" id="testimonials-count"></div>
     </div>
 
     <!-- RIGHT -->
     <div class="testimonial-card">
-
       <div class="quote-mark">“</div>
 
-      <blockquote data-bind="testimonials.items.0.text"></blockquote>
+      <blockquote id="testimonial-text"></blockquote>
 
       <div class="testimonial-footer">
-        <div class="rating" data-bind="testimonials.items.0.rating"></div>
+        <div class="rating" id="testimonial-rating"></div>
 
         <div class="author">
-          <strong data-bind="testimonials.items.0.name"></strong>
-          <span data-bind="testimonials.items.0.role"></span>
+          <strong id="testimonial-name"></strong>
+          <span id="testimonial-role"></span>
         </div>
 
         <div class="testimonial-nav">
-          <button data-action="testimonial-prev" aria-label="Previous">‹</button>
-          <button data-action="testimonial-next" aria-label="Next">›</button>
+          <button id="testimonial-prev">‹</button>
+          <button id="testimonial-next">›</button>
         </div>
       </div>
-
-      <div class="testimonial-decor"></div>
     </div>
 
   </div>
 </section>
+
+
+
+
 <section class="blogs-section" id="blog" data-section="blog">
   <div class="blogs-container">
 
@@ -2274,59 +2280,7 @@ overlay.onclick = () => {
   menu.classList.remove('open');
   overlay.classList.remove('show');
 };
-</script>
- <script>
-const testimonials = [
-  {
-    text: "The doctors were incredibly caring and professional. They took the time to explain every step clearly, making me feel comfortable and confident.",
-    name: "John Doe",
-    role: "Director",
-    rating: "5 ★"
-  },
-  {
-    text: "Outstanding care and attention. The medical team made everything easy and stress-free from start to finish.",
-    name: "Sarah Williams",
-    role: "Patient",
-    rating: "5 ★"
-  },
-  {
-    text: "Professional staff, modern facilities, and truly compassionate treatment. Highly recommended.",
-    name: "Michael Brown",
-    role: "Entrepreneur",
-    rating: "5 ★"
-  }
-];
-
-let current = 0;
-
-const textEl   = document.getElementById("testimonial-text");
-const nameEl   = document.getElementById("testimonial-name");
-const roleEl   = document.getElementById("testimonial-role");
-const ratingEl = document.getElementById("testimonial-rating");
-
-function renderTestimonial(index){
-  textEl.style.opacity = 0;
-
-  setTimeout(() => {
-    textEl.textContent   = testimonials[index].text;
-    nameEl.textContent   = testimonials[index].name;
-    roleEl.textContent   = testimonials[index].role;
-    ratingEl.textContent = testimonials[index].rating;
-    textEl.style.opacity = 1;
-  }, 200);
-}
-
-document.getElementById("testimonial-next").onclick = () => {
-  current = (current + 1) % testimonials.length;
-  renderTestimonial(current);
-};
-
-document.getElementById("testimonial-prev").onclick = () => {
-  current = (current - 1 + testimonials.length) % testimonials.length;
-  renderTestimonial(current);
-};
-</script>
-
+ 
 
 </body>
 </html>
@@ -2350,73 +2304,80 @@ setInterval(() => {
 </script>
 
 <script>
-const toggle = document.getElementById('navToggle');
-const menu = document.getElementById('navMenu');
-const overlay = document.getElementById('navOverlay');
+(function () {
+  const data = window.content_json?.testimonials;
+  if (!data || !Array.isArray(data.items) || !data.items.length) return;
 
-toggle.onclick = () => {
-  toggle.classList.toggle('active');
-  menu.classList.toggle('open');
-  overlay.classList.toggle('show');
-};
+  let current = 0;
+  const items = data.items;
 
-overlay.onclick = () => {
-  toggle.classList.remove('active');
-  menu.classList.remove('open');
-  overlay.classList.remove('show');
-};
+  const textEl   = document.getElementById("testimonial-text");
+  const nameEl   = document.getElementById("testimonial-name");
+  const roleEl   = document.getElementById("testimonial-role");
+  const ratingEl = document.getElementById("testimonial-rating");
+
+  function render(index) {
+    const t = items[index];
+    textEl.textContent   = t.text || "";
+    nameEl.textContent   = t.name || "";
+    roleEl.textContent   = t.role || "";
+    ratingEl.textContent = (t.rating || "") + " ★";
+  }
+
+  document.getElementById("testimonial-next").onclick = () => {
+    current = (current + 1) % items.length;
+    render(current);
+  };
+
+  document.getElementById("testimonial-prev").onclick = () => {
+    current = (current - 1 + items.length) % items.length;
+    render(current);
+  };
+
+  render(0);
+})();
 </script>
  <script>
-const testimonials = [
-  {
-    text: "The doctors were incredibly caring and professional. They took the time to explain every step clearly, making me feel comfortable and confident.",
-    name: "John Doe",
-    role: "Director",
-    rating: "5 ★"
-  },
-  {
-    text: "Outstanding care and attention. The medical team made everything easy and stress-free from start to finish.",
-    name: "Sarah Williams",
-    role: "Patient",
-    rating: "5 ★"
-  },
-  {
-    text: "Professional staff, modern facilities, and truly compassionate treatment. Highly recommended.",
-    name: "Michael Brown",
-    role: "Entrepreneur",
-    rating: "5 ★"
+function initTestimonials() {
+  const data = window.content_json?.testimonials;
+  if (!data || !Array.isArray(data.items) || !data.items.length) return;
+
+  let current = 0;
+  const items = data.items;
+
+  const textEl   = document.getElementById("testimonial-text");
+  const nameEl   = document.getElementById("testimonial-name");
+  const roleEl   = document.getElementById("testimonial-role");
+  const ratingEl = document.getElementById("testimonial-rating");
+
+  function render(i) {
+    const t = items[i];
+    textEl.textContent   = t.text || "";
+    nameEl.textContent   = t.name || "";
+    roleEl.textContent   = t.role || "";
+    ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
   }
-];
 
-let current = 0;
+  document.getElementById("testimonial-next").onclick = () => {
+    current = (current + 1) % items.length;
+    render(current);
+  };
 
-const textEl   = document.getElementById("testimonial-text");
-const nameEl   = document.getElementById("testimonial-name");
-const roleEl   = document.getElementById("testimonial-role");
-const ratingEl = document.getElementById("testimonial-rating");
+  document.getElementById("testimonial-prev").onclick = () => {
+    current = (current - 1 + items.length) % items.length;
+    render(current);
+  };
 
-function renderTestimonial(index){
-  textEl.style.opacity = 0;
-
-  setTimeout(() => {
-    textEl.textContent   = testimonials[index].text;
-    nameEl.textContent   = testimonials[index].name;
-    roleEl.textContent   = testimonials[index].role;
-    ratingEl.textContent = testimonials[index].rating;
-    textEl.style.opacity = 1;
-  }, 200);
+  render(0);
 }
 
-document.getElementById("testimonial-next").onclick = () => {
-  current = (current + 1) % testimonials.length;
-  renderTestimonial(current);
-};
-
-document.getElementById("testimonial-prev").onclick = () => {
-  current = (current - 1 + testimonials.length) % testimonials.length;
-  renderTestimonial(current);
-};
+// ⬅️ זה הדבר החשוב באמת
+window.addEventListener("content:ready", initTestimonials);
 </script>
+
+
+
+
 <script>
   const backToTop = document.getElementById("backToTop");
 
