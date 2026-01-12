@@ -42,5 +42,25 @@
 
   "departments-item-0-title": "departments.items[0].title",
   "departments-item-1-title": "departments.items[1].title",
-  "departments-item-2-title": "departments.items[2].title"
+  "departments-item-2-title": "departments.items[2].title",
+
+  "services-kicker": "services.kicker",
+"services-headline": "services.headline",
+
+"services-item-0-number": "services.items[0].number",
+"services-item-0-title": "services.items[0].title",
+"services-item-0-description": "services.items[0].description",
+
+"services-item-1-number": "services.items[1].number",
+"services-item-1-title": "services.items[1].title",
+"services-item-1-description": "services.items[1].description",
+
+"services-item-2-number": "services.items[2].number",
+"services-item-2-title": "services.items[2].title",
+"services-item-2-description": "services.items[2].description",
+
+"services-item-3-number": "services.items[3].number",
+"services-item-3-title": "services.items[3].title",
+"services-item-3-description": "services.items[3].description"
+
 }
