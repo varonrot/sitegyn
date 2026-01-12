@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Health & Care Website Content",
+  "title": "Health Care Website Content",
   "type": "object",
   "properties": {
     "home": {
@@ -12,24 +12,51 @@
             "kicker": { "type": "string" },
             "headline": { "type": "string" },
             "subheadline": { "type": "string" },
+
             "primary_cta": { "type": "string" },
             "secondary_cta": { "type": "string" },
-            "pills": {
-              "type": "array",
-              "items": { "type": "string" },
-              "minItems": 0,
-              "maxItems": 3
+
+            "stats": {
+              "type": "object",
+              "properties": {
+                "value": { "type": "string" },
+                "label": { "type": "string" }
+              }
             },
-            "image": {
-              "type": "string",
-              "description": "Hero image filename or URL"
+
+            "cards": {
+              "type": "object",
+              "properties": {
+                "card_1": {
+                  "type": "object",
+                  "properties": {
+                    "title": { "type": "string" },
+                    "text": { "type": "string" },
+                    "phone": { "type": "string" }
+                  },
+                  "required": ["title", "text"]
+                },
+                "card_2": {
+                  "type": "object",
+                  "properties": {
+                    "title": { "type": "string" },
+                    "text": { "type": "string" }
+                  },
+                  "required": ["title", "text"]
+                },
+                "card_3": {
+                  "type": "object",
+                  "properties": {
+                    "title": { "type": "string" },
+                    "text": { "type": "string" },
+                    "phone": { "type": "string" }
+                  },
+                  "required": ["title", "text"]
+                }
+              }
             }
           },
-          "required": [
-            "headline",
-            "subheadline",
-            "primary_cta"
-          ]
+          "required": ["headline", "subheadline", "primary_cta"]
         }
       },
       "required": ["hero"]
