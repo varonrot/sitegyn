@@ -2,20 +2,36 @@
   "hero-kicker": "home.hero.kicker",
   "hero-headline": "home.hero.headline",
   "hero-subheadline": "home.hero.subheadline",
-
   "hero-cta-primary": "home.hero.primary_cta",
   "hero-cta-secondary": "home.hero.secondary_cta",
 
   "hero-stats-value": "home.hero.stats.value",
   "hero-stats-label": "home.hero.stats.label",
 
-  "hero-card-0-title": "home.hero.cards.card_1.title",
-  "hero-card-0-text": "home.hero.cards.card_1.text",
+  "hero-card-0-title": "home.hero.cards[0].title",
+  "hero-card-0-text": "home.hero.cards[0].text",
 
-  "hero-card-1-title": "home.hero.cards.card_2.title",
-  "hero-card-1-text": "home.hero.cards.card_2.text",
+  "hero-card-1-title": "home.hero.cards[1].title",
+  "hero-card-1-text": "home.hero.cards[1].text",
 
-  "hero-card-2-title": "home.hero.cards.card_3.title",
-  "hero-card-2-text": "home.hero.cards.card_3.text",
-  "hero-card-2-phone": "home.hero.cards.card_3.phone"
+  "hero-card-2-title": "home.hero.cards[2].title",
+  "hero-card-2-text": "home.hero.cards[2].text",
+  "hero-card-2-phone": "home.hero.cards[2].phone",
+
+  "about-kicker": "about.kicker",
+  "about-headline": "about.headline",
+  "about-description": "about.description",
+
+  "about-media-title": "about.media.title",
+  "about-media-subtitle": "about.media.subtitle",
+
+  "about-point-0": "about.points[0]",
+  "about-point-1": "about.points[1]",
+  "about-point-2": "about.points[2]",
+  "about-point-3": "about.points[3]",
+
+  "about-author-name": "about.author.name",
+  "about-author-role": "about.author.role",
+
+  "about-cta": "about.cta"
 }
