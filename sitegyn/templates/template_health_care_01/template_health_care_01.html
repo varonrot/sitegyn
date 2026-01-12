@@ -363,7 +363,6 @@ header{
   }
 }
 
-
 /* ================= ABOUT ================= */
 .about{
   background:#fff;
@@ -1838,8 +1837,11 @@ section[id] {
       <div class="media-card">
         <span style="font-size:20px">🕒</span>
         <div>
-          <strong data-bind="about.media.title"></strong><br>
-          <span style="font-size:13px;color:#6b7280" data-bind="about.media.subtitle"></span>
+          <strong id="about-media-title"></strong><br>
+          <span
+            id="about-media-subtitle"
+            style="font-size:13px;color:#6b7280">
+          </span>
         </div>
       </div>
     </div>
@@ -1847,28 +1849,28 @@ section[id] {
     <!-- RIGHT : CONTENT -->
     <div style="position:relative">
 
-      <div class="about-pill" data-bind="about.kicker"></div>
+      <div class="about-pill" id="about-kicker"></div>
 
-      <h2 data-bind="about.headline"></h2>
+      <h2 id="about-headline"></h2>
 
-      <p data-bind="about.description"></p>
+      <p id="about-description"></p>
 
       <ul class="checklist">
         <li>
           <div class="plus">+</div>
-          <span data-bind="about.points.0"></span>
+          <span id="about-point-0"></span>
         </li>
         <li>
           <div class="plus">+</div>
-          <span data-bind="about.points.1"></span>
+          <span id="about-point-1"></span>
         </li>
         <li>
           <div class="plus">+</div>
-          <span data-bind="about.points.2"></span>
+          <span id="about-point-2"></span>
         </li>
         <li>
           <div class="plus">+</div>
-          <span data-bind="about.points.3"></span>
+          <span id="about-point-3"></span>
         </li>
       </ul>
 
@@ -1876,12 +1878,17 @@ section[id] {
 
       <div class="about-footer">
         <div class="about-avatar">
-          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="CEO">
+          <img
+            src="https://randomuser.me/api/portraits/men/32.jpg"
+            alt="Doctor">
         </div>
 
         <div>
-          <strong data-bind="about.author.name"></strong>
-          <div style="font-size:14px;color:var(--muted)" data-bind="about.author.role"></div>
+          <strong id="about-author-name"></strong>
+          <div
+            id="about-author-role"
+            style="font-size:14px;color:var(--muted)">
+          </div>
         </div>
 
         <img
@@ -1889,13 +1896,14 @@ section[id] {
           src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Signature_of_Michael_Jordan.svg"
           alt="Signature">
 
-        <a href="#" class="about-btn" data-bind="about.cta"></a>
+        <a href="#" class="about-btn" id="about-cta"></a>
       </div>
 
     </div>
 
   </div>
 </section>
+
 
 <section class="departments" id="departments" data-section="departments">
   <div class="departments-inner">
