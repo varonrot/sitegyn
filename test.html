@@ -312,7 +312,7 @@ header{
 @media (max-width: 768px){
 
   .hero{
-    padding-bottom: 360px; /* מקום לכרטיסים */
+    padding-bottom: 360px; 
   }
 
   .hero-inner{
@@ -357,7 +357,25 @@ header{
   }
 
 }
-
+/* ================= HERO – MOBILE FIX ================= */
+@media (max-width: 768px) {
+  .mini-stat{
+    display: none !important;
+  }
+}
+/* ================= HERO – MOBILE SPACING FIX ================= */
+@media (max-width: 768px) {
+ 
+  .hero-cards{
+    margin-top: 48px;
+    position: relative;
+    bottom: auto;
+  }
+ 
+  .hero{
+    padding-bottom: 120px;
+  }
+}
 
 /* ================= ABOUT ================= */
 .about{
