@@ -1911,13 +1911,13 @@ section[id] {
     <!-- HEADER -->
     <div class="departments-head">
       <div class="head-text">
-        <span class="pill" data-bind="departments.kicker"></span>
-        <h2 data-bind="departments.headline"></h2>
-        <p data-bind="departments.description"></p>
+        <span class="pill" id="departments-kicker"></span>
+        <h2 id="departments-headline"></h2>
+        <p id="departments-description"></p>
       </div>
 
-      <a href="#" class="btn-dept">
-        <span data-bind="departments.cta"></span> <span>→</span>
+      <a href="#" class="btn-dept" id="departments-cta">
+        <span id="departments-cta-text"></span> <span>→</span>
       </a>
     </div>
 
@@ -1925,24 +1925,25 @@ section[id] {
     <div class="dept-grid">
 
       <div class="dept-card">
-        <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=900&q=80" alt="">
-        <span class="dept-title" data-bind="departments.items.0.title"></span>
+        <img src="assets/dept-0.jpg" alt="">
+        <span class="dept-title" id="departments-item-0-title"></span>
       </div>
 
       <div class="dept-card">
-        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=800&q=80" alt="">
-        <span class="dept-title" data-bind="departments.items.1.title"></span>
+        <img src="assets/dept-1.jpg" alt="">
+        <span class="dept-title" id="departments-item-1-title"></span>
       </div>
 
       <div class="dept-card">
-        <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=900&q=80" alt="">
-        <span class="dept-title" data-bind="departments.items.2.title"></span>
+        <img src="assets/dept-2.jpg" alt="">
+        <span class="dept-title" id="departments-item-2-title"></span>
       </div>
 
     </div>
 
   </div>
 </section>
+
 <section class="services" id="services" data-section="services">
   <div class="services-inner">
 
