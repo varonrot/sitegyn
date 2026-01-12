@@ -1993,7 +1993,47 @@ section[id] {
 
   </div>
 </section>
+<section class="wide-feature" id="features" data-section="features">
+  <div class="wide-feature-inner">
 
+    <!-- LEFT IMAGE (STATIC) -->
+    <div class="wide-feature-media">
+      <img
+        src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1600&q=80"
+        alt="Medical team"
+      />
+    </div>
+
+    <!-- RIGHT CONTENT (DYNAMIC) -->
+    <div class="wide-feature-content">
+      <span class="wide-pill" data-bind="features.kicker"></span>
+
+      <h2 data-bind="features.headline"></h2>
+
+      <p class="wide-desc" data-bind="features.description"></p>
+
+      <div class="wide-stats">
+        <div class="stat">
+          <strong data-bind="features.stats.0.value"></strong>
+          <span data-bind="features.stats.0.label"></span>
+        </div>
+        <div class="stat">
+          <strong data-bind="features.stats.1.value"></strong>
+          <span data-bind="features.stats.1.label"></span>
+        </div>
+        <div class="stat">
+          <strong data-bind="features.stats.2.value"></strong>
+          <span data-bind="features.stats.2.label"></span>
+        </div>
+        <div class="stat">
+          <strong data-bind="features.stats.3.value"></strong>
+          <span data-bind="features.stats.3.label"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 <section class="testimonial" id="testimonials" data-section="testimonials">
   <div class="testimonial-inner">
 
