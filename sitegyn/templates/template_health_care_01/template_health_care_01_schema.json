@@ -25,16 +25,34 @@
             },
 
             "cards": {
-              "type": "array",
-              "maxItems": 3,
-              "items": {
-                "type": "object",
-                "properties": {
-                  "title": { "type": "string" },
-                  "text": { "type": "string" },
-                  "phone": { "type": "string" }
+              "type": "object",
+              "properties": {
+                "card_1": {
+                  "type": "object",
+                  "properties": {
+                    "title": { "type": "string" },
+                    "text": { "type": "string" },
+                    "phone": { "type": "string" }
+                  },
+                  "required": ["title", "text"]
                 },
-                "required": ["title", "text"]
+                "card_2": {
+                  "type": "object",
+                  "properties": {
+                    "title": { "type": "string" },
+                    "text": { "type": "string" }
+                  },
+                  "required": ["title", "text"]
+                },
+                "card_3": {
+                  "type": "object",
+                  "properties": {
+                    "title": { "type": "string" },
+                    "text": { "type": "string" },
+                    "phone": { "type": "string" }
+                  },
+                  "required": ["title", "text"]
+                }
               }
             }
           },
