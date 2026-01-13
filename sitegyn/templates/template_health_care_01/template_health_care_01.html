@@ -2299,30 +2299,6 @@ setInterval(() => {
   slides[i].classList.add('active');
 }, 8000);
 </script>
-<script>
-window.content_json = {
-  testimonials: {
-    kicker: "Patient Stories",
-    headline: "Hear From Our Satisfied Patients",
-    subheadline: "Trusted care that makes a difference in our community.",
-    count: "250+ Reviews",
-    items: [
-      {
-        name: "Sarah M.",
-        role: "Patient",
-        text: "Amazing care and attention. Highly recommended!",
-        rating: "5"
-      },
-      {
-        name: "James T.",
-        role: "Patient",
-        text: "Professional, warm, and very responsive team.",
-        rating: "5"
-      }
-    ]
-  }
-};
-</script>
 
   <script>
 (function () {
@@ -2351,8 +2327,6 @@ window.content_json = {
     const roleEl   = document.getElementById("testimonial-role");
     const ratingEl = document.getElementById("testimonial-rating");
 
-    if (!textEl || !nameEl || !roleEl || !ratingEl) return;
-
     function render(i) {
       const t = items[i];
       textEl.textContent   = t.text || "";
@@ -2361,33 +2335,20 @@ window.content_json = {
       ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
     }
 
-    const nextBtn = document.getElementById("testimonial-next");
-    const prevBtn = document.getElementById("testimonial-prev");
+    document.getElementById("testimonial-next").onclick = () => {
+      current = (current + 1) % items.length;
+      render(current);
+    };
 
-    if (nextBtn) {
-      nextBtn.onclick = () => {
-        current = (current + 1) % items.length;
-        render(current);
-      };
-    }
-
-    if (prevBtn) {
-      prevBtn.onclick = () => {
-        current = (current - 1 + items.length) % items.length;
-        render(current);
-      };
-    }
+    document.getElementById("testimonial-prev").onclick = () => {
+      current = (current - 1 + items.length) % items.length;
+      render(current);
+    };
 
     render(0);
   }
-
-  // ▶️ ריצה מיידית אם התוכן כבר קיים
-  if (window.content_json?.testimonials) {
-    initTestimonials();
-  }
-
-  // ▶️ האזנה לאירוע אם התוכן יגיע מאוחר יותר
-  window.addEventListener("content:ready", initTestimonials);
+ 
+  initTestimonials();
 
 })();
 </script>
