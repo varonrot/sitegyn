@@ -61,6 +61,17 @@
 
 "services-item-3-number": "services.items[3].number",
 "services-item-3-title": "services.items[3].title",
-"services-item-3-description": "services.items[3].description"
+"services-item-3-description": "services.items[3].description",
+ 
+"testimonials-kicker": "testimonials.kicker",
+"testimonials-headline": "testimonials.headline",
+"testimonials-subheadline": "testimonials.subheadline",
+"testimonials-count": "testimonials.count",
 
-}
+"testimonials-item-0-text": "testimonials.items[0].text",
+"testimonials-item-0-rating": "testimonials.items[0].rating",
+"testimonials-item-0-name": "testimonials.items[0].name",
+"testimonials-item-0-role": "testimonials.items[0].role"
+
+ 
+ }
