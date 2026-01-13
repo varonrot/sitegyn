@@ -118,31 +118,44 @@
       },
       "required": ["headline", "items"]
     },
-    "testimonials": {
-      "type": "object",
-      "properties": {
-        "kicker": { "type": "string" },
-        "headline": { "type": "string" },
-        "subheadline": { "type": "string" },
-        "count": { "type": "string" },
-        "items": {
-          "type": "array",
-          "minItems": 3,
-          "maxItems": 6,
-          "items": {
-            "type": "object",
-            "properties": {
-              "text": { "type": "string" },
-              "rating": { "type": "string" },
-              "name": { "type": "string" },
-              "role": { "type": "string" }
-            },
-            "required": ["text", "name", "role", "rating"]
+   "testimonials": {
+  "type": "object",
+  "properties": {
+    "kicker": {
+      "type": "string"
+    },
+    "headline": {
+      "type": "string"
+    },
+    "subheadline": {
+      "type": "string"
+    },
+    "count": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
           }
-        }
-      },
-      "required": ["headline", "items", "count"]
+        },
+        "required": ["text", "rating", "name", "role"]
+      }
     }
   },
-  "required": ["home"]
+  "required": ["headline", "items", "count"]
 }
