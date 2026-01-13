@@ -42,7 +42,6 @@
       },
       "required": ["hero"]
     },
-
     "about": {
       "type": "object",
       "properties": {
@@ -75,7 +74,6 @@
       },
       "required": ["headline", "description"]
     },
-
     "departments": {
       "type": "object",
       "properties": {
@@ -98,7 +96,6 @@
       },
       "required": ["headline", "items"]
     },
-
     "services": {
       "type": "object",
       "properties": {
@@ -120,7 +117,45 @@
         }
       },
       "required": ["headline", "items"]
+    },
+"testimonials": {
+  "type": "object",
+  "properties": {
+    "kicker": {
+      "type": "string"
+    },
+    "headline": {
+      "type": "string"
+    },
+    "subheadline": {
+      "type": "string"
+    },
+    "count": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        },
+        "required": ["text", "rating", "name", "role"]
+      }
     }
   },
-  "required": ["home"]
+  "required": ["headline", "items", "count"]
 }
