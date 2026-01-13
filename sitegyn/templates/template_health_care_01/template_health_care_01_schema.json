@@ -42,6 +42,7 @@
       },
       "required": ["hero"]
     },
+
     "about": {
       "type": "object",
       "properties": {
@@ -74,6 +75,7 @@
       },
       "required": ["headline", "description"]
     },
+
     "departments": {
       "type": "object",
       "properties": {
@@ -96,6 +98,7 @@
       },
       "required": ["headline", "items"]
     },
+
     "services": {
       "type": "object",
       "properties": {
@@ -118,45 +121,46 @@
       },
       "required": ["headline", "items"]
     },
-"testimonials": {
-  "type": "object",
-  "properties": {
-    "kicker": {
-      "type": "string"
-    },
-    "headline": {
-      "type": "string"
-    },
-    "subheadline": {
-      "type": "string"
-    },
-    "count": {
-      "type": "string"
-    },
-    "items": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 1,
-      "items": {
-        "type": "object",
-        "properties": {
-          "text": {
-            "type": "string"
-          },
-          "rating": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string"
+
+    "testimonials": {
+      "type": "object",
+      "properties": {
+        "kicker": { "type": "string" },
+        "headline": { "type": "string" },
+        "subheadline": { "type": "string" },
+        "count": { "type": "string" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": { "type": "string" },
+              "rating": { "type": "string" },
+              "name": { "type": "string" },
+              "role": { "type": "string" }
+            },
+            "required": ["text", "rating", "name", "role"]
           }
-        },
-        "required": ["text", "rating", "name", "role"]
-      }
+        }
+      },
+      "required": ["headline", "items", "count"]
+    },
+
+    "appointment": {
+      "type": "object",
+      "properties": {
+        "pill": { "type": "string" },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "call_label": { "type": "string" },
+        "phone": { "type": "string" },
+        "image": { "type": "string" },
+        "image_alt": { "type": "string" }
+      },
+      "required": ["title", "subtitle", "image"]
     }
   },
-  "required": ["headline", "items", "count"]
+  "required": ["home"]
 }
-
