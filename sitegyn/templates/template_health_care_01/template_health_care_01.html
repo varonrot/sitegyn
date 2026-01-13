@@ -1026,20 +1026,10 @@ header{
   display:grid;
   grid-template-columns:1fr 1.3fr;
   gap:80px;
-  align-items:center;
+  align-items:flex-start;
 }
 
-/* LEFT INFO */
-.testimonial-info .pill{
-  display:inline-block;
-  padding:6px 16px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:#0f766e;
-  font-size:13px;
-  margin-bottom:18px;
-}
-
+/* LEFT */
 .testimonial-info h2{
   font-size:42px;
   line-height:1.15;
@@ -1050,39 +1040,27 @@ header{
 .testimonial-sub{
   font-size:15px;
   color:#64748b;
-  max-width:320px;
+  max-width:360px;
   margin-bottom:28px;
-}
-
-/* AVATARS */
-.testimonial-avatars{
-  display:flex;
-  align-items:center;
-  margin-bottom:12px;
-}
-
-.testimonial-avatars img{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  border:2px solid #fff;
-  margin-left:-12px;
-}
-
-.testimonial-avatars img:first-child{
-  margin-left:0;
 }
 
 .testimonial-count{
   font-size:14px;
-  color:#0f172a;
   font-weight:600;
+  color:#0f172a;
 }
 
-/* RIGHT CARD */
+/* RIGHT STACK */
+.testimonial-cards{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+}
+
+/* CARD */
 .testimonial-card{
   position:relative;
-  padding:56px 56px 48px;
+  padding:44px 44px 36px;
   border-radius:32px;
   background:#f8fafc;
   box-shadow:
@@ -1091,11 +1069,11 @@ header{
 }
 
 /* QUOTE */
-.quote-mark{
+.testimonial-card .quote-mark{
   position:absolute;
-  top:-20px;
-  left:32px;
-  font-size:120px;
+  top:-18px;
+  left:28px;
+  font-size:96px;
   color:rgba(45,212,216,.25);
   font-family:serif;
   line-height:1;
@@ -1103,70 +1081,32 @@ header{
 
 /* TEXT */
 .testimonial-card blockquote{
-  font-size:18px;
+  font-size:17px;
   line-height:1.7;
   color:#0f172a;
-  margin-bottom:36px;
-  max-width:640px;
+  margin-bottom:26px;
 }
 
 /* FOOTER */
 .testimonial-footer{
   display:flex;
   align-items:center;
-  gap:24px;
+  gap:20px;
 }
 
 .rating{
-  font-size:16px;
   font-weight:700;
   color:#0f172a;
 }
 
 .author strong{
   display:block;
-  font-size:16px;
+  font-size:15px;
 }
 
 .author span{
   font-size:14px;
   color:#64748b;
-}
-
-/* NAV */
-.testimonial-nav{
-  margin-left:auto;
-  display:flex;
-  gap:12px;
-}
-
-.testimonial-nav button{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  border:1px solid rgba(15,23,42,.15);
-  background:#fff;
-  cursor:pointer;
-  font-size:18px;
-  transition:.25s ease;
-}
-
-.testimonial-nav button:hover{
-  background:#2dd4d8;
-  color:#022c22;
-  border-color:#2dd4d8;
-}
-
-/* DECORATIVE SHAPE */
-.testimonial-decor{
-  position:absolute;
-  right:-40px;
-  bottom:-40px;
-  width:160px;
-  height:160px;
-  background:radial-gradient(circle, rgba(45,212,216,.35), transparent 70%);
-  border-radius:50%;
-  pointer-events:none;
 }
 
 /* RESPONSIVE */
@@ -1176,18 +1116,16 @@ header{
     gap:48px;
   }
 
-  .testimonial-card{
-    padding:42px 28px;
-  }
-
   .testimonial-info h2{
     font-size:34px;
   }
+
+  .testimonial-card{
+    padding:36px 26px 30px;
+  }
 }
-#testimonial-text{
-  transition: opacity .3s ease;
-}
-/* SECTION – כמעט Full Width */
+
+/* SECTION blogs
 .blogs-section{
   padding:100px 40px;
 }
@@ -2041,14 +1979,15 @@ section[id] {
 
   </div>
 </section>
- <section class="testimonial" id="testimonials" data-section="testimonials">
+
+<section class="testimonial" id="testimonials" data-section="testimonials">
   <div class="testimonial-inner">
 
     <!-- LEFT -->
     <div class="testimonial-info">
-      <span class="pill" id="testimonials-kicker"></span>
-      <h2 id="testimonials-headline"></h2>
-      <p class="testimonial-sub" id="testimonials-subheadline"></p>
+      <span class="pill" data-bind="testimonials.kicker"></span>
+      <h2 data-bind="testimonials.headline"></h2>
+      <p class="testimonial-sub" data-bind="testimonials.subheadline"></p>
 
       <div class="testimonial-avatars">
         <img src="https://randomuser.me/api/portraits/men/32.jpg">
@@ -2058,35 +1997,61 @@ section[id] {
         <img src="https://randomuser.me/api/portraits/men/71.jpg">
       </div>
 
-      <div class="testimonial-count" id="testimonials-count"></div>
+      <div class="testimonial-count" data-bind="testimonials.count"></div>
     </div>
 
     <!-- RIGHT -->
-    <div class="testimonial-card">
-      <div class="quote-mark">“</div>
+    <div class="testimonial-cards">
 
-      <blockquote id="testimonial-text"></blockquote>
+      <div class="testimonial-card">
+        <div class="quote-mark">“</div>
+        <blockquote data-bind="testimonials.items.0.text"></blockquote>
 
-      <div class="testimonial-footer">
-        <div class="rating" id="testimonial-rating"></div>
-
-        <div class="author">
-          <strong id="testimonial-name"></strong>
-          <span id="testimonial-role"></span>
-        </div>
-
-        <div class="testimonial-nav">
-          <button id="testimonial-prev">‹</button>
-          <button id="testimonial-next">›</button>
+        <div class="testimonial-footer">
+          <div class="rating">
+            <span data-bind="testimonials.items.0.rating"></span> ★
+          </div>
+          <div class="author">
+            <strong data-bind="testimonials.items.0.name"></strong>
+            <span data-bind="testimonials.items.0.role"></span>
+          </div>
         </div>
       </div>
+
+      <div class="testimonial-card">
+        <div class="quote-mark">“</div>
+        <blockquote data-bind="testimonials.items.1.text"></blockquote>
+
+        <div class="testimonial-footer">
+          <div class="rating">
+            <span data-bind="testimonials.items.1.rating"></span> ★
+          </div>
+          <div class="author">
+            <strong data-bind="testimonials.items.1.name"></strong>
+            <span data-bind="testimonials.items.1.role"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="quote-mark">“</div>
+        <blockquote data-bind="testimonials.items.2.text"></blockquote>
+
+        <div class="testimonial-footer">
+          <div class="rating">
+            <span data-bind="testimonials.items.2.rating"></span> ★
+          </div>
+          <div class="author">
+            <strong data-bind="testimonials.items.2.name"></strong>
+            <span data-bind="testimonials.items.2.role"></span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>
 </section>
-
-
-
 
 <section class="blogs-section" id="blog" data-section="blog">
   <div class="blogs-container">
@@ -2299,64 +2264,6 @@ setInterval(() => {
   slides[i].classList.add('active');
 }, 8000);
 </script>
-
- <script>
-(function pollTestimonials() {
-
-  let tries = 0;
-  const MAX_TRIES = 50;
-
-  const interval = setInterval(() => {
-    tries++;
-
-    const data = window.content_json?.testimonials;
-    if (!data || !Array.isArray(data.items) || !data.items.length) {
-      if (tries >= MAX_TRIES) clearInterval(interval);
-      return;
-    }
-
-    clearInterval(interval);
-
-    // LEFT
-    document.getElementById("testimonials-kicker").textContent = data.kicker || "";
-    document.getElementById("testimonials-headline").textContent = data.headline || "";
-    document.getElementById("testimonials-subheadline").textContent = data.subheadline || "";
-    document.getElementById("testimonials-count").textContent = data.count || "";
-
-    // RIGHT
-    let current = 0;
-    const items = data.items;
-
-    const textEl   = document.getElementById("testimonial-text");
-    const nameEl   = document.getElementById("testimonial-name");
-    const roleEl   = document.getElementById("testimonial-role");
-    const ratingEl = document.getElementById("testimonial-rating");
-
-    function render(i) {
-      const t = items[i];
-      textEl.textContent   = t.text || "";
-      nameEl.textContent   = t.name || "";
-      roleEl.textContent   = t.role || "";
-      ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
-    }
-
-    document.getElementById("testimonial-next").onclick = () => {
-      current = (current + 1) % items.length;
-      render(current);
-    };
-
-    document.getElementById("testimonial-prev").onclick = () => {
-      current = (current - 1 + items.length) % items.length;
-      render(current);
-    };
-
-    render(0);
-
-  }, 100);
-
-})();
-</script>
-
 
 <script>
   const backToTop = document.getElementById("backToTop");
