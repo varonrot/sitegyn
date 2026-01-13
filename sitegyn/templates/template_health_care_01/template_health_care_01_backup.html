@@ -2044,7 +2044,6 @@ section[id] {
  <section class="testimonial" id="testimonials" data-section="testimonials">
   <div class="testimonial-inner">
 
-    <!-- LEFT -->
     <div class="testimonial-info">
       <span class="pill" id="testimonials-kicker"></span>
       <h2 id="testimonials-headline"></h2>
@@ -2061,32 +2060,23 @@ section[id] {
       <div class="testimonial-count" id="testimonials-count"></div>
     </div>
 
-    <!-- RIGHT -->
     <div class="testimonial-card">
       <div class="quote-mark">“</div>
 
-      <blockquote id="testimonial-text"></blockquote>
+      <blockquote id="testimonials-item-0-text"></blockquote>
 
       <div class="testimonial-footer">
-        <div class="rating" id="testimonial-rating"></div>
+        <div class="rating" id="testimonials-item-0-rating"></div>
 
         <div class="author">
-          <strong id="testimonial-name"></strong>
-          <span id="testimonial-role"></span>
-        </div>
-
-        <div class="testimonial-nav">
-          <button id="testimonial-prev">‹</button>
-          <button id="testimonial-next">›</button>
+          <strong id="testimonials-item-0-name"></strong>
+          <span id="testimonials-item-0-role"></span>
         </div>
       </div>
     </div>
 
   </div>
 </section>
-
-
-
 
 <section class="blogs-section" id="blog" data-section="blog">
   <div class="blogs-container">
@@ -2280,11 +2270,8 @@ overlay.onclick = () => {
   menu.classList.remove('open');
   overlay.classList.remove('show');
 };
- 
 
-</body>
-</html>
-
+</script>
 <script>
 const slides = document.querySelectorAll('.slide');
 let i = 0;
@@ -2302,81 +2289,6 @@ setInterval(() => {
   slides[i].classList.add('active');
 }, 8000);
 </script>
-
-<script>
-(function () {
-  const data = window.content_json?.testimonials;
-  if (!data || !Array.isArray(data.items) || !data.items.length) return;
-
-  let current = 0;
-  const items = data.items;
-
-  const textEl   = document.getElementById("testimonial-text");
-  const nameEl   = document.getElementById("testimonial-name");
-  const roleEl   = document.getElementById("testimonial-role");
-  const ratingEl = document.getElementById("testimonial-rating");
-
-  function render(index) {
-    const t = items[index];
-    textEl.textContent   = t.text || "";
-    nameEl.textContent   = t.name || "";
-    roleEl.textContent   = t.role || "";
-    ratingEl.textContent = (t.rating || "") + " ★";
-  }
-
-  document.getElementById("testimonial-next").onclick = () => {
-    current = (current + 1) % items.length;
-    render(current);
-  };
-
-  document.getElementById("testimonial-prev").onclick = () => {
-    current = (current - 1 + items.length) % items.length;
-    render(current);
-  };
-
-  render(0);
-})();
-</script>
- <script>
-function initTestimonials() {
-  const data = window.content_json?.testimonials;
-  if (!data || !Array.isArray(data.items) || !data.items.length) return;
-
-  let current = 0;
-  const items = data.items;
-
-  const textEl   = document.getElementById("testimonial-text");
-  const nameEl   = document.getElementById("testimonial-name");
-  const roleEl   = document.getElementById("testimonial-role");
-  const ratingEl = document.getElementById("testimonial-rating");
-
-  function render(i) {
-    const t = items[i];
-    textEl.textContent   = t.text || "";
-    nameEl.textContent   = t.name || "";
-    roleEl.textContent   = t.role || "";
-    ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
-  }
-
-  document.getElementById("testimonial-next").onclick = () => {
-    current = (current + 1) % items.length;
-    render(current);
-  };
-
-  document.getElementById("testimonial-prev").onclick = () => {
-    current = (current - 1 + items.length) % items.length;
-    render(current);
-  };
-
-  render(0);
-}
-
-// ⬅️ זה הדבר החשוב באמת
-window.addEventListener("content:ready", initTestimonials);
-</script>
-
-
-
 
 <script>
   const backToTop = document.getElementById("backToTop");
