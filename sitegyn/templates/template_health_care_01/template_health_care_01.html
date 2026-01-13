@@ -2300,7 +2300,7 @@ setInterval(() => {
 }, 8000);
 </script>
 
-  <script>
+<script>
 (function () {
 
   function initTestimonials() {
@@ -2308,15 +2308,10 @@ setInterval(() => {
     if (!data || !Array.isArray(data.items) || !data.items.length) return;
 
     // LEFT
-    const kickerEl = document.getElementById("testimonials-kicker");
-    const headEl   = document.getElementById("testimonials-headline");
-    const subEl    = document.getElementById("testimonials-subheadline");
-    const countEl  = document.getElementById("testimonials-count");
-
-    if (kickerEl) kickerEl.textContent = data.kicker || "";
-    if (headEl)   headEl.textContent   = data.headline || "";
-    if (subEl)    subEl.textContent    = data.subheadline || "";
-    if (countEl)  countEl.textContent  = data.count || "";
+    document.getElementById("testimonials-kicker").textContent = data.kicker || "";
+    document.getElementById("testimonials-headline").textContent = data.headline || "";
+    document.getElementById("testimonials-subheadline").textContent = data.subheadline || "";
+    document.getElementById("testimonials-count").textContent = data.count || "";
 
     // RIGHT
     let current = 0;
@@ -2347,12 +2342,11 @@ setInterval(() => {
 
     render(0);
   }
- 
-  initTestimonials();
+
+  window.addEventListener("content:ready", initTestimonials);
 
 })();
 </script>
-
 
 
 <script>
