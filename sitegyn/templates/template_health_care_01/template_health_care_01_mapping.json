@@ -71,7 +71,15 @@
 "testimonials-item-0-text": "testimonials.items[0].text",
 "testimonials-item-0-rating": "testimonials.items[0].rating",
 "testimonials-item-0-name": "testimonials.items[0].name",
-"testimonials-item-0-role": "testimonials.items[0].role"
+"testimonials-item-0-role": "testimonials.items[0].role",
+
+    "appointment-pill": "appointment.pill",
+  "appointment-title": "appointment.title",
+  "appointment-subtitle": "appointment.subtitle",
+  "appointment-call-label": "appointment.call_label",
+  "appointment-phone": "appointment.phone",
+  "appointment-image": "appointment.image",
+  "appointment-image-alt": "appointment.image_alt"
 
  
  }
