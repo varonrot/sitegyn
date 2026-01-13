@@ -1,0 +1,2853 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<title>Trading Education & Market Research | Analyst44</title>
+
+<meta name="description"
+      content="Explore Analyst44’s trading education resources and market research, designed to help traders understand earnings behavior, volatility, and real-world market reactions." />
+
+<link rel="canonical" href="https://analyst44.com/education.html" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg-main:#050713;
+      --bg-panel:#111322;
+      --bg-panel-soft:#141728;
+      --accent:#22e38b;
+      --accent-soft:#2fe6ff;
+      --text:#f7f8ff;
+      --muted:#9ca3c7;
+      --border-soft:rgba(255,255,255,0.06);
+      --radius-xl:22px;
+      --radius-lg:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:
+      radial-gradient(circle at 0 0, rgba(181,53,255,0.35) 0, transparent 45%),
+      radial-gradient(circle at 100% 0, rgba(32,186,255,0.28) 0, transparent 55%),
+      #02030a;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+    body.nav-open{overflow:hidden;}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+
+    .page-wrap{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* TOP NAV */
+    .nav{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:50;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 36px;
+      background:linear-gradient(90deg,rgba(5,7,19,0.96),rgba(5,7,19,0.8));
+      border-bottom:1px solid rgba(255,255,255,0.03);
+      backdrop-filter:blur(16px);
+    }
+    .nav-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .nav-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav-toggle{
+  display:none;
+  width:32px;
+  height:32px;
+  margin-right:8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.35);
+  background:rgba(8,11,24,0.95);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.nav-toggle span{
+  display:block;
+  width:16px;
+  height:2px;
+  border-radius:999px;
+  background:#f9fbff;
+  position:relative;
+}
+
+.nav-toggle span::before,
+.nav-toggle span::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:16px;
+  height:2px;
+  border-radius:999px;
+  background:#f9fbff;
+}
+
+.nav-toggle span::before{ top:-5px; }
+.nav-toggle span::after{ top:5px; }
+
+.nav-toggle.is-open span{
+  background:transparent;
+}
+
+.nav-toggle.is-open span::before{
+  top:0;
+  transform:rotate(45deg);
+}
+
+.nav-toggle.is-open span::after{
+  top:0;
+  transform:rotate(-45deg);
+}
+
+/* פאנל מובייל */
+.nav-mobile{
+  position:fixed;
+  top:64px;
+  left:0;
+  right:0;
+  background:rgba(5,7,19,0.98);
+  backdrop-filter:blur(20px);
+  transform:translateY(-100%);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .25s ease, opacity .25s ease;
+  z-index:40;
+}
+
+.nav-mobile.open{
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
+}
+
+.nav-mobile-inner{
+  padding:18px 24px 32px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.nav-mobile-link{
+  font-size:16px;
+  color:#f4f5ff;
+  text-align:left;
+  background:transparent;
+  border:none;
+  padding:6px 0;
+  cursor:pointer;
+}
+
+.nav-mobile-link.secondary{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.nav-mobile-divider{
+  height:1px;
+  background:rgba(255,255,255,0.06);
+  margin:10px 0;
+}
+
+    .logo-circle{
+      width:34px;height:34px;
+      border-radius:999px;
+      background:radial-gradient(circle at 30% 0,#45b6ff 0,#0050ff 40%,#2600ff 100%);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;
+      font-weight:800;
+      font-size:18px;
+      box-shadow:0 0 20px rgba(46,163,255,0.5);
+    }
+    .logo-text{
+      font-weight:600;
+      font-size:18px;
+    }
+    .logo-text span{color:#2fd9ff;font-weight:700;}
+
+    .nav-links{
+      display:flex;
+      gap:24px;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .nav-links a{position:relative;padding:4px 0;}
+    .nav-links a:hover{color:#f5f5ff;}
+    .nav-links a::after{
+      content:"";position:absolute;left:0;bottom:-4px;
+      width:0;height:2px;border-radius:999px;
+      background:linear-gradient(90deg,#32e28c,#37e1ff);
+      transition:width .18s ease;
+    }
+    .nav-links a:hover::after{width:100%;}
+
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .btn-outline{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.16);
+      padding:8px 14px;
+      font-size:13px;
+      color:var(--muted);
+      background:rgba(8,11,24,0.9);
+      display:flex;align-items:center;gap:6px;
+      cursor:pointer;
+    }
+    .btn-outline span.icon{
+      font-size:14px;
+    }
+    .btn-outline:hover{
+      border-color:rgba(255,255,255,0.4);
+      color:#fff;
+    }
+    .btn-primary{
+      border-radius:999px;
+      padding:9px 20px;
+      font-size:14px;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      color:#02030a;
+      background:linear-gradient(130deg,#18e57c,#2fe1ff);
+      box-shadow:0 0 25px rgba(24,229,124,0.5);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 0 30px rgba(24,229,124,0.7);
+    }
+
+    /* MOBILE NAV TOGGLE */
+    .nav-toggle{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      width:34px;
+      height:34px;
+      margin-left:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(6,9,22,0.95);
+      cursor:pointer;
+    }
+    .nav-toggle-line{
+      width:18px;
+      height:2px;
+      border-radius:999px;
+      background:#f9fafb;
+      display:block;
+      margin:2px 0;
+      transition:transform .18s ease, opacity .18s ease;
+    }
+
+    .mobile-menu{
+      position:fixed;
+      top:64px;
+      left:0;
+      right:0;
+      padding:12px 20px 16px;
+      background:rgba(5,7,19,0.98);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      display:none;
+      flex-direction:column;
+      gap:8px;
+      z-index:40;
+    }
+    .mobile-menu a{
+      font-size:14px;
+      color:var(--muted);
+      padding:6px 2px;
+    }
+    .mobile-menu a:hover{color:#fff;}
+    .mobile-divider{
+      border:none;
+      border-top:1px solid rgba(255,255,255,0.08);
+      margin:6px 0 4px;
+    }
+
+    body.nav-open .mobile-menu{display:flex;}
+    body.nav-open .nav-toggle-line:nth-child(1){
+      transform:translateY(4px) rotate(45deg);
+    }
+    body.nav-open .nav-toggle-line:nth-child(2){
+      opacity:0;
+    }
+    body.nav-open .nav-toggle-line:nth-child(3){
+      transform:translateY(-4px) rotate(-45deg);
+    }
+
+    /* MAIN CONTENT */
+    main{
+      flex:1;
+      padding-top:64px;
+    }
+
+    /* HERO + JELLYFISH */
+    .hero{
+      position:relative;
+      padding:140px 0 190px;
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 0 0,rgba(181,53,255,0.4) 0,transparent 45%),
+        linear-gradient(180deg,rgba(2,5,18,0.2) 0,rgba(2,5,18,0.96) 65%,#02030a 100%),
+        url("jellyfish-hero.jpg") center top/cover no-repeat;
+      opacity:0.9;
+      z-index:-2;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;inset:0;
+      background:radial-gradient(circle at 80% 0,rgba(0,195,255,0.25),transparent 50%);
+      z-index:-1;
+    }
+
+    .hero-inner{
+      max-width:1180px;
+      margin:0 auto;
+      padding:0 32px;
+      display:flex;
+      gap:56px;
+      align-items:center;
+    }
+    .hero-copy{
+      flex:1.1;
+      max-width:520px;
+    }
+    .hero-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:5px 12px;
+      border-radius:999px;
+      background:rgba(4,10,32,0.85);
+      border:1px solid rgba(123,181,255,0.45);
+      font-size:11px;
+      color:#c9d2ff;
+      margin-bottom:16px;
+    }
+    .hero-pill span.tag{
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(29,185,105,0.18);
+      color:#57f0a2;
+      font-weight:600;
+    }
+
+    .hero-title{
+      font-size:44px;
+      line-height:1.05;
+      letter-spacing:-0.03em;
+      margin-bottom:14px;
+    }
+    @media (min-width:1280px){
+      .hero-title{font-size:52px;}
+    }
+
+    /* typing word */
+    #typed{
+      color:#ff48d3;
+      font-weight:800;
+      border-right:2px solid rgba(255,255,255,0.7);
+      padding-right:4px;
+      animation:blink .8s infinite;
+    }
+    @keyframes blink{
+      0%{border-color:rgba(255,255,255,0.7);}
+      50%{border-color:transparent;}
+      100%{border-color:rgba(255,255,255,0.7);}
+    }
+
+    .hero-sub{
+      font-size:15px;
+      color:var(--muted);
+      max-width:410px;
+      line-height:1.6;
+      margin-bottom:20px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-bottom:18px;
+    }
+    .btn-ghost{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.22);
+      padding:9px 16px;
+      font-size:13px;
+      color:var(--text);
+      background:rgba(4,8,25,0.9);
+      display:flex;align-items:center;gap:8px;
+      cursor:pointer;
+    }
+    .btn-ghost span.icon{
+      font-size:14px;
+    }
+    .btn-ghost:hover{
+      background:rgba(10,16,38,0.95);
+      border-color:rgba(255,255,255,0.45);
+    }
+
+    .hero-avatars{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      margin-top:6px;
+      margin-bottom:4px;
+    }
+    .hero-avatars img{
+      width:26px;height:26px;
+      border-radius:999px;
+      border:2px solid #050713;
+      box-shadow:0 0 10px rgba(0,0,0,0.5);
+    }
+    .hero-avatars img:not(:first-child){margin-left:-10px;}
+    .hero-meta{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .hero-media{
+      flex:1.1;
+      position:relative;
+      display:flex;
+      justify-content:center;
+    }
+    .hero-card{
+      width:100%;
+      max-width:640px;
+      border-radius:26px;
+      background:radial-gradient(circle at 0 0,rgba(67,203,255,0.5),transparent 55%),
+                 radial-gradient(circle at 100% 100%,rgba(91,255,168,0.35),transparent 55%),
+                 #050814;
+      padding:14px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.7);
+      transform-origin:center;
+      transition:transform .35s ease, box-shadow .35s ease, translate .35s ease;
+    }
+    .hero-card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 40px 90px rgba(0,0,0,0.85);
+    }
+    .hero-card-inner{
+      border-radius:22px;
+      overflow:hidden;
+      background:#050713;
+    }
+
+    /* WHY SECTION */
+    .section{
+      padding:0 32px;
+    }
+    .section-inner{
+      max-width:1180px;
+      margin:0 auto;
+    }
+    .section-header{
+      margin-bottom:16px;
+    }
+    .section-kicker{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .section-title{
+      font-size:24px;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    .section-sub{
+      font-size:14px;
+      color:var(--muted);
+      max-width:520px;
+    }
+
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+      margin-top:26px;
+      margin-bottom:80px;
+    }
+    .feature-card{
+      background:radial-gradient(circle at 0 0,rgba(88,187,255,0.24),transparent 60%),var(--bg-panel-soft);
+      border-radius:var(--radius-lg);
+      border:1px solid var(--border-soft);
+      padding:18px 18px 20px;
+      min-height:170px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .feature-card:nth-child(2){
+      background:radial-gradient(circle at 0 0,rgba(255,72,211,0.25),transparent 60%),var(--bg-panel-soft);
+    }
+    .feature-card:nth-child(3){
+      background:radial-gradient(circle at 0 0,rgba(153,102,255,0.3),transparent 60%),var(--bg-panel-soft);
+    }
+    .feature-card:nth-child(4){
+      background:radial-gradient(circle at 0 0,rgba(62,215,130,0.28),transparent 60%),var(--bg-panel-soft);
+    }
+
+    .feature-icon{
+      width:26px;height:26px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:15px;
+      background:rgba(0,0,0,0.35);
+    }
+    .feature-title{
+      font-size:15px;
+      font-weight:600;
+      margin-top:8px;
+      margin-bottom:6px;
+    }
+    .feature-text{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    /* PRICING SECTION */
+    .pricing-section{
+      padding:0 32px 80px;
+    }
+    .pricing-layout{
+      max-width:1180px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+      gap:26px;
+      align-items:start;
+    }
+    .pricing-card{
+      background:var(--bg-panel);
+      border-radius:var(--radius-xl);
+      padding:26px 24px 24px;
+      border:1px solid var(--border-soft);
+      box-shadow:0 24px 60px rgba(0,0,0,0.7);
+    }
+    .pricing-label{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .pricing-headline{
+      font-size:23px;
+      font-weight:600;
+      margin-bottom:12px;
+    }
+    .pricing-price{
+      font-size:28px;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    .pricing-sub{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .pricing-list{
+      list-style:none;
+      padding:0;
+      margin:0 0 18px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .pricing-list li{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      margin-bottom:6px;
+    }
+    .pricing-list span.bullet{
+      color:#37e18e;
+      margin-top:1px;
+    }
+    .pricing-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .btn-pill-primary{
+      border-radius:999px;
+      padding:10px 18px;
+      border:none;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      color:#02030a;
+      background:linear-gradient(130deg,#18e57c,#2fe1ff);
+    }
+    .btn-pill-secondary{
+      border-radius:999px;
+      padding:9px 16px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(10,12,29,0.95);
+      font-size:13px;
+      color:var(--muted);
+      cursor:pointer;
+    }
+    .btn-pill-secondary:hover{color:#fff;border-color:rgba(255,255,255,0.4);}
+
+    .pricing-copy{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    /* CTA BAND */
+    .cta-band{
+      padding:0 32px 80px;
+    }
+    .cta-inner{
+      max-width:1180px;
+      margin:0 auto;
+      background:var(--bg-panel-soft);
+      border:1px solid var(--border-soft);
+      border-radius:var(--radius-xl);
+      padding:22px 24px;
+      display:grid;
+      grid-template-columns:minmax(0,1.2fr) minmax(0,0.9fr);
+      gap:20px;
+      align-items:center;
+    }
+    .cta-kicker{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .cta-title{
+      font-size:20px;
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .cta-text{
+      font-size:13px;color:var(--muted);
+    }
+    .cta-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .btn-gradient-big{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:12px 24px;
+      font-size:14px;
+      font-weight:600;
+      color:#02030a;
+      background:linear-gradient(130deg,#21e57d,#33e0ff);
+      box-shadow:0 0 25px rgba(51,224,255,0.4);
+    }
+    .btn-outline-soft{
+      border-radius:999px;
+      padding:11px 20px;
+      font-size:13px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.22);
+      background:rgba(9,11,26,0.95);
+      cursor:pointer;
+    }
+    .btn-outline-soft:hover{color:#fff;border-color:rgba(255,255,255,0.45);}
+
+    /* BIG CTA BACKGROUND (GRID) + FOOTER */
+    .cta-banner{
+      position:relative;
+      margin-top:30px;
+      padding:90px 24px;
+      text-align:center;
+      color:#f9fbff;
+      overflow:hidden;
+      border-radius:0;
+      background:#010309;
+      z-index:0;
+    }
+
+.cta-banner::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("grid-footer.jpg") center/cover no-repeat;
+  opacity:0.9;
+  z-index:-1;
+  pointer-events: none; /* ⬅️ להוסיף */
+}
+
+.cta-banner::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 80%,rgba(0,0,0,0.5),transparent 60%);
+  z-index:0;
+  pointer-events: none; /* ⬅️ להוסיף */
+}
+
+    .cta-banner-inner{
+      max-width:960px;
+      margin:0 auto;
+    }
+    .cta-banner-title{
+      font-size:28px;
+      font-weight:600;
+      margin-bottom:18px;
+    }
+    .cta-banner-text{
+      font-size:16px;
+      color:#cdd5ff;
+      margin-bottom:26px;
+    }
+    .cta-banner button{
+      border-radius:999px;
+      padding:11px 26px;
+      border:1px solid rgba(255,255,255,0.7);
+      background:transparent;
+      color:#fdfdff;
+      font-size:14px;
+      font-weight:500;
+      cursor:pointer;
+    }
+    .cta-banner button:hover{
+      background:rgba(4,10,32,0.85);
+    }
+
+    /* FOOTER */
+    footer{
+      background:#050713;
+      border-top:1px solid rgba(255,255,255,0.05);
+      padding:36px 32px 20px;
+      color:var(--muted);
+    }
+    .footer-inner{
+      max-width:1180px;
+      margin:0 auto;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:2.2fr repeat(3,1fr);
+      gap:26px;
+      margin-bottom:28px;
+      font-size:13px;
+    }
+    .footer-title{
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+      color:#e4e7ff;
+    }
+    .footer-text{line-height:1.7;}
+    .footer-links{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .footer-links li{margin-bottom:6px;}
+    .footer-links a{color:var(--muted);}
+    .footer-links a:hover{color:#f5f6ff;}
+
+    .footer-bottom{
+      border-top:1px solid rgba(255,255,255,0.06);
+      padding-top:10px;
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      color:#6b7285;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width:980px){
+      .hero-inner{
+        flex-direction:column;
+        padding-top:40px;
+      }
+      .hero{
+        padding-top:110px;
+        padding-bottom:140px;
+      }
+      .hero-media{
+        margin-top:16px;
+      }
+      /* במוביל – קודם טקסט ואח"כ הדשבורד */
+      .hero-copy{order:0;}
+      .hero-media{order:1;}
+      .hero-card{max-width:520px;}
+      .feature-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .pricing-layout{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-inner{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-actions{justify-content:flex-start;}
+      .cta-banner-title{font-size:24px;}
+    }
+
+    @media (max-width:720px){
+  .nav{
+    padding:0 16px;
+  }
+
+  /* להסתיר תפריט עליון רגיל במוביל */
+  .nav-links{
+    display:none;
+  }
+
+  /* להציג המבורגר בצד שמאל */
+  .nav-toggle{
+    display:flex;
+  }
+
+  /* להסתיר Help במוביל */
+  .btn-outline{
+    display:none;
+  }
+
+  /* Dashboard הירוק נשאר כמו שהוא */
+
+  .hero-inner{
+    padding:0 18px;
+  }
+  .section,.pricing-section,.cta-band{
+    padding:0 18px 60px;
+  }
+  .feature-grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .footer-grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .cta-banner{
+    padding:70px 18px;
+  }
+}
+
+/* במחשב – לא צריך את פאנל המובייל */
+@media (min-width:721px){
+  .nav-mobile{
+    display:none;
+  }
+}
+/* === PRICING PAGE LAYOUT === */
+
+.pricing-page {
+  padding-top: 120px;
+  padding-bottom: 80px;
+}
+
+.pricing-page .pricing-heading {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.pricing-page .pricing-heading p {
+  max-width: 640px;
+  margin: 16px auto 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* כרטיסי תמחור */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  max-width: 1120px;
+  margin: 40px auto 0;
+}
+
+.pricing-card {
+  background: radial-gradient(circle at top left, #283557, #141b2b);
+  border-radius: 20px;
+  padding: 24px 24px 26px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pricing-card--highlight {
+  background: radial-gradient(circle at top left, #4f2b75, #162338);
+  border-color: rgba(140, 120, 255, 0.7);
+}
+
+.pricing-card h3 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.pricing-card .pricing-tagline {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.pricing-card .pricing-amount {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.pricing-card .pricing-unit {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.pricing-card ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.pricing-card ul li i {
+  margin-top: 2px;
+}
+
+.pricing-card .pricing-cta {
+  width: 100%;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.pricing-card .pricing-cta--secondary {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #f5fbff;
+}
+
+.pricing-card .pricing-cta--primary {
+  background: linear-gradient(90deg, #18e0a5, #1ec8ff);
+  color: #021019;
+}
+
+/* טוגל חודשי/שנתי */
+.pricing-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(9, 16, 28, 0.85);
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-top: 20px;
+}
+
+.pricing-toggle button {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.pricing-toggle button.is-active {
+  background: #f5fbff;
+  color: #020812;
+}
+
+/* בלוקי הסבר מתחת לתמחור */
+.pricing-faq-grid {
+  max-width: 1120px;
+  margin: 60px auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+}
+
+.pricing-faq-grid h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.pricing-faq-grid p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* מובייל */
+@media (max-width: 960px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .pricing-page {
+    padding-top: 96px;
+    padding-bottom: 64px;
+  }
+  .pricing-faq-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+.full-course-wrapper {
+  padding: 40px 32px 80px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* HERO */
+.fc-hero {
+  display: flex;
+  gap: 28px;
+
+  /* רקע חדש */
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.75), rgba(0,0,0,0.35)),
+    url("courseanalyst44.png") center/cover no-repeat;
+
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  padding: 40px;
+  min-height: 260px;
+}
+
+.fc-thumb-box {
+  position: relative;
+  width: 360px;
+}
+
+.fc-thumb-box img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.fc-play-btn {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  font-size: 26px;
+  border: none;
+  color: white;
+  background: rgba(0,0,0,0.55);
+  cursor: pointer;
+}
+
+/* HERO text */
+.fc-hero-right { display: flex; flex-direction: column; justify-content: center; }
+
+.fc-eyebrow { color: #9ca3af; font-size: 15px; }
+.fc-eyebrow span { color: #38bdf8; }
+
+.fc-title { font-size: 32px; margin: 8px 0; }
+.fc-title span { font-size: 18px; color: #94a3b8; display: block; }
+
+.fc-rating { color: #fbbf24; margin: 8px 0; }
+.fc-rating .num { color: #cbd5e1; margin-left: 6px; }
+
+.fc-desc { font-size: 15px; color: #cbd5e1; margin-bottom: 14px; }
+
+.fc-meta { color: #94a3b8; display: flex; gap: 12px; }
+
+/* BENEFITS */
+.fc-benefits {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.fc-benefit-card {
+  background: var(--bg-panel-soft);
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid var(--border-soft);
+}
+
+.fc-benefit-card h4 {
+  margin-bottom: 6px;
+  font-size: 17px;
+}
+
+/* WHAT YOU WILL LEARN */
+.fc-learn-box {
+  margin-top: 40px;
+  background: var(--bg-panel);
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--border-soft);
+}
+
+.fc-learn-box ul {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* LESSONS */
+.fc-lessons { margin-top: 48px; }
+
+.lesson-title {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+.lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lesson-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-panel-soft);
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-soft);
+}
+
+.lesson-thumb {
+  width: 90px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.lesson-info h4 { margin-bottom: 4px; }
+.lesson-info p { font-size: 13px; color: var(--muted); }
+
+.lesson-play {
+  margin-left: auto;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  font-size: 20px;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+}
+
+/* VIDEO MODAL */
+.video-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-modal-content {
+  width: 90%;
+  max-width: 1400px;
+  background: #000;
+  padding: 0;
+  border-radius: 12px;
+  position: relative;
+}
+
+.video-modal iframe {
+  width: 100%;
+  height: 750px;
+  border-radius: 12px;
+}
+
+.video-close {
+  position: absolute;
+  right: 14px;
+  top: 6px;
+  font-size: 26px;
+  cursor: pointer;
+  color: white;
+}
+/* ===========================
+   FC-HERO – MOBILE FIX
+   =========================== */
+@media (max-width: 780px) {
+
+  .fc-hero {
+    flex-direction: column;
+    padding: 22px;
+    gap: 20px;
+
+    /* כך שהתמונה תישאר יפה ולא תיחתך */
+    background:
+      linear-gradient(90deg, rgba(0,0,0,0.75), rgba(0,0,0,0.35)),
+      url("courseanalyst44.png") center/contain no-repeat;
+    background-size: cover;
+  }
+
+  .fc-thumb-box {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .fc-thumb-box img {
+    width: 100%;
+    border-radius: 14px;
+  }
+
+  .fc-hero-right {
+    width: 100%;
+    text-align: left;
+  }
+
+  .fc-title {
+    font-size: 26px;
+    line-height: 1.25;
+  }
+
+  .fc-title span {
+    font-size: 15px;
+  }
+
+  .fc-eyebrow {
+    font-size: 14px;
+  }
+
+  .fc-desc {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .fc-meta {
+    font-size: 13px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+@media (max-width: 780px) {
+  .fc-hero {
+    flex-direction: column-reverse; /* ← הופך את הסדר במובייל */
+    padding: 24px 16px;
+    gap: 22px;
+  }
+
+  .fc-hero-left,
+  .fc-hero-right {
+    width: 100%;
+  }
+
+  .fc-thumb-box img {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+  }
+}
+/* ===========================
+   BENEFITS – MOBILE FIX
+   =========================== */
+@media (max-width: 780px) {
+
+  .fc-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 0 14px;
+  }
+
+  .fc-benefit-card {
+    width: 100%;
+    padding: 18px 16px;
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .fc-benefit-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .fc-benefit-card p {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+}
+/* ===========================
+   VIDEO MODAL — MOBILE FIX
+   =========================== */
+@media (max-width: 780px) {
+
+  .video-modal-content {
+    width: 95%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .video-modal iframe {
+    width: 100%;
+    height: 52vw; /* יחס נכון למסכים צרים */
+    max-height: 260px;
+    border-radius: 12px;
+  }
+
+  .video-close {
+    right: 10px;
+    top: 8px;
+    font-size: 24px;
+  }
+}
+.course-hero {
+  position: relative;
+  width: 100vw;
+  background: url("jellyfish-hero.jpg") center / cover no-repeat;
+  color: #e5e7eb;
+  overflow: hidden;
+}
+
+.course-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3,7,18,0.95) 0%,
+      rgba(3,7,18,0.85) 45%,
+      rgba(3,7,18,0.65) 100%
+    );
+}
+
+/* GRID */
+.course-hero-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.2fr 1.6fr 1fr;
+  gap: 48px;
+  padding: 80px 6vw;
+  align-items: center;
+}
+
+/* LEFT */
+.hero-preview {
+  position: relative;
+}
+
+.hero-preview img {
+  width: 100%;
+  border-radius: 18px;
+}
+
+.hero-play-btn {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* CENTER */
+.hero-title {
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.hero-desc {
+  max-width: 640px;
+  color: #d1d5db;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.hero-meta span {
+  margin-right: 16px;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+/* CTA */
+.hero-cta {
+  background: linear-gradient(180deg, #0f1d30, #0b1525);
+  border-radius: 18px;
+  padding: 32px;
+}
+
+.hero-price {
+  font-size: 34px;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.hero-price span {
+  font-size: 14px;
+  color: #6b7280;
+  text-decoration: line-through;
+  margin-left: 8px;
+}
+
+.hero-cta-btn {
+  width: 100%;
+  margin-top: 16px;
+  background: #3b82f6;
+  border: none;
+  color: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* VIDEO MODAL */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(3,7,18,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  z-index: 9999;
+}
+
+.video-modal.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.video-modal-inner {
+  position: relative;
+  width: 80vw;
+  max-width: 960px;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 16px;
+}
+
+.video-modal iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.video-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.course-info-section {
+  width: 100vw;
+  background: linear-gradient(180deg, #0b1525, #0a1220);
+  padding: 60px 6vw;
+  color: #e5e7eb;
+}
+
+/* GRID */
+.course-info-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+/* LEFT */
+.benefits-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.benefit-card {
+  background: #0f1d30;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.benefit-card h4 {
+  margin-bottom: 8px;
+  color: #60a5fa;
+}
+
+/* LEARN BOX */
+.learn-box {
+  background: #0f1d30;
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.learn-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.preview-btn {
+  background: #0b2545;
+  border: none;
+  color: #60a5fa;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.learn-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.learn-columns ul {
+  list-style: disc;
+  padding-left: 20px;
+  color: #cbd5f5;
+}
+
+/* RIGHT – CTA */
+.course-info-cta {
+  position: sticky;
+  top: 100px; /* חשוב */
+  background: linear-gradient(180deg, #0f1d30, #0b1525);
+  border-radius: 18px;
+  padding: 32px;
+}
+
+.cta-price {
+  font-size: 32px;
+  font-weight: 700;
+  color: #3b82f6;
+  margin: 12px 0;
+}
+
+.cta-price span {
+  font-size: 14px;
+  color: #6b7280;
+  text-decoration: line-through;
+  margin-left: 8px;
+}
+
+.cta-btn {
+  width: 100%;
+  background: #3b82f6;
+  border: none;
+  color: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 16px 0;
+}
+
+.cta-refund {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-bottom: 16px;
+}
+
+.cta-features {
+  list-style: none;
+  padding: 0;
+}
+
+.cta-features li {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #cbd5f5;
+}
+.course-info-section {
+  width: 100vw;
+  padding: 80px 6vw;
+  background: linear-gradient(180deg, #0b1525, #0a1220);
+}
+
+/* זה ההורה החשוב */
+.course-info-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 48px;
+
+  /* ❗ קריטי */
+  overflow: visible;
+}
+
+/* LEFT */
+.course-info-left {
+  min-height: 150vh; /* רק לדוגמה – כדי שתהיה גלילה */
+}
+
+/* RIGHT – STICKY */
+.course-info-cta {
+  position: sticky;
+  top: 120px; /* מתחת ל-header */
+  align-self: flex-start;
+
+  background: linear-gradient(180deg, #0f1d30, #0b1525);
+  border-radius: 22px;
+  padding: 32px;
+}
+.lesson-plans {
+  background: linear-gradient(180deg, #0b1525, #09101e);
+  border-radius: 18px;
+  padding: 32px;
+  color: #e5e7eb;
+}
+
+.lesson-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.chapter {
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.chapter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  cursor: pointer;
+}
+
+.chapter-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chapter-meta {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.chapter-content {
+  display: none;
+  padding-bottom: 12px;
+}
+
+.chapter.open .chapter-content {
+  display: block;
+}
+
+.lesson-row {
+  display: grid;
+  grid-template-columns: 1fr 60px 40px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.lesson-name {
+  font-size: 14px;
+}
+
+.lesson-time {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.play-btn {
+  background: #3b82f6;
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+.course-about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 48px;
+}
+
+.about-card {
+  background: linear-gradient(180deg, #0b1525, #09101e);
+  border-radius: 18px;
+  padding: 28px;
+  color: #e5e7eb;
+}
+
+.about-title {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.about-list {
+  list-style: disc;
+  padding-left: 18px;
+  color: #cbd5e1;
+}
+
+.about-list li {
+  margin-bottom: 12px;
+}
+
+.about-list ol {
+  margin-top: 10px;
+  padding-left: 18px;
+  color: #9ca3af;
+}
+
+/* TRAINER */
+.trainer-card {
+  position: relative;
+}
+
+.trainer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.follow-btn {
+  background: #111827;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #60a5fa;
+  padding: 6px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.trainer-body {
+  display: flex;
+  gap: 18px;
+}
+
+.trainer-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.trainer-info {
+  flex: 1;
+}
+
+.trainer-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.trainer-role {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.trainer-bio {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin-bottom: 14px;
+}
+
+.trainer-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.trainer-link {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #60a5fa;
+  text-decoration: none;
+}
+.live-cta-btn {
+  align-self: flex-start;
+  margin-top: 8px;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, #6fdc8c, #4caf50);
+  color: #0b1a12;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.35);
+  transition: all 0.2s ease;
+}
+.course-info-cta {
+  display: flex;
+  flex-direction: column;
+}
+
+.cta-btn {
+  position: relative;      /* מבטל absolute */
+  margin: 14px 0 10px;     /* מרווח תקין */
+}
+/* =========================
+   HERO – MOBILE FIX
+   ========================= */
+@media (max-width: 768px) {
+
+  .course-hero {
+    padding: 48px 20px;
+  }
+
+  .course-hero-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* ---------- CONTENT ---------- */
+  .hero-content {
+    text-align: left;
+  }
+
+  .hero-eyebrow {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .hero-title {
+    font-size: 30px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .hero-rating {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    font-size: 13px;
+  }
+
+  /* ---------- MEDIA ---------- */
+  .hero-media {
+    order: 2;
+  }
+
+  .hero-preview {
+    max-width: 100%;
+  }
+
+  .hero-preview img {
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+  }
+
+  .hero-play-btn {
+    font-size: 22px;
+    width: 56px;
+    height: 56px;
+  }
+
+  /* ---------- CTA ---------- */
+  .hero-cta {
+    order: 3;
+    width: 100%;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: left;
+  }
+
+  .live-cta-title {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  .live-cta-subtitle {
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+
+  .hero-cta-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 15px;
+    border-radius: 10px; /* כמו Purchase this course */
+  }
+
+  .live-cta-note {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+}
+
+
+
+      @media (max-width: 768px) {
+
+  .course-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .course-info-left {
+    width: 100%;
+  }
+
+  .course-info-cta {
+    position: static;
+    width: 100%;
+    margin-top: 0;
+  }
+}
+@media (max-width: 768px) {
+
+  .benefits-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .benefit-card h4 {
+    font-size: 16px;
+  }
+
+  .benefit-card p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+@media (max-width: 768px) {
+
+  .learn-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .learn-header h3 {
+    font-size: 18px;
+  }
+
+  .preview-btn {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .learn-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .learn-columns ul {
+    padding-left: 18px;
+  }
+}
+@media (max-width: 768px) {
+
+  .lesson-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .chapter-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .chapter-header h4 {
+    font-size: 16px;
+  }
+
+  .chapter-meta {
+    font-size: 12px;
+  }
+
+  .lesson-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .lesson-name {
+    font-size: 14px;
+  }
+
+  .lesson-time {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  .play-btn {
+    grid-column: 2;
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+}
+@media (max-width: 768px) {
+
+  .course-about-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .trainer-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .trainer-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .trainer-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12px;
+  }
+}
+@media (max-width: 768px) {
+
+  .course-info-cta h3 {
+    font-size: 18px;
+  }
+
+  .cta-price {
+    font-size: 16px;
+  }
+
+  .cta-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 10px; /* כמו Purchase */
+  }
+
+  .cta-features li {
+    font-size: 13px;
+  }
+}
+<script>
+function scrollToLessons() {
+  const el = document.getElementById('lesson-plans');
+  if (!el) return;
+
+  const yOffset = -80; // גובה header
+  const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+  window.scrollTo({ top: y, behavior: 'smooth' });
+}
+</script>
+/* Improve spacing inside Live CTA */
+.live-cta-title {
+  margin-bottom: 6px;
+}
+
+.live-cta-subtitle {
+  margin-bottom: 16px; /* רווח לפני הכפתור */
+}
+
+.live-cta-btn {
+  margin-bottom: 12px; /* רווח אחרי הכפתור */
+}
+
+.live-cta-note {
+  margin-top: 0;
+  font-size: 13px;
+  opacity: 0.75;
+}
+@media (max-width: 768px) {
+
+  .course-hero {
+    padding-bottom: 24px;
+  }
+
+  .course-info-section {
+    padding-top: 16px;
+  }
+}
+.cta-banner-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cta-banner-btn {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 14px 22px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7ee787, #5fcf80);
+  color: #0b1726;
+  font-weight: 600;
+}
+/* FORCE remove gap under header – MOBILE ONLY */
+@media (max-width: 980px) {
+
+  header,
+  .site-header,
+  .nav,
+  .navbar {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .hero-section,
+  .hero,
+  .hero-wrapper {
+    margin-top: 0 !important;
+    padding-top: 24px !important;
+  }
+}
+.cta-banner{
+  margin-top: 0;
+  padding: 80px 0;
+  position: relative;
+}
+      #previewVideoModal{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+
+#previewVideoModal.active{
+  display: flex;
+}
+
+#previewVideoModal .video-overlay{
+  position: absolute;
+  inset: 0;
+}
+
+#previewVideoModal .video-container{
+  position: relative;
+  width: min(960px, 92vw);
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 14px;
+  overflow: hidden;
+  z-index: 2;
+}
+
+#previewVideoModal iframe{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#previewVideoModal .video-close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  z-index: 3;
+}
+
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- TOP NAV -->
+ <header class="nav">
+  <div class="nav-left">
+    <!-- המבורגר בצד שמאל -->
+    <button class="nav-toggle" type="button" aria-label="Toggle navigation">
+      <span></span>
+    </button>
+
+    <!-- לוגו + לינק ל-landing -->
+    <a href="landing.html" class="nav-brand">
+      <div class="logo-circle">A</div>
+      <div class="logo-text">analyst<span>44</span></div>
+    </a>
+  </div>
+
+  <nav class="nav-links">
+    <a href="product.html">Product</a>
+    <a href="features.html">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="education.html">Education</a>
+  </nav>
+
+  <div class="nav-right">
+    <button class="btn-outline" onclick="location.href='help.html'">
+      <span class="icon">?</span>
+      <span>Help</span>
+    </button>
+    <button class="btn-primary" onclick="location.href='dashboard.html'">
+      Dashboard →
+    </button>
+  </div>
+</header>
+
+<!-- תפריט מובייל -->
+<div class="nav-mobile" id="navMobile">
+  <div class="nav-mobile-inner">
+    <button class="nav-mobile-link" onclick="location.href='landing.html'">Product</button>
+    <button class="nav-mobile-link" onclick="location.href='features.html'">Features</button>
+    <button class="nav-mobile-link" onclick="location.href='pricing.html'">Pricing</button>
+    <button class="nav-mobile-link" onclick="location.href='about.html'">About</button>
+    <button class="nav-mobile-link" onclick="location.href='education.html'">Education</button>
+
+    <div class="nav-mobile-divider"></div>
+
+    <button class="nav-mobile-link secondary" onclick="location.href='help.html'">Help center</button>
+    <button class="nav-mobile-link" onclick="location.href='dashboard.html'">Open dashboard →</button>
+  </div>
+</div>
+
+
+  <div class="mobile-menu">
+    <a href="#product" onclick="document.body.classList.remove('nav-open');">Product</a>
+    <a href="#features" onclick="document.body.classList.remove('nav-open');">Features</a>
+    <a href="#pricing" onclick="document.body.classList.remove('nav-open');">Pricing</a>
+    <a href="#education" onclick="document.body.classList.remove('nav-open');">Education</a>
+    <hr class="mobile-divider">
+    <a href="help.html" onclick="document.body.classList.remove('nav-open');">Help center</a>
+    <a href="dashboard.html" onclick="document.body.classList.remove('nav-open');">Open dashboard</a>
+  </div>
+
+ <main>
+     <section class="course-hero">
+
+  <div class="course-hero-overlay"></div>
+
+  <div class="course-hero-grid">
+
+<!-- LEFT: PREVIEW -->
+<div class="hero-media">
+  <div class="hero-preview">
+    <img src="course-preview.png" alt="Course preview">
+    <button class="hero-play-btn" onclick="openPreviewVideo()">▶</button>
+  </div>
+</div>
+
+    <!-- CENTER: CONTENT -->
+    <div class="hero-content">
+      <p class="hero-eyebrow">
+        A course by <span>Michael Thomas</span>
+      </p>
+
+      <h1 class="hero-title">
+        Analyst44: Financial<br>
+        Report Analysis
+      </h1>
+
+      <div class="hero-rating">
+        ★★★★★ <span>5.0 (2,431 reviews)</span>
+      </div>
+
+      <p class="hero-desc">
+        Master the full power of Analyst44 — realtime earnings decoding,
+        AI scoring logic and professional dashboard workflows.
+      </p>
+
+      <div class="hero-meta">
+        <span>15 Lessons</span>
+        <span>100% Online</span>
+        <span>Lifetime Access</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: CTA -->
+    <aside class="hero-cta live-cta" id="liveResultsCTA">
+
+  <h3 class="live-cta-title">
+    View Real-Time Trading Signals
+  </h3>
+
+  <p class="live-cta-subtitle">
+    Live market intelligence powered by Analyst44
+  </p>
+
+  <a href="realtime_scores.html" class="hero-cta-btn live-cta-btn">
+    View Live Results
+  </a>
+
+  <p class="live-cta-note">
+    Updates automatically during market hours
+  </p>
+
+</aside>
+
+
+  </div>
+</section>
+<section class="course-info-section">
+
+  <div class="course-info-grid">
+
+    <!-- LEFT 2/3 -->
+    <div class="course-info-left">
+
+      <!-- BENEFITS -->
+      <div class="benefits-row">
+        <div class="benefit-card">
+          <h4>Improve in a Structured Way</h4>
+          <p>
+            Learn the exact methodology behind Analyst44 and how to use it in trading.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <h4>Exclusive Insights</h4>
+          <p>
+            See real examples, advanced techniques and professional workflows.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <h4>Learn With Professionals</h4>
+          <p>
+            Designed for traders who want to decode earnings like a research desk.
+          </p>
+        </div>
+      </div>
+
+      <!-- WHAT YOU WILL LEARN -->
+      <div class="learn-box">
+        <div class="learn-header">
+          <h3>This Course Will Teach You</h3>
+          <button class="preview-btn">Preview ▶</button>
+        </div>
+
+        <div class="learn-columns">
+          <ul>
+            <li>Which tool is preferred for what kind of work.</li>
+            <li>Lessons and tasks that will give you intermediate level skills.</li>
+            <li>The advantages and disadvantages of each software.</li>
+          </ul>
+
+          <ul>
+            <li>How to take criticism and make best use of it.</li>
+            <li>Build your first portfolio while completing the tasks.</li>
+            <li>Trials of premium and free programs and promo codes.</li>
+          </ul>
+        </div>
+      </div>
+<section class="lesson-plans" id="lesson-plans">
+
+  <h3 class="lesson-title">Lesson Plans</h3>
+
+  <!-- CHAPTER 1 – OPEN & FREE -->
+  <div class="chapter open">
+    <div class="chapter-header">
+      <h4>Chapter 1 – Introduction (Free)</h4>
+      <span class="chapter-meta">4 videos • 18 min</span>
+    </div>
+
+    <div class="chapter-content">
+      <div class="lesson-row">
+        <span class="lesson-name">Welcome & Course Overview</span>
+        <span class="lesson-time">04:30</span>
+        <button class="play-btn" data-vimeo="https://player.vimeo.com/video/111111111">▶</button>
+      </div>
+
+      <div class="lesson-row">
+        <span class="lesson-name">How Analyst44 Works</span>
+        <span class="lesson-time">05:10</span>
+        <button class="play-btn" data-vimeo="https://player.vimeo.com/video/111111112">▶</button>
+      </div>
+
+      <div class="lesson-row">
+        <span class="lesson-name">Dashboard Walkthrough</span>
+        <span class="lesson-time">04:00</span>
+        <button class="play-btn" data-vimeo="https://player.vimeo.com/video/111111113">▶</button>
+      </div>
+
+      <div class="lesson-row">
+        <span class="lesson-name">Using the Signals</span>
+        <span class="lesson-time">04:20</span>
+        <button class="play-btn" data-vimeo="https://player.vimeo.com/video/111111114">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 2 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <h4>Chapter 2 – Core Metrics</h4>
+      <span class="chapter-meta">4 videos • 22 min</span>
+    </div>
+    <div class="chapter-content">
+      <div class="lesson-row"><span class="lesson-name">Revenue Deep Dive</span><span class="lesson-time">05:30</span></div>
+      <div class="lesson-row"><span class="lesson-name">EPS Explained</span><span class="lesson-time">05:40</span></div>
+      <div class="lesson-row"><span class="lesson-name">Growth Rates</span><span class="lesson-time">05:20</span></div>
+      <div class="lesson-row"><span class="lesson-name">Guidance Signals</span><span class="lesson-time">05:10</span></div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 3 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <h4>Chapter 3 – Earnings Analysis</h4>
+      <span class="chapter-meta">4 videos • 25 min</span>
+    </div>
+    <div class="chapter-content">
+      <div class="lesson-row"><span class="lesson-name">Margins Breakdown</span><span class="lesson-time">06:10</span></div>
+      <div class="lesson-row"><span class="lesson-name">Cost Structures</span><span class="lesson-time">06:00</span></div>
+      <div class="lesson-row"><span class="lesson-name">One-Off Items</span><span class="lesson-time">06:30</span></div>
+      <div class="lesson-row"><span class="lesson-name">Quality of Earnings</span><span class="lesson-time">06:20</span></div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 4 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <h4>Chapter 4 – Advanced Scenarios</h4>
+      <span class="chapter-meta">4 videos • 28 min</span>
+    </div>
+    <div class="chapter-content">
+      <div class="lesson-row"><span class="lesson-name">Negative Surprises</span><span class="lesson-time">07:00</span></div>
+      <div class="lesson-row"><span class="lesson-name">Positive Shocks</span><span class="lesson-time">07:10</span></div>
+      <div class="lesson-row"><span class="lesson-name">Market Reactions</span><span class="lesson-time">06:50</span></div>
+      <div class="lesson-row"><span class="lesson-name">False Signals</span><span class="lesson-time">07:00</span></div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 5 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <h4>Chapter 5 – Real Case Studies</h4>
+      <span class="chapter-meta">4 videos • 30 min</span>
+    </div>
+    <div class="chapter-content">
+      <div class="lesson-row"><span class="lesson-name">Tech Sector</span><span class="lesson-time">07:30</span></div>
+      <div class="lesson-row"><span class="lesson-name">Financials</span><span class="lesson-time">07:10</span></div>
+      <div class="lesson-row"><span class="lesson-name">Consumer Goods</span><span class="lesson-time">07:40</span></div>
+      <div class="lesson-row"><span class="lesson-name">Post-Earnings Trades</span><span class="lesson-time">07:40</span></div>
+    </div>
+  </div>
+
+</section>
+<section class="course-about-section">
+
+  <!-- REQUIREMENTS -->
+  <div class="about-card">
+    <h3 class="about-title">Requirements</h3>
+
+    <ul class="about-list">
+      <li>This course requires proficiency in English as all lessons are prepared in English.</li>
+      <li>
+        Learners with the following skills may benefit more, but beginners can still follow:
+        <ol>
+          <li>Comfortable working with a computer</li>
+          <li>Stable internet access</li>
+          <li>Basic financial or market background (recommended)</li>
+          <li>Interest in earnings analysis & trading</li>
+        </ol>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TRAINER -->
+  <div class="about-card trainer-card">
+    <div class="trainer-header">
+      <h3 class="about-title">Trainer</h3>
+      <button class="follow-btn">+ Follow</button>
+    </div>
+
+    <div class="trainer-body">
+      <img
+        src="course-preview.png"
+        alt="Trainer"
+        class="trainer-avatar"
+      />
+
+      <div class="trainer-info">
+        <h4 class="trainer-name">Analyst44 Team</h4>
+        <p class="trainer-role">
+          Professional Market Analysts & Trading Educators
+        </p>
+
+        <p class="trainer-bio">
+          The Analyst44 team consists of experienced market analysts and traders
+          specializing in earnings-driven price action, financial statements
+          interpretation, and systematic trade decision frameworks.
+          This course is built on real market data, live case studies,
+          and years of professional trading experience.
+        </p>
+
+        <div class="trainer-stats">
+          <span>⭐ 4.9</span>
+          <span>👥 35,000+ students</span>
+          <span>🎓 15 courses</span>
+          <span>📈 5,700 reviews</span>
+        </div>
+      </div>
+    </div>
+
+<!--    <a href="#" class="trainer-link">-->
+<!--      View all courses →-->
+<!--    </a>-->
+  </div>
+
+</section>
+
+    </div>
+
+    <!-- RIGHT 1/3 – STICKY -->
+    <aside class="course-info-cta">
+  <h3>Access Free Trading Tutorials</h3>
+
+  <div class="cta-price">
+    Free <span>100% Open Access</span>
+  </div>
+
+  <div class="cta-timer">
+    Available anytime during market hours
+  </div>
+
+  <button class="cta-btn" onclick="scrollToLessons()">
+    Start Free Tutorials
+  </button>
+
+  <p class="cta-refund">
+    No payment required
+  </p>
+
+  <ul class="cta-features">
+    <li>✔ Free real-time market walkthroughs</li>
+    <li>✔ Live examples and explanations</li>
+    <li>✔ No registration required</li>
+    <li>✔ Updated continuously</li>
+  </ul>
+</aside>
+
+
+
+  </div>
+</section>
+
+
+
+
+ <section class="cta-banner">
+  <a href="realtime_scores.html" class="cta-banner-link">
+
+    <div class="cta-banner-inner">
+      <h2 class="cta-banner-title">
+        View Real-Time Trading Signals
+      </h2>
+
+      <p class="cta-banner-text">
+        Live earnings scores and market reactions — updated automatically during market hours.
+      </p>
+
+      <span class="cta-banner-btn">
+        Open Live Dashboard →
+      </span>
+    </div>
+
+  </a>
+</section>
+
+</main>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">OUR MISSION</div>
+          <p class="footer-text">
+            Analyst44 helps traders and research teams turn messy earnings releases into structured,
+            trade-ready signals — with realtime scoring, clean data and intuitive dashboards.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-title">COMPANY</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="blog.html">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">PRODUCT</div>
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="status.html">System status</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">FROM THE BLOG</div>
+          <ul class="footer-links">
+            <li><a href="blog-dashboard.html">Interactive earnings dashboards</a></li>
+            <li><a href="blog-scoring-stack.html">Building a realtime scoring stack</a></li>
+            <li><a href="blog-earnings-season.html">How to trade around earnings season</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>Thank you for creating with Analyst44</div>
+        <div>v0.1.0</div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- TYPING SCRIPT -->
+<script>
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+    const words = ["signal", "earnings", "coverage", "scores", "insights"];
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function type() {
+  const tgt = document.getElementById("typed");
+  if (!tgt) return;
+
+  const current = words[wordIndex];
+  let speed = isDeleting ? 50 : 85;
+
+  if (!isDeleting) {
+    charIndex++;
+    tgt.textContent = current.slice(0, charIndex);
+    if (charIndex === current.length) {
+      isDeleting = true;
+      speed = 900;
+    }
+  } else {
+    charIndex--;
+    tgt.textContent = current.slice(0, Math.max(charIndex, 0));
+    if (charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+      speed = 400;
+    }
+  }
+
+  setTimeout(type, speed);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // תמיד להתחיל מראש העמוד
+  window.scrollTo(0, 0);
+
+  // להתחיל typing
+  type();
+
+  const toggle = document.querySelector(".nav-toggle");
+  const mobile = document.getElementById("navMobile");
+
+  if (toggle && mobile) {
+    toggle.addEventListener("click", () => {
+      const open = mobile.classList.toggle("open");
+      toggle.classList.toggle("is-open", open);
+    });
+
+    const mobileLinks = document.querySelectorAll(".nav-mobile-link");
+    mobileLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        if (mobile.classList.contains("open")) {
+          mobile.classList.remove("open");
+          toggle.classList.remove("is-open");
+        }
+      });
+    });
+  }
+});
+
+
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const modal = document.getElementById("videoModal");
+  const iframe = document.getElementById("videoFrame");
+  const closeBtn = document.querySelector(".video-close");
+
+  // כל הכפתורים של ההפעלה (Play)
+  const playButtons = document.querySelectorAll(".fc-play-btn, .lesson-play");
+
+  playButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const url = btn.dataset.vimeo || "https://player.vimeo.com/video/XXXXXX";
+
+      iframe.src = url + "?autoplay=1";
+      modal.style.display = "flex";
+    });
+  });
+
+  // סגירה בלחיצה על X
+  closeBtn.addEventListener("click", () => {
+    iframe.src = "";
+    modal.style.display = "none";
+  });
+
+  // סגירה בלחיצה מחוץ למסגרת
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      iframe.src = "";
+      modal.style.display = "none";
+    }
+  });
+
+});
+</script>
+
+<script>
+document.querySelectorAll('.chapter-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const chapter = header.parentElement;
+
+    document.querySelectorAll('.chapter').forEach(c => {
+      if (c !== chapter) c.classList.remove('open');
+    });
+
+    chapter.classList.toggle('open');
+  });
+});
+</script>
+<script>
+function scrollToLessons() {
+  const el = document.getElementById('lesson-plans');
+  if (!el) return;
+
+  el.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
+</script>
+<div id="previewVideoModal">
+  <div class="video-overlay" onclick="closePreviewVideo()"></div>
+
+  <div class="video-container">
+    <button class="video-close" onclick="closePreviewVideo()">✕</button>
+
+    <iframe
+      id="previewVideoFrame"
+      src=""
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
+<script>
+function openPreviewVideo(){
+  const modal = document.getElementById("previewVideoModal");
+  const iframe = document.getElementById("previewVideoFrame");
+
+  iframe.src = "https://player.vimeo.com/video/1145537174?autoplay=1&muted=0";
+  modal.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closePreviewVideo(){
+  const modal = document.getElementById("previewVideoModal");
+  const iframe = document.getElementById("previewVideoFrame");
+
+  iframe.src = "";
+  modal.classList.remove("active");
+  document.body.style.overflow = "";
+}
+</script>
+
+</body>
+</html>

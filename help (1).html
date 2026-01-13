@@ -1,0 +1,1599 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Help Center | Analyst44</title>
+<meta name="description" content="Find answers to common questions about Analyst44. Learn how to use real-time earnings analysis, dashboards, reports, and trading tools." />
+<link rel="canonical" href="https://analyst44.com/help.html" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Analyst44 Help Center",
+  "url": "https://analyst44.com/help.html",
+  "description": "Help center and support resources for Analyst44 users.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Analyst44"
+  }
+}
+</script>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-main:#050713;
+      --bg-panel:#111322;
+      --bg-panel-soft:#141728;
+      --accent:#22e38b;
+      --accent-soft:#2fe6ff;
+      --text:#f7f8ff;
+      --muted:#9ca3c7;
+      --border-soft:rgba(255,255,255,0.06);
+      --radius-xl:22px;
+      --radius-lg:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:
+      radial-gradient(circle at 0 0, rgba(181,53,255,0.35) 0, transparent 45%),
+      radial-gradient(circle at 100% 0, rgba(32,186,255,0.28) 0, transparent 55%),
+      #02030a;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+    body.nav-open{overflow:hidden;}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+
+    .page-wrap{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* TOP NAV */
+    .nav{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:50;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 36px;
+      background:linear-gradient(90deg,rgba(5,7,19,0.96),rgba(5,7,19,0.8));
+      border-bottom:1px solid rgba(255,255,255,0.03);
+      backdrop-filter:blur(16px);
+    }
+    .nav-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .nav-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav-toggle{
+  display:none;
+  width:32px;
+  height:32px;
+  margin-right:8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.35);
+  background:rgba(8,11,24,0.95);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.nav-toggle span{
+  display:block;
+  width:16px;
+  height:2px;
+  border-radius:999px;
+  background:#f9fbff;
+  position:relative;
+}
+
+.nav-toggle span::before,
+.nav-toggle span::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:16px;
+  height:2px;
+  border-radius:999px;
+  background:#f9fbff;
+}
+
+.nav-toggle span::before{ top:-5px; }
+.nav-toggle span::after{ top:5px; }
+
+.nav-toggle.is-open span{
+  background:transparent;
+}
+
+.nav-toggle.is-open span::before{
+  top:0;
+  transform:rotate(45deg);
+}
+
+.nav-toggle.is-open span::after{
+  top:0;
+  transform:rotate(-45deg);
+}
+
+/* פאנל מובייל */
+.nav-mobile{
+  position:fixed;
+  top:64px;
+  left:0;
+  right:0;
+  background:rgba(5,7,19,0.98);
+  backdrop-filter:blur(20px);
+  transform:translateY(-100%);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .25s ease, opacity .25s ease;
+  z-index:40;
+}
+
+.nav-mobile.open{
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
+}
+
+.nav-mobile-inner{
+  padding:18px 24px 32px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.nav-mobile-link{
+  font-size:16px;
+  color:#f4f5ff;
+  text-align:left;
+  background:transparent;
+  border:none;
+  padding:6px 0;
+  cursor:pointer;
+}
+
+.nav-mobile-link.secondary{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.nav-mobile-divider{
+  height:1px;
+  background:rgba(255,255,255,0.06);
+  margin:10px 0;
+}
+
+    .logo-circle{
+      width:34px;height:34px;
+      border-radius:999px;
+      background:radial-gradient(circle at 30% 0,#45b6ff 0,#0050ff 40%,#2600ff 100%);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;
+      font-weight:800;
+      font-size:18px;
+      box-shadow:0 0 20px rgba(46,163,255,0.5);
+    }
+    .logo-text{
+      font-weight:600;
+      font-size:18px;
+    }
+    .logo-text span{color:#2fd9ff;font-weight:700;}
+
+    .nav-links{
+      display:flex;
+      gap:24px;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .nav-links a{position:relative;padding:4px 0;}
+    .nav-links a:hover{color:#f5f5ff;}
+    .nav-links a::after{
+      content:"";position:absolute;left:0;bottom:-4px;
+      width:0;height:2px;border-radius:999px;
+      background:linear-gradient(90deg,#32e28c,#37e1ff);
+      transition:width .18s ease;
+    }
+    .nav-links a:hover::after{width:100%;}
+
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .btn-outline{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.16);
+      padding:8px 14px;
+      font-size:13px;
+      color:var(--muted);
+      background:rgba(8,11,24,0.9);
+      display:flex;align-items:center;gap:6px;
+      cursor:pointer;
+    }
+    .btn-outline span.icon{
+      font-size:14px;
+    }
+    .btn-outline:hover{
+      border-color:rgba(255,255,255,0.4);
+      color:#fff;
+    }
+    .btn-primary{
+      border-radius:999px;
+      padding:9px 20px;
+      font-size:14px;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      color:#02030a;
+      background:linear-gradient(130deg,#18e57c,#2fe1ff);
+      box-shadow:0 0 25px rgba(24,229,124,0.5);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 0 30px rgba(24,229,124,0.7);
+    }
+
+    /* MOBILE NAV TOGGLE */
+    .nav-toggle{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      width:34px;
+      height:34px;
+      margin-left:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(6,9,22,0.95);
+      cursor:pointer;
+    }
+    .nav-toggle-line{
+      width:18px;
+      height:2px;
+      border-radius:999px;
+      background:#f9fafb;
+      display:block;
+      margin:2px 0;
+      transition:transform .18s ease, opacity .18s ease;
+    }
+
+    .mobile-menu{
+      position:fixed;
+      top:64px;
+      left:0;
+      right:0;
+      padding:12px 20px 16px;
+      background:rgba(5,7,19,0.98);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      display:none;
+      flex-direction:column;
+      gap:8px;
+      z-index:40;
+    }
+    .mobile-menu a{
+      font-size:14px;
+      color:var(--muted);
+      padding:6px 2px;
+    }
+    .mobile-menu a:hover{color:#fff;}
+    .mobile-divider{
+      border:none;
+      border-top:1px solid rgba(255,255,255,0.08);
+      margin:6px 0 4px;
+    }
+
+    body.nav-open .mobile-menu{display:flex;}
+    body.nav-open .nav-toggle-line:nth-child(1){
+      transform:translateY(4px) rotate(45deg);
+    }
+    body.nav-open .nav-toggle-line:nth-child(2){
+      opacity:0;
+    }
+    body.nav-open .nav-toggle-line:nth-child(3){
+      transform:translateY(-4px) rotate(-45deg);
+    }
+
+    /* MAIN CONTENT */
+    main{
+      flex:1;
+      padding-top:64px;
+    }
+
+    /* HERO + JELLYFISH */
+    .hero{
+      position:relative;
+      padding:140px 0 190px;
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 0 0,rgba(181,53,255,0.4) 0,transparent 45%),
+        linear-gradient(180deg,rgba(2,5,18,0.2) 0,rgba(2,5,18,0.96) 65%,#02030a 100%),
+        url("jellyfish-hero.jpg") center top/cover no-repeat;
+      opacity:0.9;
+      z-index:-2;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;inset:0;
+      background:radial-gradient(circle at 80% 0,rgba(0,195,255,0.25),transparent 50%);
+      z-index:-1;
+    }
+
+    .hero-inner{
+      max-width:1180px;
+      margin:0 auto;
+      padding:0 32px;
+      display:flex;
+      gap:56px;
+      align-items:center;
+    }
+    .hero-copy{
+      flex:1.1;
+      max-width:520px;
+    }
+    .hero-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:5px 12px;
+      border-radius:999px;
+      background:rgba(4,10,32,0.85);
+      border:1px solid rgba(123,181,255,0.45);
+      font-size:11px;
+      color:#c9d2ff;
+      margin-bottom:16px;
+    }
+    .hero-pill span.tag{
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(29,185,105,0.18);
+      color:#57f0a2;
+      font-weight:600;
+    }
+
+    .hero-title{
+      font-size:44px;
+      line-height:1.05;
+      letter-spacing:-0.03em;
+      margin-bottom:14px;
+    }
+    @media (min-width:1280px){
+      .hero-title{font-size:52px;}
+    }
+
+    /* typing word */
+    #typed{
+      color:#ff48d3;
+      font-weight:800;
+      border-right:2px solid rgba(255,255,255,0.7);
+      padding-right:4px;
+      animation:blink .8s infinite;
+    }
+    @keyframes blink{
+      0%{border-color:rgba(255,255,255,0.7);}
+      50%{border-color:transparent;}
+      100%{border-color:rgba(255,255,255,0.7);}
+    }
+
+    .hero-sub{
+      font-size:15px;
+      color:var(--muted);
+      max-width:410px;
+      line-height:1.6;
+      margin-bottom:20px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-bottom:18px;
+    }
+    .btn-ghost{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.22);
+      padding:9px 16px;
+      font-size:13px;
+      color:var(--text);
+      background:rgba(4,8,25,0.9);
+      display:flex;align-items:center;gap:8px;
+      cursor:pointer;
+    }
+    .btn-ghost span.icon{
+      font-size:14px;
+    }
+    .btn-ghost:hover{
+      background:rgba(10,16,38,0.95);
+      border-color:rgba(255,255,255,0.45);
+    }
+
+    .hero-avatars{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      margin-top:6px;
+      margin-bottom:4px;
+    }
+    .hero-avatars img{
+      width:26px;height:26px;
+      border-radius:999px;
+      border:2px solid #050713;
+      box-shadow:0 0 10px rgba(0,0,0,0.5);
+    }
+    .hero-avatars img:not(:first-child){margin-left:-10px;}
+    .hero-meta{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .hero-media{
+      flex:1.1;
+      position:relative;
+      display:flex;
+      justify-content:center;
+    }
+    .hero-card{
+      width:100%;
+      max-width:640px;
+      border-radius:26px;
+      background:radial-gradient(circle at 0 0,rgba(67,203,255,0.5),transparent 55%),
+                 radial-gradient(circle at 100% 100%,rgba(91,255,168,0.35),transparent 55%),
+                 #050814;
+      padding:14px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.7);
+      transform-origin:center;
+      transition:transform .35s ease, box-shadow .35s ease, translate .35s ease;
+    }
+    .hero-card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 40px 90px rgba(0,0,0,0.85);
+    }
+    .hero-card-inner{
+      border-radius:22px;
+      overflow:hidden;
+      background:#050713;
+    }
+
+    /* WHY SECTION */
+    .section{
+      padding:0 32px;
+    }
+    .section-inner{
+      max-width:1180px;
+      margin:0 auto;
+    }
+    .section-header{
+      margin-bottom:16px;
+    }
+    .section-kicker{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .section-title{
+      font-size:24px;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    .section-sub{
+      font-size:14px;
+      color:var(--muted);
+      max-width:520px;
+    }
+
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+      margin-top:26px;
+      margin-bottom:80px;
+    }
+    .feature-card{
+      background:radial-gradient(circle at 0 0,rgba(88,187,255,0.24),transparent 60%),var(--bg-panel-soft);
+      border-radius:var(--radius-lg);
+      border:1px solid var(--border-soft);
+      padding:18px 18px 20px;
+      min-height:170px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .feature-card:nth-child(2){
+      background:radial-gradient(circle at 0 0,rgba(255,72,211,0.25),transparent 60%),var(--bg-panel-soft);
+    }
+    .feature-card:nth-child(3){
+      background:radial-gradient(circle at 0 0,rgba(153,102,255,0.3),transparent 60%),var(--bg-panel-soft);
+    }
+    .feature-card:nth-child(4){
+      background:radial-gradient(circle at 0 0,rgba(62,215,130,0.28),transparent 60%),var(--bg-panel-soft);
+    }
+
+    .feature-icon{
+      width:26px;height:26px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:15px;
+      background:rgba(0,0,0,0.35);
+    }
+    .feature-title{
+      font-size:15px;
+      font-weight:600;
+      margin-top:8px;
+      margin-bottom:6px;
+    }
+    .feature-text{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    /* PRICING SECTION */
+    .pricing-section{
+      padding:0 32px 80px;
+    }
+    .pricing-layout{
+      max-width:1180px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+      gap:26px;
+      align-items:start;
+    }
+    .pricing-card{
+      background:var(--bg-panel);
+      border-radius:var(--radius-xl);
+      padding:26px 24px 24px;
+      border:1px solid var(--border-soft);
+      box-shadow:0 24px 60px rgba(0,0,0,0.7);
+    }
+    .pricing-label{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .pricing-headline{
+      font-size:23px;
+      font-weight:600;
+      margin-bottom:12px;
+    }
+    .pricing-price{
+      font-size:28px;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    .pricing-sub{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .pricing-list{
+      list-style:none;
+      padding:0;
+      margin:0 0 18px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .pricing-list li{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      margin-bottom:6px;
+    }
+    .pricing-list span.bullet{
+      color:#37e18e;
+      margin-top:1px;
+    }
+    .pricing-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .btn-pill-primary{
+      border-radius:999px;
+      padding:10px 18px;
+      border:none;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      color:#02030a;
+      background:linear-gradient(130deg,#18e57c,#2fe1ff);
+    }
+    .btn-pill-secondary{
+      border-radius:999px;
+      padding:9px 16px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(10,12,29,0.95);
+      font-size:13px;
+      color:var(--muted);
+      cursor:pointer;
+    }
+    .btn-pill-secondary:hover{color:#fff;border-color:rgba(255,255,255,0.4);}
+
+    .pricing-copy{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    /* CTA BAND */
+    .cta-band{
+      padding:0 32px 80px;
+    }
+    .cta-inner{
+      max-width:1180px;
+      margin:0 auto;
+      background:var(--bg-panel-soft);
+      border:1px solid var(--border-soft);
+      border-radius:var(--radius-xl);
+      padding:22px 24px;
+      display:grid;
+      grid-template-columns:minmax(0,1.2fr) minmax(0,0.9fr);
+      gap:20px;
+      align-items:center;
+    }
+    .cta-kicker{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .cta-title{
+      font-size:20px;
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .cta-text{
+      font-size:13px;color:var(--muted);
+    }
+    .cta-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .btn-gradient-big{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:12px 24px;
+      font-size:14px;
+      font-weight:600;
+      color:#02030a;
+      background:linear-gradient(130deg,#21e57d,#33e0ff);
+      box-shadow:0 0 25px rgba(51,224,255,0.4);
+    }
+    .btn-outline-soft{
+      border-radius:999px;
+      padding:11px 20px;
+      font-size:13px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.22);
+      background:rgba(9,11,26,0.95);
+      cursor:pointer;
+    }
+    .btn-outline-soft:hover{color:#fff;border-color:rgba(255,255,255,0.45);}
+
+    /* BIG CTA BACKGROUND (GRID) + FOOTER */
+    .cta-banner{
+      position:relative;
+      margin-top:30px;
+      padding:90px 24px;
+      text-align:center;
+      color:#f9fbff;
+      overflow:hidden;
+      border-radius:0;
+      background:#010309;
+      z-index:0;
+    }
+
+    .cta-banner::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:url("grid-footer.jpg") center/cover no-repeat;
+      opacity:0.9;
+      z-index:-1;
+    }
+
+    .cta-banner::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at 50% 80%,rgba(0,0,0,0.5),transparent 60%);
+      z-index:0;
+    }
+
+    .cta-banner-inner{
+      max-width:960px;
+      margin:0 auto;
+    }
+    .cta-banner-title{
+      font-size:28px;
+      font-weight:600;
+      margin-bottom:18px;
+    }
+    .cta-banner-text{
+      font-size:16px;
+      color:#cdd5ff;
+      margin-bottom:26px;
+    }
+    .cta-banner button{
+      border-radius:999px;
+      padding:11px 26px;
+      border:1px solid rgba(255,255,255,0.7);
+      background:transparent;
+      color:#fdfdff;
+      font-size:14px;
+      font-weight:500;
+      cursor:pointer;
+    }
+    .cta-banner button:hover{
+      background:rgba(4,10,32,0.85);
+    }
+
+    /* FOOTER */
+    footer{
+      background:#050713;
+      border-top:1px solid rgba(255,255,255,0.05);
+      padding:36px 32px 20px;
+      color:var(--muted);
+    }
+    .footer-inner{
+      max-width:1180px;
+      margin:0 auto;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:2.2fr repeat(3,1fr);
+      gap:26px;
+      margin-bottom:28px;
+      font-size:13px;
+    }
+    .footer-title{
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+      color:#e4e7ff;
+    }
+    .footer-text{line-height:1.7;}
+    .footer-links{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .footer-links li{margin-bottom:6px;}
+    .footer-links a{color:var(--muted);}
+    .footer-links a:hover{color:#f5f6ff;}
+
+    .footer-bottom{
+      border-top:1px solid rgba(255,255,255,0.06);
+      padding-top:10px;
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      color:#6b7285;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width:980px){
+      .hero-inner{
+        flex-direction:column;
+        padding-top:40px;
+      }
+      .hero{
+        padding-top:110px;
+        padding-bottom:140px;
+      }
+      .hero-media{
+        margin-top:16px;
+      }
+      /* במוביל – קודם טקסט ואח"כ הדשבורד */
+      .hero-copy{order:0;}
+      .hero-media{order:1;}
+      .hero-card{max-width:520px;}
+      .feature-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .pricing-layout{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-inner{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-actions{justify-content:flex-start;}
+      .cta-banner-title{font-size:24px;}
+    }
+
+    @media (max-width:720px){
+  .nav{
+    padding:0 16px;
+  }
+
+  /* להסתיר תפריט עליון רגיל במוביל */
+  .nav-links{
+    display:none;
+  }
+
+  /* להציג המבורגר בצד שמאל */
+  .nav-toggle{
+    display:flex;
+  }
+
+  /* להסתיר Help במוביל */
+  .btn-outline{
+    display:none;
+  }
+
+  /* Dashboard הירוק נשאר כמו שהוא */
+
+  .hero-inner{
+    padding:0 18px;
+  }
+  .section,.pricing-section,.cta-band{
+    padding:0 18px 60px;
+  }
+  .feature-grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .footer-grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .cta-banner{
+    padding:70px 18px;
+  }
+}
+
+/* במחשב – לא צריך את פאנל המובייל */
+@media (min-width:721px){
+  .nav-mobile{
+    display:none;
+  }
+}
+/* === PRICING PAGE LAYOUT === */
+
+.pricing-page {
+  padding-top: 120px;
+  padding-bottom: 80px;
+}
+
+.pricing-page .pricing-heading {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.pricing-page .pricing-heading p {
+  max-width: 640px;
+  margin: 16px auto 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* כרטיסי תמחור */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  max-width: 1120px;
+  margin: 40px auto 0;
+}
+
+.pricing-card {
+  background: radial-gradient(circle at top left, #283557, #141b2b);
+  border-radius: 20px;
+  padding: 24px 24px 26px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pricing-card--highlight {
+  background: radial-gradient(circle at top left, #4f2b75, #162338);
+  border-color: rgba(140, 120, 255, 0.7);
+}
+
+.pricing-card h3 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.pricing-card .pricing-tagline {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.pricing-card .pricing-amount {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.pricing-card .pricing-unit {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.pricing-card ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.pricing-card ul li i {
+  margin-top: 2px;
+}
+
+.pricing-card .pricing-cta {
+  width: 100%;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.pricing-card .pricing-cta--secondary {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #f5fbff;
+}
+
+.pricing-card .pricing-cta--primary {
+  background: linear-gradient(90deg, #18e0a5, #1ec8ff);
+  color: #021019;
+}
+
+/* טוגל חודשי/שנתי */
+.pricing-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(9, 16, 28, 0.85);
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-top: 20px;
+}
+
+.pricing-toggle button {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.pricing-toggle button.is-active {
+  background: #f5fbff;
+  color: #020812;
+}
+
+/* בלוקי הסבר מתחת לתמחור */
+.pricing-faq-grid {
+  max-width: 1120px;
+  margin: 60px auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+}
+
+.pricing-faq-grid h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.pricing-faq-grid p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* מובייל */
+@media (max-width: 960px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .pricing-page {
+    padding-top: 96px;
+    padding-bottom: 64px;
+  }
+  .pricing-faq-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+ /* HERO */
+    .terms-hero {
+        padding: 120px 32px 80px;
+        background: radial-gradient(circle at 10% 0, rgba(171,53,255,0.28), transparent 55%),
+                    radial-gradient(circle at 90% 0, rgba(0,188,255,0.22), transparent 60%),
+                    #050713;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        text-align: center;
+    }
+
+    .terms-hero h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .terms-hero p {
+        max-width: 800px;
+        margin: 0 auto;
+        font-size: 18px;
+        opacity: 0.9;
+        line-height: 1.7;
+    }
+
+    /* PAGE CONTAINER */
+    .terms-container {
+        max-width: 880px;
+        margin: 60px auto 120px;
+        padding: 0 24px;
+    }
+
+    /* CARDS */
+    .terms-card {
+        background: rgba(255,255,255,0.03);
+        padding: 32px;
+        border-radius: 16px;
+        margin-bottom: 40px;
+        border: 1px solid rgba(255,255,255,0.06);
+        backdrop-filter: blur(6px);
+    }
+
+    .terms-card h2 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-size: 26px;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .terms-card p {
+        margin-bottom: 18px;
+        line-height: 1.65;
+    }
+
+    .terms-card ul {
+        padding-left: 22px;
+        margin: 0 0 18px;
+    }
+
+    .terms-card li {
+        margin-bottom: 8px;
+    }
+      .help-main {
+    padding-top: 120px;
+    padding-bottom: 120px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.help-hero {
+    margin-bottom: 50px;
+    text-align: left;
+}
+
+.help-hero h1 {
+    font-size: 44px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.help-hero p {
+    font-size: 18px;
+    color: #c8d0da;
+    max-width: 700px;
+}
+
+.help-card {
+    background: rgba(255,255,255,0.04);
+    padding: 32px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.help-card h2 {
+    font-size: 26px;
+    margin-bottom: 14px;
+    font-weight: 600;
+}
+
+.help-card p {
+    font-size: 16px;
+    color: #ced6e0;
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.help-card ul {
+    margin: 0;
+    padding-left: 22px;
+}
+
+.help-card li {
+    margin-bottom: 10px;
+    line-height: 1.55;
+}
+
+.help-card a {
+    color: #57a6ff;
+    text-decoration: none;
+}
+
+.help-card a:hover {
+    text-decoration: underline;
+}
+
+.tip {
+    margin-top: 12px;
+    color: #8fc9ff;
+    font-size: 15px;
+}
+/* CONTAINER FIX – prevents full-width stretch */
+.help-main {
+    max-width: 900px;        /* התוכן מוגבל ולא נמתח */
+    margin: 0 auto;          /* ממרכז את כל הדף */
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+
+/* HERO לא על כל הדף */
+.help-hero {
+    max-width: 900px;
+    margin: 0 auto 50px auto;
+    padding: 0 20px;
+}
+
+/* TABLE OF CONTENTS */
+.help-card.toc {
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    padding: 32px;
+}
+
+/* כל הסקשנים */
+.help-card {
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    padding: 32px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 14px;
+}
+/* HERO SPACING FIX */
+.help-hero {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: 140px;   /* היה קטן מדי – עכשיו רחוק מהטופ */
+    padding-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- TOP NAV -->
+ <header class="nav">
+  <div class="nav-left">
+    <!-- המבורגר בצד שמאל -->
+    <button class="nav-toggle" type="button" aria-label="Toggle navigation">
+      <span></span>
+    </button>
+
+    <!-- לוגו + לינק ל-landing -->
+    <a href="landing.html" class="nav-brand">
+      <div class="logo-circle">A</div>
+      <div class="logo-text">analyst<span>44</span></div>
+    </a>
+  </div>
+
+  <nav class="nav-links">
+    <a href="product.html">Product</a>
+    <a href="features.html">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="education.html">Education</a>
+  </nav>
+
+  <div class="nav-right">
+    <button class="btn-outline" onclick="location.href='help.html'">
+      <span class="icon">?</span>
+      <span>Help</span>
+    </button>
+    <button class="btn-primary" onclick="location.href='dashboard.html'">
+      Dashboard →
+    </button>
+  </div>
+</header>
+
+<!-- תפריט מובייל -->
+<div class="nav-mobile" id="navMobile">
+  <div class="nav-mobile-inner">
+    <button class="nav-mobile-link" onclick="location.href='product.html'">Product</button>
+    <button class="nav-mobile-link" onclick="location.href='features.html'">Features</button>
+    <button class="nav-mobile-link" onclick="location.href='pricing.html'">Pricing</button>
+    <button class="nav-mobile-link" onclick="location.href='about.html'">About</button>
+    <button class="nav-mobile-link" onclick="location.href='education.html'">Education</button>
+
+    <div class="nav-mobile-divider"></div>
+
+    <button class="nav-mobile-link secondary" onclick="location.href='help.html'">Help center</button>
+    <button class="nav-mobile-link" onclick="location.href='dashboard.html'">Open dashboard →</button>
+  </div>
+</div>
+
+
+  <div class="mobile-menu">
+    <a href="#product" onclick="document.body.classList.remove('nav-open');">Product</a>
+    <a href="#features" onclick="document.body.classList.remove('nav-open');">Features</a>
+    <a href="#pricing" onclick="document.body.classList.remove('nav-open');">Pricing</a>
+    <a href="#education" onclick="document.body.classList.remove('nav-open');">Education</a>
+    <hr class="mobile-divider">
+    <a href="help.html" onclick="document.body.classList.remove('nav-open');">Help center</a>
+    <a href="dashboard.html" onclick="document.body.classList.remove('nav-open');">Open dashboard</a>
+  </div>
+
+ <main>
+
+ <!-- HERO -->
+    <section class="help-hero">
+        <h1>Help Center</h1>
+        <p>
+Everything you need to understand, operate, and integrate Analyst44 —
+from first login to realtime earnings scoring, automation, and troubleshooting.
+</p>
+
+
+    </section>
+
+
+    <!-- TABLE OF CONTENTS -->
+    <section class="help-card toc">
+        <h2>Contents</h2>
+        <ol>
+            <li><a href="#getting-started">Getting started</a></li>
+            <li><a href="#account-access">Account & access</a></li>
+            <li><a href="#data-ingestion">Data ingestion (API / CSV)</a></li>
+            <li><a href="#scoring-methodology">Scoring methodology</a></li>
+            <li><a href="#integrations">Integration & webhooks</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contact">Contact support</a></li>
+        </ol>
+    </section>
+
+
+    <!-- SECTION 1 -->
+    <section id="getting-started" class="help-card">
+        <h2>Getting Started</h2>
+        <p>
+            Analyst44 is designed to help analysts and traders instantly interpret earnings releases the moment they hit the wire.
+            This section walks you through your first steps inside the platform.
+        </p>
+
+        <ul>
+            <li><strong>Understanding the dashboard</strong> — Learn how to read the realtime scores, anomalies, and KPI extractions.</li>
+            <li><strong>Realtime earnings feed</strong> — See earnings reports as soon as they arrive, parsed and ranked by our AI engine.</li>
+            <li><strong>Workspace setup</strong> — Customize your layout, watchlists, alerts, filters, and scoring preferences.</li>
+        </ul>
+
+        <p class="tip">💡 <strong>Tip:</strong> New users typically start by exploring “Today’s Earnings” to see the most recent realtime analysis.</p>
+   <p class="tip">
+💡 <strong>Tip:</strong> Most users get value within minutes by opening
+<strong>Today’s Earnings</strong> and comparing AI scores against price reaction.
+</p>
+
+    </section>
+
+
+    <!-- SECTION 2 -->
+    <section id="account-access" class="help-card">
+        <h2>Account & Access</h2>
+        <p>
+            Your account controls your workspace access, permissions, and security settings.
+            Analyst44 uses enterprise-grade authentication to ensure your data and research remain secure.
+        </p>
+
+        <ul>
+            <li><strong>Password reset</strong> — Use the “Forgot password” link on the login screen.</li>
+            <li><strong>Two-factor authentication</strong> — Optional security layer for protecting earnings-sensitive workflows.</li>
+            <li><strong>Workspace permissions</strong> — Admin users can add, remove, and manage roles for analysts and team members.</li>
+            <li><strong>Multi-device access</strong> — Your account can be used across devices, with activity secured and monitored.</li>
+        </ul>
+    </section>
+
+
+    <!-- SECTION 3 -->
+    <section id="data-ingestion" class="help-card">
+        <h2>Data Ingestion (API / CSV)</h2>
+        <p>
+            Analyst44 allows you to push your own data into the platform using structured API endpoints or CSV uploads.
+            This ensures your internal KPIs or private company data can be scored and analyzed using the same engine.
+        </p>
+
+        <ul>
+            <li><strong>API ingestion</strong> — Send structured JSON payloads to your workspace using secure API keys.</li>
+            <li><strong>CSV upload</strong> — Upload data manually with auto-validation and anomaly detection.</li>
+            <li><strong>Error handling</strong> — Receive instant feedback if data rows fail validation or contain missing fields.</li>
+            <li><strong>Automation</strong> — Schedule ingestion jobs for nightly or intraday updates.</li>
+        </ul>
+
+        <p class="tip">💡 <strong>Tip:</strong> Use the API for automated workflows and CSV for one-off manual imports.</p>
+    </section>
+
+
+    <!-- SECTION 4 -->
+    <section id="scoring-methodology" class="help-card">
+        <h2>Scoring Methodology</h2>
+        <p>
+            Analyst44 scores earnings using a multi-layer AI system trained on tens of thousands of historical reports,
+            Wall Street expectations, sector trends, and company-specific patterns.
+        </p>
+
+        <ul>
+            <li><strong>Expectation modeling</strong> — AI identifies whether results beat, miss, or align with analyst expectations.</li>
+            <li><strong>Anomaly detection</strong> — Flags unusual items, restatements, unexpected KPI movements, and one-offs.</li>
+            <li><strong>KPI extraction</strong> — Automatically pulls churn, ARR, MAU, GMV, ASP, and dozens of other metrics.</li>
+            <li><strong>Score buckets</strong> — Results are grouped into High-quality (≥80), In-line (60–79), and Weak (<60).</li>
+        </ul>
+
+        <p class="tip">📊 <strong>Example:</strong> A company with strong KPI growth and a clean report structure will score higher even if EPS is only in-line.</p>
+   <p class="tip">
+🧠 <strong>Note:</strong> Scores are explainable — each component can be reviewed,
+including anomalies, KPI trends and expectation gaps.
+</p>
+
+    </section>
+
+
+    <!-- SECTION 5 -->
+    <section id="integrations" class="help-card">
+        <h2>Integration & Webhooks</h2>
+        <p>
+            Analyst44 integrates directly with your internal systems using secure webhooks, data exports,
+            and real-time event triggers. This enables automated workflows and instant alerting.
+        </p>
+
+        <ul>
+            <li><strong>Webhooks</strong> — Receive POST requests whenever new earnings, anomalies, or KPI extractions are available.</li>
+            <li><strong>Data connectors</strong> — Export scores into Excel, Google Sheets, BI dashboards, or databases.</li>
+            <li><strong>Slack / email alerts</strong> — Get notified when high-quality beats or anomalies are detected.</li>
+            <li><strong>Custom endpoints</strong> — Integrate with proprietary research tools or quant pipelines.</li>
+        </ul>
+
+        <p class="tip">⚙️ <strong>Tip:</strong> Webhooks are ideal for teams that want real-time signals inside their trading or research systems.</p>
+    </section>
+
+
+    <!-- SECTION 6 -->
+    <section id="faq" class="help-card">
+        <h2>FAQ</h2>
+        <p>
+            A collection of the most common questions from analysts, traders, and research teams using Analyst44.
+        </p>
+
+        <ul>
+            <li><strong>Why do some scores show “Neutral”?</strong>
+               The AI model normalizes expectations based on sector trends, seasonality, and prior guidance.</li>
+
+            <li><strong>How often does the system refresh?</strong>
+               Realtime: Every few seconds during earnings season. Historical: Every few minutes.</li>
+
+            <li><strong>Can I export data?</strong>
+               Yes — via API, CSV, Excel exports, or webhook-based streams.</li>
+
+            <li><strong>How accurate is the anomaly detection?</strong>
+               Trained on thousands of past reports — accuracy increases with each model update.</li>
+
+            <li><strong>Is this financial advice?</strong>
+No. Analyst44 provides analytical interpretation and decision context —
+final trading decisions remain with the user.</li>
+
+        </ul>
+    </section>
+
+
+    <!-- SECTION 7 -->
+    <section id="contact" class="help-card">
+        <h2>Contact Support</h2>
+        <p>
+            Need help beyond the documentation? Our support team is ready to assist with technical issues, onboarding,
+            account management, and product questions.
+        </p>
+
+        <ul>
+            <li>Email: <strong>support@analyst44.com</strong></li>
+            <li>Average response time: under 24 hours</li>
+            <li>Priority support available for enterprise plans</li>
+        </ul>
+    </section>
+  <section class="cta-banner">
+      <div class="cta-banner-inner">
+        <h2 class="cta-banner-title">
+          Ready to plug realtime earnings scores into your workflow?
+        </h2>
+        <p class="cta-banner-text">
+          Join the early-access group, connect your universe and start grading every report
+          the moment it hits the tape.
+        </p>
+        <button onclick="location.href='signup.html'">
+          Join the early-access list
+        </button>
+      </div>
+    </section>
+</main>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">OUR MISSION</div>
+          <p class="footer-text">
+            Analyst44 helps traders and research teams turn messy earnings releases into structured,
+            trade-ready signals — with realtime scoring, clean data and intuitive dashboards.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-title">COMPANY</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="blog.html">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">PRODUCT</div>
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="status.html">System status</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">FROM THE BLOG</div>
+          <ul class="footer-links">
+            <li><a href="blog-dashboard.html">Interactive earnings dashboards</a></li>
+            <li><a href="blog-scoring-stack.html">Building a realtime scoring stack</a></li>
+            <li><a href="blog-earnings-season.html">How to trade around earnings season</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>Thank you for creating with Analyst44 · 2025</div>
+        <div>v0.1.0</div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- TYPING SCRIPT -->
+<script>
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+    const words = ["signal", "earnings", "coverage", "scores", "insights"];
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function type() {
+  const tgt = document.getElementById("typed");
+  if (!tgt) return;
+
+  const current = words[wordIndex];
+  let speed = isDeleting ? 50 : 85;
+
+  if (!isDeleting) {
+    charIndex++;
+    tgt.textContent = current.slice(0, charIndex);
+    if (charIndex === current.length) {
+      isDeleting = true;
+      speed = 900;
+    }
+  } else {
+    charIndex--;
+    tgt.textContent = current.slice(0, Math.max(charIndex, 0));
+    if (charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+      speed = 400;
+    }
+  }
+
+  setTimeout(type, speed);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  window.scrollTo(0, 0);
+
+
+  type();
+
+  const toggle = document.querySelector(".nav-toggle");
+  const mobile = document.getElementById("navMobile");
+
+  if (toggle && mobile) {
+    toggle.addEventListener("click", () => {
+      const open = mobile.classList.toggle("open");
+      toggle.classList.toggle("is-open", open);
+    });
+
+    const mobileLinks = document.querySelectorAll(".nav-mobile-link");
+    mobileLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        if (mobile.classList.contains("open")) {
+          mobile.classList.remove("open");
+          toggle.classList.remove("is-open");
+        }
+      });
+    });
+  }
+});
+
+
+</script>
+
+</body>
+</html>

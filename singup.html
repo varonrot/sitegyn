@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signup – Analyst44</title>
+
+<style>
+    body {
+        margin: 0; padding: 0;
+        height: 100vh;
+        display: flex; justify-content: center; align-items: center;
+        background: radial-gradient(circle at 20% 20%, #5428ff55, #0b1726 70%),
+                    radial-gradient(circle at 80% 80%, #b400ff33, #0b1726 80%),
+                    #0b1726;
+        font-family: Inter, Arial;
+        color: #fff;
+    }
+
+    .box {
+        width: 100%; max-width: 360px;
+        background: rgba(255,255,255,0.04);
+        padding: 32px; border-radius: 16px;
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    h2 { text-align:center; margin-bottom:24px; font-size:26px; font-weight:600; }
+
+    input {
+        width:100%; padding:12px;
+        background: rgba(255,255,255,0.08);
+        border:1px solid rgba(255,255,255,0.12);
+        border-radius:10px; margin:10px 0; color:#fff;
+    }
+
+    input:focus { border-color:#00eaff; outline:none; }
+
+    button {
+        width:100%; padding:12px;
+        margin-top:12px; border:none; border-radius:10px;
+        font-size:16px; cursor:pointer;
+    }
+
+    .orange-btn { background:linear-gradient(90deg,#ff4f01,#ff7b00); color:#fff; }
+
+    .google-btn {
+        background:#fff; color:#000;
+        display:flex; align-items:center; justify-content:center; gap:10px;
+    }
+
+    a { color:#9ddaff; text-decoration:none; }
+    .center-text { text-align:center; margin-top:16px; }
+
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #2a2f45, #1f2333);
+        color: white;
+        padding: 14px 22px;
+        border-radius: 10px;
+        font-size: 15px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.35s ease;
+        z-index: 99999;
+    }
+    .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>Create Account</h2>
+
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+
+    <button id="signupBtn" class="orange-btn">Sign Up</button>
+
+    <button id="googleBtn" class="google-btn">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="22">
+        Continue with Google
+    </button>
+
+    <div class="center-text">
+        Already registered? <a href="login.html">Login</a>
+    </div>
+</div>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const supabase = createClient(
+    "https://xkchlqcwntcoakmyicqb.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
+);
+
+document.getElementById("signupBtn").onclick = async () => {
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!email || !password) {
+        showToast("Please fill all fields");
+        return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+        showToast(error.message);
+        return;
+    }
+
+    // 🚀 אם אין צורך באישור מייל – מתחברים ישר
+    const { error: loginError } = await supabase.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if (loginError) {
+        showToast("Check your email to verify your account");
+        return;
+    }
+
+    showToast("Account created. Redirecting…");
+
+    setTimeout(() => {
+        window.location.href = "dashboard.html";
+    }, 1000);
+};
+
+
+document.getElementById("googleBtn").onclick = async () => {
+    await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: window.location.origin + "/dashboard.html" }
+    });
+};
+
+function showToast(message) {
+    let toast = document.getElementById("toast");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast";
+        toast.className = "toast";
+        document.body.appendChild(toast);
+    }
+
+    toast.innerText = message;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
+}
+</script>
+
+</body>
+</html>

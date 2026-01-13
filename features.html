@@ -1,0 +1,1511 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<title>Platform Features for Earnings Trading | Analyst44</title>
+
+<meta name="description" content="Explore Analyst44’s platform features for earnings trading — real-time earnings scoring, expectation analysis, volatility insights, and post-earnings market behavior tools." />
+
+<link rel="canonical" href="https://analyst44.com/features.html" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg-main:#050713;
+      --bg-panel:#111322;
+      --bg-panel-soft:#141728;
+      --accent:#22e38b;
+      --accent-soft:#2fe6ff;
+      --text:#f7f8ff;
+      --muted:#9ca3c7;
+      --border-soft:rgba(255,255,255,0.06);
+      --radius-xl:22px;
+      --radius-lg:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:#02030a;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+    body.nav-open{overflow:hidden;}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+
+    .page-wrap{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* TOP NAV */
+    .nav{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:50;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 36px;
+      background:linear-gradient(90deg,rgba(5,7,19,0.96),rgba(5,7,19,0.8));
+      border-bottom:1px solid rgba(255,255,255,0.03);
+      backdrop-filter:blur(16px);
+    }
+    .nav-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .nav-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav-toggle{
+  display:none;
+  width:32px;
+  height:32px;
+  margin-right:8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.35);
+  background:rgba(8,11,24,0.95);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.nav-toggle span{
+  display:block;
+  width:16px;
+  height:2px;
+  border-radius:999px;
+  background:#f9fbff;
+  position:relative;
+}
+
+.nav-toggle span::before,
+.nav-toggle span::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:16px;
+  height:2px;
+  border-radius:999px;
+  background:#f9fbff;
+}
+
+.nav-toggle span::before{ top:-5px; }
+.nav-toggle span::after{ top:5px; }
+
+.nav-toggle.is-open span{
+  background:transparent;
+}
+
+.nav-toggle.is-open span::before{
+  top:0;
+  transform:rotate(45deg);
+}
+
+.nav-toggle.is-open span::after{
+  top:0;
+  transform:rotate(-45deg);
+}
+
+/* פאנל מובייל */
+.nav-mobile{
+  position:fixed;
+  top:64px;
+  left:0;
+  right:0;
+  background:rgba(5,7,19,0.98);
+  backdrop-filter:blur(20px);
+  transform:translateY(-100%);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .25s ease, opacity .25s ease;
+  z-index:40;
+}
+
+.nav-mobile.open{
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
+}
+
+.nav-mobile-inner{
+  padding:18px 24px 32px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.nav-mobile-link{
+  font-size:16px;
+  color:#f4f5ff;
+  text-align:left;
+  background:transparent;
+  border:none;
+  padding:6px 0;
+  cursor:pointer;
+}
+
+.nav-mobile-link.secondary{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.nav-mobile-divider{
+  height:1px;
+  background:rgba(255,255,255,0.06);
+  margin:10px 0;
+}
+
+    .logo-circle{
+      width:34px;height:34px;
+      border-radius:999px;
+      background:radial-gradient(circle at 30% 0,#45b6ff 0,#0050ff 40%,#2600ff 100%);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;
+      font-weight:800;
+      font-size:18px;
+      box-shadow:0 0 20px rgba(46,163,255,0.5);
+    }
+    .logo-text{
+      font-weight:600;
+      font-size:18px;
+    }
+    .logo-text span{color:#2fd9ff;font-weight:700;}
+
+    .nav-links{
+      display:flex;
+      gap:24px;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .nav-links a{position:relative;padding:4px 0;}
+    .nav-links a:hover{color:#f5f5ff;}
+    .nav-links a::after{
+      content:"";position:absolute;left:0;bottom:-4px;
+      width:0;height:2px;border-radius:999px;
+      background:linear-gradient(90deg,#32e28c,#37e1ff);
+      transition:width .18s ease;
+    }
+    .nav-links a:hover::after{width:100%;}
+
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .btn-outline{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.16);
+      padding:8px 14px;
+      font-size:13px;
+      color:var(--muted);
+      background:rgba(8,11,24,0.9);
+      display:flex;align-items:center;gap:6px;
+      cursor:pointer;
+    }
+    .btn-outline span.icon{
+      font-size:14px;
+    }
+    .btn-outline:hover{
+      border-color:rgba(255,255,255,0.4);
+      color:#fff;
+    }
+    .btn-primary{
+      border-radius:999px;
+      padding:9px 20px;
+      font-size:14px;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      color:#02030a;
+      background:linear-gradient(130deg,#18e57c,#2fe1ff);
+      box-shadow:0 0 25px rgba(24,229,124,0.5);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 0 30px rgba(24,229,124,0.7);
+    }
+
+    /* MOBILE NAV TOGGLE */
+    .nav-toggle{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      width:34px;
+      height:34px;
+      margin-left:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(6,9,22,0.95);
+      cursor:pointer;
+    }
+    .nav-toggle-line{
+      width:18px;
+      height:2px;
+      border-radius:999px;
+      background:#f9fafb;
+      display:block;
+      margin:2px 0;
+      transition:transform .18s ease, opacity .18s ease;
+    }
+
+    .mobile-menu{
+      position:fixed;
+      top:64px;
+      left:0;
+      right:0;
+      padding:12px 20px 16px;
+      background:rgba(5,7,19,0.98);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      display:none;
+      flex-direction:column;
+      gap:8px;
+      z-index:40;
+    }
+    .mobile-menu a{
+      font-size:14px;
+      color:var(--muted);
+      padding:6px 2px;
+    }
+    .mobile-menu a:hover{color:#fff;}
+    .mobile-divider{
+      border:none;
+      border-top:1px solid rgba(255,255,255,0.08);
+      margin:6px 0 4px;
+    }
+
+    body.nav-open .mobile-menu{display:flex;}
+    body.nav-open .nav-toggle-line:nth-child(1){
+      transform:translateY(4px) rotate(45deg);
+    }
+    body.nav-open .nav-toggle-line:nth-child(2){
+      opacity:0;
+    }
+    body.nav-open .nav-toggle-line:nth-child(3){
+      transform:translateY(-4px) rotate(-45deg);
+    }
+
+    /* MAIN CONTENT */
+    main{
+      flex:1;
+      padding-top:64px;
+    }
+
+    /* HERO + JELLYFISH */
+    .hero{
+      position:relative;
+      padding:140px 0 190px;
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 0 0,rgba(181,53,255,0.4) 0,transparent 45%),
+        linear-gradient(180deg,rgba(2,5,18,0.2) 0,rgba(2,5,18,0.96) 65%,#02030a 100%),
+        url("jellyfish-hero.jpg") center top/cover no-repeat;
+      opacity:0.9;
+      z-index:-2;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;inset:0;
+      background:radial-gradient(circle at 80% 0,rgba(0,195,255,0.25),transparent 50%);
+      z-index:-1;
+    }
+
+    .hero-inner{
+      max-width:1180px;
+      margin:0 auto;
+      padding:0 32px;
+      display:flex;
+      gap:56px;
+      align-items:center;
+    }
+    .hero-copy{
+      flex:1.1;
+      max-width:520px;
+    }
+    .hero-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:5px 12px;
+      border-radius:999px;
+      background:rgba(4,10,32,0.85);
+      border:1px solid rgba(123,181,255,0.45);
+      font-size:11px;
+      color:#c9d2ff;
+      margin-bottom:16px;
+    }
+    .hero-pill span.tag{
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(29,185,105,0.18);
+      color:#57f0a2;
+      font-weight:600;
+    }
+
+    .hero-title{
+      font-size:44px;
+      line-height:1.05;
+      letter-spacing:-0.03em;
+      margin-bottom:14px;
+    }
+    @media (min-width:1280px){
+      .hero-title{font-size:52px;}
+    }
+
+    /* typing word */
+    #typed{
+      color:#ff48d3;
+      font-weight:800;
+      border-right:2px solid rgba(255,255,255,0.7);
+      padding-right:4px;
+      animation:blink .8s infinite;
+    }
+    @keyframes blink{
+      0%{border-color:rgba(255,255,255,0.7);}
+      50%{border-color:transparent;}
+      100%{border-color:rgba(255,255,255,0.7);}
+    }
+
+    .hero-sub{
+      font-size:15px;
+      color:var(--muted);
+      max-width:410px;
+      line-height:1.6;
+      margin-bottom:20px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-bottom:18px;
+    }
+    .btn-ghost{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.22);
+      padding:9px 16px;
+      font-size:13px;
+      color:var(--text);
+      background:rgba(4,8,25,0.9);
+      display:flex;align-items:center;gap:8px;
+      cursor:pointer;
+    }
+    .btn-ghost span.icon{
+      font-size:14px;
+    }
+    .btn-ghost:hover{
+      background:rgba(10,16,38,0.95);
+      border-color:rgba(255,255,255,0.45);
+    }
+
+    .hero-avatars{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      margin-top:6px;
+      margin-bottom:4px;
+    }
+    .hero-avatars img{
+      width:26px;height:26px;
+      border-radius:999px;
+      border:2px solid #050713;
+      box-shadow:0 0 10px rgba(0,0,0,0.5);
+    }
+    .hero-avatars img:not(:first-child){margin-left:-10px;}
+    .hero-meta{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .hero-media{
+      flex:1.1;
+      position:relative;
+      display:flex;
+      justify-content:center;
+    }
+    .hero-card{
+      width:100%;
+      max-width:640px;
+      border-radius:26px;
+      background:radial-gradient(circle at 0 0,rgba(67,203,255,0.5),transparent 55%),
+                 radial-gradient(circle at 100% 100%,rgba(91,255,168,0.35),transparent 55%),
+                 #050814;
+      padding:14px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.7);
+      transform-origin:center;
+      transition:transform .35s ease, box-shadow .35s ease, translate .35s ease;
+    }
+    .hero-card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 40px 90px rgba(0,0,0,0.85);
+    }
+    .hero-card-inner{
+      border-radius:22px;
+      overflow:hidden;
+      background:#050713;
+    }
+
+    /* WHY SECTION */
+    .section{
+      padding:0 32px;
+    }
+    .section-inner{
+      max-width:1180px;
+      margin:0 auto;
+    }
+    .section-header{
+      margin-bottom:16px;
+    }
+    .section-kicker{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .section-title{
+      font-size:24px;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    .section-sub{
+      font-size:14px;
+      color:var(--muted);
+      max-width:520px;
+    }
+
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+      margin-top:26px;
+      margin-bottom:80px;
+    }
+    .feature-card{
+      background:radial-gradient(circle at 0 0,rgba(88,187,255,0.24),transparent 60%),var(--bg-panel-soft);
+      border-radius:var(--radius-lg);
+      border:1px solid var(--border-soft);
+      padding:18px 18px 20px;
+      min-height:170px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .feature-card:nth-child(2){
+      background:radial-gradient(circle at 0 0,rgba(255,72,211,0.25),transparent 60%),var(--bg-panel-soft);
+    }
+    .feature-card:nth-child(3){
+      background:radial-gradient(circle at 0 0,rgba(153,102,255,0.3),transparent 60%),var(--bg-panel-soft);
+    }
+    .feature-card:nth-child(4){
+      background:radial-gradient(circle at 0 0,rgba(62,215,130,0.28),transparent 60%),var(--bg-panel-soft);
+    }
+
+    .feature-icon{
+      width:26px;height:26px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:15px;
+      background:rgba(0,0,0,0.35);
+    }
+    .feature-title{
+      font-size:15px;
+      font-weight:600;
+      margin-top:8px;
+      margin-bottom:6px;
+    }
+    .feature-text{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    /* PRICING SECTION */
+    .pricing-section{
+      padding:0 32px 80px;
+    }
+    .pricing-layout{
+      max-width:1180px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+      gap:26px;
+      align-items:start;
+    }
+    .pricing-card{
+      background:var(--bg-panel);
+      border-radius:var(--radius-xl);
+      padding:26px 24px 24px;
+      border:1px solid var(--border-soft);
+      box-shadow:0 24px 60px rgba(0,0,0,0.7);
+    }
+    .pricing-label{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .pricing-headline{
+      font-size:23px;
+      font-weight:600;
+      margin-bottom:12px;
+    }
+    .pricing-price{
+      font-size:28px;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    .pricing-sub{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .pricing-list{
+      list-style:none;
+      padding:0;
+      margin:0 0 18px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .pricing-list li{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      margin-bottom:6px;
+    }
+    .pricing-list span.bullet{
+      color:#37e18e;
+      margin-top:1px;
+    }
+    .pricing-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .btn-pill-primary{
+      border-radius:999px;
+      padding:10px 18px;
+      border:none;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      color:#02030a;
+      background:linear-gradient(130deg,#18e57c,#2fe1ff);
+    }
+    .btn-pill-secondary{
+      border-radius:999px;
+      padding:9px 16px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(10,12,29,0.95);
+      font-size:13px;
+      color:var(--muted);
+      cursor:pointer;
+    }
+    .btn-pill-secondary:hover{color:#fff;border-color:rgba(255,255,255,0.4);}
+
+    .pricing-copy{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    /* CTA BAND */
+    .cta-band{
+      padding:0 32px 80px;
+    }
+    .cta-inner{
+      max-width:1180px;
+      margin:0 auto;
+      background:var(--bg-panel-soft);
+      border:1px solid var(--border-soft);
+      border-radius:var(--radius-xl);
+      padding:22px 24px;
+      display:grid;
+      grid-template-columns:minmax(0,1.2fr) minmax(0,0.9fr);
+      gap:20px;
+      align-items:center;
+    }
+    .cta-kicker{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .cta-title{
+      font-size:20px;
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .cta-text{
+      font-size:13px;color:var(--muted);
+    }
+    .cta-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .btn-gradient-big{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:12px 24px;
+      font-size:14px;
+      font-weight:600;
+      color:#02030a;
+      background:linear-gradient(130deg,#21e57d,#33e0ff);
+      box-shadow:0 0 25px rgba(51,224,255,0.4);
+    }
+    .btn-outline-soft{
+      border-radius:999px;
+      padding:11px 20px;
+      font-size:13px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.22);
+      background:rgba(9,11,26,0.95);
+      cursor:pointer;
+    }
+    .btn-outline-soft:hover{color:#fff;border-color:rgba(255,255,255,0.45);}
+
+    /* BIG CTA BACKGROUND (GRID) + FOOTER */
+    .cta-banner{
+      position:relative;
+      margin-top:30px;
+      padding:90px 24px;
+      text-align:center;
+      color:#f9fbff;
+      overflow:hidden;
+      border-radius:0;
+      background:#010309;
+      z-index:0;
+    }
+
+    .cta-banner::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:url("grid-footer.jpg") center/cover no-repeat;
+      opacity:0.9;
+      z-index:-1;
+    }
+
+    .cta-banner::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at 50% 80%,rgba(0,0,0,0.5),transparent 60%);
+      z-index:0;
+    }
+
+    .cta-banner-inner{
+      max-width:960px;
+      margin:0 auto;
+    }
+    .cta-banner-title{
+      font-size:28px;
+      font-weight:600;
+      margin-bottom:18px;
+    }
+    .cta-banner-text{
+      font-size:16px;
+      color:#cdd5ff;
+      margin-bottom:26px;
+    }
+    .cta-banner button{
+      border-radius:999px;
+      padding:11px 26px;
+      border:1px solid rgba(255,255,255,0.7);
+      background:transparent;
+      color:#fdfdff;
+      font-size:14px;
+      font-weight:500;
+      cursor:pointer;
+    }
+    .cta-banner button:hover{
+      background:rgba(4,10,32,0.85);
+    }
+
+    /* FOOTER */
+    footer{
+      background:#050713;
+      border-top:1px solid rgba(255,255,255,0.05);
+      padding:36px 32px 20px;
+      color:var(--muted);
+    }
+    .footer-inner{
+      max-width:1180px;
+      margin:0 auto;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:2.2fr repeat(3,1fr);
+      gap:26px;
+      margin-bottom:28px;
+      font-size:13px;
+    }
+    .footer-title{
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+      color:#e4e7ff;
+    }
+    .footer-text{line-height:1.7;}
+    .footer-links{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .footer-links li{margin-bottom:6px;}
+    .footer-links a{color:var(--muted);}
+    .footer-links a:hover{color:#f5f6ff;}
+
+    .footer-bottom{
+      border-top:1px solid rgba(255,255,255,0.06);
+      padding-top:10px;
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      color:#6b7285;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width:980px){
+      .hero-inner{
+        flex-direction:column;
+        padding-top:40px;
+      }
+      .hero{
+        padding-top:110px;
+        padding-bottom:140px;
+      }
+      .hero-media{
+        margin-top:16px;
+      }
+      /* במוביל – קודם טקסט ואח"כ הדשבורד */
+      .hero-copy{order:0;}
+      .hero-media{order:1;}
+      .hero-card{max-width:520px;}
+      .feature-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .pricing-layout{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-inner{
+        grid-template-columns:minmax(0,1fr);
+      }
+      .cta-actions{justify-content:flex-start;}
+      .cta-banner-title{font-size:24px;}
+    }
+
+    @media (max-width:720px){
+  .nav{
+    padding:0 16px;
+  }
+
+  /* להסתיר תפריט עליון רגיל במוביל */
+  .nav-links{
+    display:none;
+  }
+
+  /* להציג המבורגר בצד שמאל */
+  .nav-toggle{
+    display:flex;
+  }
+
+  /* להסתיר Help במוביל */
+  .btn-outline{
+    display:none;
+  }
+
+  /* Dashboard הירוק נשאר כמו שהוא */
+
+  .hero-inner{
+    padding:0 18px;
+  }
+  .section,.pricing-section,.cta-band{
+    padding:0 18px 60px;
+  }
+  .feature-grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .footer-grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .cta-banner{
+    padding:70px 18px;
+  }
+}
+
+/* במחשב – לא צריך את פאנל המובייל */
+@media (min-width:721px){
+  .nav-mobile{
+    display:none;
+  }
+}
+/* ========== FEATURES PAGE ========== */
+
+.features-main{
+  padding-top:80px;
+  padding-bottom:120px;
+}
+
+/* HERO קטן ל-Features */
+.features-hero{
+  padding:140px 32px 80px;
+  background:
+    radial-gradient(circle at 10% 0, rgba(171,53,255,0.32), transparent 55%),
+    radial-gradient(circle at 90% 0, rgba(0,188,255,0.26), transparent 60%),
+    #050713;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.features-hero-inner{
+  max-width:1180px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);
+  gap:32px;
+  align-items:center;
+}
+
+.features-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:5px 12px;
+  border-radius:999px;
+  background:rgba(4,10,32,0.9);
+  border:1px solid rgba(123,181,255,0.45);
+  font-size:11px;
+  color:#c9d2ff;
+  margin-bottom:14px;
+}
+.features-pill span.tag{
+  padding:2px 8px;
+  border-radius:999px;
+  background:rgba(29,185,105,0.18);
+  color:#57f0a2;
+  font-weight:600;
+}
+
+.features-hero-title{
+  font-size:38px;
+  line-height:1.08;
+  letter-spacing:-0.03em;
+  margin-bottom:10px;
+}
+.features-hero-sub{
+  font-size:15px;
+  color:var(--muted);
+  max-width:460px;
+  line-height:1.7;
+  margin-bottom:18px;
+}
+.features-hero-meta{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.features-hero-right{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.7;
+  background:rgba(9,12,32,0.9);
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.06);
+  padding:18px 18px 16px;
+}
+
+/* גריד פיצ'רים – שלושה אזורים */
+.features-section-block{
+  padding:40px 32px 80px;
+}
+.features-section-inner{
+  max-width:1180px;
+  margin:0 auto;
+}
+
+.features-section-header{
+  margin-bottom:24px;
+}
+.features-section-kicker{
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+.features-section-title{
+  font-size:24px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+.features-section-sub{
+  font-size:14px;
+  color:var(--muted);
+  max-width:520px;
+}
+
+/* שלוש קבוצות */
+.features-groups{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+  margin-top:18px;
+}
+
+.features-group{
+  background:var(--bg-panel-soft);
+  border-radius:20px;
+  border:1px solid var(--border-soft);
+  padding:18px 18px 16px;
+}
+.features-group-title{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+.features-group-sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+/* כרטיסי פיצ'רים בתוך כל קבוצה */
+.features-group-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.features-feature{
+  padding:10px 10px 9px;
+  border-radius:14px;
+  background:rgba(5,10,30,0.95);
+  border:1px solid rgba(255,255,255,0.05);
+}
+.features-feature-title{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:4px;
+}
+.features-feature-text{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+/* שורת אייקון קטנה משמאל לכותרת בכרטיס */
+.features-feature-label{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-bottom:3px;
+}
+.features-feature-label span.icon{
+  width:20px;
+  height:20px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  background:rgba(0,0,0,0.45);
+}
+
+/* אזור "איך זה מסתדר בסטאק" */
+.features-stack{
+  margin-top:40px;
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+  gap:24px;
+}
+.features-stack h3{
+  font-size:16px;
+  margin-bottom:8px;
+}
+.features-stack p{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.7;
+}
+.features-stack-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.features-stack-item{
+  font-size:13px;
+  color:var(--muted);
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(6,10,30,0.95);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+/* רספונסיביות */
+@media (max-width:980px){
+  .features-hero{
+    padding:90px 18px 34px;
+  }
+  .features-hero-inner{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .features-section-block{
+    padding:34px 18px 70px;
+  }
+  .features-groups{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .features-stack{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
+.features-main{
+  margin-top:0 !important;
+}
+/* בטל רווח של main בדף Features */
+.features-main{
+  padding-top:0 !important;
+  margin-top:0 !important;
+}
+main.features-main{
+  padding-top:0 !important;
+  margin-top:0 !important;
+}
+
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- TOP NAV -->
+ <header class="nav">
+  <div class="nav-left">
+    <!-- המבורגר בצד שמאל -->
+    <button class="nav-toggle" type="button" aria-label="Toggle navigation">
+      <span></span>
+    </button>
+
+    <!-- לוגו + לינק ל-landing -->
+    <a href="landing.html" class="nav-brand">
+      <div class="logo-circle">A</div>
+      <div class="logo-text">analyst<span>44</span></div>
+    </a>
+  </div>
+
+  <nav class="nav-links">
+    <a href="product.html">Product</a>
+    <a href="features.html">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="education.html">Education</a>
+  </nav>
+
+  <div class="nav-right">
+    <button class="btn-outline" onclick="location.href='help.html'">
+      <span class="icon">?</span>
+      <span>Help</span>
+    </button>
+    <button class="btn-primary" onclick="location.href='dashboard.html'">
+      Dashboard →
+    </button>
+  </div>
+</header>
+
+<!-- תפריט מובייל -->
+<div class="nav-mobile" id="navMobile">
+  <div class="nav-mobile-inner">
+    <button class="nav-mobile-link" onclick="location.href='product.html'">Product</button>
+    <button class="nav-mobile-link" onclick="location.href='features.html'">Features</button>
+    <button class="nav-mobile-link" onclick="location.href='pricing.html'">Pricing</button>
+    <button class="nav-mobile-link" onclick="location.href='about.html'">About</button>
+    <button class="nav-mobile-link" onclick="location.href='education.html'">Education</button>
+
+    <div class="nav-mobile-divider"></div>
+
+    <button class="nav-mobile-link secondary" onclick="location.href='help.html'">Help center</button>
+    <button class="nav-mobile-link" onclick="location.href='dashboard.html'">Open dashboard →</button>
+  </div>
+</div>
+
+
+  <div class="mobile-menu">
+    <a href="#product" onclick="document.body.classList.remove('nav-open');">Product</a>
+    <a href="#features" onclick="document.body.classList.remove('nav-open');">Features</a>
+    <a href="#pricing" onclick="document.body.classList.remove('nav-open');">Pricing</a>
+    <a href="#education" onclick="document.body.classList.remove('nav-open');">Education</a>
+    <hr class="mobile-divider">
+    <a href="help.html" onclick="document.body.classList.remove('nav-open');">Help center</a>
+    <a href="dashboard.html" onclick="document.body.classList.remove('nav-open');">Open dashboard</a>
+  </div>
+
+  <main class="features-main">
+
+  <!-- HERO קטן ל-Features -->
+  <section class="features-hero">
+    <div class="features-hero-inner">
+      <div>
+        <div class="features-pill">
+          <span class="tag">Product</span>
+          <span>What Analyst44 actually does</span>
+        </div>
+        <h1 class="features-hero-title">
+          Features built for earnings-first workflows.
+        </h1>
+        <p class="features-hero-sub">
+          Analyst44 scores every report in realtime, normalizes the key financials
+          and gives traders and research desks a clean layer of signals over
+          the earnings tape.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+          <button class="btn-primary" onclick="location.href='dashboard.html'">
+            Open realtime dashboard
+          </button>
+          <button class="btn-ghost" onclick="location.href='pricing.html'">
+            View pricing
+          </button>
+        </div>
+        <div class="features-hero-meta">
+          Built to sit next to your broker, news feed and internal research tools.
+        </div>
+      </div>
+
+      <div class="features-hero-right">
+        <strong style="display:block;margin-bottom:6px;">Earnings, but structured.</strong>
+        <p>
+          Instead of scanning headlines and PDFs, you get a ranked list of reports
+          with scores, deltas vs. expectations and clean financial lines you can
+          filter, export or plug into your own stack.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- אזור הפיצ'רים המחולק לקבוצות -->
+  <section class="features-section-block">
+    <div class="features-section-inner">
+
+      <div class="features-section-header">
+        <div class="features-section-kicker">FEATURE SET</div>
+        <h2 class="features-section-title">From raw earnings releases to ranked signals.</h2>
+        <p class="features-section-sub">
+          Under the hood, Analyst44 combines realtime ingestion, a scoring engine
+          and a financials parser into a single surface your desk can actually use.
+        </p>
+      </div>
+
+      <div class="features-groups">
+
+        <!-- קבוצה 1: Scoring & signals -->
+        <div class="features-group">
+          <div class="features-group-title">Scoring &amp; signals</div>
+          <div class="features-group-sub">
+            See which prints matter, without reading every line yourself.
+          </div>
+
+          <div class="features-group-list">
+            <div class="features-feature">
+              <div class="features-feature-label">
+                <span class="icon">⚡</span>
+                <div class="features-feature-title">Realtime report scores</div>
+              </div>
+              <div class="features-feature-text">
+                Each earnings release is scored from 0–100 the moment it hits,
+                based on surprise, quality and context.
+              </div>
+            </div>
+
+            <div class="features-feature">
+              <div class="features-feature-label">
+                <span class="icon">📡</span>
+                <div class="features-feature-title">Beat / miss detection</div>
+              </div>
+              <div class="features-feature-text">
+                Quickly see who beat, who missed and by how much – both at the
+                headline level and deeper in the statement.
+              </div>
+            </div>
+
+            <div class="features-feature">
+              <div class="features-feature-label">
+                <span class="icon">🧭</span>
+                <div class="features-feature-title">Guidance &amp; margin shifts</div>
+              </div>
+              <div class="features-feature-text">
+                Track changes in guidance, margins and other key drivers that
+                shape how the print will trade.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- קבוצה 2: Data & coverage -->
+        <div class="features-group">
+          <div class="features-group-title">Data &amp; coverage</div>
+          <div class="features-group-sub">
+            Clean financials for the names you actually care about.
+          </div>
+
+          <div class="features-group-list">
+            <div class="features-feature">
+              <div class="features-feature-label">
+                <span class="icon">📊</span>
+                <div class="features-feature-title">Parsed financial statements</div>
+              </div>
+              <div class="features-feature-text">
+                Income, balance sheet and cash-flow fields normalized into
+                consistent columns you can filter and compare.
+              </div>
+            </div>
+
+            <div class="features-feature">
+              <div class="features-feature-label">
+                <span class="icon">🎯</span>
+                <div class="features-feature-title">Custom universes</div>
+              </div>
+              <div class="features-feature-text">
+                Focus on your own universe of tickers – by sector, index,
+                strategy or desk ownership.
+              </div>
+            </div>
+
+            <div class="features-feature">
+              <div class="features-feature-label">
+                <span class="icon">📅</span>
+                <div class="features-feature-title">Aligned with the calendar</div>
+              </div>
+              <div class="features-feature-text">
+                Every score and signal is tied back to the earnings calendar,
+                so you always know what’s coming next.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- קבוצה 3: Workflow & integrations -->
+        <div class="features-group">
+          <div class="features-group-title">Workflow &amp; integrations</div>
+          <div class="features-group-sub">
+            Designed to sit next to your broker and internal tools.
+          </div>
+
+          <div class="features-group-list">
+            <div class="features-feature">
+              <div class="features-feature-label">
+                <span class="icon">🖥</span>
+                <div class="features-feature-title">Dashboard views</div>
+              </div>
+              <div class="features-feature-text">
+                Compact screens for “live tape” monitoring plus deeper
+                drill-down views for post-earnings review.
+              </div>
+            </div>
+
+            <div class="features-feature">
+              <div class="features-feature-label">
+                <span class="icon">🔗</span>
+                <div class="features-feature-title">Exports &amp; APIs</div>
+              </div>
+              <div class="features-feature-text">
+                Push scores and parsed data into your own stack via CSV, API
+                or direct hooks into your research tools.
+              </div>
+            </div>
+
+            <div class="features-feature">
+              <div class="features-feature-label">
+                <span class="icon">👥</span>
+                <div class="features-feature-title">Team-ready setup</div>
+              </div>
+              <div class="features-feature-text">
+                Shared watchlists and consistent scoring logic across traders,
+                analysts and risk.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- איך זה משתלב בסטאק -->
+      <div class="features-stack">
+        <div>
+          <h3>How Analyst44 fits into your stack</h3>
+          <p>
+            Analyst44 doesn’t replace your broker, tape or research –
+            it sits next to them and tells you which prints deserve your
+            attention right now.
+          </p>
+          <p style="margin-top:10px;">
+            Use it as your first pass on the earnings tape, then dive deeper
+            with your own process once you know where to focus.
+          </p>
+        </div>
+        <div class="features-stack-list">
+          <div class="features-stack-item">
+            • Connect your universe, earnings calendar and watchlists.
+          </div>
+          <div class="features-stack-item">
+            • Let the scoring engine grade each report in realtime.
+          </div>
+          <div class="features-stack-item">
+            • Export structured financials into your own models when needed.
+          </div>
+          <div class="features-stack-item">
+            • Share the same view of “important prints” across the desk.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">OUR MISSION</div>
+          <p class="footer-text">
+            Analyst44 helps traders and research teams turn messy earnings releases into structured,
+            trade-ready signals — with realtime scoring, clean data and intuitive dashboards.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-title">COMPANY</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="blog.html">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">PRODUCT</div>
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="status.html">System status</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">FROM THE BLOG</div>
+          <ul class="footer-links">
+            <li><a href="blog-dashboard.html">Interactive earnings dashboards</a></li>
+            <li><a href="blog-scoring-stack.html">Building a realtime scoring stack</a></li>
+            <li><a href="blog-earnings-season.html">How to trade around earnings season</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>Thank you for creating with Analyst44 · 2025</div>
+        <div>v0.1.0</div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- TYPING SCRIPT -->
+<script>
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+    const words = ["signal", "earnings", "coverage", "scores", "insights"];
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function type() {
+  const tgt = document.getElementById("typed");
+  if (!tgt) return;
+
+  const current = words[wordIndex];
+  let speed = isDeleting ? 50 : 85;
+
+  if (!isDeleting) {
+    charIndex++;
+    tgt.textContent = current.slice(0, charIndex);
+    if (charIndex === current.length) {
+      isDeleting = true;
+      speed = 900;
+    }
+  } else {
+    charIndex--;
+    tgt.textContent = current.slice(0, Math.max(charIndex, 0));
+    if (charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+      speed = 400;
+    }
+  }
+
+  setTimeout(type, speed);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // תמיד להתחיל מראש העמוד
+  window.scrollTo(0, 0);
+
+  // להתחיל typing
+  type();
+
+  const toggle = document.querySelector(".nav-toggle");
+  const mobile = document.getElementById("navMobile");
+
+  if (toggle && mobile) {
+    toggle.addEventListener("click", () => {
+      const open = mobile.classList.toggle("open");
+      toggle.classList.toggle("is-open", open);
+    });
+
+    const mobileLinks = document.querySelectorAll(".nav-mobile-link");
+    mobileLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        if (mobile.classList.contains("open")) {
+          mobile.classList.remove("open");
+          toggle.classList.remove("is-open");
+        }
+      });
+    });
+  }
+});
+
+
+</script>
+
+</body>
+</html>
