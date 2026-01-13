@@ -1388,126 +1388,109 @@ header{
     height:240px;
   }
 }
+/* ===============================
+   APPOINTMENT SECTION
+================================ */
+
 .appointment-section{
-  width:100%;
+  padding:100px 0;
   background:#ffffff;
-  padding:120px 0;
-  position:relative;
 }
 
 .appointment-inner{
-  max-width:1300px;
+  max-width:1200px;
   margin:0 auto;
   padding:0 24px;
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:1.1fr 1fr;
   gap:80px;
   align-items:center;
 }
 
 /* LEFT */
+
 .appointment-pill{
   display:inline-block;
   padding:6px 14px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:#0891b2;
-  font-size:13px;
+  background:#e6f9fa;
+  color:#18b7c3;
   font-weight:600;
+  border-radius:999px;
+  font-size:13px;
   margin-bottom:18px;
 }
 
-.appointment-info h2{
+.appointment-title{
   font-size:44px;
-  line-height:1.2;
-  margin-bottom:18px;
+  line-height:1.15;
+  margin:0 0 16px;
   color:#0f172a;
 }
 
 .appointment-sub{
-  max-width:420px;
+  font-size:18px;
   color:#64748b;
-  margin-bottom:32px;
+  max-width:420px;
+  margin-bottom:36px;
 }
 
 .appointment-call{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:16px;
 }
 
 .call-icon{
-  width:52px;
-  height:52px;
-  background:#2dd4d8;
-  color:#fff;
+  width:56px;
+  height:56px;
   border-radius:50%;
+  background:#2fd1d6;
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:22px;
 }
 
-.appointment-call small{
+.call-text small{
   display:block;
+  font-size:13px;
   color:#64748b;
 }
 
-.appointment-call strong{
-  font-size:18px;
+.call-text strong{
+  font-size:20px;
   color:#0f172a;
 }
 
-/* FORM */
-.appointment-form{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-}
+/* RIGHT */
 
-.appointment-form input,
-.appointment-form select{
-  padding:14px 16px;
-  border-radius:10px;
-  border:1px solid #e5e7eb;
-  font-size:14px;
+.appointment-media{
   width:100%;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,.08);
 }
 
-.appointment-form input:focus,
-.appointment-form select:focus{
-  outline:none;
-  border-color:#2dd4d8;
-}
-
-.appointment-form button{
-  grid-column:span 2;
-  margin-top:10px;
-  padding:16px;
-  border:none;
-  border-radius:999px;
-  background:#2dd4d8;
-  color:#fff;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  transition:.25s;
-}
-
-.appointment-form button:hover{
-  background:#14b8a6;
+.appointment-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
 
 /* RESPONSIVE */
-@media(max-width:900px){
+
+@media (max-width: 900px){
   .appointment-inner{
     grid-template-columns:1fr;
+    gap:48px;
   }
 
-  .appointment-info h2{
+  .appointment-title{
     font-size:34px;
   }
 }
+
  /* ================= FOOTER ================= */
 .site-footer{
   background:#1e2b4f;
@@ -2078,33 +2061,36 @@ section[id] {
   </div>
 </section>
 
-<section class="blogs-section" id="blog" data-section="blog">
+<section class="blogs-section" id="blog">
   <div class="blogs-container">
 
-    <span class="pill" data-bind="blog.kicker"></span>
+    <span class="pill">Latest Blogs</span>
 
-    <h2 class="blogs-title" data-bind="blog.headline"></h2>
+    <h2 class="blogs-title">Latest News & Blogs</h2>
 
-    <p class="blogs-subtitle" data-bind="blog.subheadline"></p>
+    <p class="blogs-subtitle">
+      Discover the latest medical trends, breakthroughs, and expert insights.
+      Stay informed on health tips, treatments, and innovations shaping the future of healthcare.
+    </p>
 
     <div class="blogs-grid">
 
       <article class="blog-card">
         <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=900&q=80">
-        <div class="blog-meta" data-bind="blog.items.0.meta"></div>
-        <h3 data-bind="blog.items.0.title"></h3>
+        <div class="blog-meta">Gynaecology · Aug 15, 2025</div>
+        <h3>How Preventive Health Checkups Can Save Your Life</h3>
       </article>
 
       <article class="blog-card">
         <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=900&q=80">
-        <div class="blog-meta" data-bind="blog.items.1.meta"></div>
-        <h3 data-bind="blog.items.1.title"></h3>
+        <div class="blog-meta">Hematology · Jul 14, 2025</div>
+        <h3>The Future of Cancer Treatment: Latest Breakthroughs</h3>
       </article>
 
       <article class="blog-card">
         <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80">
-        <div class="blog-meta" data-bind="blog.items.2.meta"></div>
-        <h3 data-bind="blog.items.2.title"></h3>
+        <div class="blog-meta">Orthopedic · Jun 13, 2025</div>
+        <h3>How Modern Hospitals Are Transforming Patient Care</h3>
       </article>
 
     </div>
@@ -2118,13 +2104,13 @@ section[id] {
     <div class="appointment-info">
       <span class="appointment-pill" data-bind="appointment.pill"></span>
 
-      <h2 data-bind="appointment.title"></h2>
+      <h2 class="appointment-title" data-bind="appointment.title"></h2>
 
       <p class="appointment-sub" data-bind="appointment.subtitle"></p>
 
       <div class="appointment-call">
         <div class="call-icon">📞</div>
-        <div>
+        <div class="call-text">
           <small data-bind="appointment.call_label"></small>
           <strong data-bind="appointment.phone"></strong>
         </div>
@@ -2132,29 +2118,14 @@ section[id] {
     </div>
 
     <!-- RIGHT -->
-    <form class="appointment-form" data-bind-form="appointment.form">
-
-      <select data-bind="appointment.treatment_options">
-        <option></option>
-      </select>
-
-      <select data-bind="appointment.doctor_options">
-        <option></option>
-      </select>
-
-      <input type="text" data-bind-placeholder="appointment.name_placeholder">
-      <input type="tel" data-bind-placeholder="appointment.phone_placeholder">
-
-      <input type="text" data-bind-placeholder="appointment.state_placeholder">
-      <input type="date" data-bind="appointment.date">
-
-      <select data-bind="appointment.time_options">
-        <option></option>
-      </select>
-
-      <button type="submit" data-bind="appointment.submit_label"></button>
-
-    </form>
+    <div class="appointment-media">
+      <img
+        src=""
+        alt=""
+        data-bind-src="appointment.image"
+        data-bind-alt="appointment.image_alt"
+      >
+    </div>
 
   </div>
 </section>
