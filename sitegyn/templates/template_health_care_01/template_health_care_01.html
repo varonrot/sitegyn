@@ -2300,12 +2300,22 @@ setInterval(() => {
 }, 8000);
 </script>
 
-<script>
-(function () {
+ <script>
+(function pollTestimonials() {
 
-  function initTestimonials() {
+  let tries = 0;
+  const MAX_TRIES = 50;
+
+  const interval = setInterval(() => {
+    tries++;
+
     const data = window.content_json?.testimonials;
-    if (!data || !Array.isArray(data.items) || !data.items.length) return;
+    if (!data || !Array.isArray(data.items) || !data.items.length) {
+      if (tries >= MAX_TRIES) clearInterval(interval);
+      return;
+    }
+
+    clearInterval(interval);
 
     // LEFT
     document.getElementById("testimonials-kicker").textContent = data.kicker || "";
@@ -2341,9 +2351,8 @@ setInterval(() => {
     };
 
     render(0);
-  }
 
-  window.addEventListener("content:ready", initTestimonials);
+  }, 100);
 
 })();
 </script>
