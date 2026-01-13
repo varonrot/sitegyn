@@ -2299,51 +2299,75 @@ setInterval(() => {
   slides[i].classList.add('active');
 }, 8000);
 </script>
- 
- <script>
-function initTestimonials() {
-  const data = window.content_json?.testimonials;
-  if (!data || !Array.isArray(data.items) || !data.items.length) return;
 
-  // LEFT
-  document.getElementById("testimonials-kicker").textContent = data.kicker || "";
-  document.getElementById("testimonials-headline").textContent = data.headline || "";
-  document.getElementById("testimonials-subheadline").textContent = data.subheadline || "";
-  document.getElementById("testimonials-count").textContent = data.count || "";
+  <script>
+(function () {
 
-  // RIGHT
-  let current = 0;
-  const items = data.items;
+  function initTestimonials() {
+    const data = window.content_json?.testimonials;
+    if (!data || !Array.isArray(data.items) || !data.items.length) return;
 
-  const textEl   = document.getElementById("testimonial-text");
-  const nameEl   = document.getElementById("testimonial-name");
-  const roleEl   = document.getElementById("testimonial-role");
-  const ratingEl = document.getElementById("testimonial-rating");
+    // LEFT
+    const kickerEl = document.getElementById("testimonials-kicker");
+    const headEl   = document.getElementById("testimonials-headline");
+    const subEl    = document.getElementById("testimonials-subheadline");
+    const countEl  = document.getElementById("testimonials-count");
 
-  function render(i) {
-    const t = items[i];
-    textEl.textContent   = t.text || "";
-    nameEl.textContent   = t.name || "";
-    roleEl.textContent   = t.role || "";
-    ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
+    if (kickerEl) kickerEl.textContent = data.kicker || "";
+    if (headEl)   headEl.textContent   = data.headline || "";
+    if (subEl)    subEl.textContent    = data.subheadline || "";
+    if (countEl)  countEl.textContent  = data.count || "";
+
+    // RIGHT
+    let current = 0;
+    const items = data.items;
+
+    const textEl   = document.getElementById("testimonial-text");
+    const nameEl   = document.getElementById("testimonial-name");
+    const roleEl   = document.getElementById("testimonial-role");
+    const ratingEl = document.getElementById("testimonial-rating");
+
+    if (!textEl || !nameEl || !roleEl || !ratingEl) return;
+
+    function render(i) {
+      const t = items[i];
+      textEl.textContent   = t.text || "";
+      nameEl.textContent   = t.name || "";
+      roleEl.textContent   = t.role || "";
+      ratingEl.textContent = t.rating ? `${t.rating} ★` : "";
+    }
+
+    const nextBtn = document.getElementById("testimonial-next");
+    const prevBtn = document.getElementById("testimonial-prev");
+
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        current = (current + 1) % items.length;
+        render(current);
+      };
+    }
+
+    if (prevBtn) {
+      prevBtn.onclick = () => {
+        current = (current - 1 + items.length) % items.length;
+        render(current);
+      };
+    }
+
+    render(0);
   }
 
-  document.getElementById("testimonial-next").onclick = () => {
-    current = (current + 1) % items.length;
-    render(current);
-  };
+  // ▶️ ריצה מיידית אם התוכן כבר קיים
+  if (window.content_json?.testimonials) {
+    initTestimonials();
+  }
 
-  document.getElementById("testimonial-prev").onclick = () => {
-    current = (current - 1 + items.length) % items.length;
-    render(current);
-  };
+  // ▶️ האזנה לאירוע אם התוכן יגיע מאוחר יותר
+  window.addEventListener("content:ready", initTestimonials);
 
-  render(0);
-}
-
-// ⬅️ זה קריטי
-window.addEventListener("content:ready", initTestimonials);
+})();
 </script>
+
 
 
 <script>
