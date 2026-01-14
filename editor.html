@@ -400,7 +400,7 @@ body{
     </button>
 
     <div class="user-cluster">
-      <div class="site-pill"><i class="fa-solid fa-globe"></i> yossi-pizza.com</div>
+      <div class="site-pill"><i class="fa-solid fa-globe"></i> sitegyn.com</div>
       <div class="status-pill"><span class="dot"></span> Saved</div>
       <div class="avatar">Y</div>
     </div>
@@ -639,7 +639,7 @@ async function loadEditorSite() {
   }
 
   const subdomain = data.subdomain;
-
+  window.currentProjectSlug = subdomain;
   const sitePill = document.querySelector(".site-pill");
   if (sitePill) sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
 
