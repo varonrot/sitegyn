@@ -177,7 +177,7 @@
     },
     "required": ["brand", "copyright"]
   },
-  "footer": {
+"footer": {
   "type": "object",
   "ui:icon": "fa-shield-heart",
   "properties": {
