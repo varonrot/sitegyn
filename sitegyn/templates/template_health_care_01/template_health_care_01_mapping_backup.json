@@ -77,6 +77,10 @@
   "appointment-title": "appointment.title",
   "appointment-subtitle": "appointment.subtitle",
   "appointment-call-label": "appointment.call_label",
-  "appointment-phone": "appointment.phone"
+  "appointment-phone": "appointment.phone",
+
+  "footer-logo": "footer.brand.logo",
+  "footer-description": "footer.brand.description",
+  "footer-copyright": "footer.copyright"
 }
  
