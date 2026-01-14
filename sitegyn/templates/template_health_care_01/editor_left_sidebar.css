@@ -67,16 +67,14 @@
   box-shadow:0 6px 18px rgba(21,128,255,.35);
 }
 
-/* ===== ICON CONTAINER ===== */
+/* ===== ICON (NO BOX) ===== */
 .sidebar.left .nav-item::before{
-  content:"";
-  width:34px;
-  height:34px;
-  min-width:34px;
-  border-radius:10px;
-  display:grid;
-  place-items:center;
-  background:rgba(0,0,0,.35);
+  width:auto;
+  height:auto;
+  min-width:0;
+  border-radius:0;
+  background:none;
+  display:inline-block;
   color:#ffffff;
   font-family:"Font Awesome 6 Free";
   font-weight:900;
