@@ -158,5 +158,25 @@
     "phone": { "type": "string" }
   },
   "required": ["title", "subtitle"]
-}
+},
+ 
+  "footer": {
+    "type": "object",
+    "properties": {
+      "brand": {
+        "type": "object",
+        "properties": {
+          "logo": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["logo", "description"]
+      },
+      "copyright": {
+        "type": "string"
+      }
+    },
+    "required": ["brand", "copyright"]
+  }
+ 
+
 
