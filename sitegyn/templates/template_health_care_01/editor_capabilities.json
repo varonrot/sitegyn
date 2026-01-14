@@ -25,13 +25,40 @@
             "label": "Secondary CTA",
             "type": "text"
           },
+
           "stats": {
             "label": "Stats",
-            "type": "group"
+            "type": "group",
+            "fields": {
+              "value": {
+                "label": "Value",
+                "type": "text"
+              },
+              "label": {
+                "label": "Label",
+                "type": "text"
+              }
+            }
           },
+
           "cards": {
             "label": "Cards",
-            "type": "group"
+            "type": "repeater",
+            "item_label": "Card",
+            "fields": {
+              "title": {
+                "label": "Title",
+                "type": "text"
+              },
+              "text": {
+                "label": "Text",
+                "type": "textarea"
+              },
+              "phone": {
+                "label": "Phone",
+                "type": "text"
+              }
+            }
           }
         }
       }
@@ -55,7 +82,17 @@
       },
       "media": {
         "label": "Media Block",
-        "type": "group"
+        "type": "group",
+        "fields": {
+          "title": {
+            "label": "Title",
+            "type": "text"
+          },
+          "subtitle": {
+            "label": "Subtitle",
+            "type": "text"
+          }
+        }
       },
       "points": {
         "label": "Key Points",
@@ -63,7 +100,17 @@
       },
       "author": {
         "label": "Author",
-        "type": "group"
+        "type": "group",
+        "fields": {
+          "name": {
+            "label": "Name",
+            "type": "text"
+          },
+          "role": {
+            "label": "Role",
+            "type": "text"
+          }
+        }
       },
       "cta": {
         "label": "Call To Action",
@@ -137,7 +184,25 @@
       },
       "items": {
         "label": "Testimonial",
-        "type": "group"
+        "type": "group",
+        "fields": {
+          "text": {
+            "label": "Text",
+            "type": "textarea"
+          },
+          "rating": {
+            "label": "Rating",
+            "type": "text"
+          },
+          "name": {
+            "label": "Name",
+            "type": "text"
+          },
+          "role": {
+            "label": "Role",
+            "type": "text"
+          }
+        }
       }
     }
   },
