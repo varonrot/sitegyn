@@ -1,0 +1,116 @@
+{
+  "template_id": "template_health_01",
+  "capabilities": [
+    {
+      "section": "home.hero",
+      "label": "Hero Section",
+      "icon": "hero",
+      "ai_edit": true,
+      "inline_edit": true,
+      "fields": [
+        "kicker",
+        "headline",
+        "subheadline",
+        "primary_cta",
+        "secondary_cta",
+        "stats.value",
+        "stats.label",
+        "cards[0].title",
+        "cards[0].text",
+        "cards[1].title",
+        "cards[1].text",
+        "cards[2].title",
+        "cards[2].text",
+        "cards[2].phone"
+      ]
+    },
+    {
+      "section": "about",
+      "label": "About",
+      "icon": "about",
+      "ai_edit": true,
+      "inline_edit": true,
+      "fields": [
+        "kicker",
+        "headline",
+        "description",
+        "media.title",
+        "media.subtitle",
+        "points",
+        "author.name",
+        "author.role",
+        "cta"
+      ]
+    },
+    {
+      "section": "departments",
+      "label": "Departments",
+      "icon": "grid",
+      "ai_edit": true,
+      "inline_edit": true,
+      "fields": [
+        "kicker",
+        "headline",
+        "description",
+        "cta",
+        "items[0].title",
+        "items[1].title",
+        "items[2].title"
+      ]
+    },
+    {
+      "section": "services",
+      "label": "Services",
+      "icon": "list",
+      "ai_edit": true,
+      "inline_edit": true,
+      "fields": [
+        "kicker",
+        "headline",
+        "items[0].number",
+        "items[0].title",
+        "items[0].description",
+        "items[1].number",
+        "items[1].title",
+        "items[1].description",
+        "items[2].number",
+        "items[2].title",
+        "items[2].description",
+        "items[3].number",
+        "items[3].title",
+        "items[3].description"
+      ]
+    },
+    {
+      "section": "testimonials",
+      "label": "Testimonials",
+      "icon": "quote",
+      "ai_edit": true,
+      "inline_edit": true,
+      "fields": [
+        "kicker",
+        "headline",
+        "subheadline",
+        "count",
+        "items[0].text",
+        "items[0].rating",
+        "items[0].name",
+        "items[0].role"
+      ]
+    },
+    {
+      "section": "appointment",
+      "label": "Appointment",
+      "icon": "phone",
+      "ai_edit": true,
+      "inline_edit": true,
+      "fields": [
+        "pill",
+        "title",
+        "subtitle",
+        "call_label",
+        "phone"
+      ]
+    }
+  ]
+}
