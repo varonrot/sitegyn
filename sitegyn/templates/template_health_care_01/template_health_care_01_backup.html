@@ -63,18 +63,25 @@ header{
 }
 
 /* ================= HERO ================= */
+
 .hero{
   min-height:100vh;
   position:relative;
-  overflow:visible; /* ✔️ */
+  overflow:visible;
   padding-top:72px;
   padding-bottom:260px;
 }
 
-.hero-bg{position:absolute;inset:0}
+/* BACKGROUND SLIDES */
+.hero-bg{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+}
+
 .slide{
   position:absolute;
-  inset:-6%; /* זה הקסם */
+  inset:-6%;
   background-size:cover;
   background-position:center;
   opacity:0;
@@ -96,13 +103,12 @@ header{
   z-index:1;
 }
 
-
+/* CONTENT */
 .hero-inner{
   position:relative;
   z-index:2;
   max-width:1200px;
   margin:auto;
-  height:100%;
   padding:100px 20px 160px;
   display:grid;
   grid-template-columns:1.1fr .9fr;
@@ -110,6 +116,7 @@ header{
   align-items:center;
 }
 
+/* TEXT */
 .hero-pill{
   display:inline-block;
   padding:6px 14px;
@@ -132,7 +139,12 @@ header{
   color:var(--text);
 }
 
-.hero-actions{display:flex;gap:16px}
+/* CTA */
+.hero-actions{
+  display:flex;
+  gap:16px;
+}
+
 .btn-primary{
   background:var(--primary);
   color:#022c22;
@@ -141,6 +153,7 @@ header{
   text-decoration:none;
   font-weight:700;
 }
+
 .btn-outline{
   border:1px solid rgba(255,255,255,.4);
   padding:14px 30px;
@@ -149,58 +162,108 @@ header{
   text-decoration:none;
 }
 
-/* VIDEO CARD – CLEAN */
+/* RIGHT SIDE WRAPPER – NO VIDEO HERE */
 .hero-video{
   position:relative;
   width:100%;
-  min-height:420px; /* ⬅️ קריטי */
+  min-height:420px;
   z-index:3;
 }
 
-.hero-video video{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:28px;
-}
-.hero-bg{
-  position:absolute;
-  inset:0;
-  overflow:hidden; /* ✔️ כאן כן */
-}
-
-
-/* STAT */
-.hero-stat{
+/* ================= MINI STAT ================= */
+.mini-stat{
   position:absolute;
   bottom:18px;
   left:-36px;
-  background:#fff;
-  color:#0f172a;
-  border-radius:24px;
-  padding:18px 20px;
+  z-index:4;
+
   display:flex;
-  gap:18px;
   align-items:center;
-  box-shadow:0 30px 60px rgba(0,0,0,.25);
+  justify-content:space-between;
+  gap:18px;
+
+  padding:16px 18px;
+  min-width:360px;
+
+  background:rgba(15,23,42,.55);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:28px;
+
+  color:#ffffff;
 }
 
-.stat-number{font-size:26px;font-weight:800}
-.stat-label{font-size:14px;color:#6b7280}
+/* LEFT */
+.mini-stat-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 
-.stat-video{
+.avatars{
+  display:flex;
+}
+
+.avatars img,
+.avatar-plus{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:2px solid #ffffff;
+  margin-left:-10px;
+}
+
+.avatar-plus{
+  background:var(--primary);
+  color:#022c22;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* TEXT */
+.mini-stat-text{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.mini-stat-text strong{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.02em;
+  line-height:1.25;
+  color:#ffffff;
+  opacity:1;
+  text-shadow:0 1px 4px rgba(0,0,0,.35);
+}
+
+.mini-stat-text span{
+  font-size:13px;
+  font-weight:400;
+  color:rgba(255,255,255,.75);
+  line-height:1.25;
+}
+
+/* VIDEO */
+.mini-stat-media{
   width:120px;
   height:84px;
   border-radius:16px;
   overflow:hidden;
+  background:#000;
+  flex-shrink:0;
 }
-.stat-video video{
+
+.mini-stat-media video{
   width:100%;
   height:100%;
   object-fit:cover;
+  display:block;
 }
+
+
 
 /* ================= SERVICE CARDS FIX ================= */
 .hero-cards{
@@ -535,15 +598,7 @@ header{
   border:2px solid #fff;
 }
 
-.mini-stat-text strong{
-  font-size:26px;
-  color:#0f172a;
-}
 
-.mini-stat-text span{
-  font-size:14px;
-  color:#6b7280;
-}
 
 .mini-stat-media{
   width:140px;
@@ -1074,9 +1129,10 @@ header{
 }
 
 .testimonial-count{
+  margin-top:12px;
   font-size:14px;
-  color:#0f172a;
   font-weight:600;
+  color:#64748b;
 }
 
 /* RIGHT CARD */
@@ -1388,126 +1444,109 @@ header{
     height:240px;
   }
 }
+/* ===============================
+   APPOINTMENT SECTION
+================================ */
+
 .appointment-section{
-  width:100%;
+  padding:100px 0;
   background:#ffffff;
-  padding:120px 0;
-  position:relative;
 }
 
 .appointment-inner{
-  max-width:1300px;
+  max-width:1200px;
   margin:0 auto;
   padding:0 24px;
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:1.1fr 1fr;
   gap:80px;
   align-items:center;
 }
 
 /* LEFT */
+
 .appointment-pill{
   display:inline-block;
   padding:6px 14px;
-  border-radius:999px;
-  background:rgba(45,212,216,.15);
-  color:#0891b2;
-  font-size:13px;
+  background:#e6f9fa;
+  color:#18b7c3;
   font-weight:600;
+  border-radius:999px;
+  font-size:13px;
   margin-bottom:18px;
 }
 
-.appointment-info h2{
+.appointment-title{
   font-size:44px;
-  line-height:1.2;
-  margin-bottom:18px;
+  line-height:1.15;
+  margin:0 0 16px;
   color:#0f172a;
 }
 
 .appointment-sub{
-  max-width:420px;
+  font-size:18px;
   color:#64748b;
-  margin-bottom:32px;
+  max-width:420px;
+  margin-bottom:36px;
 }
 
 .appointment-call{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:16px;
 }
 
 .call-icon{
-  width:52px;
-  height:52px;
-  background:#2dd4d8;
-  color:#fff;
+  width:56px;
+  height:56px;
   border-radius:50%;
+  background:#2fd1d6;
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:22px;
 }
 
-.appointment-call small{
+.call-text small{
   display:block;
+  font-size:13px;
   color:#64748b;
 }
 
-.appointment-call strong{
-  font-size:18px;
+.call-text strong{
+  font-size:20px;
   color:#0f172a;
 }
 
-/* FORM */
-.appointment-form{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-}
+/* RIGHT */
 
-.appointment-form input,
-.appointment-form select{
-  padding:14px 16px;
-  border-radius:10px;
-  border:1px solid #e5e7eb;
-  font-size:14px;
+.appointment-media{
   width:100%;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,.08);
 }
 
-.appointment-form input:focus,
-.appointment-form select:focus{
-  outline:none;
-  border-color:#2dd4d8;
-}
-
-.appointment-form button{
-  grid-column:span 2;
-  margin-top:10px;
-  padding:16px;
-  border:none;
-  border-radius:999px;
-  background:#2dd4d8;
-  color:#fff;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  transition:.25s;
-}
-
-.appointment-form button:hover{
-  background:#14b8a6;
+.appointment-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
 
 /* RESPONSIVE */
-@media(max-width:900px){
+
+@media (max-width: 900px){
   .appointment-inner{
     grid-template-columns:1fr;
+    gap:48px;
   }
 
-  .appointment-info h2{
+  .appointment-title{
     font-size:34px;
   }
 }
+
  /* ================= FOOTER ================= */
 .site-footer{
   background:#1e2b4f;
@@ -1707,6 +1746,220 @@ section[id] {
     display:block;
   }
 }
+.appointment-media{
+  max-width:520px;
+  aspect-ratio:16 / 9;
+  overflow:hidden;
+  border-radius:16px;
+}
+
+#appointment-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+/* ======================================================
+ SYSTEM FOOTER
+ Used by: <footer class="site-footer">
+====================================================== */
+
+.site-footer{
+  background:#1e2c52;
+  color:#cbd5e1;
+  padding:64px 20px 28px;
+  position:relative;
+  font-size:14px;
+}
+
+/* ======================================================
+ FOOTER GRID
+====================================================== */
+
+.footer-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:2fr 1.2fr 1fr;
+  gap:48px;
+}
+
+/* ======================================================
+ BRAND
+====================================================== */
+
+.footer-brand .logo{
+  font-size:28px;
+  font-weight:800;
+  color:#ffffff;
+  margin-bottom:14px;
+}
+
+.footer-brand .logo span{
+  color:#2dd4bf;
+}
+
+.footer-brand p{
+  max-width:340px;
+  line-height:1.6;
+  color:#cbd5e1;
+  margin-bottom:20px;
+}
+
+/* ======================================================
+ SOCIAL ICONS
+====================================================== */
+
+.footer-social{
+  display:flex;
+  gap:14px;
+}
+
+.footer-social a{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.08);
+  color:#e2e8f0;
+  font-weight:600;
+  text-decoration:none;
+  transition:background .2s ease, transform .2s ease;
+}
+
+.footer-social a:hover{
+  background:#2dd4bf;
+  color:#0f172a;
+  transform:translateY(-2px);
+}
+
+/* ======================================================
+ FOOTER COLUMNS
+====================================================== */
+
+.footer-col h4{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#ffffff;
+  margin-bottom:16px;
+}
+
+.footer-col ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.footer-col li{
+  margin-bottom:10px;
+}
+
+/* ======================================================
+ LINKS
+====================================================== */
+
+.footer-col a{
+  color:#94a3b8;
+  text-decoration:none;
+  font-weight:500;
+  transition:color .2s ease;
+}
+
+.footer-col a:hover{
+  color:#2dd4bf;
+}
+
+/* ======================================================
+ ACTION CTA
+====================================================== */
+
+.footer-col:last-child a{
+  display:inline-block;
+  padding:10px 20px;
+  background:#2dd4bf;
+  color:#0f172a;
+  border-radius:999px;
+  font-weight:700;
+}
+
+.footer-col:last-child a:hover{
+  background:#5eead4;
+}
+
+/* ======================================================
+ FOOTER BOTTOM
+====================================================== */
+
+.footer-bottom{
+  max-width:1200px;
+  margin:40px auto 0;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.1);
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  font-size:12px;
+  color:#94a3b8;
+}
+
+/* ======================================================
+ BACK TO TOP
+====================================================== */
+
+#backToTop{
+  position:absolute;
+  right:24px;
+  bottom:24px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:none;
+  background:#2dd4bf;
+  color:#0f172a;
+  font-size:18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .2s ease, transform .2s ease;
+}
+
+#backToTop:hover{
+  background:#5eead4;
+  transform:translateY(-3px);
+}
+
+/* ======================================================
+ RESPONSIVE
+====================================================== */
+
+@media (max-width:900px){
+  .footer-inner{
+    grid-template-columns:1fr 1fr;
+    gap:36px;
+  }
+}
+
+@media (max-width:600px){
+  .footer-inner{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+
+  .footer-bottom{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  #backToTop{
+    right:16px;
+    bottom:16px;
+  }
+}
 
 
 </style>
@@ -1761,15 +2014,31 @@ section[id] {
 
       <p id="hero-subheadline"></p>
 
-      <div class="hero-actions">
-        <a href="#" class="btn-primary" id="hero-cta-primary"></a>
-        <a href="#" class="btn-outline" id="hero-cta-secondary"></a>
-      </div>
+<div class="hero-actions">
+
+  <a
+    href="#appointment"
+    class="btn-primary"
+    id="hero-cta-primary"
+  >
+    Schedule Your Consultation
+  </a>
+
+  <a
+    href="#about"
+    class="btn-outline"
+    id="hero-cta-secondary"
+  >
+    Learn More About Our Approach
+  </a>
+
+</div>
+
     </div>
 
     <div class="hero-video">
       <video autoplay muted loop playsinline>
-        <source src="assets/288798_tiny.mp4" type="video/mp4">
+        <source src="assets/v.mp4" type="video/mp4">
       </video>
 
       <div class="mini-stat">
@@ -1789,7 +2058,7 @@ section[id] {
 
         <div class="mini-stat-media">
           <video autoplay muted loop playsinline>
-            <source src="assets/stat-video.mp4" type="video/mp4">
+            <source src="/assets/288798_tiny.mp4" type="video/mp4">
           </video>
         </div>
       </div>
@@ -1831,7 +2100,7 @@ section[id] {
     <!-- LEFT : IMAGE -->
     <div class="about-media">
       <img
-        src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=80"
+        src="/assets/Care_Management.png"
         alt="Doctor">
 
       <div class="media-card">
@@ -1879,7 +2148,7 @@ section[id] {
       <div class="about-footer">
         <div class="about-avatar">
           <img
-            src="https://randomuser.me/api/portraits/men/32.jpg"
+            src="/assets/heart-hologram-1.jpg"
             alt="Doctor">
         </div>
 
@@ -1893,7 +2162,7 @@ section[id] {
 
         <img
           class="about-signature"
-          src="assets/Signature.png"
+          src="/assets/Signature.png"
           alt="Signature">
 
         <a href="#" class="about-btn" id="about-cta"></a>
@@ -1915,8 +2184,8 @@ section[id] {
         <h2 id="departments-headline"></h2>
         <p id="departments-description"></p>
       </div>
-      <a href="#" class="btn-dept">
-        All Department <span>→</span>
+      <a href="#appointment" class="btn-dept">
+        Make Appointment <span>→</span>
       </a>
     </div>
 
@@ -1924,17 +2193,17 @@ section[id] {
     <div class="dept-grid">
 
       <div class="dept-card">
-        <img src="assets/dept-0.jpg" alt="">
+        <img src="/assets/dept-2.jpg" alt="">
         <span class="dept-title" id="departments-item-0-title"></span>
       </div>
 
       <div class="dept-card">
-        <img src="assets/dept-1.jpg" alt="">
+        <img src="/assets/eye-care-800x800.jpg" alt="">
         <span class="dept-title" id="departments-item-1-title"></span>
       </div>
 
       <div class="dept-card">
-        <img src="assets/dept-2.jpg" alt="">
+        <img src="/assets/orthopedic-800x800.jpg" alt="">
         <span class="dept-title" id="departments-item-2-title"></span>
       </div>
 
@@ -1999,7 +2268,7 @@ section[id] {
     <!-- LEFT IMAGE -->
     <div class="wide-feature-media">
       <img
-        src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1600&q=80"
+        src="/assets/hero-health.jpg"
         alt="Medical team"
       />
     </div>
@@ -2056,8 +2325,10 @@ section[id] {
         <img src="https://randomuser.me/api/portraits/women/68.jpg">
         <img src="https://randomuser.me/api/portraits/men/71.jpg">
       </div>
+<div class="testimonial-count">
+  100+ Clients Reviews
+</div>
 
-      <div class="testimonial-count" id="testimonials-count"></div>
     </div>
 
     <div class="testimonial-card">
@@ -2078,157 +2349,120 @@ section[id] {
   </div>
 </section>
 
-<section class="blogs-section" id="blog" data-section="blog">
+<section class="blogs-section" id="blog">
   <div class="blogs-container">
 
-    <span class="pill" data-bind="blog.kicker"></span>
+    <span class="pill">Latest Blogs</span>
 
-    <h2 class="blogs-title" data-bind="blog.headline"></h2>
+    <h2 class="blogs-title">Latest News & Blogs</h2>
 
-    <p class="blogs-subtitle" data-bind="blog.subheadline"></p>
+    <p class="blogs-subtitle">
+      Discover the latest medical trends, breakthroughs, and expert insights.
+      Stay informed on health tips, treatments, and innovations shaping the future of healthcare.
+    </p>
 
     <div class="blogs-grid">
 
       <article class="blog-card">
-        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=900&q=80">
-        <div class="blog-meta" data-bind="blog.items.0.meta"></div>
-        <h3 data-bind="blog.items.0.title"></h3>
+        <img src="/assets/blog-img01-1000x650.jpg">
+        <div class="blog-meta">Gynaecology · Aug 15, 2025</div>
+        <h3>How Preventive Health Checkups Can Save Your Life</h3>
       </article>
 
       <article class="blog-card">
-        <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=900&q=80">
-        <div class="blog-meta" data-bind="blog.items.1.meta"></div>
-        <h3 data-bind="blog.items.1.title"></h3>
+        <img src="/assets/blog-img02-1000x650.jpg">
+        <div class="blog-meta">Hematology · Jul 14, 2025</div>
+        <h3>The Future of Cancer Treatment: Latest Breakthroughs</h3>
       </article>
 
       <article class="blog-card">
-        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80">
-        <div class="blog-meta" data-bind="blog.items.2.meta"></div>
-        <h3 data-bind="blog.items.2.title"></h3>
+        <img src="/assets/blog-img03-1000x650.jpg">
+        <div class="blog-meta">Orthopedic · Jun 13, 2025</div>
+        <h3>How Modern Hospitals Are Transforming Patient Care</h3>
       </article>
 
     </div>
 
   </div>
 </section>
-<section class="appointment-section" id="appointment" data-section="appointment">
+ <section class="appointment-section" id="appointment" data-section="appointment">
   <div class="appointment-inner">
 
-    <!-- LEFT -->
     <div class="appointment-info">
-      <span class="appointment-pill" data-bind="appointment.pill"></span>
+      <span class="appointment-pill" id="appointment-pill"></span>
 
-      <h2 data-bind="appointment.title"></h2>
+      <h2 class="appointment-title" id="appointment-title"></h2>
 
-      <p class="appointment-sub" data-bind="appointment.subtitle"></p>
+      <p class="appointment-sub" id="appointment-subtitle"></p>
 
       <div class="appointment-call">
         <div class="call-icon">📞</div>
-        <div>
-          <small data-bind="appointment.call_label"></small>
-          <strong data-bind="appointment.phone"></strong>
+        <div class="call-text">
+          <small id="appointment-call-label"></small>
+          <strong id="appointment-phone"></strong>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT -->
-    <form class="appointment-form" data-bind-form="appointment.form">
+<div class="appointment-media">
+  <img
+    id="appointment-image"
+    src="/assets/plastic-surgery-research-Clinical-Trial-Facilities-4.png"
+    alt="Schedule appointment"
+    loading="lazy"
+  >
+</div>
 
-      <select data-bind="appointment.treatment_options">
-        <option></option>
-      </select>
-
-      <select data-bind="appointment.doctor_options">
-        <option></option>
-      </select>
-
-      <input type="text" data-bind-placeholder="appointment.name_placeholder">
-      <input type="tel" data-bind-placeholder="appointment.phone_placeholder">
-
-      <input type="text" data-bind-placeholder="appointment.state_placeholder">
-      <input type="date" data-bind="appointment.date">
-
-      <select data-bind="appointment.time_options">
-        <option></option>
-      </select>
-
-      <button type="submit" data-bind="appointment.submit_label"></button>
-
-    </form>
 
   </div>
 </section>
 
-<footer class="site-footer" id="contact">
+<footer class="site-footer" data-system="footer">
 
   <div class="footer-inner">
 
-    <!-- LEFT -->
-    <div class="footer-brand">
-      <div class="logo">Ciya<span>Care</span></div>
-      <p>
-        Trusted healthcare with expert doctors, advanced treatments,
-        and compassionate care for every patient.
-      </p>
+    <!-- BRAND / SYSTEM -->
+   <div class="footer-brand">
+  <div class="logo">Medical<span>Care</span></div>
+  <p>
+    Professional healthcare services.<br>
+    Focused on quality, safety, and patient well-being.
+  </p>
 
-      <div class="footer-social">
-        <a href="#">Fa</a>
-        <a href="#">X</a>
-        <a href="#">Dr</a>
-        <a href="#">Be</a>
-      </div>
-    </div>
+  <div class="footer-social">
+    <a href="#" aria-label="Facebook">Fb</a>
+    <a href="#" aria-label="X / Twitter">X</a>
+    <a href="#" aria-label="LinkedIn">In</a>
+  </div>
+</div>
 
-    <!-- COL 2 -->
+
+    <!-- PRIMARY NAV (MATCH HEADER) -->
     <div class="footer-col">
-      <h4>Departments</h4>
+      <h4>Navigation</h4>
       <ul>
-        <li>Neurology</li>
-        <li>Cardiology</li>
-        <li>Orthopedics</li>
-        <li>Eye Care</li>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#departments">Departments</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#appointment">Contact</a></li>
       </ul>
-
-      <h4 class="mt">Opening Hours</h4>
-      <p>Mon – Fri: 08:30 – 18:30</p>
-      <p>Sat – Sun: 09:30 – 19:30</p>
-      <p>Emergency 24 hours</p>
     </div>
 
-    <!-- COL 3 -->
+    <!-- ACTION -->
     <div class="footer-col">
-      <h4>Useful Links</h4>
+      <h4>Action</h4>
       <ul>
-        <li>Home</li>
-        <li>About Us</li>
-        <li>Pricing</li>
-        <li>Service</li>
+        <li><a href="#appointment">Make Appointment</a></li>
       </ul>
-
-      <h4 class="mt">Inquiry</h4>
-      <p>Phone: +(704) 279-1249</p>
-      <p>Email: info@example.com</p>
-    </div>
-
-    <!-- COL 4 -->
-    <div class="footer-col">
-      <h4>Subscribe</h4>
-      <p>Subscribe to our newsletter.</p>
-
-      <div class="subscribe-box">
-        <input type="email" placeholder="Enter Your Email">
-        <button>➤</button>
-      </div>
-
-      <h4 class="mt">Location</h4>
-      <p>17504 Carlton Cuevas Rd,<br>Gulfport, MS, 39503</p>
     </div>
 
   </div>
 
   <div class="footer-bottom">
-    <span>© Copyright Sitegyn. All Rights Reserved</span>
-    <span>Develop and design by Sitegyn Global Solutions</span>
+    <span>© Sitegyn. All rights reserved.</span>
+    <span>Powered by Sitegyn Global Solutions</span>
   </div>
 
   <!-- BACK TO TOP -->
