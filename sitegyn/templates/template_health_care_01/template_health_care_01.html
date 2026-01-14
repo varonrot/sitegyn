@@ -2100,35 +2100,33 @@ section[id] {
 <section class="appointment-section" id="appointment" data-section="appointment">
   <div class="appointment-inner">
 
-    <!-- LEFT -->
     <div class="appointment-info">
-      <span class="appointment-pill" data-bind="appointment.pill"></span>
+      <span class="appointment-pill" id="appointment-pill"></span>
 
-      <h2 class="appointment-title" data-bind="appointment.title"></h2>
+      <h2 class="appointment-title" id="appointment-title"></h2>
 
-      <p class="appointment-sub" data-bind="appointment.subtitle"></p>
+      <p class="appointment-sub" id="appointment-subtitle"></p>
 
       <div class="appointment-call">
         <div class="call-icon">📞</div>
         <div class="call-text">
-          <small data-bind="appointment.call_label"></small>
-          <strong data-bind="appointment.phone"></strong>
+          <small id="appointment-call-label"></small>
+          <strong id="appointment-phone"></strong>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT -->
     <div class="appointment-media">
       <img
+        id="appointment-image"
         src=""
         alt=""
-        data-bind-src="appointment.image"
-        data-bind-alt="appointment.image_alt"
       >
     </div>
 
   </div>
 </section>
+
 
 <footer class="site-footer" id="contact">
 
