@@ -2,15 +2,21 @@
    EDITOR – LEFT SIDEBAR (Health Care)
    ========================================================= */
 
+/* ===== SIDEBAR BASE ===== */
 .sidebar.left{
   width:280px;
-  background:linear-gradient(180deg,#041831 0%, #064893 60%, #0f8fff 100%);
+  background:linear-gradient(
+    180deg,
+    #041831 0%,
+    #064893 60%,
+    #0f8fff 100%
+  );
   padding:18px 14px 22px;
   overflow-y:auto;
   border-right:1px solid rgba(255,255,255,.06);
 }
 
-/* ===== SECTION TITLE ===== */
+/* ===== SECTION TITLES ===== */
 .sidebar.left .section-title{
   font-size:11px;
   margin:22px 8px 10px;
@@ -18,16 +24,18 @@
   letter-spacing:.08em;
   font-weight:700;
   color:#a7c7ff;
+  opacity:.9;
 }
 
-/* ===== LIST ===== */
+/* ===== LIST WRAPPER ===== */
 .sidebar.left .nav-list{
   display:flex;
   flex-direction:column;
   gap:8px;
+  margin-bottom:10px;
 }
 
-/* ===== ITEM ===== */
+/* ===== NAV ITEM ===== */
 .sidebar.left .nav-item{
   display:flex;
   align-items:center;
@@ -39,7 +47,10 @@
   font-size:14px;
   font-weight:500;
   color:#e7f5ff;
-  transition:.15s ease;
+  transition:
+    background .15s ease,
+    transform .1s ease,
+    box-shadow .15s ease;
 }
 
 .sidebar.left .nav-item:hover{
@@ -48,64 +59,74 @@
 }
 
 .sidebar.left .nav-item.active{
-  background:linear-gradient(90deg,#1580ff,#4338ca);
+  background:linear-gradient(
+    90deg,
+    rgba(21,128,255,.95),
+    rgba(67,56,202,.95)
+  );
   box-shadow:0 6px 18px rgba(21,128,255,.35);
 }
 
-/* ===== ICON ===== */
+/* ===== ICON CONTAINER ===== */
 .sidebar.left .nav-item::before{
   content:"";
   width:34px;
   height:34px;
+  min-width:34px;
   border-radius:10px;
   display:grid;
   place-items:center;
   background:rgba(0,0,0,.35);
-  color:#fff;
+  color:#ffffff;
   font-family:"Font Awesome 6 Free";
   font-weight:900;
   font-size:14px;
 }
 
 /* =========================================================
-   ICONS – Health Care Schema
+   ICONS – Health Care mapping (by data-path)
    ========================================================= */
 
 /* HOME / HERO */
-.nav-item[data-path^="home.hero.kicker"]::before{content:"\f0f3";}
-.nav-item[data-path^="home.hero.headline"]::before{content:"\f1dc";}
-.nav-item[data-path^="home.hero.subheadline"]::before{content:"\f036";}
-.nav-item[data-path^="home.hero.primary_cta"]::before{content:"\f0a1";}
-.nav-item[data-path^="home.hero.secondary_cta"]::before{content:"\f0c1";}
-.nav-item[data-path^="home.hero.stats"]::before{content:"\f201";}
-.nav-item[data-path^="home.hero.cards"]::before{content:"\f24d";}
+.nav-item[data-path^="home.hero.kicker"]::before{content:"\f02b";}            /* tag */
+.nav-item[data-path^="home.hero.headline"]::before{content:"\f1dc";}          /* heading */
+.nav-item[data-path^="home.hero.subheadline"]::before{content:"\f036";}       /* align-left */
+.nav-item[data-path^="home.hero.primary_cta"]::before{content:"\f2a0";}       /* phone-volume */
+.nav-item[data-path^="home.hero.secondary_cta"]::before{content:"\f274";}     /* calendar-check */
+.nav-item[data-path^="home.hero.stats"]::before{content:"\f201";}             /* chart-line */
+.nav-item[data-path^="home.hero.cards"]::before{content:"\f2c2";}             /* id-card */
 
 /* ABOUT */
-.nav-item[data-path^="about.kicker"]::before{content:"\f05a";}
-.nav-item[data-path^="about.headline"]::before{content:"\f007";}
-.nav-item[data-path^="about.description"]::before{content:"\f15c";}
-.nav-item[data-path^="about.media"]::before{content:"\f03d";}
-.nav-item[data-path^="about.points"]::before{content:"\f00c";}
-.nav-item[data-path^="about.author"]::before{content:"\f406";}
-.nav-item[data-path^="about.cta"]::before{content:"\f0a1";}
+.nav-item[data-path^="about.kicker"]::before{content:"\f02b";}
+.nav-item[data-path^="about.headline"]::before{content:"\f1dc";}
+.nav-item[data-path^="about.description"]::before{content:"\f1dd";}           /* paragraph */
+.nav-item[data-path^="about.media"]::before{content:"\f03e";}                 /* image */
+.nav-item[data-path^="about.points"]::before{content:"\f058";}                /* list-check */
+.nav-item[data-path^="about.author"]::before{content:"\f0f0";}                /* user-md */
+.nav-item[data-path^="about.cta"]::before{content:"\f061";}                   /* arrow-right */
 
 /* DEPARTMENTS */
-.nav-item[data-path^="departments.headline"]::before{content:"\f0f8";}
-.nav-item[data-path^="departments.description"]::before{content:"\f15c";}
-.nav-item[data-path^="departments.items"]::before{content:"\f0ae";}
-.nav-item[data-path^="departments.cta"]::before{content:"\f0a1";}
+.nav-item[data-path^="departments.kicker"]::before{content:"\f02b";}
+.nav-item[data-path^="departments.headline"]::before{content:"\f1dc";}
+.nav-item[data-path^="departments.description"]::before{content:"\f036";}
+.nav-item[data-path^="departments.items"]::before{content:"\f0f1";}            /* hospital */
+.nav-item[data-path^="departments.cta"]::before{content:"\f061";}
 
 /* SERVICES */
-.nav-item[data-path^="services.headline"]::before{content:"\f0fa";}
-.nav-item[data-path^="services.items"]::before{content:"\f4d7";}
+.nav-item[data-path^="services.kicker"]::before{content:"\f02b";}
+.nav-item[data-path^="services.headline"]::before{content:"\f1dc";}
+.nav-item[data-path^="services.items"]::before{content:"\f46d";}               /* hand-holding-medical */
 
 /* TESTIMONIALS */
-.nav-item[data-path^="testimonials.headline"]::before{content:"\f086";}
-.nav-item[data-path^="testimonials.items"]::before{content:"\f4ad";}
-.nav-item[data-path^="testimonials.count"]::before{content:"\f091";}
+.nav-item[data-path^="testimonials.kicker"]::before{content:"\f02b";}
+.nav-item[data-path^="testimonials.headline"]::before{content:"\f1dc";}
+.nav-item[data-path^="testimonials.subheadline"]::before{content:"\f036";}
+.nav-item[data-path^="testimonials.count"]::before{content:"\f0c0";}           /* users */
+.nav-item[data-path^="testimonials.items"]::before{content:"\f4ad";}           /* comment-medical */
 
 /* APPOINTMENT */
-.nav-item[data-path^="appointment.title"]::before{content:"\f073";}
-.nav-item[data-path^="appointment.subtitle"]::before{content:"\f15c";}
+.nav-item[data-path^="appointment.pill"]::before{content:"\f111";}             /* circle */
+.nav-item[data-path^="appointment.title"]::before{content:"\f1dc";}
+.nav-item[data-path^="appointment.subtitle"]::before{content:"\f036";}
+.nav-item[data-path^="appointment.call_label"]::before{content:"\f2a0";}
 .nav-item[data-path^="appointment.phone"]::before{content:"\f095";}
-.nav-item[data-path^="appointment.call_label"]::before{content:"\f0a1";}
