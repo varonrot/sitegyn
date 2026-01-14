@@ -16,6 +16,7 @@
             "subheadline": { "type": "string", "ui:icon": "fa-align-left" },
             "primary_cta": { "type": "string", "ui:icon": "fa-phone-volume" },
             "secondary_cta": { "type": "string", "ui:icon": "fa-calendar-check" },
+
             "stats": {
               "type": "object",
               "ui:icon": "fa-chart-line",
@@ -25,6 +26,7 @@
               },
               "required": ["value", "label"]
             },
+
             "cards": {
               "type": "array",
               "ui:icon": "fa-id-card-clip",
@@ -54,6 +56,7 @@
         "kicker": { "type": "string", "ui:icon": "fa-tag" },
         "headline": { "type": "string", "ui:icon": "fa-heading" },
         "description": { "type": "string", "ui:icon": "fa-paragraph" },
+
         "media": {
           "type": "object",
           "ui:icon": "fa-image",
@@ -63,13 +66,15 @@
           },
           "required": ["title", "subtitle"]
         },
+
         "points": {
           "type": "array",
           "ui:icon": "fa-list-check",
+          "items": { "type": "string" },
           "minItems": 1,
-          "maxItems": 6,
-          "items": { "type": "string" }
+          "maxItems": 6
         },
+
         "author": {
           "type": "object",
           "ui:icon": "fa-user-doctor",
@@ -79,6 +84,7 @@
           },
           "required": ["name", "role"]
         },
+
         "cta": { "type": "string", "ui:icon": "fa-arrow-right" }
       },
       "required": ["headline", "description"]
@@ -92,6 +98,7 @@
         "headline": { "type": "string", "ui:icon": "fa-heading" },
         "description": { "type": "string", "ui:icon": "fa-align-left" },
         "cta": { "type": "string", "ui:icon": "fa-arrow-right" },
+
         "items": {
           "type": "array",
           "ui:icon": "fa-building-circle-check",
@@ -115,6 +122,7 @@
       "properties": {
         "kicker": { "type": "string", "ui:icon": "fa-tag" },
         "headline": { "type": "string", "ui:icon": "fa-heading" },
+
         "items": {
           "type": "array",
           "ui:icon": "fa-list-ol",
@@ -142,6 +150,7 @@
         "headline": { "type": "string", "ui:icon": "fa-heading" },
         "subheadline": { "type": "string", "ui:icon": "fa-align-left" },
         "count": { "type": "string", "ui:icon": "fa-users" },
+
         "items": {
           "type": "array",
           "ui:icon": "fa-comment-medical",
@@ -175,5 +184,12 @@
       "required": ["title", "subtitle"]
     }
   },
-  "required": ["home", "about", "departments", "services", "testimonials", "appointment"]
+  "required": [
+    "home",
+    "about",
+    "departments",
+    "services",
+    "testimonials",
+    "appointment"
+  ]
 }
