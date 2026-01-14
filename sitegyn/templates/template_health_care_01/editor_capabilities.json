@@ -5,33 +5,30 @@
       "hero": {
         "label": "Hero",
         "fields": {
-          "kicker": {
-            "label": "Kicker",
-            "type": "text"
-          },
-          "headline": {
-            "label": "Headline",
-            "type": "text"
-          },
-          "subheadline": {
-            "label": "Subheadline",
-            "type": "textarea"
-          },
-          "primary_cta": {
-            "label": "Primary CTA",
-            "type": "text"
-          },
-          "secondary_cta": {
-            "label": "Secondary CTA",
-            "type": "text"
-          },
+          "kicker": { "label": "Kicker", "type": "text" },
+          "headline": { "label": "Headline", "type": "text" },
+          "subheadline": { "label": "Subheadline", "type": "textarea" },
+          "primary_cta": { "label": "Primary CTA", "type": "text" },
+          "secondary_cta": { "label": "Secondary CTA", "type": "text" },
+
           "stats": {
             "label": "Stats",
-            "type": "group"
+            "type": "object",
+            "fields": {
+              "value": { "label": "Value", "type": "text" },
+              "label": { "label": "Label", "type": "text" }
+            }
           },
+
           "cards": {
-            "label": "Cards",
-            "type": "group"
+            "label": "Hero Cards",
+            "type": "array",
+            "itemLabel": "Card",
+            "fields": {
+              "title": { "label": "Title", "type": "text" },
+              "text": { "label": "Description", "type": "textarea" },
+              "phone": { "label": "Phone", "type": "text" }
+            }
           }
         }
       }
@@ -41,59 +38,56 @@
   "about": {
     "label": "About",
     "fields": {
-      "kicker": {
-        "label": "Kicker",
-        "type": "text"
-      },
-      "headline": {
-        "label": "Headline",
-        "type": "text"
-      },
-      "description": {
-        "label": "Description",
-        "type": "textarea"
-      },
+      "kicker": { "label": "Kicker", "type": "text" },
+      "headline": { "label": "Headline", "type": "text" },
+      "description": { "label": "Description", "type": "textarea" },
+
       "media": {
-        "label": "Media Block",
-        "type": "group"
+        "label": "Media",
+        "type": "object",
+        "fields": {
+          "title": { "label": "Media Title", "type": "text" },
+          "subtitle": { "label": "Media Subtitle", "type": "text" }
+        }
       },
+
       "points": {
         "label": "Key Points",
-        "type": "list"
+        "type": "array",
+        "itemLabel": "Point",
+        "fields": {
+          "text": { "label": "Point Text", "type": "text" }
+        }
       },
+
       "author": {
         "label": "Author",
-        "type": "group"
+        "type": "object",
+        "fields": {
+          "name": { "label": "Name", "type": "text" },
+          "role": { "label": "Role", "type": "text" }
+        }
       },
-      "cta": {
-        "label": "Call To Action",
-        "type": "text"
-      }
+
+      "cta": { "label": "CTA", "type": "text" }
     }
   },
 
   "departments": {
     "label": "Departments",
     "fields": {
-      "kicker": {
-        "label": "Kicker",
-        "type": "text"
-      },
-      "headline": {
-        "label": "Headline",
-        "type": "text"
-      },
-      "description": {
-        "label": "Description",
-        "type": "textarea"
-      },
-      "cta": {
-        "label": "CTA",
-        "type": "text"
-      },
+      "kicker": { "label": "Kicker", "type": "text" },
+      "headline": { "label": "Headline", "type": "text" },
+      "description": { "label": "Description", "type": "textarea" },
+      "cta": { "label": "CTA", "type": "text" },
+
       "items": {
-        "label": "Departments Items",
-        "type": "list"
+        "label": "Department",
+        "type": "array",
+        "itemLabel": "Department",
+        "fields": {
+          "title": { "label": "Title", "type": "text" }
+        }
       }
     }
   },
@@ -101,17 +95,18 @@
   "services": {
     "label": "Services",
     "fields": {
-      "kicker": {
-        "label": "Kicker",
-        "type": "text"
-      },
-      "headline": {
-        "label": "Headline",
-        "type": "text"
-      },
+      "kicker": { "label": "Kicker", "type": "text" },
+      "headline": { "label": "Headline", "type": "text" },
+
       "items": {
-        "label": "Service Items",
-        "type": "list"
+        "label": "Service",
+        "type": "array",
+        "itemLabel": "Service",
+        "fields": {
+          "number": { "label": "Number", "type": "text" },
+          "title": { "label": "Title", "type": "text" },
+          "description": { "label": "Description", "type": "textarea" }
+        }
       }
     }
   },
@@ -119,25 +114,21 @@
   "testimonials": {
     "label": "Testimonials",
     "fields": {
-      "kicker": {
-        "label": "Kicker",
-        "type": "text"
-      },
-      "headline": {
-        "label": "Headline",
-        "type": "text"
-      },
-      "subheadline": {
-        "label": "Subheadline",
-        "type": "text"
-      },
-      "count": {
-        "label": "Reviews Count",
-        "type": "text"
-      },
+      "kicker": { "label": "Kicker", "type": "text" },
+      "headline": { "label": "Headline", "type": "text" },
+      "subheadline": { "label": "Subheadline", "type": "text" },
+      "count": { "label": "Reviews Count", "type": "text" },
+
       "items": {
         "label": "Testimonial",
-        "type": "group"
+        "type": "array",
+        "itemLabel": "Testimonial",
+        "fields": {
+          "text": { "label": "Text", "type": "textarea" },
+          "rating": { "label": "Rating", "type": "text" },
+          "name": { "label": "Name", "type": "text" },
+          "role": { "label": "Role", "type": "text" }
+        }
       }
     }
   },
@@ -145,26 +136,11 @@
   "appointment": {
     "label": "Appointment",
     "fields": {
-      "pill": {
-        "label": "Pill",
-        "type": "text"
-      },
-      "title": {
-        "label": "Title",
-        "type": "text"
-      },
-      "subtitle": {
-        "label": "Subtitle",
-        "type": "textarea"
-      },
-      "call_label": {
-        "label": "Call Label",
-        "type": "text"
-      },
-      "phone": {
-        "label": "Phone",
-        "type": "text"
-      }
+      "pill": { "label": "Pill", "type": "text" },
+      "title": { "label": "Title", "type": "text" },
+      "subtitle": { "label": "Subtitle", "type": "textarea" },
+      "call_label": { "label": "Call Label", "type": "text" },
+      "phone": { "label": "Phone", "type": "text" }
     }
   }
 }
