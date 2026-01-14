@@ -231,23 +231,5 @@
         "type": "text"
       }
     }
-  },
-"footer": {
-  "label": "Footer",
-  "fields": {
-    "brand.logo": {
-      "label": "Brand Logo Text",
-      "type": "text"
-    },
-    "brand.description": {
-      "label": "Brand Description",
-      "type": "textarea"
-    },
-    "copyright": {
-      "label": "Copyright Text",
-      "type": "text"
-    }
   }
-}
-
 }
