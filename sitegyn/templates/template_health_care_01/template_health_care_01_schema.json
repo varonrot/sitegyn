@@ -148,19 +148,15 @@
       "required": ["headline", "items", "count"]
     },
 
-    "appointment": {
-      "type": "object",
-      "properties": {
-        "pill": { "type": "string" },
-        "title": { "type": "string" },
-        "subtitle": { "type": "string" },
-        "call_label": { "type": "string" },
-        "phone": { "type": "string" },
-        "image": { "type": "string" },
-        "image_alt": { "type": "string" }
-      },
-      "required": ["title", "subtitle", "image"]
-    }
+"appointment": {
+  "type": "object",
+  "properties": {
+    "pill": { "type": "string" },
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "call_label": { "type": "string" },
+    "phone": { "type": "string" }
   },
-  "required": ["home"]
+  "required": ["title", "subtitle"]
 }
+
