@@ -1690,6 +1690,19 @@ section[id] {
     display:block;
   }
 }
+.appointment-media{
+  max-width:520px;
+  aspect-ratio:16 / 9;
+  overflow:hidden;
+  border-radius:16px;
+}
+
+#appointment-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 
 
 </style>
@@ -2097,7 +2110,7 @@ section[id] {
 
   </div>
 </section>
-<section class="appointment-section" id="appointment" data-section="appointment">
+ <section class="appointment-section" id="appointment" data-section="appointment">
   <div class="appointment-inner">
 
     <div class="appointment-info">
@@ -2116,17 +2129,18 @@ section[id] {
       </div>
     </div>
 
-    <div class="appointment-media">
-      <img
-        id="appointment-image"
-        src=""
-        alt=""
-      >
-    </div>
+<div class="appointment-media">
+  <img
+    id="appointment-image"
+    src="/assets/appointment.webp"
+    alt="Schedule appointment"
+    loading="lazy"
+  >
+</div>
+
 
   </div>
 </section>
-
 
 <footer class="site-footer" id="contact">
 
