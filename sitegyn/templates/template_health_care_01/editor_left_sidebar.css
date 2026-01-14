@@ -1,114 +1,132 @@
 /* =========================================================
-   EDITOR – LEFT SIDEBAR
-   Template: Health / Medical
-========================================================= */
+   EDITOR – LEFT SIDEBAR (Health Care)
+   ========================================================= */
 
-.editor-sidebar-left{
+/* ===== SIDEBAR BASE ===== */
+.sidebar.left{
   width:280px;
-  height:100vh;
-  background:linear-gradient(180deg,#041831 0%, #064893 60%, #0f8fff 100%);
-  color:#ffffff;
+  background:linear-gradient(
+    180deg,
+    #041831 0%,
+    #064893 60%,
+    #0f8fff 100%
+  );
   padding:18px 14px 22px;
   overflow-y:auto;
-  border-right:1px solid rgba(255,255,255,.08);
+  border-right:1px solid rgba(255,255,255,.06);
 }
 
-/* SECTION TITLE */
-.editor-sidebar-left .section-title{
+/* ===== SECTION TITLES ===== */
+.sidebar.left .section-title{
   font-size:11px;
-  font-weight:700;
+  margin:22px 8px 10px;
   text-transform:uppercase;
   letter-spacing:.08em;
-  color:#c7ddff;
-  margin:22px 8px 10px;
+  font-weight:700;
+  color:#a7c7ff;
   opacity:.9;
 }
 
-/* NAV LIST */
-.editor-sidebar-left .nav-list{
+/* ===== LIST WRAPPER ===== */
+.sidebar.left .nav-list{
   display:flex;
   flex-direction:column;
   gap:8px;
+  margin-bottom:10px;
 }
 
-/* NAV ITEM */
-.editor-sidebar-left .nav-item{
+/* ===== NAV ITEM ===== */
+.sidebar.left .nav-item{
   display:flex;
   align-items:center;
   gap:12px;
-  padding:10px 12px;
-  border-radius:10px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(0,0,0,.22);
   cursor:pointer;
-  transition:background .2s ease, transform .15s ease;
   font-size:14px;
   font-weight:500;
-  color:#eaf2ff;
+  color:#e7f5ff;
+  transition:
+    background .15s ease,
+    transform .1s ease,
+    box-shadow .15s ease;
 }
 
-.editor-sidebar-left .nav-item:hover{
-  background:rgba(255,255,255,.08);
-  transform:translateX(2px);
+.sidebar.left .nav-item:hover{
+  background:rgba(0,0,0,.38);
+  transform:translateX(1px);
 }
 
-.editor-sidebar-left .nav-item.active{
-  background:rgba(255,255,255,.18);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);
+.sidebar.left .nav-item.active{
+  background:linear-gradient(
+    90deg,
+    rgba(21,128,255,.95),
+    rgba(67,56,202,.95)
+  );
+  box-shadow:0 6px 18px rgba(21,128,255,.35);
 }
 
-/* ICON */
-.editor-sidebar-left .nav-icon{
+/* ===== ICON CONTAINER ===== */
+.sidebar.left .nav-item::before{
+  content:"";
   width:34px;
   height:34px;
+  min-width:34px;
   border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(255,255,255,.15);
-  font-size:15px;
-  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  background:rgba(0,0,0,.35);
+  color:#ffffff;
+  font-family:"Font Awesome 6 Free";
+  font-weight:900;
+  font-size:14px;
 }
 
-/* LABEL */
-.editor-sidebar-left .nav-label{
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
+/* =========================================================
+   ICONS – Health Care mapping (by data-path)
+   ========================================================= */
 
-/* DIVIDER */
-.editor-sidebar-left .divider{
-  height:1px;
-  background:rgba(255,255,255,.12);
-  margin:18px 6px;
-}
+/* HOME / HERO */
+.nav-item[data-path^="home.hero.kicker"]::before{content:"\f02b";}            /* tag */
+.nav-item[data-path^="home.hero.headline"]::before{content:"\f1dc";}          /* heading */
+.nav-item[data-path^="home.hero.subheadline"]::before{content:"\f036";}       /* align-left */
+.nav-item[data-path^="home.hero.primary_cta"]::before{content:"\f2a0";}       /* phone-volume */
+.nav-item[data-path^="home.hero.secondary_cta"]::before{content:"\f274";}     /* calendar-check */
+.nav-item[data-path^="home.hero.stats"]::before{content:"\f201";}             /* chart-line */
+.nav-item[data-path^="home.hero.cards"]::before{content:"\f2c2";}             /* id-card */
 
-/* SCROLLBAR */
-.editor-sidebar-left::-webkit-scrollbar{
-  width:6px;
-}
-.editor-sidebar-left::-webkit-scrollbar-thumb{
-  background:rgba(255,255,255,.25);
-  border-radius:6px;
-}
-.editor-sidebar-left::-webkit-scrollbar-track{
-  background:transparent;
-}
+/* ABOUT */
+.nav-item[data-path^="about.kicker"]::before{content:"\f02b";}
+.nav-item[data-path^="about.headline"]::before{content:"\f1dc";}
+.nav-item[data-path^="about.description"]::before{content:"\f1dd";}           /* paragraph */
+.nav-item[data-path^="about.media"]::before{content:"\f03e";}                 /* image */
+.nav-item[data-path^="about.points"]::before{content:"\f058";}                /* list-check */
+.nav-item[data-path^="about.author"]::before{content:"\f0f0";}                /* user-md */
+.nav-item[data-path^="about.cta"]::before{content:"\f061";}                   /* arrow-right */
 
-/* MOBILE */
-@media (max-width: 900px){
-  .editor-sidebar-left{
-    width:240px;
-    padding:16px 12px;
-  }
+/* DEPARTMENTS */
+.nav-item[data-path^="departments.kicker"]::before{content:"\f02b";}
+.nav-item[data-path^="departments.headline"]::before{content:"\f1dc";}
+.nav-item[data-path^="departments.description"]::before{content:"\f036";}
+.nav-item[data-path^="departments.items"]::before{content:"\f0f1";}            /* hospital */
+.nav-item[data-path^="departments.cta"]::before{content:"\f061";}
 
-  .editor-sidebar-left .nav-item{
-    font-size:13px;
-    padding:9px 10px;
-  }
+/* SERVICES */
+.nav-item[data-path^="services.kicker"]::before{content:"\f02b";}
+.nav-item[data-path^="services.headline"]::before{content:"\f1dc";}
+.nav-item[data-path^="services.items"]::before{content:"\f46d";}               /* hand-holding-medical */
 
-  .editor-sidebar-left .nav-icon{
-    width:30px;
-    height:30px;
-    font-size:14px;
-  }
-}
+/* TESTIMONIALS */
+.nav-item[data-path^="testimonials.kicker"]::before{content:"\f02b";}
+.nav-item[data-path^="testimonials.headline"]::before{content:"\f1dc";}
+.nav-item[data-path^="testimonials.subheadline"]::before{content:"\f036";}
+.nav-item[data-path^="testimonials.count"]::before{content:"\f0c0";}           /* users */
+.nav-item[data-path^="testimonials.items"]::before{content:"\f4ad";}           /* comment-medical */
+
+/* APPOINTMENT */
+.nav-item[data-path^="appointment.pill"]::before{content:"\f111";}             /* circle */
+.nav-item[data-path^="appointment.title"]::before{content:"\f1dc";}
+.nav-item[data-path^="appointment.subtitle"]::before{content:"\f036";}
+.nav-item[data-path^="appointment.call_label"]::before{content:"\f2a0";}
+.nav-item[data-path^="appointment.phone"]::before{content:"\f095";}
