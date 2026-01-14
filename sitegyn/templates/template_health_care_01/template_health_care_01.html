@@ -171,6 +171,36 @@ header{
   overflow:hidden; /* ✔️ כאן כן */
 }
 
+
+/* STAT */
+.hero-stat{
+  position:absolute;
+  bottom:18px;
+  left:-36px;
+  background:#fff;
+  color:#0f172a;
+  border-radius:24px;
+  padding:18px 20px;
+  display:flex;
+  gap:18px;
+  align-items:center;
+  box-shadow:0 30px 60px rgba(0,0,0,.25);
+}
+
+.stat-number{font-size:26px;font-weight:800}
+.stat-label{font-size:14px;color:#6b7280}
+
+.stat-video{
+  width:120px;
+  height:84px;
+  border-radius:16px;
+  overflow:hidden;
+}
+.stat-video video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 /* ===============================
    MINI STAT – GLASS (NEW)
    =============================== */
@@ -235,10 +265,10 @@ header{
 
 /* 🔒 VALUE (15+) */
 .mini-stat-text strong{
-  font-size:28px;
+  font-size:28px;          /* 👈 כאן התיקון */
   font-weight:700;
   line-height:1.1;
-  color:#e5f3ff;           
+  color:#e5f3ff;           /* 👈 לא שחור */
   letter-spacing:-0.02em;
 }
 
@@ -2019,10 +2049,26 @@ section[id] {
 
       <p id="hero-subheadline"></p>
 
-      <div class="hero-actions">
-        <a href="#" class="btn-primary" id="hero-cta-primary"></a>
-        <a href="#" class="btn-outline" id="hero-cta-secondary"></a>
-      </div>
+<div class="hero-actions">
+
+  <a
+    href="#appointment"
+    class="btn-primary"
+    id="hero-cta-primary"
+  >
+    Schedule Your Consultation
+  </a>
+
+  <a
+    href="#about"
+    class="btn-outline"
+    id="hero-cta-secondary"
+  >
+    Learn More About Our Approach
+  </a>
+
+</div>
+
     </div>
 
     <div class="hero-video">
