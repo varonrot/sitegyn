@@ -14,8 +14,8 @@
             "kicker": { "type": "string", "ui:icon": "fa-tag" },
             "headline": { "type": "string", "ui:icon": "fa-heading" },
             "subheadline": { "type": "string", "ui:icon": "fa-align-left" },
-            "primary_cta": { "type": "string", "ui:icon": "fa-phone" },
-            "secondary_cta": { "type": "string", "ui:icon": "fa-calendar" },
+            "primary_cta": { "type": "string", "ui:icon": "fa-phone-volume" },
+            "secondary_cta": { "type": "string", "ui:icon": "fa-calendar-check" },
             "stats": {
               "type": "object",
               "ui:icon": "fa-chart-line",
@@ -27,7 +27,7 @@
             },
             "cards": {
               "type": "array",
-              "ui:icon": "fa-id-card",
+              "ui:icon": "fa-id-card-clip",
               "minItems": 3,
               "maxItems": 3,
               "items": {
@@ -72,7 +72,7 @@
         },
         "author": {
           "type": "object",
-          "ui:icon": "fa-user",
+          "ui:icon": "fa-user-doctor",
           "properties": {
             "name": { "type": "string", "ui:icon": "fa-user" },
             "role": { "type": "string", "ui:icon": "fa-user-tie" }
@@ -94,7 +94,7 @@
         "cta": { "type": "string", "ui:icon": "fa-arrow-right" },
         "items": {
           "type": "array",
-          "ui:icon": "fa-stethoscope",
+          "ui:icon": "fa-building-circle-check",
           "minItems": 3,
           "maxItems": 3,
           "items": {
@@ -111,7 +111,7 @@
 
     "services": {
       "type": "object",
-      "ui:icon": "fa-heart-pulse",
+      "ui:icon": "fa-hand-holding-medical",
       "properties": {
         "kicker": { "type": "string", "ui:icon": "fa-tag" },
         "headline": { "type": "string", "ui:icon": "fa-heading" },
@@ -144,7 +144,7 @@
         "count": { "type": "string", "ui:icon": "fa-users" },
         "items": {
           "type": "array",
-          "ui:icon": "fa-comment",
+          "ui:icon": "fa-comment-medical",
           "minItems": 1,
           "maxItems": 1,
           "items": {
@@ -153,7 +153,7 @@
               "text": { "type": "string", "ui:icon": "fa-quote-right" },
               "rating": { "type": "string", "ui:icon": "fa-star" },
               "name": { "type": "string", "ui:icon": "fa-user" },
-              "role": { "type": "string", "ui:icon": "fa-user" }
+              "role": { "type": "string", "ui:icon": "fa-user-doctor" }
             },
             "required": ["text", "rating", "name", "role"]
           }
@@ -169,7 +169,7 @@
         "pill": { "type": "string", "ui:icon": "fa-circle" },
         "title": { "type": "string", "ui:icon": "fa-heading" },
         "subtitle": { "type": "string", "ui:icon": "fa-align-left" },
-        "call_label": { "type": "string", "ui:icon": "fa-phone" },
+        "call_label": { "type": "string", "ui:icon": "fa-phone-volume" },
         "phone": { "type": "string", "ui:icon": "fa-phone" }
       },
       "required": ["title", "subtitle"]
