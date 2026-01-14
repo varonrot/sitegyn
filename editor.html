@@ -405,9 +405,9 @@ body{
       <div class="avatar">Y</div>
     </div>
 
-    <button class="btn-dark">Preview</button>
+    <button class="btn-dark" id="previewBtn">Preview</button>
     <button class="btn-dark">Save</button>
-    <button class="btn-green">Publish</button>
+    <button class="btn-green">Dashboard</button>
   </div>
 </div>
 
@@ -985,7 +985,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (closeBtn && preview) {
     closeBtn.addEventListener("click", async (e) => {
-      e.stopPropagation();       
+      e.stopPropagation();
       await saveBottomPreview();
       preview.classList.add("hidden");
     });
@@ -1000,6 +1000,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
+<script>document.getElementById("previewBtn").addEventListener("click", () => {
+  const projectSlug = window.currentProjectSlug;
 
+  const previewUrl = `https://sitegyn.com/p/${projectSlug}`;
+
+  window.open(previewUrl, "_blank");
+});
+</script>
 </body>
 </html>
