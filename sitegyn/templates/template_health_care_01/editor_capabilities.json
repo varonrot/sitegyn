@@ -5,39 +5,18 @@
       "hero": {
         "label": "Hero",
         "fields": {
-          "kicker": {
-            "label": "Kicker",
-            "type": "text"
-          },
-          "headline": {
-            "label": "Headline",
-            "type": "text"
-          },
-          "subheadline": {
-            "label": "Subheadline",
-            "type": "textarea"
-          },
-          "primary_cta": {
-            "label": "Primary CTA",
-            "type": "text"
-          },
-          "secondary_cta": {
-            "label": "Secondary CTA",
-            "type": "text"
-          },
+          "kicker": { "label": "Kicker", "type": "text" },
+          "headline": { "label": "Headline", "type": "text" },
+          "subheadline": { "label": "Subheadline", "type": "textarea" },
+          "primary_cta": { "label": "Primary CTA", "type": "text" },
+          "secondary_cta": { "label": "Secondary CTA", "type": "text" },
 
           "stats": {
             "label": "Stats",
             "type": "group",
             "fields": {
-              "value": {
-                "label": "Value",
-                "type": "text"
-              },
-              "label": {
-                "label": "Label",
-                "type": "text"
-              }
+              "value": { "label": "Value", "type": "text" },
+              "label": { "label": "Label", "type": "text" }
             }
           },
 
@@ -46,18 +25,9 @@
             "type": "repeater",
             "item_label": "Card",
             "fields": {
-              "title": {
-                "label": "Title",
-                "type": "text"
-              },
-              "text": {
-                "label": "Text",
-                "type": "textarea"
-              },
-              "phone": {
-                "label": "Phone",
-                "type": "text"
-              }
+              "title": { "label": "Title", "type": "text" },
+              "text": { "label": "Text", "type": "textarea" },
+              "phone": { "label": "Phone", "type": "text" }
             }
           }
         }
@@ -68,140 +38,70 @@
   "about": {
     "label": "About",
     "fields": {
-      "kicker": {
-        "label": "Kicker",
-        "type": "text"
-      },
-      "headline": {
-        "label": "Headline",
-        "type": "text"
-      },
-      "description": {
-        "label": "Description",
-        "type": "textarea"
-      },
+      "kicker": { "label": "Kicker", "type": "text" },
+      "headline": { "label": "Headline", "type": "text" },
+      "description": { "label": "Description", "type": "textarea" },
+
       "media": {
         "label": "Media Block",
         "type": "group",
         "fields": {
-          "title": {
-            "label": "Title",
-            "type": "text"
-          },
-          "subtitle": {
-            "label": "Subtitle",
-            "type": "text"
-          }
+          "title": { "label": "Title", "type": "text" },
+          "subtitle": { "label": "Subtitle", "type": "text" }
         }
       },
-      "points": {
-        "label": "Key Points",
-        "type": "list"
-      },
+
+      "points": { "label": "Key Points", "type": "list" },
+
       "author": {
         "label": "Author",
         "type": "group",
         "fields": {
-          "name": {
-            "label": "Name",
-            "type": "text"
-          },
-          "role": {
-            "label": "Role",
-            "type": "text"
-          }
+          "name": { "label": "Name", "type": "text" },
+          "role": { "label": "Role", "type": "text" }
         }
       },
-      "cta": {
-        "label": "Call To Action",
-        "type": "text"
-      }
+
+      "cta": { "label": "Call To Action", "type": "text" }
     }
   },
 
   "departments": {
     "label": "Departments",
     "fields": {
-      "kicker": {
-        "label": "Kicker",
-        "type": "text"
-      },
-      "headline": {
-        "label": "Headline",
-        "type": "text"
-      },
-      "description": {
-        "label": "Description",
-        "type": "textarea"
-      },
-      "cta": {
-        "label": "CTA",
-        "type": "text"
-      },
-      "items": {
-        "label": "Departments Items",
-        "type": "list"
-      }
+      "kicker": { "label": "Kicker", "type": "text" },
+      "headline": { "label": "Headline", "type": "text" },
+      "description": { "label": "Description", "type": "textarea" },
+      "cta": { "label": "CTA", "type": "text" },
+      "items": { "label": "Departments Items", "type": "list" }
     }
   },
 
   "services": {
     "label": "Services",
     "fields": {
-      "kicker": {
-        "label": "Kicker",
-        "type": "text"
-      },
-      "headline": {
-        "label": "Headline",
-        "type": "text"
-      },
-      "items": {
-        "label": "Service Items",
-        "type": "list"
-      }
+      "kicker": { "label": "Kicker", "type": "text" },
+      "headline": { "label": "Headline", "type": "text" },
+      "items": { "label": "Service Items", "type": "list" }
     }
   },
 
   "testimonials": {
     "label": "Testimonials",
     "fields": {
-      "kicker": {
-        "label": "Kicker",
-        "type": "text"
-      },
-      "headline": {
-        "label": "Headline",
-        "type": "text"
-      },
-      "subheadline": {
-        "label": "Subheadline",
-        "type": "text"
-      },
-      "count": {
-        "label": "Reviews Count",
-        "type": "text"
-      },
+      "kicker": { "label": "Kicker", "type": "text" },
+      "headline": { "label": "Headline", "type": "text" },
+      "subheadline": { "label": "Subheadline", "type": "text" },
+      "count": { "label": "Reviews Count", "type": "text" },
+
       "items": {
         "label": "Testimonial",
         "type": "group",
         "fields": {
-          "text": {
-            "label": "Text",
-            "type": "textarea"
-          },
-          "rating": {
-            "label": "Rating",
-            "type": "text"
-          },
-          "name": {
-            "label": "Name",
-            "type": "text"
-          },
-          "role": {
-            "label": "Role",
-            "type": "text"
-          }
+          "text": { "label": "Text", "type": "textarea" },
+          "rating": { "label": "Rating", "type": "text" },
+          "name": { "label": "Name", "type": "text" },
+          "role": { "label": "Role", "type": "text" }
         }
       }
     }
@@ -210,51 +110,30 @@
   "appointment": {
     "label": "Appointment",
     "fields": {
-      "pill": {
-        "label": "Pill",
-        "type": "text"
-      },
-      "title": {
-        "label": "Title",
-        "type": "text"
-      },
-      "subtitle": {
-        "label": "Subtitle",
-        "type": "textarea"
-      },
-      "call_label": {
-        "label": "Call Label",
-        "type": "text"
-      },
-      "phone": {
-        "label": "Phone",
-        "type": "text"
-      }
+      "pill": { "label": "Pill", "type": "text" },
+      "title": { "label": "Title", "type": "text" },
+      "subtitle": { "label": "Subtitle", "type": "textarea" },
+      "call_label": { "label": "Call Label", "type": "text" },
+      "phone": { "label": "Phone", "type": "text" }
     }
-  }
-},
-"footer": {
-  "label": "Footer",
-  "type": "group",
-  "fields": {
-    "brand": {
-      "label": "Brand",
-      "type": "group",
-      "fields": {
-        "logo": {
-          "label": "Logo Text",
-          "type": "text"
-        },
-        "description": {
-          "label": "Description",
-          "type": "textarea"
+  },
+
+  "footer": {
+    "label": "Footer",
+    "type": "group",
+    "fields": {
+      "brand": {
+        "label": "Brand",
+        "type": "group",
+        "fields": {
+          "logo": { "label": "Logo Text", "type": "text" },
+          "description": { "label": "Description", "type": "textarea" }
         }
+      },
+      "copyright": {
+        "label": "Copyright",
+        "type": "text"
       }
-    },
-    "copyright": {
-      "label": "Copyright",
-      "type": "text"
     }
   }
 }
-
