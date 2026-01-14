@@ -87,45 +87,53 @@
    ICONS – Health Care mapping (by data-path)
    ========================================================= */
 
-/* HOME / HERO */
-.nav-item[data-path^="home.hero.kicker"]::before{content:"\f02b";}            /* tag */
-.nav-item[data-path^="home.hero.headline"]::before{content:"\f1dc";}          /* heading */
-.nav-item[data-path^="home.hero.subheadline"]::before{content:"\f036";}       /* align-left */
-.nav-item[data-path^="home.hero.primary_cta"]::before{content:"\f2a0";}       /* phone-volume */
-.nav-item[data-path^="home.hero.secondary_cta"]::before{content:"\f274";}     /* calendar-check */
-.nav-item[data-path^="home.hero.stats"]::before{content:"\f201";}             /* chart-line */
-.nav-item[data-path^="home.hero.cards"]::before{content:"\f2c2";}             /* id-card */
+/* ================= HOME / HERO ================= */
+.nav-item[data-path^="home.hero.kicker"]::before{content:"\f02b";}
+.nav-item[data-path^="home.hero.headline"]::before{content:"\f1dc";}
+.nav-item[data-path^="home.hero.subheadline"]::before{content:"\f036";}
+.nav-item[data-path^="home.hero.primary_cta"]::before{content:"\f2a0";}
+.nav-item[data-path^="home.hero.secondary_cta"]::before{content:"\f274";}
+.nav-item[data-path^="home.hero.stats"]::before{content:"\f201";}
 
-/* ABOUT */
+/* HERO – CARDS (container + repeater children) */
+.nav-item[data-path="home.hero.cards"]::before{
+  content:"\f2c2"; /* id-card */
+}
+
+.nav-item[data-path^="home.hero.cards."]::before{
+  content:"\f2c2"; /* id-card */
+}
+
+/* ================= ABOUT ================= */
 .nav-item[data-path^="about.kicker"]::before{content:"\f02b";}
 .nav-item[data-path^="about.headline"]::before{content:"\f1dc";}
-.nav-item[data-path^="about.description"]::before{content:"\f1dd";}           /* paragraph */
-.nav-item[data-path^="about.media"]::before{content:"\f03e";}                 /* image */
-.nav-item[data-path^="about.points"]::before{content:"\f058";}                /* list-check */
-.nav-item[data-path^="about.author"]::before{content:"\f0f0";}                /* user-md */
-.nav-item[data-path^="about.cta"]::before{content:"\f061";}                   /* arrow-right */
+.nav-item[data-path^="about.description"]::before{content:"\f1dd";}
+.nav-item[data-path^="about.media"]::before{content:"\f03e";}
+.nav-item[data-path^="about.points"]::before{content:"\f058";}
+.nav-item[data-path^="about.author"]::before{content:"\f0f0";}
+.nav-item[data-path^="about.cta"]::before{content:"\f061";}
 
-/* DEPARTMENTS */
+/* ================= DEPARTMENTS ================= */
 .nav-item[data-path^="departments.kicker"]::before{content:"\f02b";}
 .nav-item[data-path^="departments.headline"]::before{content:"\f1dc";}
 .nav-item[data-path^="departments.description"]::before{content:"\f036";}
-.nav-item[data-path^="departments.items"]::before{content:"\f0f1";}            /* hospital */
+.nav-item[data-path^="departments.items"]::before{content:"\f0f1";}
 .nav-item[data-path^="departments.cta"]::before{content:"\f061";}
 
-/* SERVICES */
+/* ================= SERVICES ================= */
 .nav-item[data-path^="services.kicker"]::before{content:"\f02b";}
 .nav-item[data-path^="services.headline"]::before{content:"\f1dc";}
-.nav-item[data-path^="services.items"]::before{content:"\f46d";}               /* hand-holding-medical */
+.nav-item[data-path^="services.items"]::before{content:"\f46d";}
 
-/* TESTIMONIALS */
+/* ================= TESTIMONIALS ================= */
 .nav-item[data-path^="testimonials.kicker"]::before{content:"\f02b";}
 .nav-item[data-path^="testimonials.headline"]::before{content:"\f1dc";}
 .nav-item[data-path^="testimonials.subheadline"]::before{content:"\f036";}
-.nav-item[data-path^="testimonials.count"]::before{content:"\f0c0";}           /* users */
-.nav-item[data-path^="testimonials.items"]::before{content:"\f4ad";}           /* comment-medical */
+.nav-item[data-path^="testimonials.count"]::before{content:"\f0c0";}
+.nav-item[data-path^="testimonials.items"]::before{content:"\f4ad";}
 
-/* APPOINTMENT */
-.nav-item[data-path^="appointment.pill"]::before{content:"\f111";}             /* circle */
+/* ================= APPOINTMENT ================= */
+.nav-item[data-path^="appointment.pill"]::before{content:"\f111";}
 .nav-item[data-path^="appointment.title"]::before{content:"\f1dc";}
 .nav-item[data-path^="appointment.subtitle"]::before{content:"\f036";}
 .nav-item[data-path^="appointment.call_label"]::before{content:"\f2a0";}
