@@ -171,7 +171,6 @@ header{
 }
 
 /* ================= MINI STAT ================= */
-
 .mini-stat{
   position:absolute;
   bottom:18px;
@@ -191,7 +190,7 @@ header{
   border:1px solid rgba(255,255,255,.18);
   border-radius:28px;
 
-  color:#e5f3ff;
+  color:#ffffff;
 }
 
 /* LEFT */
@@ -210,7 +209,7 @@ header{
   width:34px;
   height:34px;
   border-radius:50%;
-  border:2px solid #fff;
+  border:2px solid #ffffff;
   margin-left:-10px;
 }
 
@@ -224,23 +223,30 @@ header{
 }
 
 /* TEXT */
+.mini-stat-text{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
 .mini-stat-text strong{
   font-size:13px;
-  font-weight:600;
+  font-weight:700;
   letter-spacing:.02em;
-  opacity:.95;
+  line-height:1.25;
+  color:#ffffff;
+  opacity:1;
+  text-shadow:0 1px 4px rgba(0,0,0,.35);
 }
 
 .mini-stat-text span{
   font-size:13px;
+  font-weight:400;
   color:rgba(255,255,255,.75);
-}
-.mini-stat-text strong{
-  text-shadow:0 2px 6px rgba(0,0,0,.35);
+  line-height:1.25;
 }
 
-
-/* VIDEO – ONLY HERE */
+/* VIDEO */
 .mini-stat-media{
   width:120px;
   height:84px;
@@ -256,6 +262,7 @@ header{
   object-fit:cover;
   display:block;
 }
+
 
 
 /* ================= SERVICE CARDS FIX ================= */
