@@ -1,1 +1,195 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Health Care Website Content",
+  "type": "object",
+  "properties": {
+    "home": {
+      "type": "object",
+      "ui:icon": "fa-house-medical",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "ui:icon": "fa-star-of-life",
+          "properties": {
+            "kicker": { "type": "string", "ui:icon": "fa-tag" },
+            "headline": { "type": "string", "ui:icon": "fa-heading" },
+            "subheadline": { "type": "string", "ui:icon": "fa-align-left" },
+            "primary_cta": { "type": "string", "ui:icon": "fa-phone-volume" },
+            "secondary_cta": { "type": "string", "ui:icon": "fa-calendar-check" },
 
+            "stats": {
+              "type": "object",
+              "ui:icon": "fa-chart-line",
+              "properties": {
+                "value": { "type": "string", "ui:icon": "fa-hashtag" },
+                "label": { "type": "string", "ui:icon": "fa-tag" }
+              },
+              "required": ["value", "label"]
+            },
+
+            "cards": {
+              "type": "array",
+              "ui:icon": "fa-id-card-clip",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string", "ui:icon": "fa-heading" },
+                  "text": { "type": "string", "ui:icon": "fa-align-left" },
+                  "phone": { "type": "string", "ui:icon": "fa-phone" }
+                },
+                "required": ["title", "text"]
+              }
+            }
+          },
+          "required": ["headline", "subheadline", "primary_cta"]
+        }
+      },
+      "required": ["hero"]
+    },
+
+    "about": {
+      "type": "object",
+      "ui:icon": "fa-circle-info",
+      "properties": {
+        "kicker": { "type": "string", "ui:icon": "fa-tag" },
+        "headline": { "type": "string", "ui:icon": "fa-heading" },
+        "description": { "type": "string", "ui:icon": "fa-paragraph" },
+
+        "media": {
+          "type": "object",
+          "ui:icon": "fa-image",
+          "properties": {
+            "title": { "type": "string", "ui:icon": "fa-heading" },
+            "subtitle": { "type": "string", "ui:icon": "fa-align-left" }
+          },
+          "required": ["title", "subtitle"]
+        },
+
+        "points": {
+          "type": "array",
+          "ui:icon": "fa-list-check",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "maxItems": 6
+        },
+
+        "author": {
+          "type": "object",
+          "ui:icon": "fa-user-doctor",
+          "properties": {
+            "name": { "type": "string", "ui:icon": "fa-user" },
+            "role": { "type": "string", "ui:icon": "fa-user-tie" }
+          },
+          "required": ["name", "role"]
+        },
+
+        "cta": { "type": "string", "ui:icon": "fa-arrow-right" }
+      },
+      "required": ["headline", "description"]
+    },
+
+    "departments": {
+      "type": "object",
+      "ui:icon": "fa-hospital",
+      "properties": {
+        "kicker": { "type": "string", "ui:icon": "fa-tag" },
+        "headline": { "type": "string", "ui:icon": "fa-heading" },
+        "description": { "type": "string", "ui:icon": "fa-align-left" },
+        "cta": { "type": "string", "ui:icon": "fa-arrow-right" },
+
+        "items": {
+          "type": "array",
+          "ui:icon": "fa-building-circle-check",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string", "ui:icon": "fa-stethoscope" }
+            },
+            "required": ["title"]
+          }
+        }
+      },
+      "required": ["headline", "items"]
+    },
+
+    "services": {
+      "type": "object",
+      "ui:icon": "fa-hand-holding-medical",
+      "properties": {
+        "kicker": { "type": "string", "ui:icon": "fa-tag" },
+        "headline": { "type": "string", "ui:icon": "fa-heading" },
+
+        "items": {
+          "type": "array",
+          "ui:icon": "fa-list-ol",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "number": { "type": "string", "ui:icon": "fa-hashtag" },
+              "title": { "type": "string", "ui:icon": "fa-heading" },
+              "description": { "type": "string", "ui:icon": "fa-align-left" }
+            },
+            "required": ["number", "title", "description"]
+          }
+        }
+      },
+      "required": ["headline", "items"]
+    },
+
+    "testimonials": {
+      "type": "object",
+      "ui:icon": "fa-quote-left",
+      "properties": {
+        "kicker": { "type": "string", "ui:icon": "fa-tag" },
+        "headline": { "type": "string", "ui:icon": "fa-heading" },
+        "subheadline": { "type": "string", "ui:icon": "fa-align-left" },
+        "count": { "type": "string", "ui:icon": "fa-users" },
+
+        "items": {
+          "type": "array",
+          "ui:icon": "fa-comment-medical",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": { "type": "string", "ui:icon": "fa-quote-right" },
+              "rating": { "type": "string", "ui:icon": "fa-star" },
+              "name": { "type": "string", "ui:icon": "fa-user" },
+              "role": { "type": "string", "ui:icon": "fa-user-doctor" }
+            },
+            "required": ["text", "rating", "name", "role"]
+          }
+        }
+      },
+      "required": ["headline", "items", "count"]
+    },
+
+    "appointment": {
+      "type": "object",
+      "ui:icon": "fa-calendar-plus",
+      "properties": {
+        "pill": { "type": "string", "ui:icon": "fa-circle" },
+        "title": { "type": "string", "ui:icon": "fa-heading" },
+        "subtitle": { "type": "string", "ui:icon": "fa-align-left" },
+        "call_label": { "type": "string", "ui:icon": "fa-phone-volume" },
+        "phone": { "type": "string", "ui:icon": "fa-phone" }
+      },
+      "required": ["title", "subtitle"]
+    }
+  },
+  "required": [
+    "home",
+    "about",
+    "departments",
+    "services",
+    "testimonials",
+    "appointment"
+  ]
+}
