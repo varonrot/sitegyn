@@ -77,8 +77,6 @@
   "appointment-title": "appointment.title",
   "appointment-subtitle": "appointment.subtitle",
   "appointment-call-label": "appointment.call_label",
-  "appointment-phone": "appointment.phone",
-  "appointment-image": "appointment.image",
-  "appointment-image-alt": "appointment.image_alt"
+  "appointment-phone": "appointment.phone"
 }
  
