@@ -1,1 +1,76 @@
+/* =========================================================
+   EDITOR – LEFT SIDEBAR (Health Care)
+   ========================================================= */
 
+/* ===== SIDEBAR BASE ===== */
+.sidebar.left{
+  width:280px;
+  background:linear-gradient(
+    180deg,
+    #041831 0%,
+    #064893 60%,
+    #0f8fff 100%
+  );
+  padding:18px 14px 22px;
+  overflow-y:auto;
+  border-right:1px solid rgba(255,255,255,.06);
+}
+
+/* ===== SECTION TITLES ===== */
+.sidebar.left .section-title{
+  font-size:11px;
+  margin:22px 8px 10px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:700;
+  color:#a7c7ff;
+  opacity:.9;
+}
+
+/* ===== LIST WRAPPER ===== */
+.sidebar.left .nav-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+/* ===== NAV ITEM ===== */
+.sidebar.left .nav-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(0,0,0,.22);
+  cursor:pointer;
+  font-size:14px;
+  font-weight:500;
+  color:#e7f5ff;
+  transition:
+    background .15s ease,
+    transform .1s ease,
+    box-shadow .15s ease;
+}
+
+.sidebar.left .nav-item:hover{
+  background:rgba(0,0,0,.38);
+  transform:translateX(1px);
+}
+
+.sidebar.left .nav-item.active{
+  background:linear-gradient(
+    90deg,
+    rgba(21,128,255,.95),
+    rgba(67,56,202,.95)
+  );
+  box-shadow:0 6px 18px rgba(21,128,255,.35);
+}
+
+/* ===== ICON STYLE (HTML ICON ONLY) ===== */
+.sidebar.left .nav-item i,
+.sidebar.left .nav-item svg{
+  font-size:14px;
+  color:#ffffff;
+  flex-shrink:0;
+}
