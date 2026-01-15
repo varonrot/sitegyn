@@ -531,7 +531,9 @@ async function loadEditorSite() {
 
   iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
 
-  await loadTemplateSidebar(projectId);
+await loadTemplateSidebar(projectId);      // LEFT sidebar
+await loadTemplateAISidebar(projectId);   // RIGHT (AI) sidebar
+
 }
 
 loadEditorSite();
@@ -558,6 +560,62 @@ async function loadTemplateSidebar(projectId) {
 
 
   buildSidebarFromSchema(schema);
+}
+/* =========================
+   Load template AI sidebar
+========================= */
+async function loadTemplateAISidebar(projectId) {
+  const { data, error } = await supabase
+    .from("projects")
+    .select("selected_template_id")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.selected_template_id) return;
+
+  const templateId = data.selected_template_id;
+
+  const aiSchemaUrl =
+    `/sitegyn/templates/${templateId}/${templateId}_AI_Action_Schema.json`;
+
+  const aiSchema = await fetch(aiSchemaUrl).then(r => r.json());
+
+  buildAISidebarFromSchema(aiSchema);
+}
+function buildAISidebarFromSchema(schema) {
+  const container = document.getElementById("sidebar-ai-dynamic");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const title = document.createElement("div");
+  title.className = "section-title";
+  title.textContent = "AI Actions";
+  container.appendChild(title);
+
+  const list = document.createElement("div");
+  list.className = "nav-list";
+
+  const actions = schema.actions || [];
+
+  actions.forEach(action => {
+    const item = document.createElement("div");
+    item.className = "nav-item ai-action";
+    item.dataset.action = action.id;
+    item.dataset.target = action.target;
+    item.dataset.prompt = action.prompt;
+
+    item.innerHTML = `
+      <span class="nav-ico">
+        <i class="fa-solid ${action.icon || "fa-wand-magic-sparkles"}"></i>
+      </span>
+      <span class="nav-label">${action.label}</span>
+    `;
+
+    list.appendChild(item);
+  });
+
+  container.appendChild(list);
 }
 
 /* =========================
@@ -696,6 +754,8 @@ function humanize(str) {
 ========================= */
 document.addEventListener("click", async (e) => {
 
+  // ❗ אל תיגע ב-AI actions
+  if (e.target.closest(".ai-action")) return;
   if (e.target.closest("#bottom-preview")) return;
 
   const item = e.target.closest(".nav-item");
@@ -705,6 +765,20 @@ document.addEventListener("click", async (e) => {
   if (!path) return;
 
   openBottomPreview(path);
+});
+
+/* =========================
+   AI Sidebar click handler
+========================= */
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".ai-action");
+  if (!btn) return;
+
+  runAIAction({
+    action: btn.dataset.action,
+    target: btn.dataset.target,
+    prompt: btn.dataset.prompt
+  });
 });
 
 
@@ -816,6 +890,32 @@ document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview
       }
     )
     .subscribe();
+}
+/* =========================
+   Run AI Action
+========================= */
+async function runAIAction({ action, target, prompt }) {
+  const projectId = getProjectId();
+  if (!projectId) return;
+
+  const { data } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  if (!data?.content_json) return;
+
+  const currentValue = getValueByPath(data.content_json, target);
+
+  console.log("AI ACTION", {
+    action,
+    target,
+    prompt,
+    currentValue
+  });
+
+  // פה ייכנס OpenAI בהמשך
 }
 
 </script>
