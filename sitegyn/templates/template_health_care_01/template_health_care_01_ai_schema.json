@@ -1,0 +1,64 @@
+{
+  "hero": {
+    "label": "Hero – AI",
+    "icon": "fa-star-of-life",
+    "actions": [
+      {
+        "id": "hero-rewrite-kicker",
+        "label": "Rewrite Kicker",
+        "icon": "fa-tag",
+        "path": "home.hero.kicker",
+        "mode": "rewrite"
+      },
+      {
+        "id": "hero-rewrite-headline",
+        "label": "Rewrite Headline",
+        "icon": "fa-heading",
+        "path": "home.hero.headline",
+        "mode": "rewrite"
+      },
+      {
+        "id": "hero-rewrite-subheadline",
+        "label": "Rewrite Subheadline",
+        "icon": "fa-align-left",
+        "path": "home.hero.subheadline",
+        "mode": "rewrite"
+      },
+      {
+        "id": "hero-improve-cards",
+        "label": "Improve Cards Content",
+        "icon": "fa-id-card-clip",
+        "path": "home.hero.cards",
+        "mode": "improve_array"
+      }
+    ]
+  },
+
+  "about": {
+    "label": "About – AI",
+    "icon": "fa-circle-info",
+    "actions": [
+      {
+        "id": "about-rewrite-title",
+        "label": "Rewrite Title",
+        "icon": "fa-heading",
+        "path": "about.headline",
+        "mode": "rewrite"
+      },
+      {
+        "id": "about-rewrite-description",
+        "label": "Rewrite Paragraphs",
+        "icon": "fa-paragraph",
+        "path": "about.description",
+        "mode": "rewrite"
+      },
+      {
+        "id": "about-improve-points",
+        "label": "Improve Why Points",
+        "icon": "fa-list-check",
+        "path": "about.points",
+        "mode": "improve_array"
+      }
+    ]
+  }
+}
