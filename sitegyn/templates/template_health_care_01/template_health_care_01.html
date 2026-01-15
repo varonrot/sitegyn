@@ -2224,14 +2224,14 @@ html {
   </div>
 </section>
 
- <footer class="site-footer" data-system="footer">
+<footer class="site-footer" data-system="footer">
 
   <div class="footer-inner">
 
     <!-- SYSTEM / GPT CONTENT -->
     <div class="footer-col footer-system">
-      <div class="logo" data-bind="footer.brand.logo"></div>
-      <p class="footer-description" data-bind="footer.brand.description"></p>
+      <div class="logo" id="footer-brand-logo"></div>
+      <p class="footer-description" id="footer-brand-description"></p>
     </div>
 
     <!-- NAV 1 -->
@@ -2263,13 +2263,12 @@ html {
   </div>
 
   <div class="footer-bottom">
-    <span data-bind="footer.copyright"></span>
+    <span id="footer-copyright"></span>
   </div>
 
   <button id="backToTop" aria-label="Back to top">↑</button>
 
 </footer>
-
 
 <script>
 const slides = document.querySelectorAll('.slide');
