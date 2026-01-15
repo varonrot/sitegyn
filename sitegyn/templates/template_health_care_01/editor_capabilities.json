@@ -126,11 +126,11 @@
       "type": "group",
       "fields": {
         "logo": {
-          "label": "Logo Text",
+          "label": "Title",
           "type": "text"
         },
         "description": {
-          "label": "Description",
+          "label": "Subtitle",
           "type": "textarea"
         }
       }
@@ -141,4 +141,5 @@
     }
   }
 }
+
 
