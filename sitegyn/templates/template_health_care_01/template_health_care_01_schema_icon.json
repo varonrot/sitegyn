@@ -185,26 +185,27 @@
       "required": ["title", "subtitle"]
     },
 
-    "footer": {
+"footer": {
+  "type": "object",
+  "ui:icon": "fa-shield-heart",
+  "properties": {
+    "brand": {
       "type": "object",
-      "ui:icon": "fa-shield-heart",
+      "ui:icon": "fa-hospital",
       "properties": {
-        "brand": {
-          "type": "object",
-          "ui:icon": "fa-hospital",
-          "properties": {
-            "logo": { "type": "string", "ui:icon": "fa-heading" },
-            "description": { "type": "string", "ui:icon": "fa-align-left" }
-          },
-          "required": ["logo", "description"]
-        },
-        "copyright": {
-          "type": "string",
-          "ui:icon": "fa-copyright"
-        }
+        "logo": { "type": "string", "ui:icon": "fa-heading" },
+        "description": { "type": "string", "ui:icon": "fa-align-left" }
       },
-      "required": ["brand", "copyright"]
+      "required": ["logo", "description"]
+    },
+    "copyright": {
+      "type": "string",
+      "ui:icon": "fa-copyright"
     }
+  },
+  "required": ["brand", "copyright"]
+}
+
   },
 
   "required": [
