@@ -118,22 +118,27 @@
     }
   },
 
-  "footer": {
-    "label": "Footer",
-    "type": "group",
-    "fields": {
-      "brand": {
-        "label": "Brand",
-        "type": "group",
-        "fields": {
-          "logo": { "label": "Logo Text", "type": "text" },
-          "description": { "label": "Description", "type": "textarea" }
+"footer": {
+  "label": "Footer",
+  "fields": {
+    "brand": {
+      "label": "Brand",
+      "type": "group",
+      "fields": {
+        "logo": {
+          "label": "Logo Text",
+          "type": "text"
+        },
+        "description": {
+          "label": "Description",
+          "type": "textarea"
         }
-      },
-      "copyright": {
-        "label": "Copyright",
-        "type": "text"
       }
+    },
+    "copyright": {
+      "label": "Copyright",
+      "type": "text"
     }
   }
 }
+
