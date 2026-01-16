@@ -377,6 +377,109 @@ body{
   }
 }
 
+/* =========================
+   AI CHAT MODAL
+========================= */
+.ai-chat-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(6px);
+  z-index:1000;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.ai-chat-overlay.hidden{
+  display:none;
+}
+
+.ai-chat-panel{
+  width:380px;
+  max-width:100%;
+  height:100%;
+  background:#020617;
+  border-left:1px solid rgba(255,255,255,.12);
+  display:flex;
+  flex-direction:column;
+}
+
+.ai-chat-header{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.ai-chat-sub{
+  font-size:12px;
+  opacity:.7;
+}
+
+.ai-chat-header button{
+  background:none;
+  border:none;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.ai-chat-messages{
+  flex:1;
+  padding:16px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.ai-msg{
+  max-width:85%;
+  padding:10px 12px;
+  border-radius:12px;
+  font-size:14px;
+  line-height:1.4;
+}
+
+.ai-msg-system{
+  background:rgba(255,255,255,.08);
+  align-self:flex-start;
+}
+
+.ai-msg-user{
+  background:linear-gradient(135deg,#2563eb,#22c55e);
+  color:#04110a;
+  align-self:flex-end;
+}
+
+.ai-chat-input{
+  border-top:1px solid rgba(255,255,255,.12);
+  padding:12px;
+  display:flex;
+  gap:8px;
+}
+
+.ai-chat-input textarea{
+  flex:1;
+  resize:none;
+  height:44px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.15);
+  background:#020617;
+  color:white;
+  padding:8px 10px;
+  font-family:inherit;
+}
+
+.ai-chat-input button{
+  border:none;
+  border-radius:10px;
+  padding:0 16px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  font-weight:700;
+  cursor:pointer;
+}
 
 
 </style>
@@ -395,9 +498,10 @@ body{
   </div>
 
   <div class="top-right">
-    <button class="icon-btn" onclick="toggleRight()">
-      <i class="fa-solid fa-wand-magic-sparkles"></i>
-    </button>
+<button class="icon-btn" id="ai-chat-btn">
+  <i class="fa-solid fa-wand-magic-sparkles"></i>
+</button>
+
 
     <div class="user-cluster">
       <div class="site-pill"><i class="fa-solid fa-globe"></i> sitegyn.com</div>
@@ -997,5 +1101,97 @@ document.addEventListener("DOMContentLoaded", () => {
   window.open(previewUrl, "_blank");
 });
 </script>
+ 
+    <!-- =========================
+   AI CHAT MODAL
+========================= -->
+<div id="ai-chat-overlay" class="ai-chat-overlay hidden">
+  <div class="ai-chat-panel">
+    <div class="ai-chat-header">
+      <div>
+        <strong>AI Assistant</strong>
+        <div class="ai-chat-sub">Improve your website</div>
+      </div>
+      <button id="ai-chat-close">✕</button>
+    </div>
+
+    <div class="ai-chat-messages" id="ai-chat-messages">
+      <div class="ai-msg ai-msg-system">
+        Hi 👋
+        You can talk to me about your website and we’ll improve it together.
+      </div>
+    </div>
+
+    <div class="ai-chat-input">
+      <textarea
+        id="ai-chat-textarea"
+        placeholder="Tell me what you'd like to improve..."
+      ></textarea>
+      <button id="ai-chat-send">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ===== Elements =====
+  const aiOverlay   = document.getElementById("ai-chat-overlay");
+  const aiClose     = document.getElementById("ai-chat-close");
+  const aiSend      = document.getElementById("ai-chat-send");
+  const aiTextarea  = document.getElementById("ai-chat-textarea");
+  const aiMessages  = document.getElementById("ai-chat-messages");
+  const aiChatBtn   = document.getElementById("ai-chat-btn");
+
+  if (!aiOverlay || !aiChatBtn) {
+    console.warn("AI Chat: missing required elements");
+    return;
+  }
+
+  // ===== OPEN (top magic button) =====
+  aiChatBtn.addEventListener("click", () => {
+    aiOverlay.classList.remove("hidden");
+    setTimeout(() => aiTextarea?.focus(), 50);
+  });
+
+  // ===== CLOSE (X button) =====
+  aiClose?.addEventListener("click", () => {
+    aiOverlay.classList.add("hidden");
+  });
+
+  // ===== CLOSE on overlay click (outside panel) =====
+  aiOverlay.addEventListener("click", (e) => {
+    if (e.target === aiOverlay) {
+      aiOverlay.classList.add("hidden");
+    }
+  });
+
+  // ===== SEND message (local only – no AI yet) =====
+  aiSend?.addEventListener("click", sendMessage);
+
+  aiTextarea?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  function sendMessage() {
+    const text = aiTextarea.value.trim();
+    if (!text) return;
+
+    const msg = document.createElement("div");
+    msg.className = "ai-msg ai-msg-user";
+    msg.textContent = text;
+
+    aiMessages.appendChild(msg);
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+
+    aiTextarea.value = "";
+  }
+
+});
+</script>
+
 </body>
 </html>
