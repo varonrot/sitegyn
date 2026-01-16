@@ -681,15 +681,11 @@ function buildAISidebarFromSchema(schema) {
       for (const fieldKey in sectionProps.hero.properties) {
         const fieldSchema = sectionProps.hero.properties[fieldKey];
 
-    const iconClass = getIconFromSchema(fieldSchema);
-
-const item = renderAIItem({
-  label,
-  path,
-  type,
-  iconClass
-});
-
+        const item = renderAIItem({
+          label: humanize(fieldKey),
+          path: `home.hero.${fieldKey}`,
+          type: fieldSchema.type || "text"
+        });
 
         list.appendChild(item);
       }
@@ -716,20 +712,24 @@ const item = renderAIItem({
     container.appendChild(list);
   }
 }
-function renderAIItem({ label, path, type, iconClass }) {
+
+function renderAIItem({ label, path, type }) {
   const item = document.createElement("div");
   item.className = "nav-item ai-item";
+  item.dataset.aiPath = path;
+  item.dataset.fieldType = type;
 
   item.innerHTML = `
-    <span class="nav-ico">
-      <i class="fa-solid ${iconClass}"></i>
-    </span>
+    <span class="nav-ico"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
     <span class="nav-label">${label}</span>
   `;
 
+  item.addEventListener("click", () => {
+    openAIEditor({ path, type, label });
+  });
+
   return item;
 }
-
 
 async function openAIEditor({ path, type, label }) {
   const projectId = getProjectId();
