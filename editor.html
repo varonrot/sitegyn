@@ -643,7 +643,7 @@ async function loadEditorSite() {
   const sitePill = document.querySelector(".site-pill");
   if (sitePill) sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
 
-  iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
+  iframe.src = `https://sitegyn.com/p/${subdomain}`;
 
   await loadTemplateSidebar(projectId);
 }
