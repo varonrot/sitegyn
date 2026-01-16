@@ -2,7 +2,6 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Health Care Website Content",
   "type": "object",
-
   "properties": {
     "home": {
       "type": "object",
@@ -183,45 +182,14 @@
         "phone": { "type": "string", "ui:icon": "fa-phone" }
       },
       "required": ["title", "subtitle"]
-    },
-
-"footer": {
-  "type": "object",
-  "ui:icon": "fa-shield-heart",
-  "properties": {
-    "brand": {
-      "type": "object",
-      "ui:icon": "fa-hospital",
-      "properties": {
-        "logo": {
-          "type": "string",
-          "ui:icon": "fa-heading"
-        },
-        "description": {
-          "type": "string",
-          "ui:icon": "fa-align-left"
-        }
-      },
-      "required": ["logo", "description"]
-    },
-    "copyright": {
-      "type": "string",
-      "ui:icon": "fa-copyright"
     }
   },
-  "required": ["brand", "copyright"]
-}
-
-
-  },
-
   "required": [
     "home",
     "about",
     "departments",
     "services",
     "testimonials",
-    "appointment",
-    "footer"
+    "appointment"
   ]
 }
