@@ -438,9 +438,122 @@ body{
 <!-- RIGHT -->
 <aside class="sidebar right">
 
-  <div id="sidebar-ai-dynamic"></div>
+  <!-- ================= HERO AI ================= -->
+  <div class="section-title">Hero – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-tag"></i></span>
+      Rewrite Kicker
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Headline
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subheadline
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-list"></i></span>
+      Improve Pills
+    </div>
+  </div>
+
+  <!-- ================= ABOUT AI ================= -->
+  <div class="section-title">About – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-quote-left"></i></span>
+      Rewrite Tagline
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-paragraph"></i></span>
+      Rewrite Paragraphs
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-certificate"></i></span>
+      Rewrite Why Badge
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-list-check"></i></span>
+      Improve Why Points
+    </div>
+  </div>
+
+  <!-- ================= OFFERS AI ================= -->
+  <div class="section-title">Offers – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Section Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Section Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-tags"></i></span>
+      Improve Deals Content
+    </div>
+  </div>
+
+  <!-- ================= MENU AI ================= -->
+  <div class="section-title">Menu – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-pizza-slice"></i></span>
+      Improve Pizza Descriptions
+    </div>
+  </div>
+
+  <!-- ================= SERVICES AI ================= -->
+  <div class="section-title">Services – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-boxes-stacked"></i></span>
+      Improve Service Items
+    </div>
+  </div>
+
+  <!-- ================= CONTACT AI ================= -->
+  <div class="section-title">Contact – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-clock"></i></span>
+      Rewrite Opening Hours Text
+    </div>
+  </div>
 
 </aside>
+
 
 </div>
 
@@ -530,8 +643,7 @@ async function loadEditorSite() {
   const sitePill = document.querySelector(".site-pill");
   if (sitePill) sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
 
- iframe.src = `https://sitegyn.com/p/${subdomain}`;
-
+  iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
 
   await loadTemplateSidebar(projectId);
 }
@@ -693,79 +805,6 @@ function capitalize(str) {
 function humanize(str) {
   return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
 }
-/* =========================
-   RIGHT SIDEBAR (AI) – STEP 1 (LOCAL DATA)
-========================= */
-
-function initRightSidebarLocal() {
-  const capabilities = {
-    sections: [
-      {
-        label: "AI Assistant",
-        actions: [
-          { id: "rewrite", label: "Rewrite Section", icon: "fa-wand-magic-sparkles" },
-          { id: "improve", label: "Improve Copy", icon: "fa-align-left" },
-          { id: "shorten", label: "Shorten", icon: "fa-scissors" },
-          { id: "translate", label: "Translate", icon: "fa-language" }
-        ]
-      },
-      {
-        label: "SEO",
-        actions: [
-          { id: "seo_title", label: "Suggest SEO Title", icon: "fa-magnifying-glass" },
-          { id: "seo_meta", label: "Meta Description", icon: "fa-tag" }
-        ]
-      }
-    ]
-  };
-
-  buildAISidebar(capabilities);
-}
-
-function buildAISidebar(capabilities) {
-  const container = document.getElementById("sidebar-ai-dynamic");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const sections = Array.isArray(capabilities?.sections) ? capabilities.sections : [];
-  sections.forEach((section) => {
-    const title = document.createElement("div");
-    title.className = "section-title";
-    title.textContent = section.label || "AI";
-    container.appendChild(title);
-
-    const list = document.createElement("div");
-    list.className = "nav-list";
-
-    const actions = Array.isArray(section.actions) ? section.actions : [];
-    actions.forEach((action) => {
-      const item = document.createElement("div");
-      item.className = "nav-item";
-      item.dataset.aiAction = action.id || "";
-
-      item.innerHTML = `
-        <span class="icon"><i class="fa-solid ${action.icon || "fa-wand-magic-sparkles"}"></i></span>
-        <span class="nav-label">${action.label || "Action"}</span>
-      `;
-
-      item.addEventListener("click", (e) => {
-        e.stopPropagation();
-        onAIActionClick(action);
-      });
-
-      list.appendChild(item);
-    });
-
-    container.appendChild(list);
-  });
-}
-
-function onAIActionClick(action) {
-  console.log("AI action clicked:", action);
-  // שלב 2: נקשור את זה ל-currentEditPath ול-content_json
-}
-
    /* =========================
    Bottom Preview – click handler
 ========================= */
