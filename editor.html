@@ -437,106 +437,11 @@ body{
 
 <!-- RIGHT -->
 <aside class="sidebar right">
+
   <div id="sidebar-ai-dynamic"></div>
-</aside>
-
-  <!-- ================= ABOUT AI ================= -->
-  <div class="section-title">About – AI</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-heading"></i></span>
-      Rewrite Title
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-quote-left"></i></span>
-      Rewrite Tagline
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-paragraph"></i></span>
-      Rewrite Paragraphs
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-certificate"></i></span>
-      Rewrite Why Badge
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-list-check"></i></span>
-      Improve Why Points
-    </div>
-  </div>
-
-  <!-- ================= OFFERS AI ================= -->
-  <div class="section-title">Offers – AI</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-heading"></i></span>
-      Rewrite Section Title
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
-      Rewrite Section Subtitle
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-tags"></i></span>
-      Improve Deals Content
-    </div>
-  </div>
-
-  <!-- ================= MENU AI ================= -->
-  <div class="section-title">Menu – AI</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-heading"></i></span>
-      Rewrite Title
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
-      Rewrite Subtitle
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-pizza-slice"></i></span>
-      Improve Pizza Descriptions
-    </div>
-  </div>
-
-  <!-- ================= SERVICES AI ================= -->
-  <div class="section-title">Services – AI</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-heading"></i></span>
-      Rewrite Title
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
-      Rewrite Subtitle
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-boxes-stacked"></i></span>
-      Improve Service Items
-    </div>
-  </div>
-
-  <!-- ================= CONTACT AI ================= -->
-  <div class="section-title">Contact – AI</div>
-  <div class="nav-list">
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-heading"></i></span>
-      Rewrite Title
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
-      Rewrite Subtitle
-    </div>
-    <div class="nav-item">
-      <span class="icon"><i class="fa-solid fa-clock"></i></span>
-      Rewrite Opening Hours Text
-    </div>
-  </div>
 
 </aside>
-
-
-</div>
+</div> <!-- END .editor -->
 
 <script>
 function toggleLeft(){
@@ -548,7 +453,8 @@ function toggleRight(){
   document.querySelector('.sidebar.left').classList.remove('open');
 }
 </script>
- <script type="module">
+
+<script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 let currentEditPath = null;
 
@@ -557,7 +463,7 @@ let currentEditPath = null;
 ========================= */
 const supabase = createClient(
   "https://xkchlqcwntcoakmyicqb.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
+  "PUBLIC_ANON_KEY"
 );
 
 /* =========================
@@ -582,8 +488,7 @@ function getProjectId() {
 ========================= */
 function loadTemplateLeftSidebarCSS(templateId) {
   const cssId = "template-left-sidebar-css";
-  const existing = document.getElementById(cssId);
-  if (existing) existing.remove();
+  document.getElementById(cssId)?.remove();
 
   const link = document.createElement("link");
   link.id = cssId;
@@ -598,396 +503,142 @@ function loadTemplateLeftSidebarCSS(templateId) {
 async function loadEditorSite() {
   const iframe = document.getElementById("site-preview");
   const canvas = document.getElementById("editor-canvas");
-  if (!iframe) return;
-
   const projectId = getProjectId();
-  if (!projectId) {
-    iframe.srcdoc = "<h1 style='color:white'>No project_id</h1>";
-    return;
-  }
+  if (!iframe || !projectId) return;
 
   canvas.dataset.projectId = projectId;
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("projects")
-    .select("subdomain")
+    .select("subdomain, selected_template_id")
     .eq("id", projectId)
     .single();
 
-  if (error || !data?.subdomain) {
-    iframe.srcdoc = "<h1 style='color:white'>Project not found</h1>";
-    return;
-  }
+  if (!data) return;
 
-  const subdomain = data.subdomain;
-  window.currentProjectSlug = subdomain;
-  const sitePill = document.querySelector(".site-pill");
-  if (sitePill) sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
+  window.currentProjectSlug = data.subdomain;
+  document.querySelector(".site-pill").innerHTML =
+    `<i class="fa-solid fa-globe"></i> ${data.subdomain}`;
 
-  iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
+  iframe.src = `https://sitegyn.com/p/${data.subdomain}?editor=true`;
 
-  await loadTemplateSidebar(projectId);
+  await loadTemplateSidebar(projectId, data.selected_template_id);
 }
 
 loadEditorSite();
 
 /* =========================
-   Load template schema (ICON VERSION)
+   Load template schema + AI
 ========================= */
-async function loadTemplateSidebar(projectId) {
-  const { data, error } = await supabase
-    .from("projects")
-    .select("selected_template_id")
-    .eq("id", projectId)
-    .single();
-
-  if (error || !data?.selected_template_id) return;
-
-  const templateId = data.selected_template_id;
-
+async function loadTemplateSidebar(projectId, templateId) {
   loadTemplateLeftSidebarCSS(templateId);
 
-  // ✅ changed to _schema_icon.json
-  const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema_icon.json`;
-  const schema = await fetch(schemaUrl).then(r => r.json());
-
+  const schema = await fetch(
+    `/sitegyn/templates/${templateId}/${templateId}_schema_icon.json`
+  ).then(r => r.json());
 
   buildSidebarFromSchema(schema);
+
+  // 🟢 AI RIGHT SIDEBAR
+  await loadAICapabilities(templateId);
 }
 
 /* =========================
-   Sidebar builder
+   LEFT Sidebar builder (unchanged)
 ========================= */
 const DEFAULT_ICON = "fa-circle";
 
 function getIconFromSchema(propSchema) {
-  if (!propSchema) return DEFAULT_ICON;
-
-  // support ui:icon
-  if (typeof propSchema["ui:icon"] === "string" && propSchema["ui:icon"].trim()) {
-    return propSchema["ui:icon"].trim();
-  }
-
-  // optional: support ui.icon if you ever use that style
-  if (propSchema.ui && typeof propSchema.ui.icon === "string" && propSchema.ui.icon.trim()) {
-    return propSchema.ui.icon.trim();
-  }
-
-  return DEFAULT_ICON;
+  return propSchema?.["ui:icon"] || DEFAULT_ICON;
 }
 
-function renderNavItem({ label, path, iconClass, nested = false }) {
+function renderNavItem({ label, path, iconClass }) {
   const item = document.createElement("div");
-  item.className = nested ? "nav-item nested" : "nav-item";
+  item.className = "nav-item";
   item.dataset.path = path;
-
   item.innerHTML = `
-    <span class="nav-ico"><i class="fa-solid ${iconClass}"></i></span>
-    <span class="nav-label">${label}</span>
+    <span class="icon"><i class="fa-solid ${iconClass}"></i></span>
+    ${label}
   `;
-
   return item;
 }
 
 function buildSidebarFromSchema(schema) {
   const container = document.getElementById("sidebar-dynamic");
-  if (!container) return;
-
   container.innerHTML = "";
 
-  const sections = schema.properties || {};
-
-  for (const sectionKey in sections) {
-    const sectionSchema = sections[sectionKey];
-    const sectionProps = sectionSchema.properties || {};
-
-    // Section title
+  for (const sectionKey in schema.properties) {
     const title = document.createElement("div");
     title.className = "section-title";
-    title.textContent = capitalize(sectionKey);
+    title.textContent = sectionKey;
     container.appendChild(title);
 
-// Special: home.hero (NO "Hero" title)
-if (sectionKey === "home" && sectionProps.hero) {
-  const list = document.createElement("div");
-  list.className = "nav-list";
-
-  for (const fieldKey in sectionProps.hero.properties) {
-    const fieldSchema = sectionProps.hero.properties[fieldKey];
-    const iconClass = getIconFromSchema(fieldSchema);
-
-    const item = renderNavItem({
-      label: humanize(fieldKey),
-      path: `home.hero.${fieldKey}`,
-      iconClass
-    });
-
-    list.appendChild(item);
-  }
-
-  container.appendChild(list);
-  continue;
-}
-
-    // Regular fields
     const list = document.createElement("div");
     list.className = "nav-list";
 
-    for (const fieldKey in sectionProps) {
-      const fieldSchema = sectionProps[fieldKey]; // <- contains ui:icon
-      const iconClass = getIconFromSchema(fieldSchema);
-
-      const item = renderNavItem({
-        label: humanize(fieldKey),
+    for (const fieldKey in schema.properties[sectionKey].properties) {
+      list.appendChild(renderNavItem({
+        label: fieldKey,
         path: `${sectionKey}.${fieldKey}`,
-        iconClass
-      });
-
-      list.appendChild(item);
+        iconClass: getIconFromSchema(
+          schema.properties[sectionKey].properties[fieldKey]
+        )
+      }));
     }
-
     container.appendChild(list);
   }
 }
 
-function buildNestedSection(container, titleText, fields, basePath) {
-  const subtitle = document.createElement("div");
-  subtitle.className = "section-subtitle";
-  subtitle.textContent = titleText;
-  container.appendChild(subtitle);
+/* =====================================================
+   🟢 AI RIGHT SIDEBAR
+===================================================== */
 
-  const list = document.createElement("div");
-  list.className = "nav-list";
+async function loadAICapabilities(templateId) {
+  const data = await fetch(
+    `/sitegyn/templates/${templateId}/editor_ai_capabilities.json`
+  ).then(r => r.json());
 
-  for (const fieldKey in fields) {
-    const fieldSchema = fields[fieldKey]; // <- contains ui:icon
-    const iconClass = getIconFromSchema(fieldSchema);
+  buildAISidebar(data);
+}
 
-    const item = renderNavItem({
-      label: humanize(fieldKey),
-      path: `${basePath}.${fieldKey}`,
-      iconClass,
-      nested: true
-    });
+function buildAISidebar(capabilities) {
+  const container = document.getElementById("sidebar-ai-dynamic");
+  if (!container) return;
 
-    list.appendChild(item);
+  container.innerHTML = "";
+
+  for (const section of capabilities.sections) {
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.textContent = section.label;
+    container.appendChild(title);
+
+    const list = document.createElement("div");
+    list.className = "nav-list";
+
+    for (const action of section.actions) {
+      const item = document.createElement("div");
+      item.className = "nav-item";
+      item.innerHTML = `
+        <span class="icon">
+          <i class="fa-solid ${action.icon || 'fa-wand-magic-sparkles'}"></i>
+        </span>
+        ${action.label}
+      `;
+      item.onclick = () => triggerAIAction(action);
+      list.appendChild(item);
+    }
+    container.appendChild(list);
   }
-
-  container.appendChild(list);
 }
 
-/* =========================
-   Utils
-========================= */
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+function triggerAIAction(action) {
+  console.log("AI ACTION:", action);
+  // כאן בהמשך:
+  // - קריאה ל־API
+  // - שליחה של content_json + path
+  // - החזרת טקסט והחלפה ב־content_json
 }
-
-function humanize(str) {
-  return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
-}
-   /* =========================
-   Bottom Preview – click handler
-========================= */
-document.addEventListener("click", async (e) => {
-
-  if (e.target.closest("#bottom-preview")) return;
-
-  const item = e.target.closest(".nav-item");
-  if (!item) return;
-
-  const path = item.dataset.path;
-  if (!path) return;
-
-  openBottomPreview(path);
-});
-
-
-async function openBottomPreview(path) {
-currentEditPath = path;
-  const projectId = getProjectId();
-  if (!projectId) return;
-
-  const { data, error } = await supabase
-    .from("projects")
-    .select("content_json")
-    .eq("id", projectId)
-    .single();
-
-  if (error || !data?.content_json) return;
-
-  const value = getValueByPath(data.content_json, path);
-
-  document.getElementById("bp-title").innerText =
-    path.split(".").slice(-1)[0];
-
-  document.getElementById("bp-path").innerText = path;
-
-  const editor = document.getElementById("bp-editor");
-  if (editor) {
-    editor.value = Array.isArray(value)
-      ? value.join("\n\n")
-      : (value ?? "");
-  }
-
-  document.getElementById("bottom-preview").classList.remove("hidden");
-}
-
-
-function getValueByPath(obj, path) {
-  return path.split(".").reduce((acc, key) => acc?.[key], obj);
-}
-
-function setValueByPath(obj, path, value) {
-  const keys = path.split(".");
-  let curr = obj;
-
-  for (let i = 0; i < keys.length - 1; i++) {
-    if (!curr[keys[i]]) curr[keys[i]] = {};
-    curr = curr[keys[i]];
-  }
-
-  curr[keys[keys.length - 1]] = value;
-}
-async function saveBottomPreview() {
-  if (!currentEditPath) return;
-
-  const projectId = getProjectId();
-  if (!projectId) return;
-
-  const editor = document.getElementById("bp-editor");
-  if (!editor) return;
-
-  const { data } = await supabase
-    .from("projects")
-    .select("content_json")
-    .eq("id", projectId)
-    .single();
-
-  if (!data?.content_json) return;
-
-  const updatedJson = structuredClone(data.content_json);
-  setValueByPath(updatedJson, currentEditPath, editor.value);
-
-  await supabase
-    .from("projects")
-    .update({ content_json: updatedJson })
-    .eq("id", projectId);
-
-  const iframe = document.getElementById("site-preview");
- if (iframe) {
-  const baseSrc = iframe.src.split("?")[0];
-  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
-}
-
-}
-
-window.saveBottomPreview = saveBottomPreview;
-
-document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview);
-
-
-     function subscribeToProjectRealtime(projectId) {
-  supabase
-    .channel("projects-live-" + projectId)
-    .on(
-      "postgres_changes",
-      {
-        event: "UPDATE",
-        schema: "public",
-        table: "projects",
-        filter: `id=eq.${projectId}`,
-      },
-      (payload) => {
-        console.log("Realtime update", payload);
-
-        const iframe = document.getElementById("site-preview");
-        if (iframe) {
-          iframe.contentWindow.postMessage(
-            { type: "content-updated" },
-            "*"
-          );
-        }
-      }
-    )
-    .subscribe();
-}
-
-</script>
-
-<div id="bottom-preview" class="hidden">
-  <div class="bp-header">
-    <div>
-      <span class="bp-title" id="bp-title"></span>
-      <span class="bp-path" id="bp-path"></span>
-    </div>
-
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button
-        id="bp-preview"
-        style="
-          background:#111;
-          color:#fff;
-          border:1px solid rgba(255,255,255,.25);
-          border-radius:6px;
-          padding:4px 10px;
-          font-size:12px;
-          cursor:pointer;
-        "
-      >
-        Preview
-      </button>
-
-      <button
-        id="bp-close"
-        style="
-          background:none;
-          border:none;
-          font-size:18px;
-          cursor:pointer;
-          color:#3a1b0a;
-        "
-      >✕</button>
-    </div>
-  </div>
-
-  <textarea
-    class="bp-editor"
-    id="bp-editor"
-    placeholder="Edit content here..."
-  ></textarea>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const closeBtn = document.getElementById("bp-close");
-  const previewBtn = document.getElementById("bp-preview");
-  const preview = document.getElementById("bottom-preview");
-
-  if (closeBtn && preview) {
-    closeBtn.addEventListener("click", async (e) => {
-      e.stopPropagation();
-      await saveBottomPreview();
-      preview.classList.add("hidden");
-    });
-  }
-
-  if (previewBtn) {
-    previewBtn.addEventListener("click", async (e) => {
-      e.stopPropagation();
-      await saveBottomPreview();
-    });
-  }
-});
-
-</script>
-<script>document.getElementById("previewBtn").addEventListener("click", () => {
-  const projectSlug = window.currentProjectSlug;
-
-  const previewUrl = `https://sitegyn.com/p/${projectSlug}`;
-
-  window.open(previewUrl, "_blank");
-});
 </script>
 </body>
-</html>
+ </html>
