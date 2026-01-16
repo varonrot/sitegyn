@@ -614,44 +614,38 @@ function buildSidebarFromSchema(schema) {
     title.textContent = capitalize(sectionKey);
     container.appendChild(title);
 
-// Special: home.hero (NO "Hero" title)
-if (sectionKey === "home" && sectionProps.hero) {
-  const list = document.createElement("div");
-  list.className = "nav-list";
+for (const fieldKey in sectionProps.hero.properties) {
+  const fieldSchema = sectionProps.hero.properties[fieldKey];
+  const iconClass = getIconFromSchema(fieldSchema);
 
-  for (const fieldKey in sectionProps.hero.properties) {
-    const fieldSchema = sectionProps.hero.properties[fieldKey];
-    const iconClass = getIconFromSchema(fieldSchema);
+  const item = renderAIItem({
+    label: humanize(fieldKey),
+    path: `home.hero.${fieldKey}`,
+    type: fieldSchema.type || "text",
+    iconClass
+  });
 
-    const item = renderNavItem({
-      label: humanize(fieldKey),
-      path: `home.hero.${fieldKey}`,
-      iconClass
-    });
-
-    list.appendChild(item);
-  }
-
-  container.appendChild(list);
-  continue;
+  list.appendChild(item);
 }
+
 
     // Regular fields
     const list = document.createElement("div");
     list.className = "nav-list";
 
-    for (const fieldKey in sectionProps) {
-      const fieldSchema = sectionProps[fieldKey]; // <- contains ui:icon
-      const iconClass = getIconFromSchema(fieldSchema);
+for (const fieldKey in sectionProps) {
+  const fieldSchema = sectionProps[fieldKey];
+  const iconClass = getIconFromSchema(fieldSchema);
 
-      const item = renderNavItem({
-        label: humanize(fieldKey),
-        path: `${sectionKey}.${fieldKey}`,
-        iconClass
-      });
+  const item = renderAIItem({
+    label: humanize(fieldKey),
+    path: `${sectionKey}.${fieldKey}`,
+    type: fieldSchema.type || "text",
+    iconClass
+  });
 
-      list.appendChild(item);
-    }
+  list.appendChild(item);
+}
 
     container.appendChild(list);
   }
@@ -713,14 +707,20 @@ function buildAISidebarFromSchema(schema) {
   }
 }
 
-function renderAIItem({ label, path, type }) {
+function renderAIItem({ label, path, type, iconClass }) {
   const item = document.createElement("div");
   item.className = "nav-item ai-item";
   item.dataset.aiPath = path;
   item.dataset.fieldType = type;
 
+  const safeIcon = iconClass && iconClass.trim()
+    ? iconClass
+    : "fa-wand-magic-sparkles";
+
   item.innerHTML = `
-    <span class="nav-ico"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+    <span class="nav-ico">
+      <i class="fa-solid ${safeIcon}"></i>
+    </span>
     <span class="nav-label">${label}</span>
   `;
 
@@ -730,6 +730,7 @@ function renderAIItem({ label, path, type }) {
 
   return item;
 }
+
 
 async function openAIEditor({ path, type, label }) {
   const projectId = getProjectId();
