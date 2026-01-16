@@ -554,7 +554,6 @@ async function loadTemplateSidebar(projectId) {
 
   loadTemplateLeftSidebarCSS(templateId);
 
-  // ✅ changed to _schema_icon.json
   const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema_icon.json`;
   const schema = await fetch(schemaUrl).then(r => r.json());
 
@@ -578,45 +577,57 @@ async function loadTemplateAISidebar(projectId) {
   const aiSchemaUrl =
     `/sitegyn/templates/${templateId}/${templateId}_AI_Action_Schema.json`;
 
+  console.log("AI SCHEMA URL:", aiSchemaUrl);
+
   const aiSchema = await fetch(aiSchemaUrl).then(r => r.json());
+
+  console.log("AI SCHEMA LOADED:", aiSchema);
 
   buildAISidebarFromSchema(aiSchema);
 }
+
 function buildAISidebarFromSchema(schema) {
   const container = document.getElementById("sidebar-ai-dynamic");
   if (!container) return;
 
   container.innerHTML = "";
 
-  const title = document.createElement("div");
-  title.className = "section-title";
-  title.textContent = "AI Actions";
-  container.appendChild(title);
+  for (const sectionKey in schema) {
+    const section = schema[sectionKey];
 
-  const list = document.createElement("div");
-  list.className = "nav-list";
-
-  const actions = schema.actions || [];
-
-  actions.forEach(action => {
-    const item = document.createElement("div");
-    item.className = "nav-item ai-action";
-    item.dataset.action = action.id;
-    item.dataset.target = action.target;
-    item.dataset.prompt = action.prompt;
-
-    item.innerHTML = `
-      <span class="nav-ico">
-        <i class="fa-solid ${action.icon || "fa-wand-magic-sparkles"}"></i>
-      </span>
-      <span class="nav-label">${action.label}</span>
+    // Section title
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.innerHTML = `
+      <i class="fa-solid ${section.icon || "fa-wand-magic-sparkles"}"></i>
+      ${section.label || sectionKey}
     `;
+    container.appendChild(title);
 
-    list.appendChild(item);
-  });
+    const list = document.createElement("div");
+    list.className = "nav-list";
 
-  container.appendChild(list);
+    (section.actions || []).forEach(action => {
+      const item = document.createElement("div");
+      item.className = "nav-item ai-action";
+      item.dataset.action = action.id;
+      item.dataset.target = action.path;
+      item.dataset.mode   = action.mode;
+
+      item.innerHTML = `
+        <span class="nav-ico">
+          <i class="fa-solid ${action.icon || "fa-wand-magic-sparkles"}"></i>
+        </span>
+        <span class="nav-label">${action.label}</span>
+      `;
+
+      list.appendChild(item);
+    });
+
+    container.appendChild(list);
+  }
 }
+
 
 /* =========================
    Sidebar builder
@@ -754,7 +765,6 @@ function humanize(str) {
 ========================= */
 document.addEventListener("click", async (e) => {
 
-  // ❗ אל תיגע ב-AI actions
   if (e.target.closest(".ai-action")) return;
   if (e.target.closest("#bottom-preview")) return;
 
