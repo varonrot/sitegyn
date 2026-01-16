@@ -681,11 +681,15 @@ function buildAISidebarFromSchema(schema) {
       for (const fieldKey in sectionProps.hero.properties) {
         const fieldSchema = sectionProps.hero.properties[fieldKey];
 
-        const item = renderAIItem({
-          label: humanize(fieldKey),
-          path: `home.hero.${fieldKey}`,
-          type: fieldSchema.type || "text"
-        });
+    const iconClass = getIconFromSchema(fieldSchema);
+
+const item = renderAIItem({
+  label,
+  path,
+  type,
+  iconClass
+});
+
 
         list.appendChild(item);
       }
@@ -712,24 +716,20 @@ function buildAISidebarFromSchema(schema) {
     container.appendChild(list);
   }
 }
-
-function renderAIItem({ label, path, type }) {
+function renderAIItem({ label, path, type, iconClass }) {
   const item = document.createElement("div");
   item.className = "nav-item ai-item";
-  item.dataset.aiPath = path;
-  item.dataset.fieldType = type;
 
   item.innerHTML = `
-    <span class="nav-ico"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+    <span class="nav-ico">
+      <i class="fa-solid ${iconClass}"></i>
+    </span>
     <span class="nav-label">${label}</span>
   `;
 
-  item.addEventListener("click", () => {
-    openAIEditor({ path, type, label });
-  });
-
   return item;
 }
+
 
 async function openAIEditor({ path, type, label }) {
   const projectId = getProjectId();
@@ -774,57 +774,6 @@ function buildNestedSection(container, titleText, fields, basePath) {
   }
 
   container.appendChild(list);
-}
-/* =========================
-   AI Sidebar Builder (RIGHT)
-========================= */
-function buildAISidebarFromSchema(schema) {
-  const container = document.getElementById("sidebar-ai-dynamic");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const sections = schema.properties || {};
-
-  for (const sectionKey in sections) {
-    const sectionSchema = sections[sectionKey];
-    const sectionProps = sectionSchema.properties || {};
-
-    // Section title
-    const title = document.createElement("div");
-    title.className = "section-title";
-    title.textContent = sectionKey.toUpperCase();
-    container.appendChild(title);
-
-    const list = document.createElement("div");
-    list.className = "nav-list";
-
-    for (const fieldKey in sectionProps) {
-      const fieldSchema = sectionProps[fieldKey];
-      const iconClass = getIconFromSchema(fieldSchema);
-
-      const item = document.createElement("div");
-      item.className = "nav-item ai";
-      item.dataset.path = `${sectionKey}.${fieldKey}`;
-
-      item.innerHTML = `
-        <span class="nav-ico">
-          <i class="fa-solid ${iconClass}"></i>
-        </span>
-        <span class="nav-label">
-          Rewrite ${humanize(fieldKey)}
-        </span>
-      `;
-
-      item.addEventListener("click", () => {
-        openAIPromptForPath(item.dataset.path);
-      });
-
-      list.appendChild(item);
-    }
-
-    container.appendChild(list);
-  }
 }
 
 /* =========================
