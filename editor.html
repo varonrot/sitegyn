@@ -1149,41 +1149,51 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =========================
-  // Load chat history
+  // Helpers
   // =========================
-  async function loadChatHistory(projectId) {
-    const { data, error } = await supabase
-      .from("chat_messages")
-      .select("role, content")
-      .eq("project_id", projectId)
-      .order("created_at", { ascending: true });
+  function getProjectIdFromURL() {
+    return new URLSearchParams(window.location.search).get("project_id");
+  }
 
-    if (error) {
-      console.error("loadChatHistory error:", error);
-      return;
-    }
+  function appendMessage(role, content) {
+    const div = document.createElement("div");
+    div.className =
+      role === "user"
+        ? "ai-msg ai-msg-user"
+        : "ai-msg ai-msg-system";
 
-    aiMessages.innerHTML = "";
-
-    data.forEach(msg => {
-      const div = document.createElement("div");
-      div.className =
-        msg.role === "user"
-          ? "ai-msg ai-msg-user"
-          : "ai-msg ai-msg-system";
-
-      div.textContent = msg.content;
-      aiMessages.appendChild(div);
-    });
-
+    div.textContent = content;
+    aiMessages.appendChild(div);
     aiMessages.scrollTop = aiMessages.scrollHeight;
   }
 
-  // ===== OPEN (top magic button) =====
+  // =========================
+  // Load history via backend
+  // =========================
+  async function loadChatHistory(projectId) {
+    try {
+      const res = await fetch("/api/chat/history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project_id: projectId })
+      });
+
+      const data = await res.json();
+      if (!Array.isArray(data)) return;
+
+      aiMessages.innerHTML = "";
+      data.forEach(msg => appendMessage(msg.role, msg.content));
+
+    } catch (err) {
+      console.error("Failed to load chat history", err);
+    }
+  }
+
+  // ===== OPEN =====
   aiChatBtn.addEventListener("click", async () => {
     aiOverlay.classList.remove("hidden");
 
-    const projectId = getProjectId();
+    const projectId = getProjectIdFromURL();
     if (projectId) {
       await loadChatHistory(projectId);
     }
@@ -1191,21 +1201,19 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => aiTextarea?.focus(), 50);
   });
 
-  // ===== CLOSE (X button) =====
+  // ===== CLOSE =====
   aiClose?.addEventListener("click", () => {
     aiOverlay.classList.add("hidden");
   });
 
-  // ===== CLOSE on overlay click (outside panel) =====
   aiOverlay.addEventListener("click", (e) => {
     if (e.target === aiOverlay) {
       aiOverlay.classList.add("hidden");
     }
   });
 
-  // ===== SEND message =====
+  // ===== SEND =====
   aiSend?.addEventListener("click", sendMessage);
-
   aiTextarea?.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -1217,29 +1225,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const text = aiTextarea.value.trim();
     if (!text) return;
 
-    // UI
-    const msg = document.createElement("div");
-    msg.className = "ai-msg ai-msg-user";
-    msg.textContent = text;
-    aiMessages.appendChild(msg);
-    aiMessages.scrollTop = aiMessages.scrollHeight;
+    const projectId = getProjectIdFromURL();
+    if (!projectId) {
+      console.error("Missing project_id");
+      return;
+    }
 
+    appendMessage("user", text);
     aiTextarea.value = "";
 
-    // DB
-    const projectId = getProjectId();
-    if (!projectId) return;
-
-    const { error } = await supabase
-      .from("chat_messages")
-      .insert({
-        project_id: projectId,
-        role: "user",
-        content: text
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          project_id: projectId,
+          message: text,
+          source: "editor"
+        })
       });
 
-    if (error) {
-      console.error("Insert chat message error:", error);
+      const data = await res.json();
+      if (data?.reply) {
+        appendMessage("assistant", data.reply);
+      }
+
+    } catch (err) {
+      console.error("Chat send failed", err);
     }
   }
 
