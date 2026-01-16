@@ -1101,7 +1101,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.open(previewUrl, "_blank");
 });
 </script>
- 
+
     <!-- =========================
    AI CHAT MODAL
 ========================= -->
@@ -1132,7 +1132,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </div>
 
-<script>
+ <script>
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===== Elements =====
@@ -1143,14 +1143,51 @@ document.addEventListener("DOMContentLoaded", () => {
   const aiMessages  = document.getElementById("ai-chat-messages");
   const aiChatBtn   = document.getElementById("ai-chat-btn");
 
-  if (!aiOverlay || !aiChatBtn) {
+  if (!aiOverlay || !aiChatBtn || !aiMessages) {
     console.warn("AI Chat: missing required elements");
     return;
   }
 
+  // =========================
+  // Load chat history
+  // =========================
+  async function loadChatHistory(projectId) {
+    const { data, error } = await supabase
+      .from("chat_messages")
+      .select("role, content")
+      .eq("project_id", projectId)
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.error("loadChatHistory error:", error);
+      return;
+    }
+
+    aiMessages.innerHTML = "";
+
+    data.forEach(msg => {
+      const div = document.createElement("div");
+      div.className =
+        msg.role === "user"
+          ? "ai-msg ai-msg-user"
+          : "ai-msg ai-msg-system";
+
+      div.textContent = msg.content;
+      aiMessages.appendChild(div);
+    });
+
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+  }
+
   // ===== OPEN (top magic button) =====
-  aiChatBtn.addEventListener("click", () => {
+  aiChatBtn.addEventListener("click", async () => {
     aiOverlay.classList.remove("hidden");
+
+    const projectId = getProjectId();
+    if (projectId) {
+      await loadChatHistory(projectId);
+    }
+
     setTimeout(() => aiTextarea?.focus(), 50);
   });
 
@@ -1166,7 +1203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ===== SEND message (local only – no AI yet) =====
+  // ===== SEND message =====
   aiSend?.addEventListener("click", sendMessage);
 
   aiTextarea?.addEventListener("keydown", (e) => {
@@ -1176,18 +1213,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  function sendMessage() {
+  async function sendMessage() {
     const text = aiTextarea.value.trim();
     if (!text) return;
 
+    // UI
     const msg = document.createElement("div");
     msg.className = "ai-msg ai-msg-user";
     msg.textContent = text;
-
     aiMessages.appendChild(msg);
     aiMessages.scrollTop = aiMessages.scrollHeight;
 
     aiTextarea.value = "";
+
+    // DB
+    const projectId = getProjectId();
+    if (!projectId) return;
+
+    const { error } = await supabase
+      .from("chat_messages")
+      .insert({
+        project_id: projectId,
+        role: "user",
+        content: text
+      });
+
+    if (error) {
+      console.error("Insert chat message error:", error);
+    }
   }
 
 });
