@@ -2,7 +2,6 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Health Care Website Content",
   "type": "object",
-
   "properties": {
     "home": {
       "type": "object",
@@ -149,44 +148,14 @@
       "required": ["headline", "items", "count"]
     },
 
-    "appointment": {
-      "type": "object",
-      "properties": {
-        "pill": { "type": "string" },
-        "title": { "type": "string" },
-        "subtitle": { "type": "string" },
-        "call_label": { "type": "string" },
-        "phone": { "type": "string" }
-      },
-      "required": ["title", "subtitle"]
-    },
-
-    "footer": {
-      "type": "object",
-      "properties": {
-        "brand": {
-          "type": "object",
-          "properties": {
-            "logo": { "type": "string" },
-            "description": { "type": "string" }
-          },
-          "required": ["logo", "description"]
-        },
-        "copyright": {
-          "type": "string"
-        }
-      },
-      "required": ["brand", "copyright"]
-    }
+"appointment": {
+  "type": "object",
+  "properties": {
+    "pill": { "type": "string" },
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "call_label": { "type": "string" },
+    "phone": { "type": "string" }
   },
-
-  "required": [
-    "home",
-    "about",
-    "departments",
-    "services",
-    "testimonials",
-    "appointment",
-    "footer"
-  ]
+  "required": ["title", "subtitle"]
 }
