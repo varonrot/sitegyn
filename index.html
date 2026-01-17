@@ -1586,11 +1586,12 @@ body.chat-open .page-wrap {
 </div>
 
 <!-- TYPING SCRIPT + NAV -->
-<script>
+ <script>
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
+/* ===== HERO TYPING ===== */
 const words = ["AI website","landing page","portfolio site","course hub"];
 let wordIndex = 0;
 let charIndex = 0;
@@ -1625,9 +1626,9 @@ function type() {
 
 document.addEventListener("DOMContentLoaded", () => {
   window.scrollTo(0, 0);
-
   type();
 
+  /* ===== MOBILE NAV ===== */
   const toggle = document.querySelector(".nav-toggle");
   const mobile = document.getElementById("navMobile");
 
@@ -1637,60 +1638,24 @@ document.addEventListener("DOMContentLoaded", () => {
       toggle.classList.toggle("is-open", open);
     });
 
-    const mobileLinks = document.querySelectorAll(".nav-mobile-link");
-    mobileLinks.forEach(link => {
+    document.querySelectorAll(".nav-mobile-link").forEach(link => {
       link.addEventListener("click", () => {
-        if (mobile.classList.contains("open")) {
-          mobile.classList.remove("open");
-          toggle.classList.remove("is-open");
-        }
+        mobile.classList.remove("open");
+        toggle.classList.remove("is-open");
       });
     });
   }
-    // ===== CHAT CREATE BUTTON LOGIC =====
+
+  /* ===== CHAT CREATE BUTTON ===== */
   const createBtn = document.getElementById('sitegyn-create-btn');
   const input = document.getElementById('sitegyn-chat-input');
 
   if (createBtn && input) {
-    createBtn.addEventListener('click', async () => {
-      const text = input.value.trim();
-      if (!text) return;
-
-      // show user message
-      appendMessage(text, 'user');
-      input.value = '';
-
-      // 🔥 start fake build sequence
-      fakeBuildSequence();
-
-      const projectId = localStorage.getItem('sitegyn_project_id');
-      if (!projectId) {
-        typeBotMessage("Something went wrong. Please reopen the chat.");
-        return;
-      }
-
-      try {
-        await fetch(`${API_BASE}/api/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            project_id: projectId,
-            message: text
-          })
-        });
-
-        // ⏱ wait for build to feel real
-        setTimeout(() => {
-          typeBotMessage("🚀 Your website is ready!");
-          showViewWebsiteButton();
-        }, 9000);
-
-      } catch (err) {
-        typeBotMessage("Network error. Please try again.");
-      }
+    createBtn.addEventListener('click', () => {
+      const form = document.getElementById('sitegyn-chat-form');
+      if (form) form.dispatchEvent(new Event('submit'));
     });
   }
-
 });
 </script>
 <script>
@@ -1715,17 +1680,15 @@ async function initProjectIfNeeded() {
   const existing = localStorage.getItem('sitegyn_project_id');
   if (existing) return existing;
 
-  const payload = {
-    client_id: createClientId(),
-    language: 'en',
-    business_type: 'consulting',
-    business_name: 'Demo Biz'
-  };
-
   const res = await fetch(`${API_BASE}/api/start_project`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({
+      client_id: createClientId(),
+      language: 'en',
+      business_type: 'consulting',
+      business_name: 'Demo Biz'
+    })
   });
 
   if (!res.ok) throw new Error('start_project failed');
@@ -1735,15 +1698,13 @@ async function initProjectIfNeeded() {
   return data.project_id;
 }
 
-async function pingBackend() {
-  try {
-    await fetch(`${API_BASE}/`);
-  } catch (_) {}
-}
-
 /* =========================
    CHAT UI HELPERS
 ========================= */
+function wait(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
 function typeBotMessage(text, baseSpeed = 45) {
   return new Promise(resolve => {
     const box = document.getElementById('sitegyn-chat-messages');
@@ -1758,29 +1719,18 @@ function typeBotMessage(text, baseSpeed = 45) {
     box.appendChild(msg);
 
     let i = 0;
-
     function typeChar() {
       if (i < text.length) {
-        bubble.textContent += text.charAt(i);
-        i++;
-
-        let delay = baseSpeed + Math.random() * 40;
-        if (/[.,!]/.test(text.charAt(i - 1))) delay += 300;
-
+        bubble.textContent += text.charAt(i++);
         box.scrollTop = box.scrollHeight;
-        setTimeout(typeChar, delay);
+        setTimeout(typeChar, baseSpeed + Math.random() * 40);
       } else {
         resolve();
       }
     }
-
     typeChar();
   });
 }
-function wait(ms) {
-  return new Promise(res => setTimeout(res, ms));
-}
-
 
 function appendMessage(text, who) {
   const box = document.getElementById('sitegyn-chat-messages');
@@ -1799,24 +1749,24 @@ function appendMessage(text, who) {
 }
 
 /* =========================
-   F. BUILD SEQUENCE
+   FAKE BUILD LOOP (🔥 חשוב)
 ========================= */
-async function fakeBuildSequence() {
-  await typeBotMessage("Got it 👍 Let me start building your website…");
-  await wait(900);
+async function fakeBuildLoop(isDone) {
+  const steps = [
+    "• Creating the site structure",
+    "• Writing content based on your business",
+    "• Designing layout and colors",
+    "• Optimizing for mobile",
+    "• Final touches…"
+  ];
 
-  await typeBotMessage("• Creating the site structure");
-  await wait(900);
-
-  await typeBotMessage("• Writing content based on your business");
-  await wait(900);
-
-  await typeBotMessage("• Designing layout and colors");
-  await wait(900);
-
-  await typeBotMessage("Almost there…");
+  let i = 0;
+  while (!isDone()) {
+    await typeBotMessage(steps[i % steps.length]);
+    await wait(900);
+    i++;
+  }
 }
-
 
 /* =========================
    VIEW WEBSITE BUTTON
@@ -1871,9 +1821,8 @@ async function openChat() {
     if (!window.__introTyped) {
       window.__introTyped = true;
       typeBotMessage(
-        "Hi 👋\n\nTo build your website, I’ll need a few details.\n" +
-        "Please tell me:\n• your name\n• your business name\n• what your business does\n\n" +
-        "Take your time 😊"
+        "Hi 👋\n\nTo build your website, I’ll need:\n" +
+        "• your name\n• business name\n• what you do\n\nTake your time 😊"
       );
     }
   } catch {
@@ -1885,16 +1834,13 @@ async function openChat() {
    MAIN FORM LOGIC
 ========================= */
 document.addEventListener('DOMContentLoaded', () => {
-  pingBackend();
-
   const form = document.getElementById('sitegyn-chat-form');
   const input = document.getElementById('sitegyn-chat-input');
   const closeBtn = document.getElementById('sitegyn-chat-close');
-  const wrapper = document.getElementById('sitegyn-chat-wrapper');
 
-  if (closeBtn && wrapper) {
+  if (closeBtn) {
     closeBtn.onclick = () => {
-      wrapper.classList.remove('open');
+      document.getElementById('sitegyn-chat-wrapper')?.classList.remove('open');
       document.body.classList.remove('chat-open');
     };
   }
@@ -1903,15 +1849,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (window.__isBuilding) return;
 
     const text = input.value.trim();
     if (!text) return;
 
+    window.__isBuilding = true;
     appendMessage(text, 'user');
     input.value = '';
 
-    /* 🔥 start fake build immediately */
-    fakeBuildSequence();
+    let backendDone = false;
+    fakeBuildLoop(() => backendDone);
 
     try {
       await fetch(`${API_BASE}/api/chat`, {
@@ -1923,14 +1871,16 @@ document.addEventListener('DOMContentLoaded', () => {
         })
       });
 
-      setTimeout(() => {
-        typeBotMessage("🚀 Your website is ready!");
-        showViewWebsiteButton();
-      }, 9000);
+      backendDone = true;
+      await typeBotMessage("🚀 Your website is ready!");
+      showViewWebsiteButton();
 
     } catch {
-      typeBotMessage("Network error. Please try again.");
+      backendDone = true;
+      await typeBotMessage("Network error. Please try again.");
     }
+
+    window.__isBuilding = false;
   });
 });
 </script>
