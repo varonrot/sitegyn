@@ -1185,26 +1185,43 @@ document.addEventListener("DOMContentLoaded", () => {
   return div;
 }
 
-function typeText(element, text, speed = 18) {
+function typeText(element, text, baseSpeed = 80) {
   return new Promise(resolve => {
     element.textContent = "";
     let i = 0;
-    element.classList.add("typing");
 
-    const interval = setInterval(() => {
-      element.textContent += text.charAt(i);
+    function typeNext() {
+      if (i >= text.length) {
+        resolve();
+        return;
+      }
+
+      const char = text.charAt(i);
+      element.textContent += char;
       i++;
+
+      // ===== Human typing logic =====
+      let delay = baseSpeed;
+
+      // random variance (human inconsistency)
+      delay += Math.random() * 40;
+
+      // punctuation pauses
+      if (/[.,!?]/.test(char)) delay += 180;
+      if (char === "\n") delay += 300;
+
+      // slight slow-down near end
+      if (i > text.length * 0.8) delay += 40;
 
       element.scrollIntoView({ behavior: "smooth", block: "end" });
 
-      if (i >= text.length) {
-        clearInterval(interval);
-        element.classList.remove("typing");
-        resolve();
-      }
-    }, speed);
+      setTimeout(typeNext, delay);
+    }
+
+    typeNext();
   });
 }
+
 
   // =========================
   // Load history via backend
