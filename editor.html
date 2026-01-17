@@ -925,22 +925,24 @@ document.addEventListener("click", async (e) => {
   openBottomPreview(path);
 });
 function typeText(element, text, speed = 22) {
-  element.textContent = "";
-  let i = 0;
+  return new Promise(resolve => {
+    element.textContent = "";
+    let i = 0;
+    element.classList.add("typing");
 
-  element.classList.add("typing");
+    const interval = setInterval(() => {
+      element.textContent += text.charAt(i);
+      i++;
 
-  const interval = setInterval(() => {
-    element.textContent += text.charAt(i);
-    i++;
+      element.scrollIntoView({ behavior: "smooth", block: "end" });
 
-    element.scrollIntoView({ behavior: "smooth", block: "end" });
-
-    if (i >= text.length) {
-      clearInterval(interval);
-      element.classList.remove("typing");
-    }
-  }, speed);
+      if (i >= text.length) {
+        clearInterval(interval);
+        element.classList.remove("typing");
+        resolve();
+      }
+    }, speed);
+  });
 }
 
 
