@@ -925,35 +925,22 @@ document.addEventListener("click", async (e) => {
   openBottomPreview(path);
 });
 function typeText(element, text, speed = 22) {
-  return new Promise((resolve) => {
-    element.textContent = "";
-    let i = 0;
+  element.textContent = "";
+  let i = 0;
 
-    aiIsTyping = true;
-    element.classList.add("typing");
+  element.classList.add("typing");
 
-    const interval = setInterval(() => {
-      element.textContent += text.charAt(i);
-      i++;
+  const interval = setInterval(() => {
+    element.textContent += text.charAt(i);
+    i++;
 
-      element.scrollIntoView({ behavior: "smooth", block: "end" });
+    element.scrollIntoView({ behavior: "smooth", block: "end" });
 
-      if (i >= text.length) {
-        clearInterval(interval);
-        element.classList.remove("typing");
-        aiIsTyping = false;
-        resolve();
-      }
-    }, speed);
-  });
-}
-function createAssistantBubble() {
-  const div = document.createElement("div");
-  div.className = "ai-msg ai-msg-system";
-  div.textContent = "";
-  aiMessages.appendChild(div);
-  aiMessages.scrollTop = aiMessages.scrollHeight;
-  return div;
+    if (i >= text.length) {
+      clearInterval(interval);
+      element.classList.remove("typing");
+    }
+  }, speed);
 }
 
 
@@ -1117,7 +1104,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.getElementById("bp-close");
   const previewBtn = document.getElementById("bp-preview");
   const preview = document.getElementById("bottom-preview");
-  let aiIsTyping = false;
 
   if (closeBtn && preview) {
     closeBtn.addEventListener("click", async (e) => {
@@ -1198,14 +1184,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return new URLSearchParams(window.location.search).get("project_id");
   }
 
-function appendUserMessage(content) {
-  const div = document.createElement("div");
-  div.className = "ai-msg ai-msg-user";
-  div.textContent = content;
-  aiMessages.appendChild(div);
-  aiMessages.scrollTop = aiMessages.scrollHeight;
-}
+  function appendMessage(role, content) {
+    const div = document.createElement("div");
+    div.className =
+      role === "user"
+        ? "ai-msg ai-msg-user"
+        : "ai-msg ai-msg-system";
 
+    div.textContent = content;
+    aiMessages.appendChild(div);
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+  }
 
   // =========================
   // Load history via backend
