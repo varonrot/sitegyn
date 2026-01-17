@@ -1579,9 +1579,8 @@ body.chat-open .page-wrap {
   autocomplete="off">
 </textarea>
 
-    <button type="submit" id="sitegyn-chat-send">
-  Create my website
-</button>
+<button id="sitegyn-create-btn">Create my website</button>
+
 
   </form>
 </div>
@@ -1648,6 +1647,50 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+    // ===== CHAT CREATE BUTTON LOGIC =====
+  const createBtn = document.getElementById('sitegyn-create-btn');
+  const input = document.getElementById('sitegyn-chat-input');
+
+  if (createBtn && input) {
+    createBtn.addEventListener('click', async () => {
+      const text = input.value.trim();
+      if (!text) return;
+
+      // show user message
+      appendMessage(text, 'user');
+      input.value = '';
+
+      // 🔥 start fake build sequence
+      fakeBuildSequence();
+
+      const projectId = localStorage.getItem('sitegyn_project_id');
+      if (!projectId) {
+        typeBotMessage("Something went wrong. Please reopen the chat.");
+        return;
+      }
+
+      try {
+        await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            project_id: projectId,
+            message: text
+          })
+        });
+
+        // ⏱ wait for build to feel real
+        setTimeout(() => {
+          typeBotMessage("🚀 Your website is ready!");
+          showViewWebsiteButton();
+        }, 9000);
+
+      } catch (err) {
+        typeBotMessage("Network error. Please try again.");
+      }
+    });
+  }
+
 });
 </script>
 <script>
@@ -1870,265 +1913,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-
-<!-- CHAT + BACKEND LOGIC -->
-<!--<script>-->
-<!--  const API_BASE = 'https://sitegyn-backend.onrender.com';-->
-
-<!--  function createClientId() {-->
-<!--    let id = localStorage.getItem('sitegyn_client_id');-->
-<!--    if (!id) {-->
-<!--      id = 'client_' + Math.random().toString(36).substring(2) + Date.now().toString(36);-->
-<!--      localStorage.setItem('sitegyn_client_id', id);-->
-<!--      console.log('[Sitegyn] New client_id created:', id);-->
-<!--    } else {-->
-<!--      console.log('[Sitegyn] Existing client_id:', id);-->
-<!--    }-->
-<!--    return id;-->
-<!--  }-->
-
-<!--  async function initProjectIfNeeded() {-->
-<!--    const existing = localStorage.getItem('sitegyn_project_id');-->
-<!--    if (existing) {-->
-<!--      return existing;-->
-<!--    }-->
-
-<!--    const clientId = createClientId();-->
-
-<!--    const payload = {-->
-<!--      client_id: clientId,-->
-<!--      language: 'en',-->
-<!--      business_type: 'consulting',-->
-<!--      business_name: 'Demo Biz'-->
-<!--    };-->
-
-<!--    try {-->
-<!--      console.log('[Sitegyn] Starting project, payload:', payload);-->
-
-<!--      const res = await fetch(`${API_BASE}/api/start_project`, {-->
-<!--        method: 'POST',-->
-<!--        headers: { 'Content-Type': 'application/json' },-->
-<!--        body: JSON.stringify(payload)-->
-<!--      });-->
-
-<!--      if (!res.ok) {-->
-<!--        console.error('[Sitegyn] start_project failed:', res.status, await res.text());-->
-<!--        throw new Error('start_project failed');-->
-<!--      }-->
-
-<!--      const data = await res.json();-->
-<!--      console.log('[Sitegyn] Project started:', data);-->
-
-<!--      if (data.project_id) {-->
-<!--        localStorage.setItem('sitegyn_project_id', data.project_id);-->
-<!--        return data.project_id;-->
-<!--      }-->
-<!--      throw new Error('No project_id in response');-->
-<!--    } catch (err) {-->
-<!--      console.error('[Sitegyn] Error calling /api/start_project:', err);-->
-<!--      throw err;-->
-<!--    }-->
-<!--  }-->
-
-<!--  async function pingBackend() {-->
-<!--    try {-->
-<!--      const res = await fetch(`${API_BASE}/`);-->
-<!--      const data = await res.json();-->
-<!--      console.log('[Sitegyn] Backend OK:', data);-->
-<!--    } catch (err) {-->
-<!--      console.error('[Sitegyn] Backend ping failed:', err);-->
-<!--    }-->
-<!--  }-->
-
-<!--async function openChat() {-->
-<!--  const wrapper = document.getElementById('sitegyn-chat-wrapper');-->
-<!--  const statusEl = document.getElementById('sitegyn-chat-status');-->
-
-<!--  if (!wrapper) return;-->
-
-<!--  document.body.classList.add('chat-open');-->
-<!--  wrapper.classList.add('open');-->
-<!--  statusEl.textContent = 'Creating your project…';-->
-
-<!--  try {-->
-<!--    await initProjectIfNeeded();-->
-<!--    statusEl.textContent = 'Project ready';-->
-
-<!--    if (!window.__introTyped) {-->
-<!--      window.__introTyped = true;-->
-
-<!--      typeBotMessage(-->
-<!--        "Hi 👋\n\nTo build your website, I’ll need a few details.\nPlease tell me:\n• your name\n• your business name\n• and what your business does\n\nTake your time 😊"-->
-<!--      );-->
-<!--    }-->
-
-<!--  } catch (err) {-->
-<!--    statusEl.textContent = 'Problem creating project. Try again.';-->
-<!--  }-->
-<!--}-->
-<!--function typeBotMessage(text, baseSpeed = 45) {-->
-<!--  const box = document.getElementById('sitegyn-chat-messages');-->
-<!--  if (!box) return;-->
-
-<!--  const msg = document.createElement('div');-->
-<!--  msg.className = 'sg-msg sg-msg-bot';-->
-
-<!--  const bubble = document.createElement('div');-->
-<!--  bubble.className = 'sg-msg-bubble';-->
-<!--  msg.appendChild(bubble);-->
-<!--  box.appendChild(msg);-->
-
-<!--  let i = 0;-->
-
-<!--  function typeChar() {-->
-<!--    if (i < text.length) {-->
-<!--      bubble.textContent += text.charAt(i);-->
-<!--      i++;-->
-
-<!--      let delay = baseSpeed + Math.random() * 40;-->
-<!--      if (/[.,!]/.test(text.charAt(i - 1))) delay += 300;-->
-
-<!--      box.scrollTop = box.scrollHeight;-->
-<!--      setTimeout(typeChar, delay);-->
-<!--    }-->
-<!--  }-->
-
-<!--  typeChar();-->
-<!--}-->
-
-
-
-<!--  function appendMessage(text, who) {-->
-<!--    const box = document.getElementById('sitegyn-chat-messages');-->
-<!--    if (!box) return;-->
-<!--    const msg = document.createElement('div');-->
-<!--    msg.className = 'sg-msg ' + (who === 'user' ? 'sg-msg-user' : 'sg-msg-bot');-->
-<!--    const bubble = document.createElement('div');-->
-<!--    bubble.className = 'sg-msg-bubble';-->
-<!--    bubble.textContent = text;-->
-<!--    msg.appendChild(bubble);-->
-<!--    box.appendChild(msg);-->
-<!--    box.scrollTop = box.scrollHeight;-->
-<!--  }-->
-
-<!--  document.addEventListener('DOMContentLoaded', () => {-->
-<!--    pingBackend();-->
-
-<!--    const closeBtn = document.getElementById('sitegyn-chat-close');-->
-<!--    const wrapper = document.getElementById('sitegyn-chat-wrapper');-->
-<!--    const form = document.getElementById('sitegyn-chat-form');-->
-<!--    const input = document.getElementById('sitegyn-chat-input');-->
-
-<!--    if (closeBtn && wrapper) {-->
-<!--closeBtn.addEventListener('click', () => {-->
-<!--  wrapper.classList.remove('open');-->
-<!--  document.body.classList.remove('chat-open');-->
-<!--});-->
-
-<!--    }-->
-
-<!--    if (form && input) {-->
-<!--      form.addEventListener('submit', async (e) => {-->
-<!--        e.preventDefault();-->
-<!--        const text = input.value.trim();-->
-<!--        if (!text) return;-->
-
-<!--        appendMessage(text, 'user');-->
-<!--        input.value = '';-->
-<!--function fakeBuildSequence() {-->
-<!--  typeBotMessage("Got it 👍 Let me start building your website…");-->
-
-<!--  setTimeout(() => {-->
-<!--    typeBotMessage("• Creating the site structure");-->
-<!--  }, 1500);-->
-
-<!--  setTimeout(() => {-->
-<!--    typeBotMessage("• Writing content based on your business");-->
-<!--  }, 3500);-->
-
-<!--  setTimeout(() => {-->
-<!--    typeBotMessage("• Designing layout and colors");-->
-<!--  }, 5500);-->
-
-<!--  setTimeout(() => {-->
-<!--    typeBotMessage("Almost there…");-->
-<!--  }, 7500);-->
-<!--}-->
-
-<!--        const projectId = localStorage.getItem('sitegyn_project_id');-->
-<!--        if (!projectId) {-->
-<!--          appendMessage("Couldn't find project id. Please close and reopen the chat.", 'bot');-->
-<!--          return;-->
-<!--        }-->
-
-<!--        try {-->
-<!--          const res = await fetch(`${API_BASE}/api/chat`, {-->
-<!--            method: 'POST',-->
-<!--            headers: { 'Content-Type': 'application/json' },-->
-<!--            body: JSON.stringify({ project_id: projectId, message: text })-->
-<!--          });-->
-
-<!--          if (!res.ok) {-->
-<!--            const errText = await res.text();-->
-<!--            console.error('Chat API error:', errText);-->
-<!--            appendMessage('Something went wrong. Try again in a moment.', 'bot');-->
-<!--            return;-->
-<!--          }-->
-
-<!--        const data = await res.json();-->
-
-<!--setTimeout(() => {-->
-<!--  typeBotMessage("🚀 Your website is ready!");-->
-<!--  showViewWebsiteButton();-->
-<!--}, 9000);-->
-
-<!--const lastMsg = document.querySelector('#sitegyn-chat-messages .sg-msg-bot:last-child .sg-msg-bubble');-->
-<!--if (lastMsg) {-->
-<!--  lastMsg.style.fontSize = '16px';-->
-<!--  lastMsg.style.fontWeight = '700';-->
-<!--  lastMsg.style.color = '#ffffff';-->
-<!--}-->
-
-<!--if (!window.__siteReadyShown) {-->
-<!--  window.__siteReadyShown = true;-->
-
-<!--  const box = document.getElementById('sitegyn-chat-messages');-->
-<!--  const btn = document.createElement('button');-->
-
-<!--  btn.textContent = 'View website →';-->
-<!--btn.style.marginTop = '14px';-->
-<!--btn.style.padding = '14px 22px';-->
-<!--btn.style.fontSize = '15px';-->
-<!--btn.style.fontWeight = '700';-->
-<!--btn.style.borderRadius = '999px';-->
-<!--btn.style.border = 'none';-->
-<!--btn.style.cursor = 'pointer';-->
-<!--btn.style.background = 'linear-gradient(130deg,#18e57c,#2fe1ff)';-->
-<!--btn.style.color = '#02030a';-->
-<!--btn.style.boxShadow = '0 0 25px rgba(24,229,124,0.6)';-->
-<!--btn.style.width = 'fit-content';-->
-<!--btn.onmouseenter = () => btn.style.transform = 'translateY(-1px)';-->
-<!--btn.onmouseleave = () => btn.style.transform = 'translateY(0)';-->
-
-
-<!--  btn.onclick = () => {-->
-<!--    const pid = localStorage.getItem('sitegyn_project_id');-->
-<!--    if (pid) {-->
-<!--      window.location.href = `/editor.html?project_id=${pid}`;-->
-<!--    }-->
-<!--  };-->
-
-<!--  box.appendChild(btn);-->
-<!--}-->
-
-<!--        } catch (err) {-->
-<!--          console.error('Chat fetch error:', err);-->
-<!--          appendMessage('Network error. Please try again later.', 'bot');-->
-<!--        }-->
-<!--      });-->
-<!--    }-->
-<!--  });-->
-<!--</script>-->
+ 
 <script>
 function openEditorFromHome() {
   const projectId = localStorage.getItem('sitegyn_project_id');
