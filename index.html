@@ -788,21 +788,23 @@
     }
 
     /* ===== CHAT PANEL (חדש) ===== */
-    #sitegyn-chat-wrapper{
-      position:fixed;
-      right:32px;
-      bottom:32px;
-      width:420px;
-      max-height:560px;
-      background:rgba(8,11,26,0.98);
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.16);
-      box-shadow:0 24px 60px rgba(0,0,0,0.75);
-      display:none;
-      flex-direction:column;
-      overflow:hidden;
-      z-index:60;
-    }
+#sitegyn-chat-wrapper{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 640px;
+  max-width: calc(100% - 32px);
+  max-height: 700px;
+  background: rgba(8,11,26,0.98);
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.85);
+  display: none;
+  flex-direction: column;
+  z-index: 60;
+}
+
 
     #sitegyn-chat-wrapper.open{
       display:flex;
@@ -834,7 +836,7 @@
       padding:10px 12px;
       flex:1;
       overflow-y:auto;
-      font-size:12px;
+      font-size:14px;
     }
     .sg-msg{
       margin-bottom:8px;
@@ -850,6 +852,13 @@
       padding:6px 9px;
       border-radius:12px;
     }
+    .sg-msg-bot .sg-msg-bubble{
+  background:#0b1224;
+  border:1px solid rgba(255,255,255,0.14);
+  color:#f7f8ff;              /* ← הבהרה */
+  font-size:14px;
+}
+
     .sg-msg-user .sg-msg-bubble{
       background:#2563eb;
     }
@@ -863,17 +872,46 @@
       display:flex;
       gap:6px;
     }
-    #sitegyn-chat-input{
-      flex:1;
-      resize:none;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.12);
-      padding:6px 8px;
-      font-size:12px;
-      font-family:inherit;
-      background:#020617;
-      color:var(--text);
-    }
+#sitegyn-chat-input{
+  flex: 1;
+  resize: none;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  background: #0b1228;
+  color: var(--text);
+  outline: none;
+  caret-color: #2fe1a7;
+}
+
+/* ===== Placeholder visibility (dark background fix) ===== */
+#sitegyn-chat-input::placeholder{
+  color: rgba(255,255,255,0.55);
+  font-weight: 400;
+}
+
+/* Chrome / Edge */
+#sitegyn-chat-input::-webkit-input-placeholder{
+  color: rgba(255,255,255,0.55);
+}
+
+/* Firefox */
+#sitegyn-chat-input::-moz-placeholder{
+  color: rgba(255,255,255,0.55);
+}
+
+/* On focus – softer placeholder */
+#sitegyn-chat-input:focus::placeholder{
+  color: rgba(255,255,255,0.7);
+}
+
+/* Optional: subtle focus feedback */
+#sitegyn-chat-input:focus{
+  border-color: rgba(47,225,167,0.6);
+}
+
     #sitegyn-chat-send{
       border:none;
       border-radius:999px;
@@ -1070,7 +1108,6 @@
     justify-content: center;
   }
 
-  /* Avatars – אופציונלי */
   .hero-avatars {
     margin-top: 14px;
     transform: scale(0.9);
@@ -1083,10 +1120,132 @@
     margin-top: 10px;
   }
 }
+/* ===== CHAT OVERLAY ===== */
+#sitegyn-chat-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 3, 10, 0.65);
+  backdrop-filter: blur(10px);
+  z-index: 55;
+  display: none;
+}
+
+body.chat-open #sitegyn-chat-overlay {
+  display: block;
+}
+
+body.chat-open .page-wrap {
+  filter: blur(8px);
+  pointer-events: none;
+  user-select: none;
+}
+/* =========================
+   MOBILE CHAT FIX
+   ========================= */
+@media (max-width: 768px) {
+
+  #sitegyn-chat-wrapper{
+    width: calc(100vw - 24px);
+    max-width: 420px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 16px;
+    border-radius: 18px;
+  }
+
+  #sitegyn-chat-header{
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  #sitegyn-chat-messages{
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  #sitegyn-chat-input{
+    padding: 12px;
+    gap: 10px;
+  }
+
+#sitegyn-chat-input{
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+
+  #sitegyn-chat-input button{
+    height: 44px;
+    padding: 0 16px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+}
+/* =========================
+   MOBILE FULLSCREEN CHAT
+   ========================= */
+@media (max-width: 768px) {
+
+  #sitegyn-chat-wrapper{
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    border-radius: 0;
+    transform: none;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
+
+  #sitegyn-chat-header{
+    padding: 16px;
+    font-size: 16px;
+  }
+
+  #sitegyn-chat-messages{
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  #sitegyn-chat-input{
+    padding: 14px;
+    gap: 12px;
+    background: rgba(12,18,36,0.95);
+    backdrop-filter: blur(6px);
+  }
+
+
+
+  #sitegyn-chat-input button{
+    height: 48px;
+    font-size: 15px;
+    padding: 0 18px;
+    border-radius: 14px;
+    white-space: nowrap;
+  }
+}
+#sitegyn-chat-input::placeholder{
+  color: rgba(255,255,255,0.85);
+  font-weight: 400;
+}
+
+
+@media (max-width: 768px){
+  #sitegyn-chat-input::placeholder{
+    color: rgba(255,255,255,0.9);
+  }
+}
 
   </style>
 </head>
 <body>
+<div id="sitegyn-chat-overlay"></div>
+
 <div class="page-wrap">
 
   <!-- TOP NAV -->
@@ -1401,20 +1560,29 @@
 
 <!-- ===== Sitegyn Chat Panel ===== -->
 <div id="sitegyn-chat-wrapper">
-  <div class="sitegyn-chat-header">
-    <div>
-      <div class="sitegyn-chat-title">Sitegyn Assistant</div>
-      <div class="sitegyn-chat-subtitle" id="sitegyn-chat-status">Getting your project ready…</div>
+<div class="sitegyn-chat-header">
+  <div>
+    <div class="sitegyn-chat-title">Create your website</div>
+    <div class="sitegyn-chat-subtitle" id="sitegyn-chat-status">
+      Answer one question and your site will be ready
     </div>
-    <button id="sitegyn-chat-close" aria-label="Close chat">×</button>
   </div>
+  <button id="sitegyn-chat-close" aria-label="Close chat">×</button>
+</div>
 
   <div id="sitegyn-chat-messages"></div>
 
   <form id="sitegyn-chat-form">
-    <textarea id="sitegyn-chat-input" rows="2"
-      placeholder="First, what is your business name and what does your business do?"></textarea>
-    <button type="submit" id="sitegyn-chat-send">Send</button>
+<textarea
+  id="sitegyn-chat-input"
+  rows="2"
+  autocomplete="off">
+</textarea>
+
+    <button type="submit" id="sitegyn-chat-send">
+  Create my website
+</button>
+
   </form>
 </div>
 
@@ -1552,23 +1720,72 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function openChat() {
-    const wrapper = document.getElementById('sitegyn-chat-wrapper');
-    const statusEl = document.getElementById('sitegyn-chat-status');
+async function openChat() {
+  const wrapper = document.getElementById('sitegyn-chat-wrapper');
+  const statusEl = document.getElementById('sitegyn-chat-status');
 
-    if (!wrapper) return;
+  if (!wrapper) return;
 
-    wrapper.classList.add('open');
-    statusEl.textContent = 'Creating your project…';
+  document.body.classList.add('chat-open');
+  wrapper.classList.add('open');
+  statusEl.textContent = 'Creating your project…';
 
-    try {
-      const projectId = await initProjectIfNeeded();
-      statusEl.textContent = 'Project ready · ID ' + projectId;
-      console.log('[Sitegyn] Chat using project_id:', projectId);
-    } catch (err) {
-      statusEl.textContent = 'Problem creating project. Try again.';
+  try {
+    await initProjectIfNeeded();
+    statusEl.textContent = 'Project ready';
+
+    if (!window.__introTyped) {
+      window.__introTyped = true;
+
+      typeBotMessage(
+        "Hi 👋\n\nTo build your website, I’ll need a few details.\nPlease tell me:\n• your name\n• your business name\n• and what your business does\n\nTake your time 😊"
+      );
     }
+
+  } catch (err) {
+    statusEl.textContent = 'Problem creating project. Try again.';
   }
+}
+function typeBotMessage(text, callback) {
+  const box = document.getElementById('sitegyn-chat-messages');
+  if (!box) return;
+
+  const msg = document.createElement('div');
+  msg.className = 'sg-msg sg-msg-bot';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'sg-msg-bubble';
+  bubble.textContent = '';
+
+  msg.appendChild(bubble);
+  box.appendChild(msg);
+  box.scrollTop = box.scrollHeight;
+
+  let i = 0;
+
+  function typeNext() {
+    if (i >= text.length) {
+      if (callback) callback();
+      return;
+    }
+
+    bubble.textContent += text[i];
+
+    let delay = 35 + Math.random() * 70;
+
+    if (/[.,•]/.test(text[i])) delay += 250;
+    if (/[\u{1F300}-\u{1FAFF}]/u.test(text[i])) delay += 400;
+
+    i++;
+    box.scrollTop = box.scrollHeight;
+    setTimeout(typeNext, delay);
+  }
+
+  setTimeout(typeNext, 300);
+}
+
+
+
 
   function appendMessage(text, who) {
     const box = document.getElementById('sitegyn-chat-messages');
@@ -1592,9 +1809,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById('sitegyn-chat-input');
 
     if (closeBtn && wrapper) {
-      closeBtn.addEventListener('click', () => {
-        wrapper.classList.remove('open');
-      });
+closeBtn.addEventListener('click', () => {
+  wrapper.classList.remove('open');
+  document.body.classList.remove('chat-open');
+});
+
     }
 
     if (form && input) {
@@ -1626,8 +1845,48 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
           }
 
-          const data = await res.json();
-          appendMessage(data.reply || '(no reply)', 'bot');
+        const data = await res.json();
+
+appendMessage('🚀 Your website is ready!', 'bot');
+const lastMsg = document.querySelector('#sitegyn-chat-messages .sg-msg-bot:last-child .sg-msg-bubble');
+if (lastMsg) {
+  lastMsg.style.fontSize = '16px';
+  lastMsg.style.fontWeight = '700';
+  lastMsg.style.color = '#ffffff';
+}
+
+if (!window.__siteReadyShown) {
+  window.__siteReadyShown = true;
+
+  const box = document.getElementById('sitegyn-chat-messages');
+  const btn = document.createElement('button');
+
+  btn.textContent = 'View website →';
+btn.style.marginTop = '14px';
+btn.style.padding = '14px 22px';
+btn.style.fontSize = '15px';
+btn.style.fontWeight = '700';
+btn.style.borderRadius = '999px';
+btn.style.border = 'none';
+btn.style.cursor = 'pointer';
+btn.style.background = 'linear-gradient(130deg,#18e57c,#2fe1ff)';
+btn.style.color = '#02030a';
+btn.style.boxShadow = '0 0 25px rgba(24,229,124,0.6)';
+btn.style.width = 'fit-content';
+btn.onmouseenter = () => btn.style.transform = 'translateY(-1px)';
+btn.onmouseleave = () => btn.style.transform = 'translateY(0)';
+
+
+  btn.onclick = () => {
+    const pid = localStorage.getItem('sitegyn_project_id');
+    if (pid) {
+      window.location.href = `/editor.html?project_id=${pid}`;
+    }
+  };
+
+  box.appendChild(btn);
+}
+
         } catch (err) {
           console.error('Chat fetch error:', err);
           appendMessage('Network error. Please try again later.', 'bot');
