@@ -480,6 +480,17 @@ body{
   font-weight:700;
   cursor:pointer;
 }
+.typing::after {
+  content: "▋";
+  margin-left: 2px;
+  animation: blink 1s infinite;
+  opacity: .6;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: .6 }
+  25%, 75% { opacity: 0 }
+}
 
 
 </style>
@@ -1166,6 +1177,34 @@ document.addEventListener("DOMContentLoaded", () => {
     aiMessages.appendChild(div);
     aiMessages.scrollTop = aiMessages.scrollHeight;
   }
+  function createAssistantBubble() {
+  const div = document.createElement("div");
+  div.className = "ai-msg ai-msg-system";
+  aiMessages.appendChild(div);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+  return div;
+}
+
+function typeText(element, text, speed = 18) {
+  return new Promise(resolve => {
+    element.textContent = "";
+    let i = 0;
+    element.classList.add("typing");
+
+    const interval = setInterval(() => {
+      element.textContent += text.charAt(i);
+      i++;
+
+      element.scrollIntoView({ behavior: "smooth", block: "end" });
+
+      if (i >= text.length) {
+        clearInterval(interval);
+        element.classList.remove("typing");
+        resolve();
+      }
+    }, speed);
+  });
+}
 
   // =========================
   // Load history via backend
@@ -1246,9 +1285,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
-      if (data?.reply) {
-        appendMessage("assistant", data.reply);
-      }
+if (data?.reply) {
+  const bubble = createAssistantBubble();
+
+  aiSend.disabled = true;
+  aiTextarea.disabled = true;
+
+  await typeText(bubble, data.reply);
+
+  aiSend.disabled = false;
+  aiTextarea.disabled = false;
+  aiTextarea.focus();
+}
+
 
     } catch (err) {
       console.error("Chat send failed", err);
