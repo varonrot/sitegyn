@@ -1745,29 +1745,42 @@ async function pingBackend() {
    CHAT UI HELPERS
 ========================= */
 function typeBotMessage(text, baseSpeed = 45) {
-  const box = document.getElementById('sitegyn-chat-messages');
-  if (!box) return;
+  return new Promise(resolve => {
+    const box = document.getElementById('sitegyn-chat-messages');
+    if (!box) return resolve();
 
-  const msg = document.createElement('div');
-  msg.className = 'sg-msg sg-msg-bot';
+    const msg = document.createElement('div');
+    msg.className = 'sg-msg sg-msg-bot';
 
-  const bubble = document.createElement('div');
-  bubble.className = 'sg-msg-bubble';
-  msg.appendChild(bubble);
-  box.appendChild(msg);
+    const bubble = document.createElement('div');
+    bubble.className = 'sg-msg-bubble';
+    msg.appendChild(bubble);
+    box.appendChild(msg);
 
-  let i = 0;
-  function typeChar() {
-    if (i < text.length) {
-      bubble.textContent += text.charAt(i++);
-      let delay = baseSpeed + Math.random() * 40;
-      if (/[.,!]/.test(text.charAt(i - 1))) delay += 300;
-      box.scrollTop = box.scrollHeight;
-      setTimeout(typeChar, delay);
+    let i = 0;
+
+    function typeChar() {
+      if (i < text.length) {
+        bubble.textContent += text.charAt(i);
+        i++;
+
+        let delay = baseSpeed + Math.random() * 40;
+        if (/[.,!]/.test(text.charAt(i - 1))) delay += 300;
+
+        box.scrollTop = box.scrollHeight;
+        setTimeout(typeChar, delay);
+      } else {
+        resolve();
+      }
     }
-  }
-  typeChar();
+
+    typeChar();
+  });
 }
+function wait(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
 
 function appendMessage(text, who) {
   const box = document.getElementById('sitegyn-chat-messages');
@@ -1786,16 +1799,24 @@ function appendMessage(text, who) {
 }
 
 /* =========================
-   FAKE BUILD SEQUENCE
+   F. BUILD SEQUENCE
 ========================= */
-function fakeBuildSequence() {
-  typeBotMessage("Got it 👍 Let me start building your website…");
+async function fakeBuildSequence() {
+  await typeBotMessage("Got it 👍 Let me start building your website…");
+  await wait(700);
 
-  setTimeout(() => typeBotMessage("• Creating the site structure"), 1500);
-  setTimeout(() => typeBotMessage("• Writing content based on your business"), 3500);
-  setTimeout(() => typeBotMessage("• Designing layout and colors"), 5500);
-  setTimeout(() => typeBotMessage("Almost there…"), 7500);
+  await typeBotMessage("• Creating the site structure");
+  await wait(700);
+
+  await typeBotMessage("• Writing content based on your business");
+  await wait(700);
+
+  await typeBotMessage("• Designing layout and colors");
+  await wait(700);
+
+  await typeBotMessage("Almost there…");
 }
+
 
 /* =========================
    VIEW WEBSITE BUTTON
@@ -1913,7 +1934,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
- 
+
 <script>
 function openEditorFromHome() {
   const projectId = localStorage.getItem('sitegyn_project_id');
