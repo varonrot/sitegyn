@@ -959,6 +959,130 @@
         display:none;
       }
     }
+/* ===== HERO BASE ===== */
+.hero {
+  position: relative;
+  padding: 120px 0 100px;
+  overflow: hidden;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 64px;
+}
+
+/* ===== VIDEO WRAPPER ===== */
+.hero-video-wrap {
+  position: relative;
+  width: 520px;
+  aspect-ratio: 16 / 10;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.45);
+}
+
+.hero-video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none; /* אין שליטה */
+}
+
+/* ===== FLOAT EFFECT (DESKTOP) ===== */
+@media (min-width: 1024px) {
+  .hero-media {
+    transform: translateY(-18px);
+  }
+}
+
+/* ===== MOBILE BEHAVIOR ===== */
+@media (max-width: 900px) {
+  .hero {
+    padding: 96px 0 80px;
+  }
+
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .hero-video-wrap {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+  }
+}
+/* =========================
+   HERO – MOBILE TUNING
+========================= */
+@media (max-width: 768px) {
+
+  .hero-copy {
+    padding-right: 0;
+  }
+
+  /* Pill */
+  .hero-pill {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  /* Main headline */
+  .hero-title {
+    font-size: 28px;        /* היה גדול מדי */
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  /* Typed word span */
+  .hero-title #typed {
+    white-space: nowrap;   /* מונע שבירה לשורה */
+    display: inline-block;
+  }
+
+  /* Subtitle */
+  .hero-sub {
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 100%;
+  }
+
+  /* Buttons */
+  .hero-actions {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .hero-actions .btn-primary,
+  .hero-actions .btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Avatars – אופציונלי */
+  .hero-avatars {
+    margin-top: 14px;
+    transform: scale(0.9);
+  }
+
+  /* Meta text */
+  .hero-meta {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 10px;
+  }
+}
 
   </style>
 </head>
@@ -972,18 +1096,18 @@
         <span></span>
       </button>
 
-      <a href="landing.html" class="nav-brand">
+      <a href="index.html" class="nav-brand">
         <div class="logo-circle">A</div>
         <div class="logo-text">sitegyn<span>.com</span></div>
       </a>
     </div>
 
     <nav class="nav-links">
-      <a href="landing.html#product">Product</a>
+      <a href="index.html">Product</a>
       <a href="features.html">Features</a>
       <a href="pricing.html">Pricing</a>
       <a href="about.html">About</a>
-      <a href="landing.html#education">Education</a>
+      <a href="education.html">Education</a>
     </nav>
 
     <div class="nav-right">
@@ -991,9 +1115,10 @@
         <span class="icon">?</span>
         <span>Help</span>
       </button>
-      <button class="btn-primary" onclick="location.href='editor.html'">
-        Editor →
-      </button>
+<button class="btn-primary" onclick="openEditorFromHome()">
+  Editor →
+</button>
+
     </div>
   </header>
 
@@ -1026,50 +1151,59 @@
   <main>
     <!-- HERO -->
     <section class="hero" id="product">
-      <div class="hero-inner">
-        <div class="hero-copy">
-          <div class="hero-pill">
-            <span class="tag">AI websites</span>
-            <span>From idea to live site in under a minute</span>
-          </div>
-          <h1 class="hero-title">
-            Create <span id="typed"></span><br>without touching a line of code.
-          </h1>
-          <p class="hero-sub">
-            Sitegyn turns a short chat into a complete website – sections, copy and layout
-            tailored to your business. No templates, no drag-and-drop builders, just answer a few questions.
-          </p>
+  <div class="hero-inner">
 
-          <div class="hero-actions">
-            <button class="btn-primary" onclick="openChat();">
-              Create your AI website
-            </button>
-            <button class="btn-ghost" onclick="location.href='#education'">
-              <span class="icon">▶</span>
-              <span>See how it works</span>
-            </button>
-          </div>
-
-          <div class="hero-avatars">
-            <img src="https://i.pravatar.cc/60?img=32" alt="">
-            <img src="https://i.pravatar.cc/60?img=45" alt="">
-            <img src="https://i.pravatar.cc/60?img=12" alt="">
-            <img src="https://i.pravatar.cc/60?img=5" alt="">
-          </div>
-          <div class="hero-meta">
-            Early creators already building AI-made sites with Sitegyn
-          </div>
-        </div>
-
-        <div class="hero-media">
-          <div class="hero-card">
-            <div class="hero-card-inner">
-              <img src="analyst44-dashboard.png" alt="Sitegyn AI website builder preview">
-            </div>
-          </div>
-        </div>
+    <div class="hero-copy">
+      <div class="hero-pill">
+        <span class="tag">AI websites</span>
+        <span>From idea to live site in under a minute</span>
       </div>
-    </section>
+
+      <h1 class="hero-title">
+        Create <span id="typed"></span><br>without touching a line of code.
+      </h1>
+
+      <p class="hero-sub">
+        Sitegyn turns a short chat into a complete website – sections, copy and layout
+        tailored to your business. No templates, no drag-and-drop builders, just answer a few questions.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="openChat();">
+          Create your AI website
+        </button>
+        <button class="btn-ghost" onclick="location.href='#education'">
+          <span class="icon">▶</span>
+          <span>See how it works</span>
+        </button>
+      </div>
+
+      <div class="hero-avatars">
+        <img src="https://i.pravatar.cc/60?img=32" alt="">
+        <img src="https://i.pravatar.cc/60?img=45" alt="">
+        <img src="https://i.pravatar.cc/60?img=12" alt="">
+        <img src="https://i.pravatar.cc/60?img=5" alt="">
+      </div>
+
+      <div class="hero-meta">
+        Early creators already building AI-made sites with Sitegyn
+      </div>
+    </div>
+
+    <div class="hero-media">
+      <div class="hero-video-wrap">
+        <iframe
+          src="https://player.vimeo.com/video/906617475?autoplay=1&loop=1&muted=1&background=1&playsinline=1"
+          frameborder="0"
+          allow="autoplay; fullscreen"
+          aria-hidden="true">
+        </iframe>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
     <!-- WHY SITEGYN -->
     <section class="section" id="features">
@@ -1133,39 +1267,70 @@
 
     <!-- PRICING -->
     <section class="pricing-section" id="pricing">
-      <div class="pricing-layout">
-        <div class="pricing-card">
-          <div class="pricing-label">PRICING</div>
-          <h2 class="pricing-headline">Simple early-access pricing.</h2>
-          <div class="pricing-price">$ — / month</div>
-          <div class="pricing-sub">
-            Start with a single AI-generated site. Upgrade only when Sitegyn becomes
-            your default way to start new projects.
-          </div>
-          <ul class="pricing-list">
-            <li><span class="bullet">✔</span><span>Unlimited drafts for one main website.</span></li>
-            <li><span class="bullet">✔</span><span>Export-ready copy, sections and structure.</span></li>
-            <li><span class="bullet">✔</span><span>Support for multiple languages and tones.</span></li>
-            <li><span class="bullet">✔</span><span>Priority access to new layout & design presets.</span></li>
-          </ul>
-          <div class="pricing-actions">
-            <button class="btn-pill-primary" onclick="location.href='pricing.html'">View full pricing →</button>
-            <button class="btn-pill-secondary" onclick="location.href='#education'">Learn the workflow</button>
-          </div>
-        </div>
+  <div class="pricing-layout">
+    <div class="pricing-card">
+      <div class="pricing-label">PRICING</div>
 
-        <div class="pricing-copy" id="education">
-          <p>
-            Use Sitegyn as your private AI web studio. Capture your positioning once, then reuse it
-            whenever you need a new landing page, product page or portfolio.
-          </p>
-          <p style="margin-top:12px;">
-            The goal is simple: stop wasting hours fighting builders and templates.
-            Let the AI assemble a complete first version, then spend your energy on fine-tuning.
-          </p>
-        </div>
+      <h2 class="pricing-headline">
+        Start free. Pay only when you use.
+      </h2>
+
+      <div class="pricing-price">
+        $0 to start
       </div>
-    </section>
+
+      <div class="pricing-sub">
+        One AI conversation creates a live website in seconds.
+        Tokens are only needed for edits, premium features, and keeping your site online.
+      </div>
+
+      <ul class="pricing-list">
+        <li>
+          <span class="bullet">✔</span>
+          <span>One free AI conversation to generate a full website.</span>
+        </li>
+        <li>
+          <span class="bullet">✔</span>
+          <span>Your site is live immediately on a free subdomain.</span>
+        </li>
+        <li>
+          <span class="bullet">✔</span>
+          <span>100 free tokens included for edits or hosting time.</span>
+        </li>
+        <li>
+          <span class="bullet">✔</span>
+          <span>No subscription, no automatic charges.</span>
+        </li>
+      </ul>
+
+      <div class="pricing-actions">
+        <button
+          class="btn-pill-primary"
+          onclick="location.href='builder.html'">
+          Start free →
+        </button>
+        <button
+          class="btn-pill-secondary"
+          onclick="location.href='pricing.html'">
+          How tokens work
+        </button>
+      </div>
+    </div>
+
+    <div class="pricing-copy" id="education">
+      <p>
+        Sitegyn works like a private AI web studio.
+        One short conversation captures your idea and instantly turns it into a live website.
+      </p>
+      <p style="margin-top:12px;">
+        After that, you decide how far to take it.
+        Use tokens for AI edits, new pages, premium templates,
+        or simply to keep your site online — all without subscriptions.
+      </p>
+    </div>
+  </div>
+</section>
+
 
     <!-- CTA BAND -->
     <section class="cta-banner">
@@ -1191,8 +1356,7 @@
         <div>
           <div class="footer-title">OUR MISSION</div>
           <p class="footer-text">
-            Sitegyn helps founders, freelancers and small teams turn ideas into websites in minutes,
-            not weeks – with AI-generated copy, structure and design they can actually edit.
+            Smart websites generated in seconds. Built for clarity, speed, and scale — with intelligent structure, clean design, and features that grow with your business.
           </p>
         </div>
 
@@ -1471,6 +1635,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+</script>
+<script>
+function openEditorFromHome() {
+  const projectId = localStorage.getItem('sitegyn_project_id');
+
+  if (projectId) {
+
+    window.location.href = `/editor.html?project_id=${projectId}`;
+  } else {
+
+    openChat();
+  }
+}
 </script>
 
 </body>
