@@ -1746,7 +1746,7 @@ async function openChat() {
     statusEl.textContent = 'Problem creating project. Try again.';
   }
 }
-function typeBotMessage(text, callback) {
+function typeBotMessage(text, baseSpeed = 45) {
   const box = document.getElementById('sitegyn-chat-messages');
   if (!box) return;
 
@@ -1755,35 +1755,26 @@ function typeBotMessage(text, callback) {
 
   const bubble = document.createElement('div');
   bubble.className = 'sg-msg-bubble';
-  bubble.textContent = '';
-
   msg.appendChild(bubble);
   box.appendChild(msg);
-  box.scrollTop = box.scrollHeight;
 
   let i = 0;
 
-  function typeNext() {
-    if (i >= text.length) {
-      if (callback) callback();
-      return;
+  function typeChar() {
+    if (i < text.length) {
+      bubble.textContent += text.charAt(i);
+      i++;
+
+      let delay = baseSpeed + Math.random() * 40;
+      if (/[.,!]/.test(text.charAt(i - 1))) delay += 300;
+
+      box.scrollTop = box.scrollHeight;
+      setTimeout(typeChar, delay);
     }
-
-    bubble.textContent += text[i];
-
-    let delay = 35 + Math.random() * 70;
-
-    if (/[.,•]/.test(text[i])) delay += 250;
-    if (/[\u{1F300}-\u{1FAFF}]/u.test(text[i])) delay += 400;
-
-    i++;
-    box.scrollTop = box.scrollHeight;
-    setTimeout(typeNext, delay);
   }
 
-  setTimeout(typeNext, 300);
+  typeChar();
 }
-
 
 
 
@@ -1824,6 +1815,25 @@ closeBtn.addEventListener('click', () => {
 
         appendMessage(text, 'user');
         input.value = '';
+function fakeBuildSequence() {
+  typeBotMessage("Got it 👍 Let me start building your website…");
+
+  setTimeout(() => {
+    typeBotMessage("• Creating the site structure");
+  }, 1500);
+
+  setTimeout(() => {
+    typeBotMessage("• Writing content based on your business");
+  }, 3500);
+
+  setTimeout(() => {
+    typeBotMessage("• Designing layout and colors");
+  }, 5500);
+
+  setTimeout(() => {
+    typeBotMessage("Almost there…");
+  }, 7500);
+}
 
         const projectId = localStorage.getItem('sitegyn_project_id');
         if (!projectId) {
@@ -1847,7 +1857,11 @@ closeBtn.addEventListener('click', () => {
 
         const data = await res.json();
 
-appendMessage('🚀 Your website is ready!', 'bot');
+setTimeout(() => {
+  typeBotMessage("🚀 Your website is ready!");
+  showViewWebsiteButton();
+}, 9000);
+
 const lastMsg = document.querySelector('#sitegyn-chat-messages .sg-msg-bot:last-child .sg-msg-bubble');
 if (lastMsg) {
   lastMsg.style.fontSize = '16px';
