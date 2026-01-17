@@ -480,17 +480,6 @@ body{
   font-weight:700;
   cursor:pointer;
 }
-.typing::after {
-  content: "▋";
-  margin-left: 2px;
-  animation: blink 1s infinite;
-  opacity: .6;
-}
-
-@keyframes blink {
-  0%, 50%, 100% { opacity: .6 }
-  25%, 75% { opacity: 0 }
-}
 
 
 </style>
@@ -924,26 +913,6 @@ document.addEventListener("click", async (e) => {
 
   openBottomPreview(path);
 });
-function typeText(element, text, speed = 22) {
-  return new Promise(resolve => {
-    element.textContent = "";
-    let i = 0;
-    element.classList.add("typing");
-
-    const interval = setInterval(() => {
-      element.textContent += text.charAt(i);
-      i++;
-
-      element.scrollIntoView({ behavior: "smooth", block: "end" });
-
-      if (i >= text.length) {
-        clearInterval(interval);
-        element.classList.remove("typing");
-        resolve();
-      }
-    }, speed);
-  });
-}
 
 
 async function openBottomPreview(path) {
@@ -1277,19 +1246,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
-if (data?.reply) {
-  const bubble = createAssistantBubble();
-
-  aiSend.disabled = true;
-  aiTextarea.disabled = true;
-
-  await typeText(bubble, data.reply);
-
-  aiSend.disabled = false;
-  aiTextarea.disabled = false;
-  aiTextarea.focus();
-}
-
+      if (data?.reply) {
+        appendMessage("assistant", data.reply);
+      }
 
     } catch (err) {
       console.error("Chat send failed", err);
