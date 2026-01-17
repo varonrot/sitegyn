@@ -1773,7 +1773,7 @@ function typeBotMessage(text, baseSpeed = 45) {
         box.scrollTop = box.scrollHeight;
         setTimeout(typeChar, delay);
       } else {
-        // ✅ השורה הסתיימה – רק עכשיו ממשיכים
+
         resolve();
       }
     }
@@ -1819,6 +1819,27 @@ async function fakeBuildSequence() {
   await wait(700);
 
   await typeBotMessage("Almost there…");
+}
+/* =========================
+   SMART FINAL WAIT
+========================= */
+async function smartFinalWait(backendPromise) {
+  const fillers = [
+    "Finalizing details…",
+    "Optimizing layout…",
+    "Preparing editor…",
+    "Almost ready…"
+  ];
+
+  let done = false;
+  backendPromise.then(() => done = true);
+
+  let i = 0;
+  while (!done) {
+    await typeBotMessage(fillers[i % fillers.length]);
+    await wait(1200);
+    i++;
+  }
 }
 
 
@@ -1916,23 +1937,30 @@ form.addEventListener('submit', async (e) => {
 
   const projectId = localStorage.getItem('sitegyn_project_id');
   if (!projectId) {
-    typeBotMessage("Something went wrong. Please reopen the chat.");
+    await typeBotMessage("Something went wrong. Please reopen the chat.");
     return;
   }
-
-  const fakePromise = fakeBuildSequence();
+ 
   const backendPromise = fetch(`${API_BASE}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ project_id: projectId, message: text })
   });
 
+  await fakeBuildSequence();
+
+  await smartFinalWait(backendPromise);
+
+  await typeBotMessage("🚀 Your website is ready!");
+  showViewWebsiteButton();
+});
+
   await fakePromise;
 
   let backendDone = false;
 
   backendPromise.then(() => backendDone = true);
- 
+
   while (!backendDone) {
     await wait(2000);
     await typeBotMessage("Still working on it…");
