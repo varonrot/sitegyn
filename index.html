@@ -1940,7 +1940,7 @@ form.addEventListener('submit', async (e) => {
     await typeBotMessage("Something went wrong. Please reopen the chat.");
     return;
   }
- 
+
   const backendPromise = fetch(`${API_BASE}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1948,27 +1948,13 @@ form.addEventListener('submit', async (e) => {
   });
 
   await fakeBuildSequence();
-
   await smartFinalWait(backendPromise);
 
   await typeBotMessage("🚀 Your website is ready!");
   showViewWebsiteButton();
 });
 
-  await fakePromise;
 
-  let backendDone = false;
-
-  backendPromise.then(() => backendDone = true);
-
-  while (!backendDone) {
-    await wait(2000);
-    await typeBotMessage("Still working on it…");
-  }
-
-  await typeBotMessage("🚀 Your website is ready!");
-  showViewWebsiteButton();
-});
 
 </script>
 
