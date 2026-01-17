@@ -377,120 +377,6 @@ body{
   }
 }
 
-/* =========================
-   AI CHAT MODAL
-========================= */
-.ai-chat-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.45);
-  backdrop-filter:blur(6px);
-  z-index:1000;
-  display:flex;
-  justify-content:flex-end;
-}
-
-.ai-chat-overlay.hidden{
-  display:none;
-}
-
-.ai-chat-panel{
-  width:380px;
-  max-width:100%;
-  height:100%;
-  background:#020617;
-  border-left:1px solid rgba(255,255,255,.12);
-  display:flex;
-  flex-direction:column;
-}
-
-.ai-chat-header{
-  padding:14px 16px;
-  border-bottom:1px solid rgba(255,255,255,.12);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.ai-chat-sub{
-  font-size:12px;
-  opacity:.7;
-}
-
-.ai-chat-header button{
-  background:none;
-  border:none;
-  color:white;
-  font-size:18px;
-  cursor:pointer;
-}
-
-.ai-chat-messages{
-  flex:1;
-  padding:16px;
-  overflow:auto;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.ai-msg{
-  max-width:85%;
-  padding:10px 12px;
-  border-radius:12px;
-  font-size:14px;
-  line-height:1.4;
-}
-
-.ai-msg-system{
-  background:rgba(255,255,255,.08);
-  align-self:flex-start;
-}
-
-.ai-msg-user{
-  background:linear-gradient(135deg,#2563eb,#22c55e);
-  color:#04110a;
-  align-self:flex-end;
-}
-
-.ai-chat-input{
-  border-top:1px solid rgba(255,255,255,.12);
-  padding:12px;
-  display:flex;
-  gap:8px;
-}
-
-.ai-chat-input textarea{
-  flex:1;
-  resize:none;
-  height:44px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.15);
-  background:#020617;
-  color:white;
-  padding:8px 10px;
-  font-family:inherit;
-}
-
-.ai-chat-input button{
-  border:none;
-  border-radius:10px;
-  padding:0 16px;
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-  font-weight:700;
-  cursor:pointer;
-}
-.typing::after {
-  content: "▋";
-  margin-left: 2px;
-  animation: blink 1s infinite;
-  opacity: .6;
-}
-
-@keyframes blink {
-  0%, 50%, 100% { opacity: .6 }
-  25%, 75% { opacity: 0 }
-}
 
 
 </style>
@@ -509,10 +395,9 @@ body{
   </div>
 
   <div class="top-right">
-<button class="icon-btn" id="ai-chat-btn">
-  <i class="fa-solid fa-wand-magic-sparkles"></i>
-</button>
-
+    <button class="icon-btn" onclick="toggleRight()">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </button>
 
     <div class="user-cluster">
       <div class="site-pill"><i class="fa-solid fa-globe"></i> sitegyn.com</div>
@@ -552,8 +437,121 @@ body{
 
 <!-- RIGHT -->
 <aside class="sidebar right">
-  <div class="section-title">AI Actions</div>
-  <div id="sidebar-ai-dynamic"></div>
+
+  <!-- ================= HERO AI ================= -->
+  <div class="section-title">Hero – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-tag"></i></span>
+      Rewrite Kicker
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Headline
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subheadline
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-list"></i></span>
+      Improve Pills
+    </div>
+  </div>
+
+  <!-- ================= ABOUT AI ================= -->
+  <div class="section-title">About – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-quote-left"></i></span>
+      Rewrite Tagline
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-paragraph"></i></span>
+      Rewrite Paragraphs
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-certificate"></i></span>
+      Rewrite Why Badge
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-list-check"></i></span>
+      Improve Why Points
+    </div>
+  </div>
+
+  <!-- ================= OFFERS AI ================= -->
+  <div class="section-title">Offers – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Section Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Section Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-tags"></i></span>
+      Improve Deals Content
+    </div>
+  </div>
+
+  <!-- ================= MENU AI ================= -->
+  <div class="section-title">Menu – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-pizza-slice"></i></span>
+      Improve Pizza Descriptions
+    </div>
+  </div>
+
+  <!-- ================= SERVICES AI ================= -->
+  <div class="section-title">Services – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-boxes-stacked"></i></span>
+      Improve Service Items
+    </div>
+  </div>
+
+  <!-- ================= CONTACT AI ================= -->
+  <div class="section-title">Contact – AI</div>
+  <div class="nav-list">
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-heading"></i></span>
+      Rewrite Title
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-align-left"></i></span>
+      Rewrite Subtitle
+    </div>
+    <div class="nav-item">
+      <span class="icon"><i class="fa-solid fa-clock"></i></span>
+      Rewrite Opening Hours Text
+    </div>
+  </div>
+
 </aside>
 
 
@@ -674,7 +672,6 @@ async function loadTemplateSidebar(projectId) {
 
 
   buildSidebarFromSchema(schema);
-  buildAISidebarFromSchema(schema);
 }
 
 /* =========================
@@ -683,19 +680,20 @@ async function loadTemplateSidebar(projectId) {
 const DEFAULT_ICON = "fa-circle";
 
 function getIconFromSchema(propSchema) {
-  if (!propSchema) return "fa-circle";
+  if (!propSchema) return DEFAULT_ICON;
 
+  // support ui:icon
   if (typeof propSchema["ui:icon"] === "string" && propSchema["ui:icon"].trim()) {
     return propSchema["ui:icon"].trim();
   }
 
+  // optional: support ui.icon if you ever use that style
   if (propSchema.ui && typeof propSchema.ui.icon === "string" && propSchema.ui.icon.trim()) {
     return propSchema.ui.icon.trim();
   }
 
-  return "fa-circle";
+  return DEFAULT_ICON;
 }
-
 
 function renderNavItem({ label, path, iconClass, nested = false }) {
   const item = document.createElement("div");
@@ -770,108 +768,6 @@ if (sectionKey === "home" && sectionProps.hero) {
     container.appendChild(list);
   }
 }
-function buildAISidebarFromSchema(schema) {
-  const container = document.getElementById("sidebar-ai-dynamic");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const sections = schema.properties || {};
-
-  for (const sectionKey in sections) {
-    const sectionSchema = sections[sectionKey];
-    const sectionProps = sectionSchema.properties || {};
-
-    const title = document.createElement("div");
-    title.className = "section-title";
-    title.textContent = capitalize(sectionKey);
-    container.appendChild(title);
-
-    // ===== Special: home.hero =====
-    if (sectionKey === "home" && sectionProps.hero) {
-      const list = document.createElement("div");
-      list.className = "nav-list";
-
-      for (const fieldKey in sectionProps.hero.properties) {
-        const fieldSchema = sectionProps.hero.properties[fieldKey];
-        const iconClass = getIconFromSchema(fieldSchema);
-
-        const item = renderAIItem({
-          label: humanize(fieldKey),
-          path: `home.hero.${fieldKey}`,
-          type: fieldSchema.type || "text",
-          iconClass
-        });
-
-        list.appendChild(item);
-      }
-
-      container.appendChild(list);
-      continue;
-    }
-
-    // ===== Regular sections =====
-    const list = document.createElement("div");
-    list.className = "nav-list";
-
-    for (const fieldKey in sectionProps) {
-      const fieldSchema = sectionProps[fieldKey];
-      const iconClass = getIconFromSchema(fieldSchema);
-
-      const item = renderAIItem({
-        label: humanize(fieldKey),
-        path: `${sectionKey}.${fieldKey}`,
-        type: fieldSchema.type || "text",
-        iconClass
-      });
-
-      list.appendChild(item);
-    }
-
-    container.appendChild(list);
-  }
-}
-
-
-function renderAIItem({ label, path, type, iconClass }) {
-  const item = document.createElement("div");
-  item.className = "nav-item ai-item";
-  item.dataset.aiPath = path;
-  item.dataset.fieldType = type;
-
-  item.innerHTML = `
-    <span class="nav-ico">
-      <i class="fa-solid ${iconClass || "fa-circle"}"></i>
-    </span>
-    <span class="nav-label">${label}</span>
-  `;
-
-  item.addEventListener("click", () => {
-    openAIEditor({ path, type, label });
-  });
-
-  return item;
-}
-
-
-async function openAIEditor({ path, type, label }) {
-  const projectId = getProjectId();
-  if (!projectId) return;
-
-  const { data, error } = await supabase
-    .from("projects")
-    .select("content_json")
-    .eq("id", projectId)
-    .single();
-
-  if (error || !data?.content_json) return;
-
-  const currentValue = getValueByPath(data.content_json, path);
-
-  alert(
-    `AI EDIT\n\nField: ${label}\nPath: ${path}\nType: ${type}\n\nCurrent value:\n${JSON.stringify(currentValue, null, 2)}`
-  );
-}
 
 function buildNestedSection(container, titleText, fields, basePath) {
   const subtitle = document.createElement("div");
@@ -916,7 +812,7 @@ document.addEventListener("click", async (e) => {
 
   if (e.target.closest("#bottom-preview")) return;
 
-  const item = e.target.closest(".nav-item:not(.ai-item)");
+  const item = e.target.closest(".nav-item");
   if (!item) return;
 
   const path = item.dataset.path;
@@ -1112,217 +1008,5 @@ document.addEventListener("DOMContentLoaded", () => {
   window.open(previewUrl, "_blank");
 });
 </script>
-
-    <!-- =========================
-   AI CHAT MODAL
-========================= -->
-<div id="ai-chat-overlay" class="ai-chat-overlay hidden">
-  <div class="ai-chat-panel">
-    <div class="ai-chat-header">
-      <div>
-        <strong>AI Assistant</strong>
-        <div class="ai-chat-sub">Improve your website</div>
-      </div>
-      <button id="ai-chat-close">✕</button>
-    </div>
-
-    <div class="ai-chat-messages" id="ai-chat-messages">
-      <div class="ai-msg ai-msg-system">
-        Hi 👋
-        You can talk to me about your website and we’ll improve it together.
-      </div>
-    </div>
-
-    <div class="ai-chat-input">
-      <textarea
-        id="ai-chat-textarea"
-        placeholder="Tell me what you'd like to improve..."
-      ></textarea>
-      <button id="ai-chat-send">Send</button>
-    </div>
-  </div>
-</div>
-
- <script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  // ===== Elements =====
-  const aiOverlay   = document.getElementById("ai-chat-overlay");
-  const aiClose     = document.getElementById("ai-chat-close");
-  const aiSend      = document.getElementById("ai-chat-send");
-  const aiTextarea  = document.getElementById("ai-chat-textarea");
-  const aiMessages  = document.getElementById("ai-chat-messages");
-  const aiChatBtn   = document.getElementById("ai-chat-btn");
-
-  if (!aiOverlay || !aiChatBtn || !aiMessages) {
-    console.warn("AI Chat: missing required elements");
-    return;
-  }
-
-  // =========================
-  // Helpers
-  // =========================
-  function getProjectIdFromURL() {
-    return new URLSearchParams(window.location.search).get("project_id");
-  }
-
-  function appendMessage(role, content) {
-    const div = document.createElement("div");
-    div.className =
-      role === "user"
-        ? "ai-msg ai-msg-user"
-        : "ai-msg ai-msg-system";
-
-    div.textContent = content;
-    aiMessages.appendChild(div);
-    aiMessages.scrollTop = aiMessages.scrollHeight;
-  }
-  function createAssistantBubble() {
-  const div = document.createElement("div");
-  div.className = "ai-msg ai-msg-system";
-  aiMessages.appendChild(div);
-  aiMessages.scrollTop = aiMessages.scrollHeight;
-  return div;
-}
-
-function typeText(element, text, baseSpeed = 80) {
-  return new Promise(resolve => {
-    element.textContent = "";
-    let i = 0;
-
-    function typeNext() {
-      if (i >= text.length) {
-        resolve();
-        return;
-      }
-
-      const char = text.charAt(i);
-      element.textContent += char;
-      i++;
-
-      // ===== Human typing logic =====
-      let delay = baseSpeed;
-
-      // random variance (human inconsistency)
-      delay += Math.random() * 40;
-
-      // punctuation pauses
-      if (/[.,!?]/.test(char)) delay += 180;
-      if (char === "\n") delay += 300;
-
-      // slight slow-down near end
-      if (i > text.length * 0.8) delay += 40;
-
-      element.scrollIntoView({ behavior: "smooth", block: "end" });
-
-      setTimeout(typeNext, delay);
-    }
-
-    typeNext();
-  });
-}
-
-
-  // =========================
-  // Load history via backend
-  // =========================
-  async function loadChatHistory(projectId) {
-    try {
-      const res = await fetch("/api/chat/history", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ project_id: projectId })
-      });
-
-      const data = await res.json();
-      if (!Array.isArray(data)) return;
-
-      aiMessages.innerHTML = "";
-      data.forEach(msg => appendMessage(msg.role, msg.content));
-
-    } catch (err) {
-      console.error("Failed to load chat history", err);
-    }
-  }
-
-  // ===== OPEN =====
-  aiChatBtn.addEventListener("click", async () => {
-    aiOverlay.classList.remove("hidden");
-
-    const projectId = getProjectIdFromURL();
-    if (projectId) {
-      await loadChatHistory(projectId);
-    }
-
-    setTimeout(() => aiTextarea?.focus(), 50);
-  });
-
-  // ===== CLOSE =====
-  aiClose?.addEventListener("click", () => {
-    aiOverlay.classList.add("hidden");
-  });
-
-  aiOverlay.addEventListener("click", (e) => {
-    if (e.target === aiOverlay) {
-      aiOverlay.classList.add("hidden");
-    }
-  });
-
-  // ===== SEND =====
-  aiSend?.addEventListener("click", sendMessage);
-  aiTextarea?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-
-  async function sendMessage() {
-    const text = aiTextarea.value.trim();
-    if (!text) return;
-
-    const projectId = getProjectIdFromURL();
-    if (!projectId) {
-      console.error("Missing project_id");
-      return;
-    }
-
-    appendMessage("user", text);
-    aiTextarea.value = "";
-
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          project_id: projectId,
-          message: text,
-          source: "editor"
-        })
-      });
-
-      const data = await res.json();
-if (data?.reply) {
-  const bubble = createAssistantBubble();
-
-  aiSend.disabled = true;
-  aiTextarea.disabled = true;
-
-  await typeText(bubble, data.reply);
-
-  aiSend.disabled = false;
-  aiTextarea.disabled = false;
-  aiTextarea.focus();
-}
-
-
-    } catch (err) {
-      console.error("Chat send failed", err);
-    }
-  }
-
-});
-</script>
-
 </body>
 </html>
