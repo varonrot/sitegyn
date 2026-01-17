@@ -1275,9 +1275,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
-      if (data?.reply) {
-        appendMessage("assistant", data.reply);
-      }
+if (data?.reply) {
+  const bubble = createAssistantBubble();
+
+  aiSend.disabled = true;
+  aiTextarea.disabled = true;
+
+  await typeText(bubble, data.reply);
+
+  aiSend.disabled = false;
+  aiTextarea.disabled = false;
+  aiTextarea.focus();
+}
+
 
     } catch (err) {
       console.error("Chat send failed", err);
