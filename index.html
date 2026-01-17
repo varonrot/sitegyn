@@ -1783,9 +1783,8 @@ function typeBotMessage(text, baseSpeed = 45) {
 }
 
 function wait(ms) {
-  return new Promise(res => setTimeout(res, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 
 function appendMessage(text, who) {
   const box = document.getElementById('sitegyn-chat-messages');
@@ -1906,38 +1905,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!form || !input) return;
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    const text = input.value.trim();
-    if (!text) return;
+  const text = input.value.trim();
+  if (!text) return;
 
-    appendMessage(text, 'user');
-    input.value = '';
+  appendMessage(text, 'user');
+  input.value = '';
 
-    /* 🔥 start fake build immediately */
-    fakeBuildSequence();
+  const projectId = localStorage.getItem('sitegyn_project_id');
+  if (!projectId) {
+    typeBotMessage("Something went wrong. Please reopen the chat.");
+    return;
+  }
 
-    try {
-      await fetch(`${API_BASE}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          project_id: localStorage.getItem('sitegyn_project_id'),
-          message: text
-        })
-      });
-
-      setTimeout(() => {
-        typeBotMessage("🚀 Your website is ready!");
-        showViewWebsiteButton();
-      }, 9000);
-
-    } catch {
-      typeBotMessage("Network error. Please try again.");
-    }
+  const fakePromise = fakeBuildSequence();
+  const backendPromise = fetch(`${API_BASE}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ project_id: projectId, message: text })
   });
+
+  await fakePromise;
+
+  let backendDone = false;
+
+  backendPromise.then(() => backendDone = true);
+ 
+  while (!backendDone) {
+    await wait(2000);
+    await typeBotMessage("Still working on it…");
+  }
+
+  await typeBotMessage("🚀 Your website is ready!");
+  showViewWebsiteButton();
 });
+
 </script>
 
 <script>
