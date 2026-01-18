@@ -1240,6 +1240,55 @@ body.chat-open .page-wrap {
     color: rgba(255,255,255,0.9);
   }
 }
+#sitegyn-create-btn {
+  cursor: pointer;
+}
+#sitegyn-create-btn {
+  appearance: none;
+  border: none;
+  outline: none;
+
+  padding: 12px 20px;
+  min-width: 160px;
+
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  color: #03130a;
+  background: linear-gradient(135deg, #1ef7a0, #22d3ee);
+
+  box-shadow:
+    0 8px 24px rgba(34, 211, 238, 0.35),
+    inset 0 0 0 1px rgba(255,255,255,0.15);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+#sitegyn-create-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow:
+    0 12px 30px rgba(34, 211, 238, 0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+#sitegyn-create-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 6px 18px rgba(34, 211, 238, 0.35),
+    inset 0 0 0 1px rgba(0,0,0,0.15);
+}
+#sitegyn-create-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  filter: grayscale(20%);
+  box-shadow: none;
+}
 
   </style>
 </head>
