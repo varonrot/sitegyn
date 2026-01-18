@@ -1289,27 +1289,6 @@ body.chat-open .page-wrap {
   filter: grayscale(20%);
   box-shadow: none;
 }
-<style>
-#sitegyn-preview-bar{
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  display: flex;
-  gap: 10px;
-  z-index: 9999;
-}
-
-#sitegyn-preview-bar button{
-  border: none;
-  border-radius: 999px;
-  padding: 10px 16px;
-  font-weight: 600;
-  cursor: pointer;
-  background: linear-gradient(135deg,#1ef7a0,#22d3ee);
-  color: #03130a;
-  box-shadow: 0 8px 24px rgba(34,211,238,0.35);
-}
-</style>
 
   </style>
 </head>
@@ -1768,16 +1747,6 @@ async function initProjectIfNeeded() {
   localStorage.setItem('sitegyn_project_id', data.project_id);
   return data.project_id;
 }
-/* =========================
-   FETCH PROJECT DATA
-========================= */
-async function fetchProjectSubdomain(projectId) {
-  const res = await fetch(`${API_BASE}/api/projects/${projectId}`);
-  if (!res.ok) return null;
-
-  const data = await res.json();
-  return data.subdomain || null;
-}
 
 /* =========================
    CHAT UI HELPERS
@@ -1889,25 +1858,10 @@ function showViewWebsiteButton() {
     boxShadow: '0 0 25px rgba(24,229,124,0.6)'
   });
 
-btn.onclick = async () => {
-  const projectId = localStorage.getItem('sitegyn_project_id');
-  if (!projectId) return;
-
-  let subdomain = localStorage.getItem('sitegyn_subdomain');
-
-  // אם עדיין לא שמור – מביא מהשרת
-  if (!subdomain) {
-    subdomain = await fetchProjectSubdomain(projectId);
-    if (!subdomain) {
-      alert('Website is still generating, try again in a moment');
-      return;
-    }
-    localStorage.setItem('sitegyn_subdomain', subdomain);
-  }
-
-  sessionStorage.setItem('sitegyn_preview_mode', '1');
-  window.location.href = `/p/${subdomain}`;
-};
+  btn.onclick = () => {
+    const pid = localStorage.getItem('sitegyn_project_id');
+    if (pid) window.location.href = `/editor.html?project_id=${pid}`;
+  };
 
   box.appendChild(btn);
 }
@@ -1972,21 +1926,14 @@ document.addEventListener('DOMContentLoaded', () => {
     fakeBuildLoop(() => backendDone);
 
     try {
-const res = await fetch(`${API_BASE}/api/chat`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    project_id: localStorage.getItem('sitegyn_project_id'),
-    message: text
-  })
-});
-
-const data = await res.json();
- 
-if (data.subdomain) {
-  localStorage.setItem('sitegyn_subdomain', data.subdomain);
-}
-
+      await fetch(`${API_BASE}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          project_id: localStorage.getItem('sitegyn_project_id'),
+          message: text
+        })
+      });
 
       backendDone = true;
       await typeBotMessage("🚀 Your website is ready!");
@@ -2015,34 +1962,6 @@ function openEditorFromHome() {
   }
 }
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const isPreview = sessionStorage.getItem('sitegyn_preview_mode') === '1';
-  if (!isPreview) return;
-
-  sessionStorage.removeItem('sitegyn_preview_mode');
-
-  const bar = document.createElement('div');
-  bar.id = 'sitegyn-preview-bar';
-  bar.innerHTML = `
-    <button id="sg-edit">✏️ Edit</button>
-    <button id="sg-share">🔗 Share</button>
-  `;
-
-  document.body.appendChild(bar);
-
-  document.getElementById('sg-edit').onclick = () => {
-    const pid = localStorage.getItem('sitegyn_project_id');
-    if (pid) location.href = '/editor.html?project_id=' + pid;
-  };
-
-  document.getElementById('sg-share').onclick = async () => {
-    await navigator.clipboard.writeText(location.href);
-    alert('Link copied');
-  };
-});
-</script>
-
 
 </body>
 </html>
