@@ -1858,10 +1858,21 @@ function showViewWebsiteButton() {
     boxShadow: '0 0 25px rgba(24,229,124,0.6)'
   });
 
-  btn.onclick = () => {
-    const pid = localStorage.getItem('sitegyn_project_id');
-    if (pid) window.location.href = `/editor.html?project_id=${pid}`;
-  };
+btn.onclick = () => {
+  const subdomain = localStorage.getItem('sitegyn_subdomain');
+  const token = localStorage.getItem('sitegyn_manage_token');
+
+  if (!subdomain) {
+    alert('Site not ready yet');
+    return;
+  }
+
+  let url = `https://sitegyn.com/p/${subdomain}`;
+  if (token) url += `?manage_token=${token}`;
+
+  window.location.href = url;
+};
+
 
   box.appendChild(btn);
 }
@@ -1925,24 +1936,35 @@ document.addEventListener('DOMContentLoaded', () => {
     let backendDone = false;
     fakeBuildLoop(() => backendDone);
 
-    try {
-      await fetch(`${API_BASE}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          project_id: localStorage.getItem('sitegyn_project_id'),
-          message: text
-        })
-      });
+try {
+  const res = await fetch(`${API_BASE}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      project_id: localStorage.getItem('sitegyn_project_id'),
+      message: text
+    })
+  });
 
-      backendDone = true;
-      await typeBotMessage("🚀 Your website is ready!");
-      showViewWebsiteButton();
+  const data = await res.json();
 
-    } catch {
-      backendDone = true;
-      await typeBotMessage("Network error. Please try again.");
-    }
+  if (data.subdomain) {
+    localStorage.setItem('sitegyn_subdomain', data.subdomain);
+  }
+
+  if (data.manage_token) {
+    localStorage.setItem('sitegyn_manage_token', data.manage_token);
+  }
+
+  backendDone = true;
+  await typeBotMessage("🚀 Your website is ready!");
+  showViewWebsiteButton();
+
+} catch {
+  backendDone = true;
+  await typeBotMessage("Network error. Please try again.");
+}
+
 
     window.__isBuilding = false;
   });
