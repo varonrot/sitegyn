@@ -388,12 +388,18 @@ def chat():
 # ==========================================
 # PUBLIC SITE — on-the-fly render (NEW)
 # ==========================================
-@app.route("/p/<subdomain>")
-def public_page_by_subdomain(subdomain: str):
-    html = render_project_html_by_subdomain(subdomain)
-    if html is None:
-        return "Project not found or failed to render", 404
-    return Response(html, mimetype="text/html")
+@app.route("/api/start_project", methods=["POST"])
+def start_project():
+    resp = supabase.table("projects").insert({}).execute()
+    if not resp.data:
+        return jsonify({"error": "insert_failed"}), 500
+
+    project_id = resp.data[0]["id"]
+
+    ensure_preview_token_for_project(project_id)
+
+    return jsonify({"project_id": project_id})
+
 
 
 # ==========================================
