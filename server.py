@@ -150,21 +150,27 @@ def generate_content_for_project(
     except Exception:
         traceback.print_exc()
         return None
-
 from datetime import datetime, timedelta
 import secrets
 
-def ensure_preview_token(project_id: str):
+def ensure_preview_token_for_project(project_id: str):
+    """
+    Create preview access token once per project.
+    Safe to call multiple times.
+    """
     try:
-        existing = supabase.table("project_access_tokens") \
-            .select("id") \
-            .eq("project_id", project_id) \
-            .eq("access_type", "preview") \
-            .is_("revoked_at", None) \
-            .execute().data
+        existing = (
+            supabase.table("project_access_tokens")
+            .select("id")
+            .eq("project_id", project_id)
+            .eq("access_type", "preview")
+            .is_("revoked_at", None)
+            .execute()
+            .data
+        )
 
         if existing:
-            return None  # כבר יש
+            return  # כבר קיים, לא עושים כלום
 
         token = secrets.token_urlsafe(16)
 
@@ -176,11 +182,8 @@ def ensure_preview_token(project_id: str):
             "created_by": None,
         }).execute()
 
-        return token
-
     except Exception:
         traceback.print_exc()
-        return None
 
 # ==========================================
 # ROUTES
@@ -360,9 +363,8 @@ def chat():
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
-        # SAFE ADD — does nothing if already exists
-        if update_obj.get("content_json"):
-            ensure_preview_token(project_id)
+        if update_obj.get("content_json") or project_row.get("content_json"):
+            ensure_preview_token_for_project(project_id)
 
         return jsonify({
             "reply": visible_text,
