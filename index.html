@@ -1858,54 +1858,10 @@ function showViewWebsiteButton() {
     boxShadow: '0 0 25px rgba(24,229,124,0.6)'
   });
 
-btn.onclick = async () => {
-  let subdomain = localStorage.getItem('sitegyn_subdomain');
-  let token = localStorage.getItem('sitegyn_manage_token');
-
-  if (subdomain) {
-    let url = `https://sitegyn.com/p/${subdomain}`;
-    if (token) url += `?manage_token=${token}`;
-    window.location.href = url;
-    return;
-  }
-
-  const projectId = localStorage.getItem('sitegyn_project_id');
-  if (!projectId) {
-    alert('Project not found');
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API_BASE}/api/get_project_public`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ project_id: projectId })
-    });
-
-    const data = await res.json();
-
-    if (!data.subdomain) {
-      alert('Site not ready yet');
-      return;
-    }
-
-    localStorage.setItem('sitegyn_subdomain', data.subdomain);
-    if (data.manage_token) {
-      localStorage.setItem('sitegyn_manage_token', data.manage_token);
-      token = data.manage_token;
-    }
-
-    let url = `https://sitegyn.com/p/${data.subdomain}`;
-    if (token) url += `?manage_token=${token}`;
-
-    window.location.href = url;
-
-  } catch (e) {
-    alert('Failed to open site');
-  }
-};
-
-
+  btn.onclick = () => {
+    const pid = localStorage.getItem('sitegyn_project_id');
+    if (pid) window.location.href = `/editor.html?project_id=${pid}`;
+  };
 
   box.appendChild(btn);
 }
@@ -1969,35 +1925,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let backendDone = false;
     fakeBuildLoop(() => backendDone);
 
-try {
-  const res = await fetch(`${API_BASE}/api/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      project_id: localStorage.getItem('sitegyn_project_id'),
-      message: text
-    })
-  });
+    try {
+      await fetch(`${API_BASE}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          project_id: localStorage.getItem('sitegyn_project_id'),
+          message: text
+        })
+      });
 
-  const data = await res.json();
+      backendDone = true;
+      await typeBotMessage("🚀 Your website is ready!");
+      showViewWebsiteButton();
 
-  if (data.subdomain) {
-    localStorage.setItem('sitegyn_subdomain', data.subdomain);
-  }
-
-  if (data.manage_token) {
-    localStorage.setItem('sitegyn_manage_token', data.manage_token);
-  }
-
-  backendDone = true;
-  await typeBotMessage("🚀 Your website is ready!");
-  showViewWebsiteButton();
-
-} catch {
-  backendDone = true;
-  await typeBotMessage("Network error. Please try again.");
-}
-
+    } catch {
+      backendDone = true;
+      await typeBotMessage("Network error. Please try again.");
+    }
 
     window.__isBuilding = false;
   });
