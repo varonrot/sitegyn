@@ -150,40 +150,22 @@ def generate_content_for_project(
     except Exception:
         traceback.print_exc()
         return None
-from datetime import datetime, timedelta
-import secrets
+@app.route("/api/start_project", methods=["POST"])
+def start_project():
+    # יצירת פרויקט
+    resp = supabase.table("projects").insert({}).execute()
+    if not resp.data:
+        return jsonify({"error": "insert_failed"}), 500
 
-def ensure_preview_token_for_project(project_id: str):
-    """
-    Create preview access token once per project.
-    Safe to call multiple times.
-    """
-    try:
-        existing = (
-            supabase.table("project_access_tokens")
-            .select("id")
-            .eq("project_id", project_id)
-            .eq("access_type", "preview")
-            .is_("revoked_at", None)
-            .execute()
-            .data
-        )
+    project_id = resp.data[0]["id"]
 
-        if existing:
-            return  # כבר קיים
+    # יצירת טוקן
+    token = create_preview_token(project_id)
 
-        token = secrets.token_urlsafe(16)
-
-        supabase.table("project_access_tokens").insert({
-            "project_id": project_id,
-            "token": token,
-            "access_type": "preview",
-            "expires_at": datetime.utcnow() + timedelta(hours=24),
-            "created_by": None,
-        }).execute()
-
-    except Exception:
-        traceback.print_exc()
+    return jsonify({
+        "project_id": project_id,
+        "preview_token": token
+    })
 
 # ==========================================
 # ROUTES
@@ -198,18 +180,14 @@ def homepage():
 def health():
     return jsonify({"status": "ok"})
 
+
 @app.route("/api/start_project", methods=["POST"])
 def start_project():
     resp = supabase.table("projects").insert({}).execute()
     if not resp.data:
         return jsonify({"error": "insert_failed"}), 500
+    return jsonify({"project_id": resp.data[0]["id"]})
 
-    project_id = resp.data[0]["id"]
-
-    # 🔑 יצירת preview token מיד
-    ensure_preview_token_for_project(project_id)
-
-    return jsonify({"project_id": project_id})
 
 # ==========================================
 # CHAT — stores history + updates DB
