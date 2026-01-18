@@ -164,13 +164,22 @@ def homepage():
 def health():
     return jsonify({"status": "ok"})
 
-
+import secrets
 @app.route("/api/start_project", methods=["POST"])
 def start_project():
-    resp = supabase.table("projects").insert({}).execute()
+    token = secrets.token_urlsafe(32)
+
+    resp = supabase.table("projects").insert({
+        "access_token": token
+    }).execute()
+
     if not resp.data:
         return jsonify({"error": "insert_failed"}), 500
-    return jsonify({"project_id": resp.data[0]["id"]})
+
+    return jsonify({
+        "project_id": resp.data[0]["id"],
+        "access_token": token
+    })
 
 
 # ==========================================
