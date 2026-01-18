@@ -1749,21 +1749,33 @@ function appendMessage(text, who) {
 }
 
 /* =========================
-   FAKE BUILD LOOP (🔥 חשוב)
+   FAKE BUILD LOOP
 ========================= */
-async function fakeBuildLoop(isDone) {
+async function fakeBuildIntro() {
   const steps = [
     "• Creating the site structure",
     "• Writing content based on your business",
     "• Designing layout and colors",
     "• Optimizing for mobile",
-    "• Final touches…"
+    "• Applying final touches"
+  ];
+
+  for (const step of steps) {
+    await typeBotMessage(step);
+    await wait(850);
+  }
+}
+async function fakeBuildWaitingLoop(isDone) {
+  const messages = [
+    "• Polishing details…",
+    "• Final optimizations…",
+    "• Almost ready…"
   ];
 
   let i = 0;
   while (!isDone()) {
-    await typeBotMessage(steps[i % steps.length]);
-    await wait(900);
+    await typeBotMessage(messages[i % messages.length]);
+    await wait(1200);
     i++;
   }
 }
@@ -1858,8 +1870,33 @@ document.addEventListener('DOMContentLoaded', () => {
     appendMessage(text, 'user');
     input.value = '';
 
-    let backendDone = false;
-    fakeBuildLoop(() => backendDone);
+let backendDone = false;
+
+await typeBotMessage("Got it 👍 Let me start building your website…");
+
+fakeBuildIntro();
+
+fakeBuildWaitingLoop(() => backendDone);
+
+try {
+  await fetch(`${API_BASE}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      project_id: localStorage.getItem('sitegyn_project_id'),
+      message: text
+    })
+  });
+
+  backendDone = true;
+  await typeBotMessage("🚀 Your website is ready!");
+  showViewWebsiteButton();
+
+} catch {
+  backendDone = true;
+  await typeBotMessage("Network error. Please try again.");
+}
+
 
     try {
       await fetch(`${API_BASE}/api/chat`, {
