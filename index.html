@@ -1768,6 +1768,16 @@ async function initProjectIfNeeded() {
   localStorage.setItem('sitegyn_project_id', data.project_id);
   return data.project_id;
 }
+/* =========================
+   FETCH PROJECT DATA
+========================= */
+async function fetchProjectSubdomain(projectId) {
+  const res = await fetch(`${API_BASE}/api/projects/${projectId}`);
+  if (!res.ok) return null;
+
+  const data = await res.json();
+  return data.subdomain || null;
+}
 
 /* =========================
    CHAT UI HELPERS
@@ -1879,17 +1889,25 @@ function showViewWebsiteButton() {
     boxShadow: '0 0 25px rgba(24,229,124,0.6)'
   });
 
-btn.onclick = () => {
+btn.onclick = async () => {
   const projectId = localStorage.getItem('sitegyn_project_id');
-  const subdomain = localStorage.getItem('sitegyn_subdomain');
+  if (!projectId) return;
 
-  if (!projectId || !subdomain) return;
+  let subdomain = localStorage.getItem('sitegyn_subdomain');
+
+  // אם עדיין לא שמור – מביא מהשרת
+  if (!subdomain) {
+    subdomain = await fetchProjectSubdomain(projectId);
+    if (!subdomain) {
+      alert('Website is still generating, try again in a moment');
+      return;
+    }
+    localStorage.setItem('sitegyn_subdomain', subdomain);
+  }
 
   sessionStorage.setItem('sitegyn_preview_mode', '1');
-
   window.location.href = `/p/${subdomain}`;
 };
-
 
   box.appendChild(btn);
 }
@@ -1995,10 +2013,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const isPreview = sessionStorage.getItem('sitegyn_preview_mode') === '1';
   if (!isPreview) return;
 
-  // ניקוי – חד פעמי
   sessionStorage.removeItem('sitegyn_preview_mode');
 
-  // יצירת Floating Bar
   const bar = document.createElement('div');
   bar.id = 'sitegyn-preview-bar';
   bar.innerHTML = `
@@ -2019,6 +2035,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 });
 </script>
+
 
 </body>
 </html>
