@@ -329,11 +329,23 @@ def chat():
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
+        # === fetch subdomain for frontend redirect ===
+        project_row = (
+            supabase.table("projects")
+            .select("subdomain")
+            .eq("id", project_id)
+            .execute()
+            .data
+        )
 
+        subdomain = None
+        if project_row and project_row[0].get("subdomain"):
+            subdomain = project_row[0]["subdomain"]
 
         return jsonify({
             "reply": visible_text,
-            "project_id": project_id
+            "project_id": project_id,
+            "subdomain": subdomain
         })
 
     except Exception as e:
