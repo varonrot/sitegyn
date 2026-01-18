@@ -361,9 +361,8 @@ def chat():
                     # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
             # 3) עדכון הטבלה ב-Supabase
+        if update_obj:
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
-
-        supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
         project_after = (
             supabase.table("projects")
