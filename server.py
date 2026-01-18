@@ -170,7 +170,7 @@ def ensure_preview_token_for_project(project_id: str):
         )
 
         if existing:
-            return  # כבר קיים, לא עושים כלום
+            return  # כבר קיים
 
         token = secrets.token_urlsafe(16)
 
@@ -198,14 +198,18 @@ def homepage():
 def health():
     return jsonify({"status": "ok"})
 
-
 @app.route("/api/start_project", methods=["POST"])
 def start_project():
     resp = supabase.table("projects").insert({}).execute()
     if not resp.data:
         return jsonify({"error": "insert_failed"}), 500
-    return jsonify({"project_id": resp.data[0]["id"]})
 
+    project_id = resp.data[0]["id"]
+
+    # 🔑 יצירת preview token מיד
+    ensure_preview_token_for_project(project_id)
+
+    return jsonify({"project_id": project_id})
 
 # ==========================================
 # CHAT — stores history + updates DB
@@ -361,19 +365,9 @@ def chat():
                     # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
             # 3) עדכון הטבלה ב-Supabase
-        if update_obj:
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
-        project_after = (
-            supabase.table("projects")
-            .select("content_json")
-            .eq("id", project_id)
-            .execute()
-            .data[0]
-        )
 
-        if project_after.get("content_json"):
-            ensure_preview_token_for_project(project_id)
 
         return jsonify({
             "reply": visible_text,
@@ -388,18 +382,12 @@ def chat():
 # ==========================================
 # PUBLIC SITE — on-the-fly render (NEW)
 # ==========================================
-@app.route("/api/start_project", methods=["POST"])
-def start_project():
-    resp = supabase.table("projects").insert({}).execute()
-    if not resp.data:
-        return jsonify({"error": "insert_failed"}), 500
-
-    project_id = resp.data[0]["id"]
-
-    ensure_preview_token_for_project(project_id)
-
-    return jsonify({"project_id": project_id})
-
+@app.route("/p/<subdomain>")
+def public_page_by_subdomain(subdomain: str):
+    html = render_project_html_by_subdomain(subdomain)
+    if html is None:
+        return "Project not found or failed to render", 404
+    return Response(html, mimetype="text/html")
 
 
 # ==========================================
