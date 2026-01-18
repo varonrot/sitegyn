@@ -152,20 +152,32 @@ def generate_content_for_project(
         return None
 @app.route("/api/start_project", methods=["POST"])
 def start_project():
-    # יצירת פרויקט
     resp = supabase.table("projects").insert({}).execute()
     if not resp.data:
         return jsonify({"error": "insert_failed"}), 500
 
     project_id = resp.data[0]["id"]
-
-    # יצירת טוקן
     token = create_preview_token(project_id)
 
     return jsonify({
         "project_id": project_id,
         "preview_token": token
     })
+
+from datetime import datetime, timedelta
+import secrets
+
+def create_preview_token(project_id: str):
+    token = secrets.token_urlsafe(16)
+
+    supabase.table("project_access_tokens").insert({
+        "project_id": project_id,
+        "token": token,
+        "access_type": "preview",
+        "expires_at": datetime.utcnow() + timedelta(days=1),
+    }).execute()
+
+    return token
 
 # ==========================================
 # ROUTES
@@ -180,13 +192,6 @@ def homepage():
 def health():
     return jsonify({"status": "ok"})
 
-
-@app.route("/api/start_project", methods=["POST"])
-def start_project():
-    resp = supabase.table("projects").insert({}).execute()
-    if not resp.data:
-        return jsonify({"error": "insert_failed"}), 500
-    return jsonify({"project_id": resp.data[0]["id"]})
 
 
 # ==========================================
