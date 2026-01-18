@@ -1858,20 +1858,53 @@ function showViewWebsiteButton() {
     boxShadow: '0 0 25px rgba(24,229,124,0.6)'
   });
 
-btn.onclick = () => {
-  const subdomain = localStorage.getItem('sitegyn_subdomain');
-  const token = localStorage.getItem('sitegyn_manage_token');
+btn.onclick = async () => {
+  let subdomain = localStorage.getItem('sitegyn_subdomain');
+  let token = localStorage.getItem('sitegyn_manage_token');
 
-  if (!subdomain) {
-    alert('Site not ready yet');
+  if (subdomain) {
+    let url = `https://sitegyn.com/p/${subdomain}`;
+    if (token) url += `?manage_token=${token}`;
+    window.location.href = url;
     return;
   }
 
-  let url = `https://sitegyn.com/p/${subdomain}`;
-  if (token) url += `?manage_token=${token}`;
+  const projectId = localStorage.getItem('sitegyn_project_id');
+  if (!projectId) {
+    alert('Project not found');
+    return;
+  }
 
-  window.location.href = url;
+  try {
+    const res = await fetch(`${API_BASE}/api/get_project_public`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ project_id: projectId })
+    });
+
+    const data = await res.json();
+
+    if (!data.subdomain) {
+      alert('Site not ready yet');
+      return;
+    }
+
+    localStorage.setItem('sitegyn_subdomain', data.subdomain);
+    if (data.manage_token) {
+      localStorage.setItem('sitegyn_manage_token', data.manage_token);
+      token = data.manage_token;
+    }
+
+    let url = `https://sitegyn.com/p/${data.subdomain}`;
+    if (token) url += `?manage_token=${token}`;
+
+    window.location.href = url;
+
+  } catch (e) {
+    alert('Failed to open site');
+  }
 };
+
 
 
   box.appendChild(btn);
