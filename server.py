@@ -363,7 +363,7 @@ def chat():
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
-        if update_obj.get("content_json") or project_row.get("content_json"):
+        if update_obj.get("content_json"):
             ensure_preview_token_for_project(project_id)
 
         return jsonify({
