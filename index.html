@@ -1858,10 +1858,13 @@ function showViewWebsiteButton() {
     boxShadow: '0 0 25px rgba(24,229,124,0.6)'
   });
 
-  btn.onclick = () => {
-    const pid = localStorage.getItem('sitegyn_project_id');
-    if (pid) window.location.href = `/editor.html?project_id=${pid}`;
-  };
+btn.onclick = () => {
+  const sub = localStorage.getItem('sitegyn_subdomain');
+  if (sub) {
+    window.location.href = `/p/${sub}`;
+  }
+};
+
 
   box.appendChild(btn);
 }
@@ -1926,18 +1929,18 @@ document.addEventListener('DOMContentLoaded', () => {
     fakeBuildLoop(() => backendDone);
 
     try {
-      await fetch(`${API_BASE}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          project_id: localStorage.getItem('sitegyn_project_id'),
-          message: text
-        })
-      });
+await fetch(`${API_BASE}/api/chat`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    project_id: localStorage.getItem('sitegyn_project_id'),
+    message: text
+  })
+});
 
-      backendDone = true;
-      await typeBotMessage("🚀 Your website is ready!");
-      showViewWebsiteButton();
+backendDone = true;
+await typeBotMessage("🚀 Your website is ready!");
+showViewWebsiteButton();
 
     } catch {
       backendDone = true;
@@ -1951,16 +1954,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script>
 function openEditorFromHome() {
-  const projectId = localStorage.getItem('sitegyn_project_id');
+  const sub = localStorage.getItem('sitegyn_subdomain');
 
-  if (projectId) {
-
-    window.location.href = `/editor.html?project_id=${projectId}`;
+  if (sub) {
+   
+    window.location.href = `/p/${sub}`;
   } else {
 
     openChat();
   }
 }
+
 </script>
 
 </body>
