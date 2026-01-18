@@ -460,7 +460,7 @@
     /* WHY SECTION */
     .section{
       padding:0 32px;
-      margin-top:60px; /* רווח מהמדוזות */
+      margin-top:60px;
     }
     .section-inner{
       max-width:1180px;
@@ -788,21 +788,23 @@
     }
 
     /* ===== CHAT PANEL (חדש) ===== */
-    #sitegyn-chat-wrapper{
-      position:fixed;
-      right:32px;
-      bottom:32px;
-      width:420px;
-      max-height:560px;
-      background:rgba(8,11,26,0.98);
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.16);
-      box-shadow:0 24px 60px rgba(0,0,0,0.75);
-      display:none;
-      flex-direction:column;
-      overflow:hidden;
-      z-index:60;
-    }
+#sitegyn-chat-wrapper{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 640px;
+  max-width: calc(100% - 32px);
+  max-height: 700px;
+  background: rgba(8,11,26,0.98);
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.85);
+  display: none;
+  flex-direction: column;
+  z-index: 60;
+}
+
 
     #sitegyn-chat-wrapper.open{
       display:flex;
@@ -834,7 +836,7 @@
       padding:10px 12px;
       flex:1;
       overflow-y:auto;
-      font-size:12px;
+      font-size:14px;
     }
     .sg-msg{
       margin-bottom:8px;
@@ -850,6 +852,13 @@
       padding:6px 9px;
       border-radius:12px;
     }
+    .sg-msg-bot .sg-msg-bubble{
+  background:#0b1224;
+  border:1px solid rgba(255,255,255,0.14);
+  color:#f7f8ff;              /* ← הבהרה */
+  font-size:14px;
+}
+
     .sg-msg-user .sg-msg-bubble{
       background:#2563eb;
     }
@@ -863,17 +872,46 @@
       display:flex;
       gap:6px;
     }
-    #sitegyn-chat-input{
-      flex:1;
-      resize:none;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.12);
-      padding:6px 8px;
-      font-size:12px;
-      font-family:inherit;
-      background:#020617;
-      color:var(--text);
-    }
+#sitegyn-chat-input{
+  flex: 1;
+  resize: none;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  background: #0b1228;
+  color: var(--text);
+  outline: none;
+  caret-color: #2fe1a7;
+}
+
+/* ===== Placeholder visibility (dark background fix) ===== */
+#sitegyn-chat-input::placeholder{
+  color: rgba(255,255,255,0.55);
+  font-weight: 400;
+}
+
+/* Chrome / Edge */
+#sitegyn-chat-input::-webkit-input-placeholder{
+  color: rgba(255,255,255,0.55);
+}
+
+/* Firefox */
+#sitegyn-chat-input::-moz-placeholder{
+  color: rgba(255,255,255,0.55);
+}
+
+/* On focus – softer placeholder */
+#sitegyn-chat-input:focus::placeholder{
+  color: rgba(255,255,255,0.7);
+}
+
+/* Optional: subtle focus feedback */
+#sitegyn-chat-input:focus{
+  border-color: rgba(47,225,167,0.6);
+}
+
     #sitegyn-chat-send{
       border:none;
       border-radius:999px;
@@ -1070,7 +1108,6 @@
     justify-content: center;
   }
 
-  /* Avatars – אופציונלי */
   .hero-avatars {
     margin-top: 14px;
     transform: scale(0.9);
@@ -1083,10 +1120,181 @@
     margin-top: 10px;
   }
 }
+/* ===== CHAT OVERLAY ===== */
+#sitegyn-chat-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 3, 10, 0.65);
+  backdrop-filter: blur(10px);
+  z-index: 55;
+  display: none;
+}
+
+body.chat-open #sitegyn-chat-overlay {
+  display: block;
+}
+
+body.chat-open .page-wrap {
+  filter: blur(8px);
+  pointer-events: none;
+  user-select: none;
+}
+/* =========================
+   MOBILE CHAT FIX
+   ========================= */
+@media (max-width: 768px) {
+
+  #sitegyn-chat-wrapper{
+    width: calc(100vw - 24px);
+    max-width: 420px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 16px;
+    border-radius: 18px;
+  }
+
+  #sitegyn-chat-header{
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  #sitegyn-chat-messages{
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  #sitegyn-chat-input{
+    padding: 12px;
+    gap: 10px;
+  }
+
+#sitegyn-chat-input{
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+
+  #sitegyn-chat-input button{
+    height: 44px;
+    padding: 0 16px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+}
+/* =========================
+   MOBILE FULLSCREEN CHAT
+   ========================= */
+@media (max-width: 768px) {
+
+  #sitegyn-chat-wrapper{
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    border-radius: 0;
+    transform: none;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
+
+  #sitegyn-chat-header{
+    padding: 16px;
+    font-size: 16px;
+  }
+
+  #sitegyn-chat-messages{
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  #sitegyn-chat-input{
+    padding: 14px;
+    gap: 12px;
+    background: rgba(12,18,36,0.95);
+    backdrop-filter: blur(6px);
+  }
+
+
+
+  #sitegyn-chat-input button{
+    height: 48px;
+    font-size: 15px;
+    padding: 0 18px;
+    border-radius: 14px;
+    white-space: nowrap;
+  }
+}
+#sitegyn-chat-input::placeholder{
+  color: rgba(255,255,255,0.85);
+  font-weight: 400;
+}
+
+
+@media (max-width: 768px){
+  #sitegyn-chat-input::placeholder{
+    color: rgba(255,255,255,0.9);
+  }
+}
+#sitegyn-create-btn {
+  cursor: pointer;
+}
+#sitegyn-create-btn {
+  appearance: none;
+  border: none;
+  outline: none;
+
+  padding: 12px 20px;
+  min-width: 160px;
+
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  color: #03130a;
+  background: linear-gradient(135deg, #1ef7a0, #22d3ee);
+
+  box-shadow:
+    0 8px 24px rgba(34, 211, 238, 0.35),
+    inset 0 0 0 1px rgba(255,255,255,0.15);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+#sitegyn-create-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow:
+    0 12px 30px rgba(34, 211, 238, 0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+#sitegyn-create-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 6px 18px rgba(34, 211, 238, 0.35),
+    inset 0 0 0 1px rgba(0,0,0,0.15);
+}
+#sitegyn-create-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  filter: grayscale(20%);
+  box-shadow: none;
+}
 
   </style>
 </head>
 <body>
+<div id="sitegyn-chat-overlay"></div>
+
 <div class="page-wrap">
 
   <!-- TOP NAV -->
@@ -1401,29 +1609,38 @@
 
 <!-- ===== Sitegyn Chat Panel ===== -->
 <div id="sitegyn-chat-wrapper">
-  <div class="sitegyn-chat-header">
-    <div>
-      <div class="sitegyn-chat-title">Sitegyn Assistant</div>
-      <div class="sitegyn-chat-subtitle" id="sitegyn-chat-status">Getting your project ready…</div>
+<div class="sitegyn-chat-header">
+  <div>
+    <div class="sitegyn-chat-title">Create your website</div>
+    <div class="sitegyn-chat-subtitle" id="sitegyn-chat-status">
+      Answer one question and your site will be ready
     </div>
-    <button id="sitegyn-chat-close" aria-label="Close chat">×</button>
   </div>
+  <button id="sitegyn-chat-close" aria-label="Close chat">×</button>
+</div>
 
   <div id="sitegyn-chat-messages"></div>
 
   <form id="sitegyn-chat-form">
-    <textarea id="sitegyn-chat-input" rows="2"
-      placeholder="First, what is your business name and what does your business do?"></textarea>
-    <button type="submit" id="sitegyn-chat-send">Send</button>
+<textarea
+  id="sitegyn-chat-input"
+  rows="2"
+  autocomplete="off">
+</textarea>
+
+<button id="sitegyn-create-btn">Create my website</button>
+
+
   </form>
 </div>
 
 <!-- TYPING SCRIPT + NAV -->
-<script>
+ <script>
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
+/* ===== HERO TYPING ===== */
 const words = ["AI website","landing page","portfolio site","course hub"];
 let wordIndex = 0;
 let charIndex = 0;
@@ -1458,9 +1675,9 @@ function type() {
 
 document.addEventListener("DOMContentLoaded", () => {
   window.scrollTo(0, 0);
-
   type();
 
+  /* ===== MOBILE NAV ===== */
   const toggle = document.querySelector(".nav-toggle");
   const mobile = document.getElementById("navMobile");
 
@@ -1470,172 +1687,268 @@ document.addEventListener("DOMContentLoaded", () => {
       toggle.classList.toggle("is-open", open);
     });
 
-    const mobileLinks = document.querySelectorAll(".nav-mobile-link");
-    mobileLinks.forEach(link => {
+    document.querySelectorAll(".nav-mobile-link").forEach(link => {
       link.addEventListener("click", () => {
-        if (mobile.classList.contains("open")) {
-          mobile.classList.remove("open");
-          toggle.classList.remove("is-open");
-        }
+        mobile.classList.remove("open");
+        toggle.classList.remove("is-open");
       });
+    });
+  }
+
+  /* ===== CHAT CREATE BUTTON ===== */
+  const createBtn = document.getElementById('sitegyn-create-btn');
+  const input = document.getElementById('sitegyn-chat-input');
+
+  if (createBtn && input) {
+    createBtn.addEventListener('click', () => {
+      const form = document.getElementById('sitegyn-chat-form');
+      if (form) form.dispatchEvent(new Event('submit'));
     });
   }
 });
 </script>
-
-<!-- CHAT + BACKEND LOGIC -->
 <script>
-  const API_BASE = 'https://sitegyn-backend.onrender.com';
+/* =========================
+   CONFIG
+========================= */
+let __typingQueue = Promise.resolve();
+const API_BASE = 'https://sitegyn-backend.onrender.com';
 
-  function createClientId() {
-    let id = localStorage.getItem('sitegyn_client_id');
-    if (!id) {
-      id = 'client_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
-      localStorage.setItem('sitegyn_client_id', id);
-      console.log('[Sitegyn] New client_id created:', id);
-    } else {
-      console.log('[Sitegyn] Existing client_id:', id);
-    }
-    return id;
+/* =========================
+   CLIENT + PROJECT
+========================= */
+function createClientId() {
+  let id = localStorage.getItem('sitegyn_client_id');
+  if (!id) {
+    id = 'client_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    localStorage.setItem('sitegyn_client_id', id);
   }
+  return id;
+}
 
-  async function initProjectIfNeeded() {
-    const existing = localStorage.getItem('sitegyn_project_id');
-    if (existing) {
-      return existing;
-    }
+async function initProjectIfNeeded() {
+  const existing = localStorage.getItem('sitegyn_project_id');
+  if (existing) return existing;
 
-    const clientId = createClientId();
-
-    const payload = {
-      client_id: clientId,
+  const res = await fetch(`${API_BASE}/api/start_project`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_id: createClientId(),
       language: 'en',
       business_type: 'consulting',
       business_name: 'Demo Biz'
+    })
+  });
+
+  if (!res.ok) throw new Error('start_project failed');
+
+  const data = await res.json();
+  localStorage.setItem('sitegyn_project_id', data.project_id);
+  return data.project_id;
+}
+
+/* =========================
+   CHAT UI HELPERS
+========================= */
+function wait(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
+function typeBotMessage(text, baseSpeed = 80) {
+  __typingQueue = __typingQueue.then(() => {
+    return new Promise(resolve => {
+      const box = document.getElementById('sitegyn-chat-messages');
+      if (!box) return resolve();
+
+      const msg = document.createElement('div');
+      msg.className = 'sg-msg sg-msg-bot';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'sg-msg-bubble';
+      msg.appendChild(bubble);
+      box.appendChild(msg);
+
+      let i = 0;
+
+      function typeChar() {
+        if (i < text.length) {
+          bubble.textContent += text.charAt(i);
+          i++;
+
+          let delay = baseSpeed + Math.random() * 60;
+
+          // פאוזות טבעיות
+          if (/[.,!]/.test(text.charAt(i - 1))) delay += 400;
+          if (text.charAt(i - 1) === '\n') delay += 500;
+
+          box.scrollTop = box.scrollHeight;
+          setTimeout(typeChar, delay);
+        } else {
+          resolve();
+        }
+      }
+
+      typeChar();
+    });
+  });
+
+  return __typingQueue;
+}
+
+function appendMessage(text, who) {
+  const box = document.getElementById('sitegyn-chat-messages');
+  if (!box) return;
+
+  const msg = document.createElement('div');
+  msg.className = 'sg-msg ' + (who === 'user' ? 'sg-msg-user' : 'sg-msg-bot');
+
+  const bubble = document.createElement('div');
+  bubble.className = 'sg-msg-bubble';
+  bubble.textContent = text;
+
+  msg.appendChild(bubble);
+  box.appendChild(msg);
+  box.scrollTop = box.scrollHeight;
+}
+
+/* =========================
+   FAKE BUILD LOOP
+========================= */
+async function fakeBuildLoop(isDone) {
+  const steps = [
+    "• Creating the site structure",
+    "• Writing content based on your business",
+    "• Designing layout and colors",
+    "• Optimizing for mobile",
+    "• Final touches…"
+  ];
+
+  let i = 0;
+  while (!isDone()) {
+    await typeBotMessage(steps[i % steps.length]);
+    await wait(900);
+    i++;
+  }
+}
+
+/* =========================
+   VIEW WEBSITE BUTTON
+========================= */
+function showViewWebsiteButton() {
+  if (window.__siteReadyShown) return;
+  window.__siteReadyShown = true;
+
+  const box = document.getElementById('sitegyn-chat-messages');
+  if (!box) return;
+
+  const btn = document.createElement('button');
+  btn.textContent = 'View website →';
+
+  Object.assign(btn.style, {
+    marginTop: '14px',
+    padding: '14px 22px',
+    fontSize: '15px',
+    fontWeight: '700',
+    borderRadius: '999px',
+    border: 'none',
+    cursor: 'pointer',
+    background: 'linear-gradient(130deg,#18e57c,#2fe1ff)',
+    color: '#02030a',
+    boxShadow: '0 0 25px rgba(24,229,124,0.6)'
+  });
+
+  btn.onclick = () => {
+    const pid = localStorage.getItem('sitegyn_project_id');
+    if (pid) window.location.href = `/editor.html?project_id=${pid}`;
+  };
+
+  box.appendChild(btn);
+}
+
+/* =========================
+   OPEN CHAT
+========================= */
+async function openChat() {
+  const wrapper = document.getElementById('sitegyn-chat-wrapper');
+  const statusEl = document.getElementById('sitegyn-chat-status');
+  if (!wrapper) return;
+
+  document.body.classList.add('chat-open');
+  wrapper.classList.add('open');
+  statusEl.textContent = 'Creating your project…';
+
+  try {
+    await initProjectIfNeeded();
+    statusEl.textContent = 'Project ready';
+
+    if (!window.__introTyped) {
+      window.__introTyped = true;
+      typeBotMessage(
+        "Hi 👋\n\nTo build your website, I’ll need:\n" +
+        "• your name\n• business name\n• what you do\n\nTake your time 😊"
+      );
+    }
+  } catch {
+    statusEl.textContent = 'Problem creating project';
+  }
+}
+
+/* =========================
+   MAIN FORM LOGIC
+========================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('sitegyn-chat-form');
+  const input = document.getElementById('sitegyn-chat-input');
+  const closeBtn = document.getElementById('sitegyn-chat-close');
+
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      document.getElementById('sitegyn-chat-wrapper')?.classList.remove('open');
+      document.body.classList.remove('chat-open');
     };
+  }
+
+  if (!form || !input) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (window.__isBuilding) return;
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    window.__isBuilding = true;
+    appendMessage(text, 'user');
+    input.value = '';
+
+    let backendDone = false;
+    fakeBuildLoop(() => backendDone);
 
     try {
-      console.log('[Sitegyn] Starting project, payload:', payload);
-
-      const res = await fetch(`${API_BASE}/api/start_project`, {
+      await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          project_id: localStorage.getItem('sitegyn_project_id'),
+          message: text
+        })
       });
 
-      if (!res.ok) {
-        console.error('[Sitegyn] start_project failed:', res.status, await res.text());
-        throw new Error('start_project failed');
-      }
+      backendDone = true;
+      await typeBotMessage("🚀 Your website is ready!");
+      showViewWebsiteButton();
 
-      const data = await res.json();
-      console.log('[Sitegyn] Project started:', data);
-
-      if (data.project_id) {
-        localStorage.setItem('sitegyn_project_id', data.project_id);
-        return data.project_id;
-      }
-      throw new Error('No project_id in response');
-    } catch (err) {
-      console.error('[Sitegyn] Error calling /api/start_project:', err);
-      throw err;
-    }
-  }
-
-  async function pingBackend() {
-    try {
-      const res = await fetch(`${API_BASE}/`);
-      const data = await res.json();
-      console.log('[Sitegyn] Backend OK:', data);
-    } catch (err) {
-      console.error('[Sitegyn] Backend ping failed:', err);
-    }
-  }
-
-  async function openChat() {
-    const wrapper = document.getElementById('sitegyn-chat-wrapper');
-    const statusEl = document.getElementById('sitegyn-chat-status');
-
-    if (!wrapper) return;
-
-    wrapper.classList.add('open');
-    statusEl.textContent = 'Creating your project…';
-
-    try {
-      const projectId = await initProjectIfNeeded();
-      statusEl.textContent = 'Project ready · ID ' + projectId;
-      console.log('[Sitegyn] Chat using project_id:', projectId);
-    } catch (err) {
-      statusEl.textContent = 'Problem creating project. Try again.';
-    }
-  }
-
-  function appendMessage(text, who) {
-    const box = document.getElementById('sitegyn-chat-messages');
-    if (!box) return;
-    const msg = document.createElement('div');
-    msg.className = 'sg-msg ' + (who === 'user' ? 'sg-msg-user' : 'sg-msg-bot');
-    const bubble = document.createElement('div');
-    bubble.className = 'sg-msg-bubble';
-    bubble.textContent = text;
-    msg.appendChild(bubble);
-    box.appendChild(msg);
-    box.scrollTop = box.scrollHeight;
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    pingBackend();
-
-    const closeBtn = document.getElementById('sitegyn-chat-close');
-    const wrapper = document.getElementById('sitegyn-chat-wrapper');
-    const form = document.getElementById('sitegyn-chat-form');
-    const input = document.getElementById('sitegyn-chat-input');
-
-    if (closeBtn && wrapper) {
-      closeBtn.addEventListener('click', () => {
-        wrapper.classList.remove('open');
-      });
+    } catch {
+      backendDone = true;
+      await typeBotMessage("Network error. Please try again.");
     }
 
-    if (form && input) {
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const text = input.value.trim();
-        if (!text) return;
-
-        appendMessage(text, 'user');
-        input.value = '';
-
-        const projectId = localStorage.getItem('sitegyn_project_id');
-        if (!projectId) {
-          appendMessage("Couldn't find project id. Please close and reopen the chat.", 'bot');
-          return;
-        }
-
-        try {
-          const res = await fetch(`${API_BASE}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ project_id: projectId, message: text })
-          });
-
-          if (!res.ok) {
-            const errText = await res.text();
-            console.error('Chat API error:', errText);
-            appendMessage('Something went wrong. Try again in a moment.', 'bot');
-            return;
-          }
-
-          const data = await res.json();
-          appendMessage(data.reply || '(no reply)', 'bot');
-        } catch (err) {
-          console.error('Chat fetch error:', err);
-          appendMessage('Network error. Please try again later.', 'bot');
-        }
-      });
-    }
+    window.__isBuilding = false;
   });
+});
 </script>
+
 <script>
 function openEditorFromHome() {
   const projectId = localStorage.getItem('sitegyn_project_id');
