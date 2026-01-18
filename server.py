@@ -164,22 +164,13 @@ def homepage():
 def health():
     return jsonify({"status": "ok"})
 
-import secrets
+
 @app.route("/api/start_project", methods=["POST"])
 def start_project():
-    token = secrets.token_urlsafe(32)
-
-    resp = supabase.table("projects").insert({
-        "access_token": token
-    }).execute()
-
+    resp = supabase.table("projects").insert({}).execute()
     if not resp.data:
         return jsonify({"error": "insert_failed"}), 500
-
-    return jsonify({
-        "project_id": resp.data[0]["id"],
-        "access_token": token
-    })
+    return jsonify({"project_id": resp.data[0]["id"]})
 
 
 # ==========================================
@@ -349,31 +340,6 @@ def chat():
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
-# ==========================================
-# GET PROJECT PUBLIC DATA (fallback for frontend)
-# ==========================================
-@app.route("/api/get_project_public", methods=["POST"])
-def get_project_public():
-    data = request.get_json(force=True)
-    project_id = data.get("project_id")
-
-    if not project_id:
-        return jsonify({"error": "missing_project_id"}), 400
-
-    project = (
-        supabase
-        .table("projects")
-        .select("subdomain, manage_token")
-        .eq("id", project_id)
-        .single()
-        .execute()
-        .data
-    )
-
-    if not project:
-        return jsonify({"error": "not found"}), 404
-
-    return jsonify(project)
 
 # ==========================================
 # PUBLIC SITE — on-the-fly render (NEW)
