@@ -1858,13 +1858,10 @@ function showViewWebsiteButton() {
     boxShadow: '0 0 25px rgba(24,229,124,0.6)'
   });
 
-btn.onclick = () => {
-  const sub = localStorage.getItem('sitegyn_subdomain');
-  if (!sub) return;
-
-  const url = `${window.location.origin}/p/${sub}`;
-  window.open(url, '_blank', 'noopener,noreferrer');
-};
+  btn.onclick = () => {
+    const pid = localStorage.getItem('sitegyn_project_id');
+    if (pid) window.location.href = `/editor.html?project_id=${pid}`;
+  };
 
   box.appendChild(btn);
 }
@@ -1929,30 +1926,18 @@ document.addEventListener('DOMContentLoaded', () => {
     fakeBuildLoop(() => backendDone);
 
     try {
-const res = await fetch(`${API_BASE}/api/chat`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    project_id: localStorage.getItem('sitegyn_project_id'),
-    message: text
-  })
-});
+      await fetch(`${API_BASE}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          project_id: localStorage.getItem('sitegyn_project_id'),
+          message: text
+        })
+      });
 
-const data = await res.json();
-
-/* ===== 🔑 CRITICAL FIX ===== */
-if (data.subdomain) {
-  localStorage.setItem('sitegyn_subdomain', data.subdomain);
-  console.log('[Sitegyn] subdomain saved:', data.subdomain);
-} else {
-  console.warn('[Sitegyn] no subdomain returned', data);
-}
-/* ========================== */
-
-backendDone = true;
-await typeBotMessage("🚀 Your website is ready!");
-showViewWebsiteButton();
-
+      backendDone = true;
+      await typeBotMessage("🚀 Your website is ready!");
+      showViewWebsiteButton();
 
     } catch {
       backendDone = true;
@@ -1966,17 +1951,16 @@ showViewWebsiteButton();
 
 <script>
 function openEditorFromHome() {
-  const sub = localStorage.getItem('sitegyn_subdomain');
+  const projectId = localStorage.getItem('sitegyn_project_id');
 
-  if (sub) {
+  if (projectId) {
 
-    window.location.href = `/p/${sub}`;
+    window.location.href = `/editor.html?project_id=${projectId}`;
   } else {
 
     openChat();
   }
 }
-
 </script>
 
 </body>
