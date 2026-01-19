@@ -1929,7 +1929,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fakeBuildLoop(() => backendDone);
 
     try {
-await fetch(`${API_BASE}/api/chat`, {
+const res = await fetch(`${API_BASE}/api/chat`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -1938,9 +1938,21 @@ await fetch(`${API_BASE}/api/chat`, {
   })
 });
 
+const data = await res.json();
+
+/* ===== 🔑 CRITICAL FIX ===== */
+if (data.subdomain) {
+  localStorage.setItem('sitegyn_subdomain', data.subdomain);
+  console.log('[Sitegyn] subdomain saved:', data.subdomain);
+} else {
+  console.warn('[Sitegyn] no subdomain returned', data);
+}
+/* ========================== */
+
 backendDone = true;
 await typeBotMessage("🚀 Your website is ready!");
 showViewWebsiteButton();
+
 
     } catch {
       backendDone = true;
@@ -1957,7 +1969,7 @@ function openEditorFromHome() {
   const sub = localStorage.getItem('sitegyn_subdomain');
 
   if (sub) {
-   
+
     window.location.href = `/p/${sub}`;
   } else {
 
