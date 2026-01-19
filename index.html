@@ -1859,9 +1859,14 @@ function showViewWebsiteButton() {
   });
 
 btn.onclick = () => {
-  const subdomain = localStorage.getItem('sitegyn_subdomain');
-  window.location.href = `/p/${subdomain}`;
+  const sub = localStorage.getItem('sitegyn_subdomain');
+  if (!sub) return;
+
+  const url = `${window.location.origin}/p/${sub}`;
+  window.open(url, '_blank', 'noopener,noreferrer');
 };
+
+
 
   box.appendChild(btn);
 }
@@ -1926,18 +1931,30 @@ document.addEventListener('DOMContentLoaded', () => {
     fakeBuildLoop(() => backendDone);
 
     try {
-      await fetch(`${API_BASE}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          project_id: localStorage.getItem('sitegyn_project_id'),
-          message: text
-        })
-      });
+const res = await fetch(`${API_BASE}/api/chat`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    project_id: localStorage.getItem('sitegyn_project_id'),
+    message: text
+  })
+});
 
-      backendDone = true;
-      await typeBotMessage("🚀 Your website is ready!");
-      showViewWebsiteButton();
+const data = await res.json();
+
+/* ===== 🔑 CRITICAL FIX ===== */
+if (data.subdomain) {
+  localStorage.setItem('sitegyn_subdomain', data.subdomain);
+  console.log('[Sitegyn] subdomain saved:', data.subdomain);
+} else {
+  console.warn('[Sitegyn] no subdomain returned', data);
+}
+/* ========================== */
+
+backendDone = true;
+await typeBotMessage("🚀 Your website is ready!");
+showViewWebsiteButton();
+
 
     } catch {
       backendDone = true;
