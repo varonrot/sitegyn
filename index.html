@@ -1860,12 +1860,7 @@ function showViewWebsiteButton() {
 
 btn.onclick = () => {
   const subdomain = localStorage.getItem('sitegyn_subdomain');
-
-  if (subdomain) {
-    window.location.href = `/p/${subdomain}`;
-  } else {
-    alert("Website is still generating. Try again in a moment.");
-  }
+  window.location.href = `/p/${subdomain}`;
 };
 
   box.appendChild(btn);
