@@ -358,9 +358,48 @@ def chat():
 # ==========================================
 @app.route("/p/<subdomain>")
 def public_page_by_subdomain(subdomain: str):
+    # 1️⃣ שליפת הפרויקט לפי subdomain
+    project_rows = (
+        supabase.table("projects")
+        .select("id, wow_seen")
+        .eq("subdomain", subdomain)
+        .limit(1)
+        .execute()
+        .data
+    )
+
+    if not project_rows:
+        return "Project not found", 404
+
+    project = project_rows[0]
+ 
     html = render_project_html_by_subdomain(subdomain)
     if html is None:
-        return "Project not found or failed to render", 404
+        return "Failed to render project", 500
+
+    show_wow = not project.get("wow_seen", False)
+
+    if show_wow:
+        supabase.table("projects") \
+            .update({"wow_seen": True}) \
+            .eq("id", project["id"]) \
+            .execute()
+
+    inject_script = f"""
+    <script>
+      window.__SITEGYN__ = {{
+        showWow: {str(show_wow).lower()},
+        projectId: "{project['id']}"
+      }};
+    </script>
+    <script src="/system/sitegyn-wow.js"></script>
+    """
+
+    if "</body>" in html:
+        html = html.replace("</body>", inject_script + "\n</body>")
+    else:
+        html += inject_script
+
     return Response(html, mimetype="text/html")
 
 
