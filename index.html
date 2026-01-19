@@ -1858,10 +1858,15 @@ function showViewWebsiteButton() {
     boxShadow: '0 0 25px rgba(24,229,124,0.6)'
   });
 
-  btn.onclick = () => {
-    const pid = localStorage.getItem('sitegyn_project_id');
-    if (pid) window.location.href = `/editor.html?project_id=${pid}`;
-  };
+btn.onclick = () => {
+  const subdomain = localStorage.getItem('sitegyn_subdomain');
+
+  if (subdomain) {
+    window.location.href = `/p/${subdomain}`;
+  } else {
+    alert("Website is still generating. Try again in a moment.");
+  }
+};
 
   box.appendChild(btn);
 }
