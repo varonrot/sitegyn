@@ -1862,11 +1862,9 @@ btn.onclick = () => {
   const sub = localStorage.getItem('sitegyn_subdomain');
   if (!sub) return;
 
-  const url = `${window.location.origin}/p/${sub}`;
+  const url = `${window.location.origin}/p/${sub}/wow`;
   window.open(url, '_blank', 'noopener,noreferrer');
 };
-
-
 
   box.appendChild(btn);
 }
