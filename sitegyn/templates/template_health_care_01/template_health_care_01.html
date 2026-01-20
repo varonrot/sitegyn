@@ -1960,6 +1960,49 @@ section[id] {
     bottom:16px;
   }
 }
+#wow-overlay,
+#wow-actions {
+  display: none;
+}
+#wow-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 19, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 9998;
+}
+#wow-actions {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  display: flex;
+  gap: 12px;
+  z-index: 9999;
+}
+
+.wow-btn {
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.wow-btn.primary {
+  background: linear-gradient(130deg,#18e57c,#2fe1ff);
+  color: #02030a;
+}
+
+.wow-btn.dark {
+  background: rgba(12,18,36,0.95);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+body.wow-active #wow-overlay,
+body.wow-active #wow-actions {
+  display: flex;
+}
 
 
 </style>
@@ -2559,6 +2602,53 @@ setInterval(() => {
   } catch (e) {
     console.warn("WOW seen update failed", e);
   }
+})();
+</script>
+<!-- WOW OVERLAY -->
+<div id="wow-overlay"></div>
+
+<!-- WOW ACTIONS -->
+<div id="wow-actions">
+  <button class="wow-btn primary" id="wow-edit">
+    ✏️ Edit site
+  </button>
+
+  <button class="wow-btn dark" id="wow-share">
+    🔗 Share site
+  </button>
+
+  <button class="wow-btn dark" id="wow-continue">
+    👀 View site
+  </button>
+</div>
+<script>
+(function () {
+  // WOW מופעל רק אם ה-URL מסתיים ב /wow
+  if (!location.pathname.endsWith('/wow')) return;
+
+  document.body.classList.add('wow-active');
+
+  const sub = location.pathname.split('/p/')[1].replace('/wow', '');
+
+  // View site
+  document.getElementById('wow-continue')?.addEventListener('click', () => {
+    location.href = `/p/${sub}`;
+  });
+
+  // Edit site
+  document.getElementById('wow-edit')?.addEventListener('click', () => {
+    const pid = localStorage.getItem('sitegyn_project_id');
+    if (pid) {
+      location.href = `/editor.html?project_id=${pid}`;
+    }
+  });
+
+  // Share site
+  document.getElementById('wow-share')?.addEventListener('click', async () => {
+    const url = `${location.origin}/p/${sub}`;
+    await navigator.clipboard.writeText(url);
+    alert('Link copied ✨');
+  });
 })();
 </script>
 
