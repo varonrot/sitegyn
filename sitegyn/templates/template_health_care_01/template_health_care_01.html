@@ -2622,18 +2622,21 @@ setInterval(() => {
   </button>
 </div>
 <script>
+<script>
 (function () {
-  // WOW מופעל רק אם ה-URL מסתיים ב /wow
-  if (!location.pathname.endsWith('/wow')) return;
+  // הפעלה אם יש /wow בכל מקום בנתיב
+  if (!location.pathname.includes('/wow')) return;
 
   document.body.classList.add('wow-active');
 
-  const sub = location.pathname.split('/p/')[1].replace('/wow', '');
+  const sub = location.pathname
+    .replace('/wow', '')
+    .split('/p/')[1];
 
-  // View site
-document.getElementById('wow-continue').onclick = () => {
-  location.href = `/p/${sub}/wow`;
-};
+  // View site – חזרה לאתר הרגיל
+  document.getElementById('wow-continue')?.addEventListener('click', () => {
+    location.href = `/p/${sub}`;
+  });
 
   // Edit site
   document.getElementById('wow-edit')?.addEventListener('click', () => {
@@ -2651,6 +2654,7 @@ document.getElementById('wow-continue').onclick = () => {
   });
 })();
 </script>
+
 
 
 </body>
