@@ -1289,62 +1289,6 @@ body.chat-open .page-wrap {
   filter: grayscale(20%);
   box-shadow: none;
 }
-/* ===== WOW OVERLAY ===== */
-#wow-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(2,4,12,0.55);
-  backdrop-filter: blur(8px);
-  z-index:9998;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .5s ease;
-}
-
-body.wow-active #wow-overlay{
-  opacity:1;
-  pointer-events:auto;
-}
-
-/* ===== WOW FLOAT BUTTONS ===== */
-#wow-actions{
-  position:fixed;
-  right:28px;
-  bottom:28px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  z-index:9999;
-  transform:translateY(30px);
-  opacity:0;
-  transition:all .6s cubic-bezier(.2,.8,.2,1);
-}
-
-body.wow-active #wow-actions{
-  transform:translateY(0);
-  opacity:1;
-}
-
-.wow-btn{
-  padding:14px 20px;
-  border-radius:999px;
-  font-size:14px;
-  font-weight:600;
-  border:none;
-  cursor:pointer;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-}
-
-.wow-btn.primary{
-  background:linear-gradient(135deg,#18e57c,#2fe1ff);
-  color:#02030a;
-}
-
-.wow-btn.dark{
-  background:#0b1224;
-  color:#f7f8ff;
-  border:1px solid rgba(255,255,255,.15);
-}
 
   </style>
 </head>
@@ -1918,9 +1862,11 @@ btn.onclick = () => {
   const sub = localStorage.getItem('sitegyn_subdomain');
   if (!sub) return;
 
-  const url = `${window.location.origin}/p/${sub}/wow`;
+  const url = `${window.location.origin}/p/${sub}`;
   window.open(url, '_blank', 'noopener,noreferrer');
 };
+
+
 
   box.appendChild(btn);
 }
@@ -2032,47 +1978,6 @@ function openEditorFromHome() {
     openChat();
   }
 }
-</script>
-<div id="wow-overlay"></div>
-
-<div id="wow-actions">
-  <button class="wow-btn primary" id="wow-edit">
-    ✏️ Edit site
-  </button>
-
-  <button class="wow-btn dark" id="wow-share">
-    🔗 Share site
-  </button>
-
-  <button class="wow-btn dark" id="wow-continue">
-    👀 View site
-  </button>
-</div>
-<script>
-(function initWOW(){
-  if (!location.pathname.endsWith('/wow')) return;
-
-  document.body.classList.add('wow-active');
-
-  const sub = location.pathname.split('/p/')[1].replace('/wow','');
-
-  document.getElementById('wow-continue').onclick = () => {
-    location.href = `/p/${sub}`;
-  };
-
-  document.getElementById('wow-edit').onclick = () => {
-    const pid = localStorage.getItem('sitegyn_project_id');
-    if (pid) {
-      location.href = `/editor.html?project_id=${pid}`;
-    }
-  };
-
-  document.getElementById('wow-share').onclick = async () => {
-    const url = location.origin + `/p/${sub}`;
-    await navigator.clipboard.writeText(url);
-    alert('Link copied ✨');
-  };
-})();
 </script>
 
 </body>
