@@ -2631,9 +2631,9 @@ setInterval(() => {
   const sub = location.pathname.split('/p/')[1].replace('/wow', '');
 
   // View site
-  document.getElementById('wow-continue')?.addEventListener('click', () => {
-    location.href = `/p/${sub}`;
-  });
+document.getElementById('wow-continue').onclick = () => {
+  location.href = `/p/${sub}/wow`;
+};
 
   // Edit site
   document.getElementById('wow-edit')?.addEventListener('click', () => {
