@@ -2545,6 +2545,22 @@ setInterval(() => {
     }
   });
 </script>
+<script>
+(async () => {
+  const isWow = document.body.dataset.wow === "true";
+  const projectId = document.body.dataset.projectId;
+
+  if (!isWow || !projectId) return;
+
+  try {
+    await fetch(`/api/projects/${projectId}/wow_seen`, {
+      method: "POST"
+    });
+  } catch (e) {
+    console.warn("WOW seen update failed", e);
+  }
+})();
+</script>
 
 
 </body>
