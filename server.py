@@ -385,11 +385,18 @@ def public_page_wow(subdomain: str):
             headers={"Location": f"/p/{subdomain}"}
         )
 
+    # 🔥 כאן הסימון
+    supabase.table("projects") \
+        .update({"wow_seen": True}) \
+        .eq("subdomain", subdomain) \
+        .execute()
+
     html = render_project_html_by_subdomain(subdomain)
     if html is None:
         return "Project not found or failed to render", 404
 
     return Response(html, mimetype="text/html")
+
 
 # ==========================================
 # Admin
