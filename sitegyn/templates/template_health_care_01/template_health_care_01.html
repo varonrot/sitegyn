@@ -2003,6 +2003,32 @@ body.wow-active #wow-overlay,
 body.wow-active #wow-actions {
   display: flex;
 }
+/* WOW overlay – מצב התחלתי */
+body.wow-active #wow-overlay {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+body.wow-active.wow-show #wow-overlay {
+  opacity: 1;
+}
+
+/* כפתורים – לפני כניסה */
+#wow-actions {
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(.2,.8,.2,1);
+  pointer-events: none;
+}
+
+/* כפתורים – אחרי כניסה */
+body.wow-show #wow-actions {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
 
 
 </style>
@@ -2655,6 +2681,44 @@ setInterval(() => {
 })();
 </script>
 
+<script>
+(function () {
+  if (!location.pathname.includes('/wow')) return;
+
+  document.body.classList.add('wow-active');
+
+  const sub = location.pathname
+    .replace('/wow', '')
+    .split('/p/')[1];
+
+  // השהיה – המשתמש קודם רואה את האתר
+  setTimeout(() => {
+    document.body.classList.add('wow-show');
+  }, 1800); // 1.8 שניות (אפשר לשחק עם זה)
+
+  // View site – יציאה מ-WOW
+  document.getElementById('wow-continue')?.addEventListener('click', () => {
+    location.href = `/p/${sub}`;
+  });
+
+  // Edit site – עורך אמיתי
+  document.getElementById('wow-edit')?.addEventListener('click', () => {
+    const pid = localStorage.getItem('sitegyn_project_id');
+    if (pid) {
+      location.href = `/editor.html?project_id=${pid}`;
+    } else {
+      alert('Editor available after login');
+    }
+  });
+
+  // Share site – לינק אמיתי
+  document.getElementById('wow-share')?.addEventListener('click', async () => {
+    const url = `${location.origin}/p/${sub}`;
+    await navigator.clipboard.writeText(url);
+    alert('✨ Link copied — share your site!');
+  });
+})();
+</script>
 
 
 </body>
