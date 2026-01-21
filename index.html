@@ -1863,10 +1863,20 @@ btn.onclick = () => {
   if (!sub) return;
 
   const url = `${window.location.origin}/p/${sub}/wow`;
+
   window.open(url, '_blank', 'noopener,noreferrer');
+
+  closeChat();
 };
 
   box.appendChild(btn);
+}
+function closeChat() {
+  const wrapper = document.getElementById('sitegyn-chat-wrapper');
+  if (!wrapper) return;
+
+  document.body.classList.remove('chat-open');
+  wrapper.classList.remove('open');
 }
 
 /* =========================
