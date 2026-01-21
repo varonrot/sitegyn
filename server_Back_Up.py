@@ -329,12 +329,25 @@ def chat():
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
+        # === fetch subdomain for frontend redirect ===
+        project_row = (
+            supabase.table("projects")
+            .select("subdomain")
+            .eq("id", project_id)
+            .execute()
+            .data
+        )
 
+        subdomain = None
+        if project_row and project_row[0].get("subdomain"):
+            subdomain = project_row[0]["subdomain"]
 
         return jsonify({
             "reply": visible_text,
-            "project_id": project_id
+            "project_id": project_id,
+            "subdomain": subdomain
         })
+
 
     except Exception as e:
         traceback.print_exc()
@@ -349,6 +362,39 @@ def public_page_by_subdomain(subdomain: str):
     html = render_project_html_by_subdomain(subdomain)
     if html is None:
         return "Project not found or failed to render", 404
+    return Response(html, mimetype="text/html")
+
+@app.route("/p/<subdomain>/wow")
+def public_page_wow(subdomain: str):
+    project = (
+        supabase.table("projects")
+        .select("id, wow_seen")
+        .eq("subdomain", subdomain)
+        .single()
+        .execute()
+        .data
+    )
+
+    if not project:
+        return "Project not found", 404
+
+    # אם כבר נצפה – מעבר לאתר הרגיל
+    if project.get("wow_seen"):
+        return Response(
+            "", status=302,
+            headers={"Location": f"/p/{subdomain}"}
+        )
+
+    # 🔥 כאן הסימון
+    supabase.table("projects") \
+        .update({"wow_seen": True}) \
+        .eq("subdomain", subdomain) \
+        .execute()
+
+    html = render_project_html_by_subdomain(subdomain)
+    if html is None:
+        return "Project not found or failed to render", 404
+
     return Response(html, mimetype="text/html")
 
 
@@ -369,6 +415,14 @@ def api_list_projects():
         traceback.print_exc()
         return jsonify({"status": "error"}), 500
 
+@app.route("/api/projects/<project_id>/wow_seen", methods=["POST"])
+def mark_wow_seen(project_id):
+    supabase.table("projects") \
+        .update({"wow_seen": True}) \
+        .eq("id", project_id) \
+        .execute()
+
+    return jsonify({"ok": True})
 
 @app.route("/api/projects/<project_id>/subdomain", methods=["POST"])
 def api_update_subdomain(project_id):
