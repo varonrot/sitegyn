@@ -651,6 +651,10 @@ async function loadEditorSite() {
 }
 
 loadEditorSite();
+const realtimeProjectId = getProjectId();
+if (realtimeProjectId) {
+  subscribeToProjectRealtime(realtimeProjectId);
+}
 
 /* =========================
    Load template schema (ICON VERSION)
@@ -916,7 +920,7 @@ function capitalize(str) {
 function humanize(str) {
   return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
 }
- 
+
 
 async function openBottomPreview(path) {
 currentEditPath = path;
@@ -1313,6 +1317,13 @@ if (data?.reply) {
     }
   }
 
+});
+</script>
+<script>
+window.addEventListener("message", (e) => {
+  if (e.data && e.data.type === "content-updated") {
+    location.reload();
+  }
 });
 </script>
 
