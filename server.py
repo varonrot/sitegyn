@@ -151,6 +151,120 @@ def generate_content_for_project(
         traceback.print_exc()
         return None
 
+def generate_content_patch(
+    client: OpenAI,
+    current_content: Dict[str, Any],
+    schema_str: str,
+    user_request: str,
+) -> Dict[str, Any] | None:
+    """
+    Generates a PATCH for content_json (not full overwrite).
+    """
+    try:
+        base_dir = Path(__file__).resolve().parent
+        prompt_path = base_dir / "content_improve_prompt.txt"
+        prompt_template = prompt_path.read_text(encoding="utf-8")
+
+        final_prompt = (
+            prompt_template
+            .replace("{{CURRENT_CONTENT_JSON}}", json.dumps(current_content, ensure_ascii=False))
+            .replace("{{SCHEMA_JSON}}", schema_str)
+            .replace("{{USER_REQUEST}}", user_request)
+        )
+
+        completion = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[{"role": "user", "content": final_prompt}],
+            temperature=0.2,
+        )
+
+        text = completion.choices[0].message.content.strip()
+        return json.loads(text)
+
+    except Exception:
+        traceback.print_exc()
+        return None
+
+def deep_merge(base: Dict[str, Any], patch: Dict[str, Any]) -> Dict[str, Any]:
+    for k, v in patch.items():
+        if isinstance(v, dict) and isinstance(base.get(k), dict):
+            deep_merge(base[k], v)
+        else:
+            base[k] = v
+    return base
+def _parse_path_tokens(path: str):
+    # supports: "a.b.0.c" and "a.b[0].c"
+    path = path.replace("[", ".").replace("]", "")
+    tokens = [t for t in path.split(".") if t != ""]
+    out = []
+    for t in tokens:
+        if t.isdigit():
+            out.append(int(t))
+        else:
+            out.append(t)
+    return out
+
+def _set_by_path(obj: Any, path: str, value: Any) -> None:
+    tokens = _parse_path_tokens(path)
+    if not tokens:
+        return
+
+    cur = obj
+    for i, tok in enumerate(tokens[:-1]):
+        nxt = tokens[i + 1]
+
+        if isinstance(tok, int):
+            # list index
+            if not isinstance(cur, list) or tok < 0 or tok >= len(cur):
+                raise KeyError(f"Invalid list index in path: {path}")
+            cur = cur[tok]
+        else:
+            # dict key
+            if not isinstance(cur, dict) or tok not in cur:
+                raise KeyError(f"Missing key in path: {path}")
+            cur = cur[tok]
+
+        # sanity: ensure container for next hop exists (must already exist by prompt rules)
+        if isinstance(nxt, int) and not isinstance(cur, list):
+            # ok to continue only if actual data is list
+            pass
+        if isinstance(nxt, str) and not isinstance(cur, dict):
+            # ok to continue only if actual data is dict
+            pass
+
+    last = tokens[-1]
+    if isinstance(last, int):
+        if not isinstance(cur, list) or last < 0 or last >= len(cur):
+            raise KeyError(f"Invalid list index in path: {path}")
+        cur[last] = value
+    else:
+        if not isinstance(cur, dict) or last not in cur:
+            raise KeyError(f"Missing key in path: {path}")
+        cur[last] = value
+
+def apply_patch_to_content(current_content: Dict[str, Any], patch_obj: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    patch_obj format:
+    { "mode":"patch", "changes":[{"path":"a.b.c","action":"replace","value":...}] }
+    """
+    if not patch_obj or patch_obj.get("mode") != "patch":
+        return current_content
+
+    changes = patch_obj.get("changes") or []
+    if not isinstance(changes, list):
+        return current_content
+
+    for ch in changes:
+        if not isinstance(ch, dict):
+            continue
+        if ch.get("action") != "replace":
+            continue
+        path = ch.get("path")
+        if not path:
+            continue
+        _set_by_path(current_content, path, ch.get("value"))
+    return current_content
+
 # ==========================================
 # ROUTES
 # ==========================================
@@ -310,6 +424,32 @@ def chat():
             template_id = pick_template_for_project(project_row, update_obj)
             if template_id and not update_obj.get("selected_template_id"):
                 update_obj["selected_template_id"] = template_id
+            # ==========================
+            # IMPROVE MODE (PATCH content_json)
+            # ==========================
+            current_content = project_row.get("content_json")
+            effective_template_id = update_obj.get("selected_template_id") or project_row.get("selected_template_id")
+
+            if current_content and effective_template_id:
+                try:
+                    template_conf = TEMPLATES.get(effective_template_id)
+                    if template_conf:
+                        base_dir = Path(__file__).resolve().parent
+                        schema_path = base_dir / template_conf["schema"]
+                        schema_str = schema_path.read_text(encoding="utf-8")
+
+                        patch_obj = generate_content_patch(
+                            client=client,
+                            current_content=current_content,
+                            schema_str=schema_str,
+                            user_request=user_message,
+                        )
+
+                        if patch_obj and patch_obj.get("mode") == "patch" and patch_obj.get("changes"):
+                            updated_content = apply_patch_to_content(current_content, patch_obj)
+                            update_obj["content_json"] = updated_content
+                except Exception:
+                    traceback.print_exc()
 
             # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
             if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
