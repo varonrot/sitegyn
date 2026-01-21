@@ -2662,20 +2662,20 @@ setInterval(() => {
     .replace('/wow', '')
     .split('/p/')[1];
 
-  // View site – חזרה לאתר הרגיל
+  // View site – פתיחה בטאב חדש
   document.getElementById('wow-continue')?.addEventListener('click', () => {
-    location.href = `/p/${sub}`;
+    window.open(`/p/${sub}`, '_blank');
   });
 
-  // Edit site
+  // Edit site – פתיחה בטאב חדש
   document.getElementById('wow-edit')?.addEventListener('click', () => {
     const pid = localStorage.getItem('sitegyn_project_id');
     if (pid) {
-      location.href = `/editor.html?project_id=${pid}`;
+      window.open(`/editor.html?project_id=${pid}`, '_blank');
     }
   });
 
-  // Share site
+  // Share site – העתקת קישור
   document.getElementById('wow-share')?.addEventListener('click', async () => {
     const url = `${location.origin}/p/${sub}`;
     await navigator.clipboard.writeText(url);
@@ -2683,6 +2683,7 @@ setInterval(() => {
   });
 })();
 </script>
+
 
 <script>
 (function () {
