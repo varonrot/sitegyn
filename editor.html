@@ -651,10 +651,6 @@ async function loadEditorSite() {
 }
 
 loadEditorSite();
-const realtimeProjectId = getProjectId();
-if (realtimeProjectId) {
-  subscribeToProjectRealtime(realtimeProjectId);
-}
 
 /* =========================
    Load template schema (ICON VERSION)
@@ -1141,6 +1137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
  <script>
 document.addEventListener("DOMContentLoaded", () => {
+let AI_MODE = "chat"; // chat | improve
 
   // ===== Elements =====
   const aiOverlay   = document.getElementById("ai-chat-overlay");
@@ -1242,16 +1239,20 @@ function typeText(element, text, baseSpeed = 80) {
   }
 
   // ===== OPEN =====
-  aiChatBtn.addEventListener("click", async () => {
-    aiOverlay.classList.remove("hidden");
+aiChatBtn.addEventListener("click", async () => {
+  AI_MODE = "improve"; // ⭐ זה השינוי הקריטי
 
-    const projectId = getProjectIdFromURL();
-    if (projectId) {
-      await loadChatHistory(projectId);
-    }
+  aiOverlay.classList.remove("hidden");
 
-    setTimeout(() => aiTextarea?.focus(), 50);
-  });
+  if (AI_MODE === "improve") {
+    aiMessages.innerHTML = `
+      <div class="ai-msg ai-msg-system">
+        ✨ Tell me what you'd like to improve on this page
+      </div>
+    `;
+  }
+
+
 
   // ===== CLOSE =====
   aiClose?.addEventListener("click", () => {
@@ -1287,15 +1288,21 @@ function typeText(element, text, baseSpeed = 80) {
     aiTextarea.value = "";
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          project_id: projectId,
-          message: text,
-          source: "editor"
-        })
-      });
+const endpoint =
+  AI_MODE === "improve"
+    ? "/api/content/improve"
+    : "/api/chat";
+
+const res = await fetch(endpoint, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    project_id: projectId,
+    message: text,
+    source: "editor"
+  })
+});
+
 
       const data = await res.json();
 if (data?.reply) {
@@ -1317,13 +1324,6 @@ if (data?.reply) {
     }
   }
 
-});
-</script>
-<script>
-window.addEventListener("message", (e) => {
-  if (e.data && e.data.type === "content-updated") {
-    location.reload();
-  }
 });
 </script>
 
