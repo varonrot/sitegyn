@@ -41,6 +41,10 @@ PROMPT_PATH = os.path.join(os.path.dirname(__file__), "sitegyn_system_prompt.txt
 with open(PROMPT_PATH, "r", encoding="utf-8") as f:
     SITEGYN_SYSTEM_PROMPT = f.read()
 
+IMPROVE_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "content_improve_prompt.txt")
+
+with open(IMPROVE_PROMPT_PATH, "r", encoding="utf-8") as f:
+    CONTENT_IMPROVE_PROMPT = f.read()
 
 # ==========================================
 # Flask app
@@ -215,13 +219,7 @@ def chat():
         if is_editor:
             messages.append({
                 "role": "system",
-                "content": (
-                    "You are editing an EXISTING website.\n"
-                    "Do NOT ask onboarding questions.\n"
-                    "Do NOT change business type or template.\n"
-                    "Focus only on improving existing content.\n"
-                    "Return updates only when relevant."
-                )
+                "content": CONTENT_IMPROVE_PROMPT
             })
         else:
             messages.append({
@@ -243,6 +241,14 @@ def chat():
         )
 
         assistant_text = completion.choices[0].message.content or ""
+        editor_payload = None
+
+        if is_editor:
+            try:
+                editor_payload = json.loads(assistant_text)
+            except:
+                editor_payload = None
+
         if not is_editor:
             supabase.table("chat_messages").insert({
                 "project_id": project_id,
@@ -286,6 +292,32 @@ def chat():
             except Exception:
                 traceback.print_exc()
                 update_obj = {}
+        # ===== Editor content patch =====
+        if is_editor and editor_payload:
+            project_row = (
+                supabase.table("projects")
+                .select("content_json")
+                .eq("id", project_id)
+                .single()
+                .execute()
+                .data
+            )
+
+            content = project_row.get("content_json") or {}
+
+            for change in editor_payload.get("changes", []):
+                path = change["path"]
+                value = change["value"]
+
+                keys = path.split(".")
+                curr = content
+                for k in keys[:-1]:
+                    curr = curr[k]
+                curr[keys[-1]] = value
+
+            supabase.table("projects").update({
+                "content_json": content
+            }).eq("id", project_id).execute()
 
         # אם יש לנו עדכון אחרי אחד משני הניסיונות – ממשיכים כרגיל
         if update_obj:
