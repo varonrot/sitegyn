@@ -1219,24 +1219,47 @@ function typeText(element, text, baseSpeed = 80) {
   // =========================
   // Load history via backend
   // =========================
-  async function loadChatHistory(projectId) {
-    try {
-      const res = await fetch("/api/chat/history", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ project_id: projectId })
-      });
+async function sendMessage() {
+  const text = aiTextarea.value.trim();
+  if (!text) return;
 
-      const data = await res.json();
-      if (!Array.isArray(data)) return;
-
-      aiMessages.innerHTML = "";
-      data.forEach(msg => appendMessage(msg.role, msg.content));
-
-    } catch (err) {
-      console.error("Failed to load chat history", err);
-    }
+  const projectId = getProjectIdFromURL();
+  if (!projectId) {
+    console.error("Missing project_id");
+    return;
   }
+
+  appendMessage("user", text);
+  aiTextarea.value = "";
+
+  try {
+    const endpoint =
+      AI_MODE === "improve"
+        ? "/api/content/update"
+        : "/api/chat";
+
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        project_id: projectId,
+        message: text,
+        source: "editor"
+      })
+    });
+
+    const data = await res.json();
+ 
+    if (data?.reply) {
+      appendMessage("assistant", data.reply);
+    }
+
+  } catch (err) {
+    console.error("Chat send failed", err);
+    appendMessage("assistant", "Something went wrong. Please try again.");
+  }
+}
+
 
   // ===== OPEN =====
 aiChatBtn.addEventListener("click", async () => {
