@@ -246,6 +246,8 @@ def chat():
         if is_editor:
             try:
                 editor_payload = json.loads(assistant_text)
+                visible_text = "✅ Content updated successfully."
+
             except:
                 editor_payload = None
 
@@ -318,6 +320,10 @@ def chat():
             supabase.table("projects").update({
                 "content_json": content
             }).eq("id", project_id).execute()
+        return jsonify({
+            "reply": visible_text,
+            "project_id": project_id
+        })
 
         # אם יש לנו עדכון אחרי אחד משני הניסיונות – ממשיכים כרגיל
         if update_obj:
