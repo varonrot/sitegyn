@@ -651,10 +651,6 @@ async function loadEditorSite() {
 }
 
 loadEditorSite();
-const realtimeProjectId = getProjectId();
-if (realtimeProjectId) {
-  subscribeToProjectRealtime(realtimeProjectId);
-}
 
 /* =========================
    Load template schema (ICON VERSION)
@@ -920,7 +916,7 @@ function capitalize(str) {
 function humanize(str) {
   return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
 }
-
+ 
 
 async function openBottomPreview(path) {
 currentEditPath = path;
@@ -1217,23 +1213,41 @@ function typeText(element, text, baseSpeed = 80) {
     typeNext();
   });
 }
-function resetEditorChat() {
-  aiMessages.innerHTML = "";
 
-  appendMessage(
-    "system",
-    "Hi 👋\nI’m here to improve your existing website.\nTell me what you'd like to change or optimize."
-  );
-}
+
+  // =========================
+  // Load history via backend
+  // =========================
+  async function loadChatHistory(projectId) {
+    try {
+      const res = await fetch("/api/chat/history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project_id: projectId })
+      });
+
+      const data = await res.json();
+      if (!Array.isArray(data)) return;
+
+      aiMessages.innerHTML = "";
+      data.forEach(msg => appendMessage(msg.role, msg.content));
+
+    } catch (err) {
+      console.error("Failed to load chat history", err);
+    }
+  }
 
   // ===== OPEN =====
-aiChatBtn.addEventListener("click", () => {
-  aiOverlay.classList.remove("hidden");
+  aiChatBtn.addEventListener("click", async () => {
+    aiOverlay.classList.remove("hidden");
 
-  resetEditorChat();
+    const projectId = getProjectIdFromURL();
+    if (projectId) {
+      await loadChatHistory(projectId);
+    }
 
-  setTimeout(() => aiTextarea?.focus(), 50);
-});
+    setTimeout(() => aiTextarea?.focus(), 50);
+  });
 
   // ===== CLOSE =====
   aiClose?.addEventListener("click", () => {
@@ -1299,13 +1313,6 @@ if (data?.reply) {
     }
   }
 
-});
-</script>
-<script>
-window.addEventListener("message", (e) => {
-  if (e.data && e.data.type === "content-updated") {
-    location.reload();
-  }
 });
 </script>
 
