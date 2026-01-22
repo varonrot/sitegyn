@@ -247,23 +247,23 @@ def chat():
             try:
                 editor_payload = json.loads(assistant_text)
                 visible_text = "✅ Content updated successfully."
-
             except:
                 editor_payload = None
-
-        if not is_editor:
+                visible_text = "⚠️ Failed to update content."
+        else:
+            # save assistant message only for non-editor chat
             supabase.table("chat_messages").insert({
                 "project_id": project_id,
                 "role": "assistant",
                 "content": assistant_text,
             }).execute()
 
-        # strip update block for UI
-        visible_text = assistant_text
-        if "<update>" in assistant_text and "</update>" in assistant_text:
-            before = visible_text.split("<update>")[0]
-            after = visible_text.split("</update>")[-1]
-            visible_text = (before + after).strip()
+            # show assistant text (without <update>)
+            visible_text = assistant_text
+            if "<update>" in assistant_text and "</update>" in assistant_text:
+                before = assistant_text.split("<update>")[0]
+                after = assistant_text.split("</update>")[-1]
+                visible_text = (before + after).strip()
 
 
 
@@ -320,108 +320,12 @@ def chat():
             supabase.table("projects").update({
                 "content_json": content
             }).eq("id", project_id).execute()
+
+      
         return jsonify({
             "reply": visible_text,
             "project_id": project_id
         })
-
-        # אם יש לנו עדכון אחרי אחד משני הניסיונות – ממשיכים כרגיל
-        if update_obj:
-            # שולפים את רשומת הפרויקט
-            project_row = (
-                supabase.table("projects")
-                .select("*")
-                .eq("id", project_id)
-                .execute()
-                .data[0]
-            )
-
-            # --- Conversation history update ---
-
-            existing_history = project_row.get("conversation_history") or {}
-            if not isinstance(existing_history, dict):
-                existing_history = {}
-
-            if is_editor:
-                # ===== Editor history =====
-                editor_turns = existing_history.get("editor_turns", [])
-                if not isinstance(editor_turns, list):
-                    editor_turns = []
-
-                editor_turns.append({
-                    "message": user_message,
-                })
-
-                existing_history["editor_turns"] = editor_turns
-
-            else:
-                # ===== Initial build history =====
-                user_turns = existing_history.get("user_turns", [])
-                if not isinstance(user_turns, list):
-                    user_turns = []
-
-                user_turns.append({
-                    "message": user_message,
-                })
-
-                existing_history["user_turns"] = user_turns
-
-            update_obj["conversation_history"] = existing_history
-
-
-            # --- 1) בחירת טמפלט ---
-            # ❗ רק בבנייה ראשונית
-            if not is_editor:
-                template_id = pick_template_for_project(project_row, update_obj)
-
-                if template_id and not update_obj.get("selected_template_id"):
-                    update_obj["selected_template_id"] = template_id
-            else:
-                template_id = project_row.get("selected_template_id")
-
-            # --- 2) יצירת content_json ---
-            # ❗ רק בבנייה ראשונית, ורק אם עדיין אין תוכן
-            if (
-                    not is_editor
-                    and template_id
-                    and not project_row.get("content_json")
-                    and not update_obj.get("content_json")
-            ):
-                try:
-                    content_json = generate_content_for_project(
-                        client=client,
-                        project_row=project_row,
-                        update_obj=update_obj,
-                        template_id=template_id,
-                    )
-                    if content_json:
-                        update_obj["content_json"] = content_json
-                except Exception:
-                    traceback.print_exc()
-
-            # 3) עדכון הטבלה ב-Supabase
-            supabase.table("projects").update(update_obj).eq("id", project_id).execute()
-
-        # === fetch subdomain for frontend redirect ===
-        project_row = (
-            supabase.table("projects")
-            .select("subdomain")
-            .eq("id", project_id)
-            .execute()
-            .data
-        )
-
-        subdomain = None
-        if project_row and project_row[0].get("subdomain"):
-            subdomain = project_row[0]["subdomain"]
-
-        return jsonify({
-            "reply": visible_text,
-            "project_id": project_id,
-            "subdomain": subdomain
-        })
-
-
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
