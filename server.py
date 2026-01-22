@@ -41,7 +41,8 @@ PROMPT_PATH = os.path.join(os.path.dirname(__file__), "sitegyn_system_prompt.txt
 with open(PROMPT_PATH, "r", encoding="utf-8") as f:
     SITEGYN_SYSTEM_PROMPT = f.read()
 
-
+IMPROVE_PROMPT_PATH = Path(__file__).parent / "content_improve_prompt.txt"
+CONTENT_IMPROVE_PROMPT = IMPROVE_PROMPT_PATH.read_text(encoding="utf-8")
 # ==========================================
 # Flask app
 # ==========================================
@@ -235,6 +236,34 @@ def generate_content_for_project(
         text = completion.choices[0].message.content.strip()
         content_json = json.loads(text)
         return content_json
+
+    except Exception:
+        traceback.print_exc()
+        return None
+
+def generate_content_patch(
+    client: OpenAI,
+    current_content: Dict[str, Any],
+    schema_str: str,
+    chat_history: list,
+    user_request: str,
+) -> Dict[str, Any] | None:
+    try:
+        final_prompt = (
+            CONTENT_IMPROVE_PROMPT
+            .replace("CURRENT_CONTENT_JSON", json.dumps(current_content, ensure_ascii=False))
+            .replace("SCHEMA_JSON", schema_str)
+            .replace("CHAT_HISTORY", json.dumps(chat_history, ensure_ascii=False))
+            .replace("USER_MESSAGE", user_request)
+        )
+
+        completion = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[{"role": "user", "content": final_prompt}],
+            temperature=0.0,
+        )
+
+        return json.loads(completion.choices[0].message.content.strip())
 
     except Exception:
         traceback.print_exc()
@@ -441,6 +470,7 @@ def chat():
                                 client=client,
                                 current_content=current_content,
                                 schema_str=schema_str,
+                                chat_history=history,
                                 user_request=user_message,
                             )
 
