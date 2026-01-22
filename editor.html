@@ -1240,18 +1240,23 @@ function typeText(element, text, baseSpeed = 80) {
 
   // ===== OPEN =====
 aiChatBtn.addEventListener("click", async () => {
-  AI_MODE = "improve"; // ⭐ זה השינוי הקריטי
+  AI_MODE = "improve";
 
   aiOverlay.classList.remove("hidden");
 
-  if (AI_MODE === "improve") {
-    aiMessages.innerHTML = `
-      <div class="ai-msg ai-msg-system">
-        ✨ Tell me what you'd like to improve on this page
-      </div>
-    `;
+  aiMessages.innerHTML = `
+    <div class="ai-msg ai-msg-system">
+      ✨ Tell me what you'd like to improve on this page
+    </div>
+  `;
+
+  const projectId = getProjectIdFromURL();
+  if (projectId) {
+    await loadChatHistory(projectId);
   }
 
+  setTimeout(() => aiTextarea?.focus(), 50);
+});
 
 
   // ===== CLOSE =====
