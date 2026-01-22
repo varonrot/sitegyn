@@ -1295,7 +1295,7 @@ aiChatBtn.addEventListener("click", async () => {
     try {
 const endpoint =
   AI_MODE === "improve"
-    ? "/api/content/improve"
+    ? "/api/content/update"
     : "/api/chat";
 
 const res = await fetch(endpoint, {
