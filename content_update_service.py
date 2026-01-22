@@ -88,12 +88,13 @@ def update_content():
             .eq("id", project_id) \
             .execute()
 
-return jsonify({
-    "reply": "✨ Done! I’ve updated the page based on your input.",
-    "patched": True
-})
-
+        return jsonify({
+            "reply": "✨ Done! I’ve updated the page based on your input.",
+            "patched": True
+        })
 
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+
+ 
