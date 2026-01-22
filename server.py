@@ -179,9 +179,13 @@ def start_project():
 @app.route("/api/chat", methods=["POST"])
 def chat():
     try:
+
         data = request.get_json(force=True)
+
         project_id = data.get("project_id")
-        user_message = data.get("message", "").strip()
+        user_message = (data.get("message") or "").strip()
+        source = data.get("source", "default")  # "editor" | "default"
+        is_editor = source == "editor"
 
         if not project_id:
             return jsonify({"error": "missing_project_id"}), 400
@@ -189,11 +193,12 @@ def chat():
             return jsonify({"error": "empty_message"}), 400
 
         # Save user message
-        supabase.table("chat_messages").insert({
-            "project_id": project_id,
-            "role": "user",
-            "content": user_message,
-        }).execute()
+        if not is_editor:
+            supabase.table("chat_messages").insert({
+                "project_id": project_id,
+                "role": "user",
+                "content": user_message,
+            }).execute()
 
         # Load entire history
         history = supabase.table("chat_messages") \
@@ -202,23 +207,33 @@ def chat():
             .order("created_at", desc=False) \
             .execute().data or []
 
-        user_turns = sum(1 for r in history if r["role"] == "user")
+
 
         # Build messages
-        messages = [
-            {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
-            {"role": "system", "content": f"The current project_id is {project_id}."},
-            {
+        messages = []
+
+        if is_editor:
+            messages.append({
                 "role": "system",
                 "content": (
-                    f"For this project there have been {user_turns} user answers so far. "
-                    "After 2 or more user answers, offer a demo or continue."
+                    "You are editing an EXISTING website.\n"
+                    "Do NOT ask onboarding questions.\n"
+                    "Do NOT change business type or template.\n"
+                    "Focus only on improving existing content.\n"
+                    "Return updates only when relevant."
                 )
-            }
-        ]
+            })
+        else:
+            messages.append({
+                "role": "system",
+                "content": SITEGYN_SYSTEM_PROMPT
+            })
 
-        for row in history:
-            messages.append({"role": row["role"], "content": row["content"]})
+        if not is_editor:
+            for row in history:
+                messages.append({"role": row["role"], "content": row["content"]})
+
+        messages.append({"role": "user", "content": user_message})
 
         # OpenAI call
         completion = client.chat.completions.create(
@@ -228,6 +243,12 @@ def chat():
         )
 
         assistant_text = completion.choices[0].message.content or ""
+        if not is_editor:
+            supabase.table("chat_messages").insert({
+                "project_id": project_id,
+                "role": "assistant",
+                "content": assistant_text,
+            }).execute()
 
         # strip update block for UI
         visible_text = assistant_text
@@ -236,12 +257,7 @@ def chat():
             after = visible_text.split("</update>")[-1]
             visible_text = (before + after).strip()
 
-        # Save assistant message
-        supabase.table("chat_messages").insert({
-            "project_id": project_id,
-            "role": "assistant",
-            "content": assistant_text,
-        }).execute()
+
 
         # Parse <update> block מהתשובה הראשונה
         update_obj = parse_update_block(assistant_text)
@@ -283,36 +299,56 @@ def chat():
             )
 
             # --- Conversation history update ---
-            existing_history = project_row.get("conversation_history") or {}
 
-            # נדאג שתמיד יהיה dict
+            existing_history = project_row.get("conversation_history") or {}
             if not isinstance(existing_history, dict):
                 existing_history = {}
 
-            # נוסיף רשומה חדשה עם התשובה האחרונה של המשתמש
-            # אפשר לפי מספר סבב, או פשוט רשימת פניות
-            user_history_list = existing_history.get("user_turns", [])
-            if not isinstance(user_history_list, list):
-                user_history_list = []
+            if is_editor:
+                # ===== Editor history =====
+                editor_turns = existing_history.get("editor_turns", [])
+                if not isinstance(editor_turns, list):
+                    editor_turns = []
 
-            user_history_list.append({
-                "message": user_message,
-            })
+                editor_turns.append({
+                    "message": user_message,
+                })
 
-            existing_history["user_turns"] = user_history_list
+                existing_history["editor_turns"] = editor_turns
 
-            # נעדכן את ה-update_obj כך שישמר בטבלת projects
+            else:
+                # ===== Initial build history =====
+                user_turns = existing_history.get("user_turns", [])
+                if not isinstance(user_turns, list):
+                    user_turns = []
+
+                user_turns.append({
+                    "message": user_message,
+                })
+
+                existing_history["user_turns"] = user_turns
+
             update_obj["conversation_history"] = existing_history
-            # --- סוף עדכון היסטוריה ---
 
 
-            # 1) בחירת טמפלט
-            template_id = pick_template_for_project(project_row, update_obj)
-            if template_id and not update_obj.get("selected_template_id"):
-                update_obj["selected_template_id"] = template_id
+            # --- 1) בחירת טמפלט ---
+            # ❗ רק בבנייה ראשונית
+            if not is_editor:
+                template_id = pick_template_for_project(project_row, update_obj)
 
-            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
-            if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
+                if template_id and not update_obj.get("selected_template_id"):
+                    update_obj["selected_template_id"] = template_id
+            else:
+                template_id = project_row.get("selected_template_id")
+
+            # --- 2) יצירת content_json ---
+            # ❗ רק בבנייה ראשונית, ורק אם עדיין אין תוכן
+            if (
+                    not is_editor
+                    and template_id
+                    and not project_row.get("content_json")
+                    and not update_obj.get("content_json")
+            ):
                 try:
                     content_json = generate_content_for_project(
                         client=client,
@@ -324,7 +360,6 @@ def chat():
                         update_obj["content_json"] = content_json
                 except Exception:
                     traceback.print_exc()
-                    # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
             # 3) עדכון הטבלה ב-Supabase
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
