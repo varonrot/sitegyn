@@ -41,10 +41,6 @@ PROMPT_PATH = os.path.join(os.path.dirname(__file__), "sitegyn_system_prompt.txt
 with open(PROMPT_PATH, "r", encoding="utf-8") as f:
     SITEGYN_SYSTEM_PROMPT = f.read()
 
-IMPROVE_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "content_improve_prompt.txt")
-
-with open(IMPROVE_PROMPT_PATH, "r", encoding="utf-8") as f:
-    CONTENT_IMPROVE_PROMPT = f.read()
 
 # ==========================================
 # Flask app
@@ -183,13 +179,9 @@ def start_project():
 @app.route("/api/chat", methods=["POST"])
 def chat():
     try:
-
         data = request.get_json(force=True)
-
         project_id = data.get("project_id")
-        user_message = (data.get("message") or "").strip()
-        source = data.get("source", "default")  # "editor" | "default"
-        is_editor = source == "editor"
+        user_message = data.get("message", "").strip()
 
         if not project_id:
             return jsonify({"error": "missing_project_id"}), 400
@@ -197,12 +189,11 @@ def chat():
             return jsonify({"error": "empty_message"}), 400
 
         # Save user message
-        if not is_editor:
-            supabase.table("chat_messages").insert({
-                "project_id": project_id,
-                "role": "user",
-                "content": user_message,
-            }).execute()
+        supabase.table("chat_messages").insert({
+            "project_id": project_id,
+            "role": "user",
+            "content": user_message,
+        }).execute()
 
         # Load entire history
         history = supabase.table("chat_messages") \
@@ -211,27 +202,23 @@ def chat():
             .order("created_at", desc=False) \
             .execute().data or []
 
-
+        user_turns = sum(1 for r in history if r["role"] == "user")
 
         # Build messages
-        messages = []
-
-        if is_editor:
-            messages.append({
+        messages = [
+            {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
+            {"role": "system", "content": f"The current project_id is {project_id}."},
+            {
                 "role": "system",
-                "content": CONTENT_IMPROVE_PROMPT
-            })
-        else:
-            messages.append({
-                "role": "system",
-                "content": SITEGYN_SYSTEM_PROMPT
-            })
+                "content": (
+                    f"For this project there have been {user_turns} user answers so far. "
+                    "After 2 or more user answers, offer a demo or continue."
+                )
+            }
+        ]
 
-        if not is_editor:
-            for row in history:
-                messages.append({"role": row["role"], "content": row["content"]})
-
-        messages.append({"role": "user", "content": user_message})
+        for row in history:
+            messages.append({"role": row["role"], "content": row["content"]})
 
         # OpenAI call
         completion = client.chat.completions.create(
@@ -241,31 +228,20 @@ def chat():
         )
 
         assistant_text = completion.choices[0].message.content or ""
-        editor_payload = None
 
-        if is_editor:
-            try:
-                editor_payload = json.loads(assistant_text)
-                visible_text = "✅ Content updated successfully."
-            except:
-                editor_payload = None
-                visible_text = "⚠️ Failed to update content."
-        else:
-            # save assistant message only for non-editor chat
-            supabase.table("chat_messages").insert({
-                "project_id": project_id,
-                "role": "assistant",
-                "content": assistant_text,
-            }).execute()
+        # strip update block for UI
+        visible_text = assistant_text
+        if "<update>" in assistant_text and "</update>" in assistant_text:
+            before = visible_text.split("<update>")[0]
+            after = visible_text.split("</update>")[-1]
+            visible_text = (before + after).strip()
 
-            # show assistant text (without <update>)
-            visible_text = assistant_text
-            if "<update>" in assistant_text and "</update>" in assistant_text:
-                before = assistant_text.split("<update>")[0]
-                after = assistant_text.split("</update>")[-1]
-                visible_text = (before + after).strip()
-
-
+        # Save assistant message
+        supabase.table("chat_messages").insert({
+            "project_id": project_id,
+            "role": "assistant",
+            "content": assistant_text,
+        }).execute()
 
         # Parse <update> block מהתשובה הראשונה
         update_obj = parse_update_block(assistant_text)
@@ -294,38 +270,85 @@ def chat():
             except Exception:
                 traceback.print_exc()
                 update_obj = {}
-        # ===== Editor content patch =====
-        if is_editor and editor_payload:
+
+        # אם יש לנו עדכון אחרי אחד משני הניסיונות – ממשיכים כרגיל
+        if update_obj:
+            # שולפים את רשומת הפרויקט
             project_row = (
                 supabase.table("projects")
-                .select("content_json")
+                .select("*")
                 .eq("id", project_id)
-                .single()
                 .execute()
-                .data
+                .data[0]
             )
 
-            content = project_row.get("content_json") or {}
+            # --- Conversation history update ---
+            existing_history = project_row.get("conversation_history") or {}
 
-            for change in editor_payload.get("changes", []):
-                path = change["path"]
-                value = change["value"]
+            # נדאג שתמיד יהיה dict
+            if not isinstance(existing_history, dict):
+                existing_history = {}
 
-                keys = path.split(".")
-                curr = content
-                for k in keys[:-1]:
-                    curr = curr[k]
-                curr[keys[-1]] = value
+            # נוסיף רשומה חדשה עם התשובה האחרונה של המשתמש
+            # אפשר לפי מספר סבב, או פשוט רשימת פניות
+            user_history_list = existing_history.get("user_turns", [])
+            if not isinstance(user_history_list, list):
+                user_history_list = []
 
-            supabase.table("projects").update({
-                "content_json": content
-            }).eq("id", project_id).execute()
+            user_history_list.append({
+                "message": user_message,
+            })
 
-      
+            existing_history["user_turns"] = user_history_list
+
+            # נעדכן את ה-update_obj כך שישמר בטבלת projects
+            update_obj["conversation_history"] = existing_history
+            # --- סוף עדכון היסטוריה ---
+
+
+            # 1) בחירת טמפלט
+            template_id = pick_template_for_project(project_row, update_obj)
+            if template_id and not update_obj.get("selected_template_id"):
+                update_obj["selected_template_id"] = template_id
+
+            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
+            if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
+                try:
+                    content_json = generate_content_for_project(
+                        client=client,
+                        project_row=project_row,
+                        update_obj=update_obj,
+                        template_id=template_id,
+                    )
+                    if content_json:
+                        update_obj["content_json"] = content_json
+                except Exception:
+                    traceback.print_exc()
+                    # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
+
+            # 3) עדכון הטבלה ב-Supabase
+            supabase.table("projects").update(update_obj).eq("id", project_id).execute()
+
+        # === fetch subdomain for frontend redirect ===
+        project_row = (
+            supabase.table("projects")
+            .select("subdomain")
+            .eq("id", project_id)
+            .execute()
+            .data
+        )
+
+        subdomain = None
+        if project_row and project_row[0].get("subdomain"):
+            subdomain = project_row[0]["subdomain"]
+
         return jsonify({
             "reply": visible_text,
-            "project_id": project_id
+            "project_id": project_id,
+            "subdomain": subdomain
         })
+
+
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
