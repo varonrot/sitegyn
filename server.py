@@ -68,7 +68,96 @@ def parse_update_block(assistant_text: str) -> Dict[str, Any]:
     except:
         traceback.print_exc()
         return {}
+# ============================
+def _parse_path_tokens(path: str):
+    """
+    Supports:
+    - a.b.c
+    - a.b.0.c
+    - a.b[0].c
+    """
+    path = path.replace("[", ".").replace("]", "")
+    tokens = [t for t in path.split(".") if t != ""]
+    out = []
+    for t in tokens:
+        if t.isdigit():
+            out.append(int(t))
+        else:
+            out.append(t)
+    return out
 
+
+def _set_by_path(obj: Any, path: str, value: Any) -> None:
+    tokens = _parse_path_tokens(path)
+    if not tokens:
+        return
+
+    cur = obj
+    for tok in tokens[:-1]:
+        if isinstance(tok, int):
+            if not isinstance(cur, list) or tok >= len(cur):
+                raise KeyError(f"Invalid list index in path: {path}")
+            cur = cur[tok]
+        else:
+            if not isinstance(cur, dict) or tok not in cur:
+                raise KeyError(f"Missing key in path: {path}")
+            cur = cur[tok]
+
+    last = tokens[-1]
+    if isinstance(last, int):
+        if not isinstance(cur, list) or last >= len(cur):
+            raise KeyError(f"Invalid list index in path: {path}")
+        cur[last] = value
+    else:
+        if not isinstance(cur, dict) or last not in cur:
+            raise KeyError(f"Missing key in path: {path}")
+        cur[last] = value
+
+
+def apply_patch_to_content(
+    current_content: Dict[str, Any],
+    patch_obj: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    patch_obj format:
+    {
+      "mode": "patch",
+      "changes": [
+        {
+          "path": "home.hero.headline",
+          "action": "replace",
+          "value": "New headline"
+        }
+      ]
+    }
+    """
+    if not patch_obj:
+        return current_content
+
+    if patch_obj.get("mode") != "patch":
+        return current_content
+
+    changes = patch_obj.get("changes")
+    if not isinstance(changes, list):
+        return current_content
+
+    for change in changes:
+        if not isinstance(change, dict):
+            continue
+        if change.get("action") != "replace":
+            continue
+
+        path = change.get("path")
+        if not path:
+            continue
+
+        try:
+            _set_by_path(current_content, path, change.get("value"))
+        except Exception:
+            traceback.print_exc()
+            continue
+
+    return current_content
 
 # ============================
 # Template selection
@@ -305,13 +394,16 @@ def chat():
             update_obj["conversation_history"] = existing_history
             # --- סוף עדכון היסטוריה ---
 
-
+            # ==========================
             # 1) בחירת טמפלט
+            # ==========================
             template_id = pick_template_for_project(project_row, update_obj)
             if template_id and not update_obj.get("selected_template_id"):
                 update_obj["selected_template_id"] = template_id
 
-            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
+            # ==========================
+            # 2) בנייה ראשונית – רק אם עדיין אין content_json
+            # ==========================
             if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
                 try:
                     content_json = generate_content_for_project(
@@ -324,9 +416,47 @@ def chat():
                         update_obj["content_json"] = content_json
                 except Exception:
                     traceback.print_exc()
-                    # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
+                    # לא עוצרים – פשוט אין content_json
 
-            # 3) עדכון הטבלה ב-Supabase
+            # ==========================
+            # 3) IMPROVE MODE — PATCH content_json
+            # ==========================
+            current_content = project_row.get("content_json") or update_obj.get("content_json")
+
+            if current_content:
+                try:
+                    template_id_effective = (
+                            update_obj.get("selected_template_id")
+                            or project_row.get("selected_template_id")
+                    )
+
+                    if template_id_effective:
+                        template_conf = TEMPLATES.get(template_id_effective)
+                        if template_conf:
+                            base_dir = Path(__file__).resolve().parent
+                            schema_path = base_dir / template_conf["schema"]
+                            schema_str = schema_path.read_text(encoding="utf-8")
+
+                            patch_obj = generate_content_patch(
+                                client=client,
+                                current_content=current_content,
+                                schema_str=schema_str,
+                                user_request=user_message,
+                            )
+
+                            if patch_obj and patch_obj.get("mode") == "patch":
+                                updated_content = apply_patch_to_content(
+                                    current_content,
+                                    patch_obj
+                                )
+                                update_obj["content_json"] = updated_content
+
+                except Exception:
+                    traceback.print_exc()
+
+            # ==========================
+            # 4) עדכון אחד ל-Supabase (וזהו)
+            # ==========================
             supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
         # === fetch subdomain for frontend redirect ===
