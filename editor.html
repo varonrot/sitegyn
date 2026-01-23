@@ -907,7 +907,15 @@ aiMessages.innerHTML = "";
  
 const contextMsg = document.createElement("div");
 contextMsg.className = "ai-msg ai-msg-context";
-contextMsg.textContent = prompt;
+const contextMsg = document.createElement("div");
+contextMsg.className = "ai-msg ai-msg-context typing";
+aiMessages.appendChild(contextMsg);
+aiMessages.scrollTop = aiMessages.scrollHeight;
+
+// טייפינג כמו צ׳ט
+await typeText(contextMsg, prompt, 35);
+contextMsg.classList.remove("typing");
+
 
 aiMessages.appendChild(contextMsg);
 aiMessages.scrollTop = aiMessages.scrollHeight;
