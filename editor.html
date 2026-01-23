@@ -491,98 +491,6 @@ body{
   0%, 50%, 100% { opacity: .6 }
   25%, 75% { opacity: 0 }
 }
-/* =========================
-   AI INTRO MODAL (CENTER)
-========================= */
-.ai-intro-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(2,6,23,.55);
-  backdrop-filter:blur(14px);
-  z-index:1200;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.ai-intro-overlay.hidden{
-  display:none;
-}
-
-.ai-intro-modal{
-  width:420px;
-  max-width:92%;
-  background:#020617;
-  border-radius:22px;
-  padding:26px 26px 28px;
-
-  box-shadow:
-    0 40px 120px rgba(0,0,0,.7),
-    0 0 0 1px rgba(255,255,255,.08);
-
-  text-align:center;
-}
-
-.ai-intro-badge{
-  display:inline-block;
-  margin-bottom:14px;
-  padding:6px 12px;
-  font-size:12px;
-  border-radius:999px;
-  background:rgba(34,197,94,.15);
-  color:#22c55e;
-  font-weight:600;
-}
-
-.ai-intro-title{
-  font-size:22px;
-  font-weight:700;
-  margin-bottom:8px;
-}
-
-.ai-intro-text{
-  font-size:14px;
-  line-height:1.6;
-  opacity:.8;
-  margin-bottom:18px;
-}
-
-.ai-intro-input{
-  width:100%;
-  height:44px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.15);
-  background:#020617;
-  color:white;
-  padding:0 14px;
-  font-size:14px;
-  margin-bottom:14px;
-}
-
-.ai-intro-actions{
-  display:flex;
-  gap:10px;
-}
-
-.ai-intro-actions button{
-  flex:1;
-  height:42px;
-  border-radius:12px;
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.ai-intro-start{
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-  color:#04110a;
-}
-
-.ai-intro-skip{
-  background:rgba(255,255,255,.06);
-  color:white;
-}
 
 
 </style>
@@ -954,15 +862,23 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 
 async function openAIEditor({ path, type, label }) {
-  const overlay = document.getElementById("ai-edit-overlay");
-  const fieldEl = document.getElementById("ai-edit-field");
+  const projectId = getProjectId();
+  if (!projectId) return;
 
-  if (!overlay || !fieldEl) return;
+  const { data, error } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
 
-  fieldEl.textContent = label;
-  overlay.classList.remove("hidden");
+  if (error || !data?.content_json) return;
+
+  const currentValue = getValueByPath(data.content_json, path);
+
+  alert(
+    `AI EDIT\n\nField: ${label}\nPath: ${path}\nType: ${type}\n\nCurrent value:\n${JSON.stringify(currentValue, null, 2)}`
+  );
 }
-
 
 function buildNestedSection(container, titleText, fields, basePath) {
   const subtitle = document.createElement("div");
@@ -1110,98 +1026,6 @@ document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview
       }
     )
     .subscribe();
-}
-/* =========================
-   AI INTRO MODAL (CENTER)
-========================= */
-.ai-intro-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(2,6,23,.55);
-  backdrop-filter:blur(14px);
-  z-index:1200;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.ai-intro-overlay.hidden{
-  display:none;
-}
-
-.ai-intro-modal{
-  width:420px;
-  max-width:92%;
-  background:#020617;
-  border-radius:22px;
-  padding:26px 26px 28px;
-
-  box-shadow:
-    0 40px 120px rgba(0,0,0,.7),
-    0 0 0 1px rgba(255,255,255,.08);
-
-  text-align:center;
-}
-
-.ai-intro-badge{
-  display:inline-block;
-  margin-bottom:14px;
-  padding:6px 12px;
-  font-size:12px;
-  border-radius:999px;
-  background:rgba(34,197,94,.15);
-  color:#22c55e;
-  font-weight:600;
-}
-
-.ai-intro-title{
-  font-size:22px;
-  font-weight:700;
-  margin-bottom:8px;
-}
-
-.ai-intro-text{
-  font-size:14px;
-  line-height:1.6;
-  opacity:.8;
-  margin-bottom:18px;
-}
-
-.ai-intro-input{
-  width:100%;
-  height:44px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.15);
-  background:#020617;
-  color:white;
-  padding:0 14px;
-  font-size:14px;
-  margin-bottom:14px;
-}
-
-.ai-intro-actions{
-  display:flex;
-  gap:10px;
-}
-
-.ai-intro-actions button{
-  flex:1;
-  height:42px;
-  border-radius:12px;
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.ai-intro-start{
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-  color:#04110a;
-}
-
-.ai-intro-skip{
-  background:rgba(255,255,255,.06);
-  color:white;
 }
 
 </script>
@@ -1489,51 +1313,6 @@ if (data?.reply) {
     }
   }
 
-});
-</script>
-<!-- =========================
-   AI INTRO MODAL
-========================= -->
-<div id="ai-intro-overlay" class="ai-intro-overlay">
-  <div class="ai-intro-modal">
-    <div class="ai-intro-badge">AI Assistant</div>
-
-    <div class="ai-intro-title">
-      I can help you improve your website
-    </div>
-
-    <div class="ai-intro-text">
-      Tell me what you’d like to change — text, tone, sections or ideas.
-    </div>
-
-    <input
-      class="ai-intro-input"
-      placeholder="For example: improve the hero headline"
-    />
-
-    <div class="ai-intro-actions">
-      <button class="ai-intro-start">
-        Start editing
-      </button>
-      <button class="ai-intro-skip">
-        Skip
-      </button>
-    </div>
-  </div>
-</div>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const intro = document.getElementById("ai-intro-overlay");
-  if (!intro) return;
-
-  intro.querySelector(".ai-intro-start")?.addEventListener("click", () => {
-    intro.classList.add("hidden");
-    document.getElementById("ai-chat-overlay")?.classList.remove("hidden");
-  });
-
-  intro.querySelector(".ai-intro-skip")?.addEventListener("click", () => {
-    intro.classList.add("hidden");
-  });
 });
 </script>
 
