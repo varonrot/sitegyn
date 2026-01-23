@@ -897,22 +897,20 @@ async function openAIEditor({ path, type, label }) {
   type,
   currentValue
 });
- 
+
 const aiOverlay  = document.getElementById("ai-chat-overlay");
 const aiMessages = document.getElementById("ai-chat-messages");
 
 aiOverlay.classList.remove("hidden");
- 
+
 aiMessages.innerHTML = "";
- 
-const contextMsg = document.createElement("div");
-contextMsg.className = "ai-msg ai-msg-context";
+
 const contextMsg = document.createElement("div");
 contextMsg.className = "ai-msg ai-msg-context typing";
+
 aiMessages.appendChild(contextMsg);
 aiMessages.scrollTop = aiMessages.scrollHeight;
 
-// טייפינג כמו צ׳ט
 await typeText(contextMsg, prompt, 35);
 contextMsg.classList.remove("typing");
 
