@@ -862,23 +862,15 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 
 async function openAIEditor({ path, type, label }) {
-  const projectId = getProjectId();
-  if (!projectId) return;
+  const overlay = document.getElementById("ai-edit-overlay");
+  const fieldEl = document.getElementById("ai-edit-field");
 
-  const { data, error } = await supabase
-    .from("projects")
-    .select("content_json")
-    .eq("id", projectId)
-    .single();
+  if (!overlay || !fieldEl) return;
 
-  if (error || !data?.content_json) return;
-
-  const currentValue = getValueByPath(data.content_json, path);
-
-  alert(
-    `AI EDIT\n\nField: ${label}\nPath: ${path}\nType: ${type}\n\nCurrent value:\n${JSON.stringify(currentValue, null, 2)}`
-  );
+  fieldEl.textContent = label;
+  overlay.classList.remove("hidden");
 }
+
 
 function buildNestedSection(container, titleText, fields, basePath) {
   const subtitle = document.createElement("div");
@@ -916,7 +908,7 @@ function capitalize(str) {
 function humanize(str) {
   return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
 }
- 
+
 
 async function openBottomPreview(path) {
 currentEditPath = path;
@@ -1026,6 +1018,104 @@ document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview
       }
     )
     .subscribe();
+}
+/* =========================
+   AI EDIT MODAL – PRECISE POSITION
+========================= */
+.ai-edit-overlay{
+  position:fixed;
+
+  top:calc(var(--topbar-h) + 24px);
+  left:var(--sidebar-w);
+  right:var(--sidebar-w);
+  bottom:0;
+
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+
+  background:rgba(2,6,23,.55);
+  backdrop-filter:blur(10px);
+  z-index:1200;
+}
+
+.ai-edit-overlay.hidden{
+  display:none;
+}
+
+.ai-edit-modal{
+  margin-top:40px;
+
+  width:420px;
+  max-width:90%;
+
+  background:#020617;
+  border-radius:20px;
+
+  padding:22px 22px 24px;
+
+  box-shadow:
+    0 40px 120px rgba(0,0,0,.65),
+    0 1px 0 rgba(255,255,255,.06) inset;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.ai-edit-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.ai-edit-sub{
+  font-size:12px;
+  opacity:.65;
+}
+
+.ai-edit-context{
+  font-size:13px;
+  opacity:.85;
+}
+
+.ai-edit-message{
+  font-size:14px;
+  line-height:1.5;
+}
+
+.ai-edit-input{
+  resize:none;
+  height:64px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.14);
+  background:#020617;
+  color:white;
+  padding:10px 12px;
+  font-size:14px;
+}
+
+.ai-edit-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.ai-edit-chips span{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  background:rgba(255,255,255,.08);
+}
+
+.ai-edit-action{
+  height:44px;
+  border-radius:14px;
+  border:none;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:#04110a;
+  font-weight:700;
+  cursor:pointer;
 }
 
 </script>
@@ -1313,6 +1403,54 @@ if (data?.reply) {
     }
   }
 
+});
+</script>
+<!-- =========================
+   AI EDIT MODAL
+========================= -->
+<div id="ai-edit-overlay" class="ai-edit-overlay hidden">
+  <div class="ai-edit-modal">
+
+    <div class="ai-edit-header">
+      <div>
+        <strong>🤖 AI Assistant</strong>
+        <div class="ai-edit-sub">
+          I can help you improve the text on your website
+        </div>
+      </div>
+      <button id="ai-edit-close">✕</button>
+    </div>
+
+    <div class="ai-edit-context">
+      ✨ Editing: <strong id="ai-edit-field">Text</strong>
+    </div>
+
+    <div class="ai-edit-message">
+      Hi 👋
+      How would you like this text to sound?
+    </div>
+
+    <textarea
+      class="ai-edit-input"
+      placeholder="For example: Make it warmer and more reassuring"
+    ></textarea>
+
+    <div class="ai-edit-chips">
+      <span>Friendly</span>
+      <span>Professional</span>
+      <span>Short & Clear</span>
+      <span>More Persuasive</span>
+    </div>
+
+    <button class="ai-edit-action">
+      ✨ Update this text
+    </button>
+
+  </div>
+</div>
+<script>
+document.getElementById("ai-edit-close")?.addEventListener("click", () => {
+  document.getElementById("ai-edit-overlay")?.classList.add("hidden");
 });
 </script>
 
