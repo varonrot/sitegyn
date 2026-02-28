@@ -492,6 +492,23 @@ body{
   25%, 75% { opacity: 0 }
 }
 
+/* =========================
+   AI CONTEXT MESSAGE
+========================= */
+.ai-msg-context{
+  background: linear-gradient(
+    180deg,
+    rgba(34,197,94,.18),
+    rgba(34,197,94,.08)
+  );
+  border: 1px solid rgba(34,197,94,.35);
+  color: #d9ffe9;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.25);
+}
 
 </style>
 </head>
@@ -572,6 +589,32 @@ function toggleRight(){
  <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 let currentEditPath = null;
+function typeText(element, text, baseSpeed = 80) {
+  return new Promise(resolve => {
+    element.textContent = "";
+    let i = 0;
+
+    function typeNext() {
+      if (i >= text.length) {
+        resolve();
+        return;
+      }
+
+      const char = text.charAt(i);
+      element.textContent += char;
+      i++;
+
+      let delay = baseSpeed + Math.random() * 40;
+      if (/[.,!?]/.test(char)) delay += 180;
+      if (char === "\n") delay += 300;
+      if (i > text.length * 0.8) delay += 40;
+
+      setTimeout(typeNext, delay);
+    }
+
+    typeNext();
+  });
+}
 
 /* =========================
    Supabase
@@ -874,10 +917,33 @@ async function openAIEditor({ path, type, label }) {
   if (error || !data?.content_json) return;
 
   const currentValue = getValueByPath(data.content_json, path);
+ const prompt = buildInitialPrompt({
+  label,
+  path,
+  type,
+  currentValue
+});
 
-  alert(
-    `AI EDIT\n\nField: ${label}\nPath: ${path}\nType: ${type}\n\nCurrent value:\n${JSON.stringify(currentValue, null, 2)}`
-  );
+const aiOverlay  = document.getElementById("ai-chat-overlay");
+const aiMessages = document.getElementById("ai-chat-messages");
+
+aiOverlay.classList.remove("hidden");
+
+aiMessages.innerHTML = "";
+
+const contextMsg = document.createElement("div");
+contextMsg.className = "ai-msg ai-msg-context typing";
+
+aiMessages.appendChild(contextMsg);
+aiMessages.scrollTop = aiMessages.scrollHeight;
+
+await typeText(contextMsg, prompt, 35);
+contextMsg.classList.remove("typing");
+
+
+aiMessages.appendChild(contextMsg);
+aiMessages.scrollTop = aiMessages.scrollHeight;
+
 }
 
 function buildNestedSection(container, titleText, fields, basePath) {
@@ -904,6 +970,54 @@ function buildNestedSection(container, titleText, fields, basePath) {
   }
 
   container.appendChild(list);
+}
+function buildInitialPrompt({ label, path, type, currentValue }) {
+  const name = label.toLowerCase();
+
+  if (name.includes("kicker") || name.includes("cta") || name.includes("button")) {
+    return `You are editing a short label on your website.
+
+Field: ${label}
+Path: ${path}
+
+Current text:
+"${currentValue}"
+
+What would you like to do?
+• rewrite it
+• make it more emotional
+• make it more professional
+• shorten it
+• replace it completely`;
+  }
+
+  if (name.includes("headline") || name.includes("title")) {
+    return `This is a main headline on your website.
+
+Current headline:
+"${currentValue}"
+
+How would you like to improve it?
+• stronger impact
+• clearer message
+• different tone
+• shorter or longer`;
+  }
+
+  return `You are editing a text section on your website.
+
+Field: ${label}
+Path: ${path}
+
+Current content:
+"${currentValue}"
+
+Tell me what you'd like to change:
+• rewrite
+• simplify
+• improve clarity
+• change tone
+• replace completely`;
 }
 
 /* =========================
