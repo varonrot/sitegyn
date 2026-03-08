@@ -13,14 +13,17 @@ Rewrite the field.
 
 IMPORTANT RULES:
 - Do NOT ask questions.
-- Return an update block.
+- Return only an update block.
 
 Return exactly:
 
 <update>
 {
- "content_json": {
-   "{{FIELD_PATH}}": "updated text"
- }
+ "changes":[
+   {
+     "path":"{{FIELD_PATH}}",
+     "value":"updated text"
+   }
+ ]
 }
 </update>
