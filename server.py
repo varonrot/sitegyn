@@ -256,11 +256,11 @@ def chat():
         editor_payload = None
 
         if is_editor:
-            try:
-                editor_payload = json.loads(assistant_text)
+            editor_payload = parse_update_block(assistant_text)
+
+            if editor_payload:
                 visible_text = "✅ Content updated successfully."
-            except:
-                editor_payload = None
+            else:
                 visible_text = "⚠️ Failed to update content."
         else:
             # save assistant message only for non-editor chat
@@ -319,14 +319,16 @@ def chat():
 
             content = project_row.get("content_json") or {}
 
-            for change in editor_payload.get("changes", []):
-                path = change["path"]
-                value = change["value"]
+            updates = editor_payload.get("content_json", {})
+
+            for path, value in updates.items():
 
                 keys = path.split(".")
                 curr = content
+
                 for k in keys[:-1]:
-                    curr = curr[k]
+                    curr = curr.setdefault(k, {})
+
                 curr[keys[-1]] = value
 
             supabase.table("projects").update({
