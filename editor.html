@@ -905,6 +905,9 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 
 async function openAIEditor({ path, type, label }) {
+
+  currentEditPath = path;   
+
   const projectId = getProjectId();
   if (!projectId) return;
 
