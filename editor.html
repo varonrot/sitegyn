@@ -1081,6 +1081,33 @@ function setValueByPath(obj, path, value) {
 
   curr[keys[keys.length - 1]] = value;
 }
+async function applyAIUpdate(reply) {
+
+  const match = reply.match(/<update>([\s\S]*?)<\/update>/);
+  if (!match) return;
+
+  const json = JSON.parse(match[1]);
+  const updates = json.content_json;
+
+  const projectId = getProjectId();
+
+  const { data } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  const updatedJson = structuredClone(data.content_json);
+
+  for (const path in updates) {
+    setValueByPath(updatedJson, path, updates[path]);
+  }
+
+  await supabase
+    .from("projects")
+    .update({ content_json: updatedJson })
+    .eq("id", projectId);
+}
 async function saveBottomPreview() {
   if (!currentEditPath) return;
 
@@ -1413,12 +1440,16 @@ body: JSON.stringify({
 
       const data = await res.json();
 if (data?.reply) {
+
   const bubble = createAssistantBubble();
 
   aiSend.disabled = true;
   aiTextarea.disabled = true;
 
   await typeText(bubble, data.reply);
+
+  // ===== APPLY UPDATE =====
+  applyAIUpdate(data.reply);
 
   aiSend.disabled = false;
   aiTextarea.disabled = false;
