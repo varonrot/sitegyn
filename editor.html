@@ -1087,7 +1087,6 @@ async function applyAIUpdate(reply) {
   if (!match) return;
 
   const json = JSON.parse(match[1]);
-  const updates = json.content_json;
 
   const projectId = getProjectId();
 
@@ -1098,6 +1097,19 @@ async function applyAIUpdate(reply) {
     .single();
 
   const updatedJson = structuredClone(data.content_json);
+
+  // ===== NEW SUPPORT =====
+  let updates = {};
+
+  if (json.content_json) {
+    updates = json.content_json;
+  }
+
+  if (json.changes) {
+    json.changes.forEach(change => {
+      updates[change.path] = change.value;
+    });
+  }
 
   for (const path in updates) {
     setValueByPath(updatedJson, path, updates[path]);
