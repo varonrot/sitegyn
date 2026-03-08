@@ -1081,57 +1081,47 @@ function setValueByPath(obj, path, value) {
 
   curr[keys[keys.length - 1]] = value;
 }
-window.applyAIUpdate = async function(reply) {
-  
-  console.log("AI RAW REPLY:", reply);
-  const updateMatch = reply.match(/<update>([\s\S]*?)<\/update>/);
+window.applyAIUpdate = async function(reply){
 
-  if (!updateMatch) {
-    console.warn("No <update> block found");
+  const match = reply.match(/<update>([\s\S]*?)<\/update>/);
+
+  if(!match){
+    console.log("No update block found");
     return;
   }
 
-  let json;
+  let data;
 
-  try {
-    json = JSON.parse(updateMatch[1].trim());
-  } catch (e) {
-    console.error("Failed to parse AI update JSON", e);
+  try{
+    data = JSON.parse(match[1]);
+  }catch(e){
+    console.error("JSON parse failed:", match[1]);
     return;
   }
 
-  const projectId = getProjectId();
+  if(!data.changes) return;
 
-  const { data } = await supabase
-    .from("projects")
-    .select("content_json")
-    .eq("id", projectId)
-    .single();
+  let updatedJson = structuredClone(currentContent);
 
-  const updatedJson = structuredClone(data.content_json);
+  data.changes.forEach(change=>{
+    const keys = change.path.split(".");
+    let obj = updatedJson;
 
-  let updates = {};
+    for(let i=0;i<keys.length-1;i++){
+      obj = obj[keys[i]];
+    }
 
-  if (json.content_json) {
-    updates = json.content_json;
-  }
+    obj[keys[keys.length-1]] = change.value;
+  });
 
-  if (json.changes) {
-    json.changes.forEach(change => {
-      updates[change.path] = change.value;
-    });
-  }
-
-  for (const path in updates) {
-    setValueByPath(updatedJson, path, updates[path]);
-  }
+  console.log("UPDATED JSON:", updatedJson);
 
   await supabase
     .from("projects")
     .update({ content_json: updatedJson })
-    .eq("id", projectId)
-    .select();
-};
+    .eq("id", projectId);
+
+}
 async function saveBottomPreview() {
   if (!currentEditPath) return;
 
