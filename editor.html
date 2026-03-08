@@ -588,7 +588,7 @@ function toggleRight(){
 </script>
  <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-let currentEditPath = null;
+window.currentEditPath = null;
 function typeText(element, text, baseSpeed = 80) {
   return new Promise(resolve => {
     element.textContent = "";
@@ -906,7 +906,7 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 async function openAIEditor({ path, type, label }) {
 
-  currentEditPath = path;
+  window.currentEditPath = path;
 
   const projectId = getProjectId();
   if (!projectId) return;
@@ -1446,7 +1446,7 @@ body: JSON.stringify({
   project_id: projectId,
   message: text,
   source: "editor",
-  field_path: currentEditPath
+  field_path: window.currentEditPath
 })
       });
 
