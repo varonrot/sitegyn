@@ -1081,7 +1081,7 @@ function setValueByPath(obj, path, value) {
 
   curr[keys[keys.length - 1]] = value;
 }
-async function applyAIUpdate(reply) {
+window.applyAIUpdate = async function(reply) {
 
   const match = reply.match(/<update>([\s\S]*?)<\/update>/);
   if (!match) return;
