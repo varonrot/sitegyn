@@ -12,6 +12,9 @@ User request:
 Rewrite the field according to the request.
 
 IMPORTANT RULES:
+- Replace the current value with the improved text.
+- Use the exact field path shown above.
+- Do NOT return placeholders like {{FIELD_PATH}} or {{CURRENT_VALUE}}.
 - Do NOT ask questions.
 - Do NOT explain anything.
 - Do NOT add text before or after the update block.
@@ -25,7 +28,7 @@ Return exactly in this format:
  "changes":[
    {
      "path":"{{FIELD_PATH}}",
-     "value":"updated text"
+     "value":"THE NEW TEXT HERE"
    }
  ]
 }
