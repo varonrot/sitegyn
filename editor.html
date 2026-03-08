@@ -1115,10 +1115,11 @@ async function applyAIUpdate(reply) {
     setValueByPath(updatedJson, path, updates[path]);
   }
 
-  await supabase
-    .from("projects")
-    .update({ content_json: updatedJson })
-    .eq("id", projectId);
+await supabase
+  .from("projects")
+  .update({ content_json: updatedJson })
+  .eq("id", projectId)
+  .select();
 }
 async function saveBottomPreview() {
   if (!currentEditPath) return;
@@ -1458,11 +1459,18 @@ if (data?.reply) {
   aiSend.disabled = true;
   aiTextarea.disabled = true;
 
-  const clean = data.reply.replace(/<update>[\s\S]*<\/update>/, "").trim();
-  await typeText(bubble, clean || "Content updated.");
+const clean = data.reply.replace(/<update>[\s\S]*<\/update>/, "").trim();
+await typeText(bubble, clean || "Content updated.");
 
-  // ===== APPLY UPDATE =====
-  applyAIUpdate(data.reply);
+// ===== APPLY UPDATE =====
+await applyAIUpdate(data.reply);
+
+// ===== FORCE PREVIEW REFRESH =====
+const iframe = document.getElementById("site-preview");
+if (iframe) {
+  const baseSrc = iframe.src.split("?")[0];
+  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+}
 
   aiSend.disabled = false;
   aiTextarea.disabled = false;
