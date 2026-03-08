@@ -253,6 +253,9 @@ def chat():
         )
 
         assistant_text = completion.choices[0].message.content or ""
+        print("====== AI RESPONSE ======")
+        print(assistant_text)
+        print("=========================")
         editor_payload = None
 
         if is_editor:
