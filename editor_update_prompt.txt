@@ -14,8 +14,9 @@ Rewrite the field according to the request.
 IMPORTANT RULES:
 - Do NOT ask questions.
 - Do NOT explain anything.
-- Do NOT include any text outside the update block.
+- Do NOT add text before or after the update block.
 - Return ONLY the update block.
+- The value must be valid JSON.
 
 Return exactly in this format:
 
