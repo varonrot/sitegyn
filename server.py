@@ -322,7 +322,14 @@ def chat():
 
             content = project_row.get("content_json") or {}
 
-            updates = editor_payload.get("content_json", {})
+            updates = {}
+
+            if "content_json" in editor_payload:
+                updates = editor_payload["content_json"]
+
+            elif "changes" in editor_payload:
+                for change in editor_payload["changes"]:
+                    updates[change["path"]] = change["value"]
 
             for path, value in updates.items():
 
