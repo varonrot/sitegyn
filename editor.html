@@ -1458,7 +1458,8 @@ if (data?.reply) {
   aiSend.disabled = true;
   aiTextarea.disabled = true;
 
-  await typeText(bubble, data.reply);
+  const clean = data.reply.replace(/<update>[\s\S]*<\/update>/, "").trim();
+  await typeText(bubble, clean || "Content updated.");
 
   // ===== APPLY UPDATE =====
   applyAIUpdate(data.reply);
