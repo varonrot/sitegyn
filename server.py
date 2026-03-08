@@ -262,7 +262,7 @@ def chat():
             editor_payload = parse_update_block(assistant_text)
 
             if editor_payload:
-                visible_text = "✅ Content updated successfully."
+                visible_text = assistant_text
             else:
                 visible_text = "⚠️ Failed to update content."
         else:
