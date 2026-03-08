@@ -20,6 +20,7 @@ IMPORTANT RULES:
 - Do NOT add text before or after the update block.
 - Return ONLY the update block.
 - The value must be valid JSON.
+- The new value should keep roughly the same length as the original unless the user asks otherwise.
 
 Return exactly in this format:
 
@@ -28,7 +29,7 @@ Return exactly in this format:
  "changes":[
    {
      "path":"{{FIELD_PATH}}",
-     "value":"THE NEW TEXT HERE"
+     "value":"UPDATED TEXT HERE"
    }
  ]
 }
