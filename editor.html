@@ -1400,11 +1400,12 @@ function typeText(element, text, baseSpeed = 80) {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          project_id: projectId,
-          message: text,
-          source: "editor"
-        })
+body: JSON.stringify({
+  project_id: projectId,
+  message: text,
+  source: "editor",
+  field_path: currentEditPath
+})
       });
 
       const data = await res.json();
