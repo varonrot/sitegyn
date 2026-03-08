@@ -9,13 +9,15 @@ Current value:
 User request:
 {{USER_MESSAGE}}
 
-Rewrite the field.
+Rewrite the field according to the request.
 
 IMPORTANT RULES:
 - Do NOT ask questions.
-- Return only an update block.
+- Do NOT explain anything.
+- Do NOT include any text outside the update block.
+- Return ONLY the update block.
 
-Return exactly:
+Return exactly in this format:
 
 <update>
 {
