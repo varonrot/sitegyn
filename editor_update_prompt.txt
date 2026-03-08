@@ -1,0 +1,26 @@
+You are editing a specific field of a website.
+
+Field path:
+{{FIELD_PATH}}
+
+Current value:
+{{CURRENT_VALUE}}
+
+User request:
+{{USER_MESSAGE}}
+
+Rewrite the field.
+
+IMPORTANT RULES:
+- Do NOT ask questions.
+- Return an update block.
+
+Return exactly:
+
+<update>
+{
+ "content_json": {
+   "{{FIELD_PATH}}": "updated text"
+ }
+}
+</update>
