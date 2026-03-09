@@ -624,6 +624,8 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
 
+let currentContent = {};
+
 /* =========================
    Project ID
 ========================= */
@@ -919,7 +921,8 @@ async function openAIEditor({ path, type, label }) {
 
   if (error || !data?.content_json) return;
 
-  const currentValue = getValueByPath(data.content_json, path);
+ currentContent = data.content_json;
+ const currentValue = getValueByPath(data.content_json, path);
  const prompt = buildInitialPrompt({
   label,
   path,
@@ -1083,6 +1086,8 @@ function setValueByPath(obj, path, value) {
 }
 window.applyAIUpdate = async function(reply){
 
+  const projectId = getProjectId();
+
   const match = reply.match(/<update>([\s\S]*?)<\/update>/);
 
   if(!match){
@@ -1121,7 +1126,9 @@ window.applyAIUpdate = async function(reply){
     .update({ content_json: updatedJson })
     .eq("id", projectId);
 
+  currentContent = updatedJson;
 }
+
 async function saveBottomPreview() {
   if (!currentEditPath) return;
 
