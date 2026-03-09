@@ -255,13 +255,23 @@ def chat():
         if not update_obj:
             try:
                 backend_messages = messages + [
+                    {"role": "user", "content": user_message},
                     {
                         "role": "system",
                         "content": (
-                            "Your previous reply did not follow the instructions. "
-                            "Now respond ONLY with a single <update>{...}</update> block "
-                            "containing valid JSON for the current project. "
-                            "Do not add any natural language or explanation."
+                            "Respond ONLY with a single <update>{...}</update> block. "
+                            "The JSON must follow this structure:\n\n"
+                            "<update>\n"
+                            "{\n"
+                            '  "changes":[\n'
+                            "    {\n"
+                            '      "path":"home.hero.kicker",\n'
+                            '      "value":"New text"\n'
+                            "    }\n"
+                            "  ]\n"
+                            "}\n"
+                            "</update>\n\n"
+                            "Do not add explanations."
                         ),
                     }
                 ]
