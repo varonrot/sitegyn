@@ -378,6 +378,13 @@ def chat():
                 "content_json": content
             }).eq("id", project_id).execute()
 
+            # ensure subdomain exists
+            if not project_row.get("subdomain"):
+                sub = f"site-{project_id[:6]}"
+
+                supabase.table("projects").update({
+                    "subdomain": sub
+                }).eq("id", project_id).execute()
 
         return jsonify({
             "reply": visible_text,
