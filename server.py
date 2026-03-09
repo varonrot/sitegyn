@@ -317,7 +317,8 @@ def chat():
 
                 return jsonify({
                     "reply": "Content updated",
-                    "project_id": project_id
+                    "project_id": project_id,
+                    "updated": True
                 })
 
             # שולפים את רשומת הפרויקט
