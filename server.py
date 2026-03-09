@@ -84,6 +84,14 @@ def parse_update_block(assistant_text: str) -> Dict[str, Any]:
         traceback.print_exc()
         return {}
 
+def get_value_by_path(obj: Dict[str, Any], path: str):
+    try:
+        curr = obj
+        for key in path.split("."):
+            curr = curr[key]
+        return curr
+    except Exception:
+        return ""
 
 # ============================
 # Template selection
@@ -229,9 +237,28 @@ def chat():
         messages = []
 
         if is_editor:
+            project_row = (
+                              supabase.table("projects")
+                              .select("content_json")
+                              .eq("id", project_id)
+                              .single()
+                              .execute()
+                              .data
+                          ) or {}
+
+            content_json = project_row.get("content_json") or {}
+            current_value = get_value_by_path(content_json, field_path) if field_path else ""
+
+            editor_prompt = (
+                EDITOR_UPDATE_PROMPT
+                .replace("{{FIELD_PATH}}", field_path or "")
+                .replace("{{CURRENT_VALUE}}", json.dumps(current_value, ensure_ascii=False))
+                .replace("{{USER_MESSAGE}}", user_message)
+            )
+
             messages.append({
                 "role": "system",
-                "content": EDITOR_UPDATE_PROMPT
+                "content": editor_prompt
             })
         else:
             messages.append({
@@ -249,10 +276,13 @@ def chat():
         completion = client.chat.completions.create(
             model="gpt-4.1-mini",
             messages=messages,
-            temperature=0.5,
+            temperature=0.0 if is_editor else 0.5,
         )
 
         assistant_text = completion.choices[0].message.content or ""
+        print("FIELD PATH:", field_path)
+        print("USER MESSAGE:", user_message)
+        print("ASSISTANT TEXT:", assistant_text)
         print("====== AI RESPONSE ======")
         print(assistant_text)
         print("=========================")
