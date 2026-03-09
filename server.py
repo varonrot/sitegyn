@@ -306,6 +306,9 @@ def chat():
                 )
                 backend_text = completion2.choices[0].message.content or ""
                 update_obj = parse_update_block(backend_text)
+
+                if is_editor:
+                    editor_payload = update_obj
             except Exception:
                 traceback.print_exc()
                 update_obj = {}
