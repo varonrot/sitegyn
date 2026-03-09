@@ -1407,7 +1407,8 @@ function typeText(element, text, baseSpeed = 80) {
         })
       });
 
-      const data = await res.json();
+const data = await res.json();
+
 if (data?.reply) {
   const bubble = createAssistantBubble();
 
@@ -1419,6 +1420,21 @@ if (data?.reply) {
   aiSend.disabled = false;
   aiTextarea.disabled = false;
   aiTextarea.focus();
+}
+
+/* =========================
+   Refresh preview after AI update
+========================= */
+
+if (data?.updated === true) {
+
+  const iframe = document.getElementById("site-preview");
+
+  if (iframe) {
+    const baseSrc = iframe.src.split("?")[0];
+    iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+  }
+
 }
 
 
