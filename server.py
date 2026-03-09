@@ -180,20 +180,25 @@ def start_project():
 def chat():
     try:
         data = request.get_json(force=True)
+
         project_id = data.get("project_id")
         user_message = data.get("message", "").strip()
+
+        source = data.get("source", "builder")
+        field_path = data.get("field_path")
 
         if not project_id:
             return jsonify({"error": "missing_project_id"}), 400
         if not user_message:
             return jsonify({"error": "empty_message"}), 400
 
-        # Save user message
-        supabase.table("chat_messages").insert({
-            "project_id": project_id,
-            "role": "user",
-            "content": user_message,
-        }).execute()
+        # Save user message רק בבניה הראשונית
+        if source != "editor":
+            supabase.table("chat_messages").insert({
+                "project_id": project_id,
+                "role": "user",
+                "content": user_message,
+            }).execute()
 
         # Load entire history
         history = supabase.table("chat_messages") \
@@ -273,6 +278,48 @@ def chat():
 
         # אם יש לנו עדכון אחרי אחד משני הניסיונות – ממשיכים כרגיל
         if update_obj:
+
+            # ==============================
+            # EDITOR UPDATE (לא לשבור builder)
+            # ==============================
+            if source == "editor":
+
+                project_row = (
+                    supabase.table("projects")
+                    .select("content_json")
+                    .eq("id", project_id)
+                    .single()
+                    .execute()
+                    .data
+                )
+
+                content = project_row.get("content_json") or {}
+
+                updates = {}
+
+                if "changes" in update_obj:
+                    for change in update_obj["changes"]:
+                        updates[change["path"]] = change["value"]
+
+                for path, value in updates.items():
+
+                    keys = path.split(".")
+                    curr = content
+
+                    for k in keys[:-1]:
+                        curr = curr.setdefault(k, {})
+
+                    curr[keys[-1]] = value
+
+                supabase.table("projects").update({
+                    "content_json": content
+                }).eq("id", project_id).execute()
+
+                return jsonify({
+                    "reply": "Content updated",
+                    "project_id": project_id
+                })
+
             # שולפים את רשומת הפרויקט
             project_row = (
                 supabase.table("projects")
