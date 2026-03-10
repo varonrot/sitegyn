@@ -187,59 +187,12 @@ def chat():
         source = data.get("source", "builder")
         field_path = data.get("field_path")
 
-        # ==========================================
-        # EDITOR MODE (no conversation)
-        # ==========================================
-        if source == "editor":
-
-            editor_prompt_path = os.path.join(os.path.dirname(__file__), "editor_update_prompt.txt")
-
-            with open(editor_prompt_path, "r", encoding="utf-8") as f:
-                editor_prompt = f.read()
-
-            # load project
-            project_row = (
-                supabase.table("projects")
-                .select("content_json")
-                .eq("id", project_id)
-                .single()
-                .execute()
-                .data
-            )
-
-            content = project_row.get("content_json") or {}
-
-            # get current value
-            curr = content
-            for k in field_path.split("."):
-                curr = curr.get(k, {})
-
-            current_value = curr if isinstance(curr, str) else ""
-
-            prompt = (
-                editor_prompt
-                .replace("{{FIELD_PATH}}", field_path)
-                .replace("{{CURRENT_VALUE}}", current_value)
-                .replace("{{USER_MESSAGE}}", user_message)
-            )
-
-            completion = client.chat.completions.create(
-                model="gpt-4.1-mini",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0
-            )
-
-            assistant_text = completion.choices[0].message.content or ""
-
-            update_obj = parse_update_block(assistant_text)
-
-            if not update_obj:
-                return jsonify({"error": "no update block"}), 500
         if not project_id:
             return jsonify({"error": "missing_project_id"}), 400
         if not user_message:
             return jsonify({"error": "empty_message"}), 400
 
+        # Save user message
         # Save user message רק בבניה הראשונית
         if source != "editor":
             supabase.table("chat_messages").insert({
@@ -303,23 +256,13 @@ def chat():
         if not update_obj:
             try:
                 backend_messages = messages + [
-                    {"role": "user", "content": user_message},
                     {
                         "role": "system",
                         "content": (
-                            "Respond ONLY with a single <update>{...}</update> block. "
-                            "The JSON must follow this structure:\n\n"
-                            "<update>\n"
-                            "{\n"
-                            '  "changes":[\n'
-                            "    {\n"
-                            '      "path":"home.hero.kicker",\n'
-                            '      "value":"New text"\n'
-                            "    }\n"
-                            "  ]\n"
-                            "}\n"
-                            "</update>\n\n"
-                            "Do not add explanations."
+                            "Your previous reply did not follow the instructions. "
+                            "Now respond ONLY with a single <update>{...}</update> block "
+                            "containing valid JSON for the current project. "
+                            "Do not add any natural language or explanation."
                         ),
                     }
                 ]
@@ -351,10 +294,7 @@ def chat():
                     .data
                 )
 
-                content = project_row.get("content_json")
-
-                if not isinstance(content, dict):
-                    content = {}
+                content = project_row.get("content_json") or {}
 
                 updates = {}
 
@@ -368,9 +308,7 @@ def chat():
                     curr = content
 
                     for k in keys[:-1]:
-                        if k not in curr or not isinstance(curr[k], dict):
-                            curr[k] = {}
-                        curr = curr[k]
+                        curr = curr.setdefault(k, {})
 
                     curr[keys[-1]] = value
 
@@ -380,9 +318,7 @@ def chat():
 
                 return jsonify({
                     "reply": "Content updated",
-                    "changes": update_obj.get("changes", []),
-                    "project_id": project_id,
-                    "updated": True
+                    "project_id": project_id
                 })
 
             # שולפים את רשומת הפרויקט
