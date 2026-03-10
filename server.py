@@ -43,6 +43,15 @@ with open(PROMPT_PATH, "r", encoding="utf-8") as f:
 
 
 # ==========================================
+# Load Editor update prompt
+# ==========================================
+EDITOR_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "editor_update_prompt.txt")
+
+with open(EDITOR_PROMPT_PATH, "r", encoding="utf-8") as f:
+    EDITOR_UPDATE_PROMPT = f.read()
+
+
+# ==========================================
 # Flask app
 # ==========================================
 app = Flask(
@@ -210,18 +219,74 @@ def chat():
 
         user_turns = sum(1 for r in history if r["role"] == "user")
 
+        if source == "editor":
+
+            project_row = (
+                supabase.table("projects")
+                .select("content_json")
+                .eq("id", project_id)
+                .single()
+                .execute()
+                .data
+            )
+
+            content = project_row.get("content_json") or {}
+
+            def get_value_by_path(obj, path):
+                for p in (path or "").split("."):
+                    obj = obj.get(p)
+                    if obj is None:
+                        return ""
+                return obj
+
+            current_value = get_value_by_path(content, field_path)
+
+            system_prompt = EDITOR_UPDATE_PROMPT \
+                .replace("{{FIELD_PATH}}", field_path or "") \
+                .replace("{{CURRENT_VALUE}}", str(current_value)) \
+                .replace("{{USER_MESSAGE}}", user_message)
+
+            project_row = (
+                supabase.table("projects")
+                .select("content_json")
+                .eq("id", project_id)
+                .single()
+                .execute()
+                .data
+            )
+
+            content = project_row.get("content_json") or {}
+
+            def get_value_by_path(obj, path):
+                for p in path.split("."):
+                    obj = obj.get(p)
+                    if obj is None:
+                        return ""
+                return obj
+
+            current_value = get_value_by_path(content, field_path)
+
+            system_prompt = EDITOR_UPDATE_PROMPT \
+                .replace("{{FIELD_PATH}}", field_path) \
+                .replace("{{CURRENT_VALUE}}", str(current_value)) \
+                .replace("{{USER_MESSAGE}}", user_message)
         # Build messages
-        messages = [
-            {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
-            {"role": "system", "content": f"The current project_id is {project_id}."},
-            {
-                "role": "system",
-                "content": (
-                    f"For this project there have been {user_turns} user answers so far. "
-                    "After 2 or more user answers, offer a demo or continue."
-                )
-            }
-        ]
+        if source == "editor":
+            messages = [
+                {"role": "system", "content": system_prompt}
+            ]
+        else:
+            messages = [
+                {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
+                {"role": "system", "content": f"The current project_id is {project_id}."},
+                {
+                    "role": "system",
+                    "content": (
+                        f"For this project there have been {user_turns} user answers so far. "
+                        "After 2 or more user answers, offer a demo or continue."
+                    )
+                }
+            ]
 
         for row in history:
             messages.append({"role": row["role"], "content": row["content"]})
@@ -230,7 +295,7 @@ def chat():
         completion = client.chat.completions.create(
             model="gpt-4.1-mini",
             messages=messages,
-            temperature=0.5,
+            temperature=0 if source == "editor" else 0.5,
         )
 
         assistant_text = completion.choices[0].message.content or ""
