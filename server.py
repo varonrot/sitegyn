@@ -303,7 +303,10 @@ def chat():
                     .data
                 )
 
-                content = project_row.get("content_json") or {}
+                content = project_row.get("content_json")
+
+                if not isinstance(content, dict):
+                    content = {}
 
                 updates = {}
 
@@ -317,7 +320,9 @@ def chat():
                     curr = content
 
                     for k in keys[:-1]:
-                        curr = curr.setdefault(k, {})
+                        if k not in curr or not isinstance(curr[k], dict):
+                            curr[k] = {}
+                        curr = curr[k]
 
                     curr[keys[-1]] = value
 
@@ -327,6 +332,7 @@ def chat():
 
                 return jsonify({
                     "reply": "Content updated",
+                    "changes": update_obj.get("changes", []),
                     "project_id": project_id,
                     "updated": True
                 })
