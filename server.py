@@ -254,17 +254,25 @@ def chat():
         # אם המודל לא החזיר בכלל <update>...</update> – נעשה קריאה שנייה "נסתרת"
         if not update_obj:
             try:
-                backend_messages = [
+                backend_messages = messages + [
+                    {"role": "user", "content": user_message},
                     {
                         "role": "system",
                         "content": (
-                                "Return ONLY this JSON wrapped in <update> tags.\n\n"
-                                "<update>\n"
-                                "{\n"
-                                ' "changes":[{"path":"' + field_path + '","value":"' + user_message + '"}]\n'
-                                                                                                      "}\n"
-                                                                                                      "</update>"
-                        )
+                            "Respond ONLY with a single <update>{...}</update> block. "
+                            "The JSON must follow this structure:\n\n"
+                            "<update>\n"
+                            "{\n"
+                            '  "changes":[\n'
+                            "    {\n"
+                            '      "path":"home.hero.kicker",\n'
+                            '      "value":"New text"\n'
+                            "    }\n"
+                            "  ]\n"
+                            "}\n"
+                            "</update>\n\n"
+                            "Do not add explanations."
+                        ),
                     }
                 ]
                 completion2 = client.chat.completions.create(
@@ -274,14 +282,12 @@ def chat():
                 )
                 backend_text = completion2.choices[0].message.content or ""
                 update_obj = parse_update_block(backend_text)
-                print("FIELD PATH:", field_path)
-                print("UPDATE OBJ:", update_obj)
             except Exception:
                 traceback.print_exc()
                 update_obj = {}
 
         # אם יש לנו עדכון אחרי אחד משני הניסיונות – ממשיכים כרגיל
-        if update_obj or source == "editor":
+        if update_obj:
 
             # ==============================
             # EDITOR UPDATE (לא לשבור builder)
@@ -303,10 +309,7 @@ def chat():
 
                 if "changes" in update_obj:
                     for change in update_obj["changes"]:
-                        # use editor path if provided
-                        path = field_path if field_path else change["path"]
-
-                        updates[path] = change["value"]
+                        updates[change["path"]] = change["value"]
 
                 for path, value in updates.items():
 
