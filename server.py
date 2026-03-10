@@ -233,31 +233,6 @@ def chat():
             content = project_row.get("content_json") or {}
 
             def get_value_by_path(obj, path):
-                for p in (path or "").split("."):
-                    obj = obj.get(p)
-                    if obj is None:
-                        return ""
-                return obj
-
-            current_value = get_value_by_path(content, field_path)
-
-            system_prompt = EDITOR_UPDATE_PROMPT \
-                .replace("{{FIELD_PATH}}", field_path or "") \
-                .replace("{{CURRENT_VALUE}}", str(current_value)) \
-                .replace("{{USER_MESSAGE}}", user_message)
-
-            project_row = (
-                supabase.table("projects")
-                .select("content_json")
-                .eq("id", project_id)
-                .single()
-                .execute()
-                .data
-            )
-
-            content = project_row.get("content_json") or {}
-
-            def get_value_by_path(obj, path):
                 for p in path.split("."):
                     obj = obj.get(p)
                     if obj is None:
