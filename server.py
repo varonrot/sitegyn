@@ -187,6 +187,54 @@ def chat():
         source = data.get("source", "builder")
         field_path = data.get("field_path")
 
+        # ==========================================
+        # EDITOR MODE (no conversation)
+        # ==========================================
+        if source == "editor":
+
+            editor_prompt_path = os.path.join(os.path.dirname(__file__), "editor_update_prompt.txt")
+
+            with open(editor_prompt_path, "r", encoding="utf-8") as f:
+                editor_prompt = f.read()
+
+            # load project
+            project_row = (
+                supabase.table("projects")
+                .select("content_json")
+                .eq("id", project_id)
+                .single()
+                .execute()
+                .data
+            )
+
+            content = project_row.get("content_json") or {}
+
+            # get current value
+            curr = content
+            for k in field_path.split("."):
+                curr = curr.get(k, {})
+
+            current_value = curr if isinstance(curr, str) else ""
+
+            prompt = (
+                editor_prompt
+                .replace("{{FIELD_PATH}}", field_path)
+                .replace("{{CURRENT_VALUE}}", current_value)
+                .replace("{{USER_MESSAGE}}", user_message)
+            )
+
+            completion = client.chat.completions.create(
+                model="gpt-4.1-mini",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0
+            )
+
+            assistant_text = completion.choices[0].message.content or ""
+
+            update_obj = parse_update_block(assistant_text)
+
+            if not update_obj:
+                return jsonify({"error": "no update block"}), 500
         if not project_id:
             return jsonify({"error": "missing_project_id"}), 400
         if not user_message:
