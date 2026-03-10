@@ -309,7 +309,10 @@ def chat():
 
                 if "changes" in update_obj:
                     for change in update_obj["changes"]:
-                        updates[change["path"]] = change["value"]
+                        # use editor path if provided
+                        path = field_path if field_path else change["path"]
+
+                        updates[path] = change["value"]
 
                 for path, value in updates.items():
 
