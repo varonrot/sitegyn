@@ -265,7 +265,7 @@ def chat():
                             "{\n"
                             '  "changes":[\n'
                             "    {\n"
-                            '      "path":"home.hero.kicker",\n'
+                            f'      "path":"{field_path}",\n'
                             '      "value":"New text"\n'
                             "    }\n"
                             "  ]\n"
