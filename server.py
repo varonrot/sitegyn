@@ -336,7 +336,7 @@ def chat():
                     .data
                 )
 
-                content = project_row.get("content_json") or {}
+                content = json.loads(json.dumps(project_row.get("content_json") or {}))
 
                 updates = {}
 
@@ -358,7 +358,7 @@ def chat():
                         curr = curr.setdefault(k, {})
 
                     curr[keys[-1]] = value
-
+                print("EDITOR UPDATE:", json.dumps(content, indent=2))
                 supabase.table("projects").update({
                     "content_json": content
                 }).eq("id", project_id).execute()
