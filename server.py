@@ -230,7 +230,7 @@ def chat():
                 .data
             )
 
-            content = project_row.get("content_json") or {}
+            content = json.loads(json.dumps(project_row.get("content_json") or {}))
 
             def get_value_by_path(obj, path):
                 if not path:
