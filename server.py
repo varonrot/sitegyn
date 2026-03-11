@@ -43,15 +43,6 @@ with open(PROMPT_PATH, "r", encoding="utf-8") as f:
 
 
 # ==========================================
-# Load Editor update prompt
-# ==========================================
-EDITOR_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "editor_update_prompt.txt")
-
-with open(EDITOR_PROMPT_PATH, "r", encoding="utf-8") as f:
-    EDITOR_UPDATE_PROMPT = f.read()
-
-
-# ==========================================
 # Flask app
 # ==========================================
 app = Flask(
@@ -189,12 +180,8 @@ def start_project():
 def chat():
     try:
         data = request.get_json(force=True)
-
         project_id = data.get("project_id")
         user_message = data.get("message", "").strip()
-
-        source = data.get("source", "builder")
-        field_path = data.get("field_path")
 
         if not project_id:
             return jsonify({"error": "missing_project_id"}), 400
@@ -202,86 +189,33 @@ def chat():
             return jsonify({"error": "empty_message"}), 400
 
         # Save user message
-        # Save user message רק בבניה הראשונית
-        if source != "editor":
-            supabase.table("chat_messages").insert({
-                "project_id": project_id,
-                "role": "user",
-                "content": user_message,
-            }).execute()
+        supabase.table("chat_messages").insert({
+            "project_id": project_id,
+            "role": "user",
+            "content": user_message,
+        }).execute()
 
         # Load entire history
-        history_resp = supabase.table("chat_messages") \
+        history = supabase.table("chat_messages") \
             .select("role, content") \
             .eq("project_id", project_id) \
             .order("created_at", desc=False) \
-            .execute()
-
-        history = history_resp.data if history_resp and history_resp.data else []
+            .execute().data or []
 
         user_turns = sum(1 for r in history if r["role"] == "user")
 
-        project_row = (
-            supabase.table("projects")
-            .select("content_json")
-            .eq("id", project_id)
-            .single()
-            .execute()
-            .data
-        )
-
-        content = project_row.get("content_json") or {}
-
-        def get_value_by_path(obj, path):
-            if not path:
-                return ""
-            for p in path.split("."):
-                obj = obj.get(p)
-                if obj is None:
-                    return ""
-            return obj
-
-            current_value = get_value_by_path(content, field_path)
-
-            system_prompt = EDITOR_UPDATE_PROMPT \
-                .replace("{{FIELD_PATH}}", field_path or "") \
-                .replace("{{CURRENT_VALUE}}", str(current_value)) \
-                .replace("{{USER_MESSAGE}}", user_message)
         # Build messages
-        if source == "editor":
-
-            messages = [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message}
-            ]
-
-        else:
-
-            messages = [
-                {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
-                {"role": "system", "content": f"The current project_id is {project_id}."},
-                {
-                    "role": "system",
-                    "content": (
-                        f"For this project there have been {user_turns} user answers so far. "
-                        "After 2 or more user answers, offer a demo or continue."
-                    )
-                }
-            ]
-
-            for row in history:
-                messages.append({"role": row["role"], "content": row["content"]})
-            messages = [
-                {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
-                {"role": "system", "content": f"The current project_id is {project_id}."},
-                {
-                    "role": "system",
-                    "content": (
-                        f"For this project there have been {user_turns} user answers so far. "
-                        "After 2 or more user answers, offer a demo or continue."
-                    )
-                }
-            ]
+        messages = [
+            {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
+            {"role": "system", "content": f"The current project_id is {project_id}."},
+            {
+                "role": "system",
+                "content": (
+                    f"For this project there have been {user_turns} user answers so far. "
+                    "After 2 or more user answers, offer a demo or continue."
+                )
+            }
+        ]
 
         for row in history:
             messages.append({"role": row["role"], "content": row["content"]})
@@ -290,7 +224,7 @@ def chat():
         completion = client.chat.completions.create(
             model="gpt-4.1-mini",
             messages=messages,
-            temperature=0 if source == "editor" else 0.5,
+            temperature=0.5,
         )
 
         assistant_text = completion.choices[0].message.content or ""
@@ -311,7 +245,7 @@ def chat():
 
         # Parse <update> block מהתשובה הראשונה
         update_obj = parse_update_block(assistant_text)
-        print("UPDATE_OBJ:", update_obj)
+
         # אם המודל לא החזיר בכלל <update>...</update> – נעשה קריאה שנייה "נסתרת"
         if not update_obj:
             try:
@@ -339,59 +273,6 @@ def chat():
 
         # אם יש לנו עדכון אחרי אחד משני הניסיונות – ממשיכים כרגיל
         if update_obj:
-
-            # ==============================
-            # EDITOR UPDATE (לא לשבור builder)
-            # ==============================
-            if source == "editor":
-
-                project_row = (
-                    supabase.table("projects")
-                    .select("content_json")
-                    .eq("id", project_id)
-                    .single()
-                    .execute()
-                    .data
-                )
-
-                content = json.loads(json.dumps(project_row.get("content_json") or {}))
-
-                updates = {}
-
-                changes = update_obj.get("changes") or [{
-                    "value": update_obj.get("value")
-                }]
-
-                for change in changes:
-                    value = change.get("value")
-
-                    # תמיד משתמשים במיקום שה-editor שלח
-                    path = field_path
-
-                    updates[path] = value
-
-
-
-                for path, value in updates.items():
-
-                    keys = path.split(".")
-                    curr = content
-
-                    for k in keys[:-1]:
-                        curr = curr.setdefault(k, {})
-
-                    curr[keys[-1]] = value
-                print("EDITOR UPDATE:", json.dumps(content, indent=2))
-                supabase.table("projects").update({
-                    "content_json": content
-                }).eq("id", project_id).execute()
-
-                return jsonify({
-                    "reply": "Content updated",
-                    "project_id": project_id,
-                    "updated": True
-                })
-
             # שולפים את רשומת הפרויקט
             project_row = (
                 supabase.table("projects")
@@ -446,12 +327,7 @@ def chat():
                     # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
             # 3) עדכון הטבלה ב-Supabase
-
-        print("UPDATE_OBJ:", json.dumps(update_obj, indent=2))
-        print("PROJECT_ID:", project_id)
-
-        resp = supabase.table("projects").update(update_obj).eq("id", project_id).execute()
-        print("SUPABASE_RESPONSE:", resp)
+            supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
         # === fetch subdomain for frontend redirect ===
         project_row = (
