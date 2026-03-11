@@ -346,7 +346,7 @@ def chat():
                     path = change.get("path")
                     value = change.get("value")
 
-                    if path and value:
+                    if path is not None:
                         updates[path] = value
 
                 for path, value in updates.items():
@@ -429,7 +429,7 @@ def chat():
 
         resp = supabase.table("projects").update(update_obj).eq("id", project_id).execute()
         print("SUPABASE_RESPONSE:", resp)
-        
+
         # === fetch subdomain for frontend redirect ===
         project_row = (
             supabase.table("projects")
