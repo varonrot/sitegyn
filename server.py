@@ -283,10 +283,28 @@ def chat():
                 .replace("{{USER_MESSAGE}}", user_message)
         # Build messages
         if source == "editor":
+
             messages = [
-                {"role": "system", "content": system_prompt}
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message}
             ]
+
         else:
+
+            messages = [
+                {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
+                {"role": "system", "content": f"The current project_id is {project_id}."},
+                {
+                    "role": "system",
+                    "content": (
+                        f"For this project there have been {user_turns} user answers so far. "
+                        "After 2 or more user answers, offer a demo or continue."
+                    )
+                }
+            ]
+
+            for row in history:
+                messages.append({"role": row["role"], "content": row["content"]})
             messages = [
                 {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
                 {"role": "system", "content": f"The current project_id is {project_id}."},
