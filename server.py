@@ -341,16 +341,18 @@ def chat():
                 updates = {}
 
                 changes = update_obj.get("changes") or [{
-                    "path": field_path,
                     "value": update_obj.get("value")
                 }]
 
                 for change in changes:
-                    path = change.get("path")
                     value = change.get("value")
 
-                    if path is not None:
-                        updates[path] = value
+                    # תמיד משתמשים במיקום שה-editor שלח
+                    path = field_path
+
+                    updates[path] = value
+
+              
 
                 for path, value in updates.items():
 
