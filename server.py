@@ -211,11 +211,13 @@ def chat():
             }).execute()
 
         # Load entire history
-        history = supabase.table("chat_messages") \
+        history_resp = supabase.table("chat_messages") \
             .select("role, content") \
             .eq("project_id", project_id) \
             .order("created_at", desc=False) \
-            .execute().data or []
+            .execute()
+
+        history = history_resp.data if history_resp and history_resp.data else []
 
         user_turns = sum(1 for r in history if r["role"] == "user")
 
