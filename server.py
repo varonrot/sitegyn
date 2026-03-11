@@ -293,7 +293,7 @@ def chat():
 
         # Parse <update> block מהתשובה הראשונה
         update_obj = parse_update_block(assistant_text)
-
+        print("UPDATE_OBJ:", update_obj)
         # אם המודל לא החזיר בכלל <update>...</update> – נעשה קריאה שנייה "נסתרת"
         if not update_obj:
             try:
