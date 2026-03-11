@@ -423,8 +423,13 @@ def chat():
                     # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
 
             # 3) עדכון הטבלה ב-Supabase
-            supabase.table("projects").update(update_obj).eq("id", project_id).execute()
 
+        print("UPDATE_OBJ:", json.dumps(update_obj, indent=2))
+        print("PROJECT_ID:", project_id)
+
+        resp = supabase.table("projects").update(update_obj).eq("id", project_id).execute()
+        print("SUPABASE_RESPONSE:", resp)
+        
         # === fetch subdomain for frontend redirect ===
         project_row = (
             supabase.table("projects")
