@@ -244,7 +244,7 @@ def chat():
             current_value = get_value_by_path(content, field_path)
 
             system_prompt = EDITOR_UPDATE_PROMPT \
-                .replace("{{FIELD_PATH}}", field_path) \
+                .replace("{{FIELD_PATH}}", field_path or "") \
                 .replace("{{CURRENT_VALUE}}", str(current_value)) \
                 .replace("{{USER_MESSAGE}}", user_message)
         # Build messages
