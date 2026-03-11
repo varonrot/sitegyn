@@ -233,6 +233,8 @@ def chat():
             content = project_row.get("content_json") or {}
 
             def get_value_by_path(obj, path):
+                if not path:
+                    return ""
                 for p in path.split("."):
                     obj = obj.get(p)
                     if obj is None:
