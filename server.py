@@ -221,61 +221,25 @@ def chat():
 
         user_turns = sum(1 for r in history if r["role"] == "user")
 
-        # ==============================
-        # EDITOR UPDATE
-        # ==============================
-        if source == "editor":
+        project_row = (
+            supabase.table("projects")
+            .select("content_json")
+            .eq("id", project_id)
+            .single()
+            .execute()
+            .data
+        )
 
-            project_row = (
-                              supabase.table("projects")
-                              .select("content_json")
-                              .eq("id", project_id)
-                              .single()
-                              .execute()
-                              .data
-                          ) or {}
+        content = project_row.get("content_json") or {}
 
-            content = project_row.get("content_json") or {}
-
-            updates = {}
-
-            # אם GPT מחזיר content_json שלם
-            if "content_json" in update_obj:
-                updates = update_obj["content_json"]
-
-            # אם GPT מחזיר רשימת changes
-            elif "changes" in update_obj:
-                for change in update_obj["changes"]:
-                    path = change.get("path")
-                    value = change.get("value")
-                    if path:
-                        updates[path] = value
-
-            # fallback — משתמשים ב-field_path
-            elif field_path:
-                updates[field_path] = update_obj.get("value")
-
-            for path, value in updates.items():
-
-                keys = path.split(".")
-                curr = content
-
-                for k in keys[:-1]:
-                    curr = curr.setdefault(k, {})
-
-                curr[keys[-1]] = value
-
-            print("EDITOR UPDATE:", json.dumps(content, indent=2))
-
-            supabase.table("projects").update({
-                "content_json": content
-            }).eq("id", project_id).execute()
-
-            return jsonify({
-                "reply": "Content updated",
-                "project_id": project_id,
-                "updated": True
-            })
+        def get_value_by_path(obj, path):
+            if not path:
+                return ""
+            for p in path.split("."):
+                obj = obj.get(p)
+                if obj is None:
+                    return ""
+            return obj
 
             current_value = get_value_by_path(content, field_path)
 
