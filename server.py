@@ -340,9 +340,14 @@ def chat():
 
                 updates = {}
 
-                if "changes" in update_obj:
-                    for change in update_obj["changes"]:
-                        updates[change["path"]] = change["value"]
+                changes = update_obj.get("changes", [])
+
+                for change in changes:
+                    path = change.get("path")
+                    value = change.get("value")
+
+                    if path and value:
+                        updates[path] = value
 
                 for path, value in updates.items():
 
