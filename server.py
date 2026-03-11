@@ -340,7 +340,10 @@ def chat():
 
                 updates = {}
 
-                changes = update_obj.get("changes", [])
+                changes = update_obj.get("changes") or [{
+                    "path": field_path,
+                    "value": update_obj.get("value")
+                }]
 
                 for change in changes:
                     path = change.get("path")
