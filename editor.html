@@ -905,9 +905,6 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 
 async function openAIEditor({ path, type, label }) {
-
-  currentEditPath = path;
-
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -1082,6 +1079,7 @@ function setValueByPath(obj, path, value) {
   curr[keys[keys.length - 1]] = value;
 }
 async function saveBottomPreview() {
+
   if (!currentEditPath) return;
 
   const projectId = getProjectId();
@@ -1094,6 +1092,7 @@ async function saveBottomPreview() {
   if (!instruction) return;
 
   try {
+
     const res = await fetch("https://update.sitegyn.com/api/update-field", {
       method: "POST",
       headers: {
@@ -1102,19 +1101,20 @@ async function saveBottomPreview() {
       body: JSON.stringify({
         project_id: projectId,
         field_path: currentEditPath,
-        instruction
+        instruction: instruction
       })
     });
 
     const data = await res.json();
-    console.log("update-field response:", data);
+
+    console.log("Update server response:", data);
 
     if (!res.ok) {
       console.error("Update server error:", data);
       return;
     }
 
-    if (typeof data.value !== "undefined") {
+    if (data?.value) {
       editor.value = data.value;
     }
 
@@ -1350,7 +1350,13 @@ function typeText(element, text, baseSpeed = 80) {
   // =========================
   // Load history via backend
   // =========================
- 
+  async function loadChatHistory(projectId) {
+    try {
+      const res = await fetch("/api/chat/history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project_id: projectId })
+      });
 
       const data = await res.json();
       if (!Array.isArray(data)) return;
@@ -1395,70 +1401,49 @@ function typeText(element, text, baseSpeed = 80) {
     }
   });
 
-async function sendMessage() {
+  async function sendMessage() {
+    const text = aiTextarea.value.trim();
+    if (!text) return;
 
-  const text = aiTextarea.value.trim();
-  if (!text) return;
-
-  const projectId = getProjectIdFromURL();
-  if (!projectId) {
-    console.error("Missing project_id");
-    return;
-  }
-
-  if (!currentEditPath) {
-    console.error("No field selected");
-    return;
-  }
-
-  appendMessage("user", text);
-  aiTextarea.value = "";
-
-  try {
-
-    const res = await fetch("https://update.sitegyn.com/api/update-field", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        project_id: projectId,
-        field_path: currentEditPath,
-        instruction: text
-      })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      console.error("Update server error:", data);
+    const projectId = getProjectIdFromURL();
+    if (!projectId) {
+      console.error("Missing project_id");
       return;
     }
 
-    if (data?.value) {
+    appendMessage("user", text);
+    aiTextarea.value = "";
 
-      const bubble = createAssistantBubble();
+    try {
+      const res = await fetch("https://update.sitegyn.com/api/update-field", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+  project_id: projectId,
+  field_path: currentEditPath,
+  instruction: text
+})
+      });
 
-      aiSend.disabled = true;
-      aiTextarea.disabled = true;
+      const data = await res.json();
+if (data?.reply) {
+  const bubble = createAssistantBubble();
 
-      await typeText(bubble, data.value);
+  aiSend.disabled = true;
+  aiTextarea.disabled = true;
 
-      aiSend.disabled = false;
-      aiTextarea.disabled = false;
-      aiTextarea.focus();
+  await typeText(bubble, data.reply);
 
-    }
-
-    const iframe = document.getElementById("site-preview");
-    if (iframe) {
-      const baseSrc = iframe.src.split("?")[0];
-      iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
-    }
-
-  } catch (err) {
-    console.error("Chat send failed", err);
-  }
-
+  aiSend.disabled = false;
+  aiTextarea.disabled = false;
+  aiTextarea.focus();
 }
+
+
+    } catch (err) {
+      console.error("Chat send failed", err);
+    }
+  }
 
 });
 </script>
