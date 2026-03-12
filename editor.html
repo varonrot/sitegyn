@@ -1079,6 +1079,7 @@ function setValueByPath(obj, path, value) {
   curr[keys[keys.length - 1]] = value;
 }
 async function saveBottomPreview() {
+
   if (!currentEditPath) return;
 
   const projectId = getProjectId();
@@ -1086,31 +1087,36 @@ async function saveBottomPreview() {
 
   const editor = document.getElementById("bp-editor");
   if (!editor) return;
+  const newValue = editor.value;
+  try {
+    const res = await fetch("https://update.sitegyn.com/api/update-field", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        project_id: projectId,
+        field_path: currentEditPath,
+        instruction: newValue
+      })
+    });
+    const data = await res.json();
 
-  const { data } = await supabase
-    .from("projects")
-    .select("content_json")
-    .eq("id", projectId)
-    .single();
+    if (data?.value) {
+      editor.value = data.value;
+    }
+    const iframe = document.getElementById("site-preview");
 
-  if (!data?.content_json) return;
+    if (iframe) {
+      const baseSrc = iframe.src.split("?")[0];
+      iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+    }
 
-  const updatedJson = structuredClone(data.content_json);
-  setValueByPath(updatedJson, currentEditPath, editor.value);
+  } catch (err) {
+    console.error("Update failed", err);
+  }
 
-  await supabase
-    .from("projects")
-    .update({ content_json: updatedJson })
-    .eq("id", projectId);
-
-  const iframe = document.getElementById("site-preview");
- if (iframe) {
-  const baseSrc = iframe.src.split("?")[0];
-  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
 }
-
-}
-
 window.saveBottomPreview = saveBottomPreview;
 
 document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview);
@@ -1407,7 +1413,8 @@ function typeText(element, text, baseSpeed = 80) {
         })
       });
 
-      const data = await res.json();
+const data = await res.json();
+
 if (data?.reply) {
   const bubble = createAssistantBubble();
 
@@ -1419,6 +1426,21 @@ if (data?.reply) {
   aiSend.disabled = false;
   aiTextarea.disabled = false;
   aiTextarea.focus();
+}
+
+/* =========================
+   Refresh preview after AI update
+========================= */
+
+if (data?.updated === true) {
+
+  const iframe = document.getElementById("site-preview");
+
+  if (iframe) {
+    const baseSrc = iframe.src.split("?")[0];
+    iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+  }
+
 }
 
 
