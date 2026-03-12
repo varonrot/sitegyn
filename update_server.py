@@ -1,49 +1,73 @@
 import os
 import json
 import traceback
-
 from flask import Flask, request, jsonify
-from dotenv import load_dotenv
 from flask_cors import CORS
-from supabase import create_client
+from dotenv import load_dotenv
+from supabase import create_client, Client
 from openai import OpenAI
 
 # ==========================================
-# ENV
+# Load environment
 # ==========================================
-
 load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+    raise RuntimeError("Missing Supabase credentials")
+
+if not OPENAI_API_KEY:
+    raise RuntimeError("Missing OpenAI API key")
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 # ==========================================
-# APP
+# Load editor prompt
 # ==========================================
+PROMPT_PATH = os.path.join(os.path.dirname(__file__), "editor_update_prompt.txt")
 
+with open(PROMPT_PATH, "r", encoding="utf-8") as f:
+    EDITOR_PROMPT = f.read()
+
+# ==========================================
+# Flask
+# ==========================================
 app = Flask(__name__)
 CORS(app)
 
 # ==========================================
-# HELPERS
+# Helpers
 # ==========================================
+def parse_update_block(text):
+    try:
+        start = text.find("<update>")
+        end = text.find("</update>")
+        if start == -1 or end == -1:
+            return None
+
+        raw = text[start + 8:end].strip()
+        return json.loads(raw)
+    except:
+        traceback.print_exc()
+        return None
+
 
 def get_value_by_path(obj, path):
-
     if not path:
         return ""
 
-    for p in path.split("."):
-        obj = obj.get(p)
-
-        if obj is None:
+    curr = obj
+    for part in path.split("."):
+        if not isinstance(curr, dict):
             return ""
-
-    return obj
+        curr = curr.get(part)
+        if curr is None:
+            return ""
+    return curr
 
 
 def set_value_by_path(obj, path, value):
@@ -58,107 +82,127 @@ def set_value_by_path(obj, path, value):
 
 
 # ==========================================
-# UPDATE FIELD
+# Health
 # ==========================================
+@app.route("/api/health")
+def health():
+    return jsonify({"status": "ok"})
 
+
+# ==========================================
+# Update Field
+# ==========================================
 @app.route("/api/update-field", methods=["POST"])
 def update_field():
 
     try:
 
-        data = request.json
+        data = request.get_json(force=True)
 
         project_id = data.get("project_id")
         field_path = data.get("field_path")
-        instruction = data.get("instruction")
+        instruction = data.get("instruction", "")
 
         if not project_id:
-            return {"error": "missing_project_id"}, 400
+            return jsonify({"error": "missing_project_id"}), 400
 
         if not field_path:
-            return {"error": "missing_field_path"}, 400
+            return jsonify({"error": "missing_field_path"}), 400
 
-        # ==========================
+        # ==========================================
         # Load project
-        # ==========================
+        # ==========================================
 
-        project = supabase.table("projects") \
-            .select("content_json") \
-            .eq("id", project_id) \
-            .single() \
-            .execute() \
+        project = (
+            supabase.table("projects")
+            .select("content_json")
+            .eq("id", project_id)
+            .single()
+            .execute()
             .data
+        )
 
-        content = project.get("content_json") or {}
+        if not project:
+            return jsonify({"error": "project_not_found"}), 404
 
-        current_value = get_value_by_path(content, field_path)
+        content_json = project.get("content_json") or {}
 
-        # ==========================
-        # GPT rewrite
-        # ==========================
+        current_value = get_value_by_path(content_json, field_path)
 
-        prompt = f"""
-Rewrite the following website text.
+        # ==========================================
+        # Build prompt
+        # ==========================================
 
-Instruction:
-{instruction}
+        prompt = (
+            EDITOR_PROMPT
+            .replace("{{FIELD_PATH}}", field_path)
+            .replace("{{CURRENT_VALUE}}", str(current_value))
+            .replace("{{USER_MESSAGE}}", instruction)
+        )
 
-Text:
-{current_value}
-
-Return only the rewritten text.
-"""
+        # ==========================================
+        # Call OpenAI
+        # ==========================================
 
         completion = client.chat.completions.create(
             model="gpt-4.1-mini",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.4
+            messages=[{
+                "role": "user",
+                "content": prompt
+            }],
+            temperature=0
         )
 
-        new_value = completion.choices[0].message.content.strip()
+        assistant_text = completion.choices[0].message.content
 
-        # ==========================
-        # Update JSON
-        # ==========================
+        update_obj = parse_update_block(assistant_text)
 
-        set_value_by_path(content, field_path, new_value)
+        if not update_obj:
+            return jsonify({"error": "invalid_update"}), 500
+
+        changes = update_obj.get("changes", [])
+
+        if not changes:
+            return jsonify({"error": "no_changes"}), 500
+
+        # ==========================================
+        # Apply changes
+        # ==========================================
+
+        for change in changes:
+
+            path = change.get("path")
+            value = change.get("value")
+
+            if not path:
+                continue
+
+            set_value_by_path(content_json, path, value)
+
+        # ==========================================
+        # Save to Supabase
+        # ==========================================
 
         supabase.table("projects") \
-            .update({"content_json": content}) \
+            .update({
+                "content_json": content_json
+            }) \
             .eq("id", project_id) \
             .execute()
 
-        return {
+        return jsonify({
             "status": "ok",
-            "value": new_value
-        }
+            "changes": changes
+        })
 
     except Exception as e:
-
         traceback.print_exc()
-
-        return {
-            "error": str(e)
-        }, 500
+        return jsonify({"error": str(e)}), 500
 
 
 # ==========================================
-# HEALTH
+# Run
 # ==========================================
-
-@app.route("/api/health")
-def health():
-    return {"status": "ok"}
-
-
-# ==========================================
-# RUN
-# ==========================================
-
 if __name__ == "__main__":
-
-    app.run(
-        host="0.0.0.0",
-        port=9000,
-        debug=True
-    )
+    port = int(os.getenv("PORT", "8001"))
+    app.run(host="0.0.0.0", port=port)
