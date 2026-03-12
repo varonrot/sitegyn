@@ -125,7 +125,10 @@ def update_field():
         if not project:
             return jsonify({"error": "project_not_found"}), 404
 
-        content_json = project.get("content_json") or {}
+        content_json = project.get("content_json")
+
+        if not isinstance(content_json, dict):
+            return jsonify({"error": "invalid_content_json"}), 500
 
         current_value = get_value_by_path(content_json, field_path)
 
@@ -177,6 +180,9 @@ def update_field():
             if not path:
                 continue
 
+            if value is None or value == "":
+                continue
+
             set_value_by_path(content_json, path, value)
 
         # ==========================================
@@ -192,7 +198,8 @@ def update_field():
 
         return jsonify({
             "status": "ok",
-            "changes": changes
+            "changes": changes,
+            "value": changes[0]["value"] if changes else None
         })
 
     except Exception as e:
