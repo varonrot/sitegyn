@@ -905,6 +905,9 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 
 async function openAIEditor({ path, type, label }) {
+
+  currentEditPath = path;
+
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -1079,7 +1082,6 @@ function setValueByPath(obj, path, value) {
   curr[keys[keys.length - 1]] = value;
 }
 async function saveBottomPreview() {
-
   if (!currentEditPath) return;
 
   const projectId = getProjectId();
@@ -1087,7 +1089,10 @@ async function saveBottomPreview() {
 
   const editor = document.getElementById("bp-editor");
   if (!editor) return;
-  const newValue = editor.value;
+
+  const instruction = editor.value.trim();
+  if (!instruction) return;
+
   try {
     const res = await fetch("https://update.sitegyn.com/api/update-field", {
       method: "POST",
@@ -1097,16 +1102,23 @@ async function saveBottomPreview() {
       body: JSON.stringify({
         project_id: projectId,
         field_path: currentEditPath,
-        instruction: newValue
+        instruction
       })
     });
-    const data = await res.json();
 
-    if (data?.value) {
+    const data = await res.json();
+    console.log("update-field response:", data);
+
+    if (!res.ok) {
+      console.error("Update server error:", data);
+      return;
+    }
+
+    if (typeof data.value !== "undefined") {
       editor.value = data.value;
     }
-    const iframe = document.getElementById("site-preview");
 
+    const iframe = document.getElementById("site-preview");
     if (iframe) {
       const baseSrc = iframe.src.split("?")[0];
       iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
@@ -1115,19 +1127,11 @@ async function saveBottomPreview() {
   } catch (err) {
     console.error("Update failed", err);
   }
-
 }
+
 window.saveBottomPreview = saveBottomPreview;
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  const editor = document.getElementById("bp-editor");
-
-  if (editor) {
-    editor.addEventListener("blur", saveBottomPreview);
-  }
-
-});
+document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview);
 
 
      function subscribeToProjectRealtime(projectId) {
@@ -1346,13 +1350,7 @@ function typeText(element, text, baseSpeed = 80) {
   // =========================
   // Load history via backend
   // =========================
-  async function loadChatHistory(projectId) {
-    try {
-      const res = await fetch("/api/chat/history", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ project_id: projectId })
-      });
+ 
 
       const data = await res.json();
       if (!Array.isArray(data)) return;
@@ -1397,65 +1395,70 @@ function typeText(element, text, baseSpeed = 80) {
     }
   });
 
-  async function sendMessage() {
-    const text = aiTextarea.value.trim();
-    if (!text) return;
+async function sendMessage() {
 
-    const projectId = getProjectIdFromURL();
-    if (!projectId) {
-      console.error("Missing project_id");
+  const text = aiTextarea.value.trim();
+  if (!text) return;
+
+  const projectId = getProjectIdFromURL();
+  if (!projectId) {
+    console.error("Missing project_id");
+    return;
+  }
+
+  if (!currentEditPath) {
+    console.error("No field selected");
+    return;
+  }
+
+  appendMessage("user", text);
+  aiTextarea.value = "";
+
+  try {
+
+    const res = await fetch("https://update.sitegyn.com/api/update-field", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        project_id: projectId,
+        field_path: currentEditPath,
+        instruction: text
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Update server error:", data);
       return;
     }
 
-    appendMessage("user", text);
-    aiTextarea.value = "";
+    if (data?.value) {
 
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          project_id: projectId,
-          message: text,
-          source: "editor"
-        })
-      });
+      const bubble = createAssistantBubble();
 
-const data = await res.json();
+      aiSend.disabled = true;
+      aiTextarea.disabled = true;
 
-if (data?.reply) {
-  const bubble = createAssistantBubble();
+      await typeText(bubble, data.value);
 
-  aiSend.disabled = true;
-  aiTextarea.disabled = true;
+      aiSend.disabled = false;
+      aiTextarea.disabled = false;
+      aiTextarea.focus();
 
-  await typeText(bubble, data.reply);
-
-  aiSend.disabled = false;
-  aiTextarea.disabled = false;
-  aiTextarea.focus();
-}
-
-/* =========================
-   Refresh preview after AI update
-========================= */
-
-if (data?.updated === true) {
-
-  const iframe = document.getElementById("site-preview");
-
-  if (iframe) {
-    const baseSrc = iframe.src.split("?")[0];
-    iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
-  }
-
-}
-
-
-    } catch (err) {
-      console.error("Chat send failed", err);
     }
+
+    const iframe = document.getElementById("site-preview");
+    if (iframe) {
+      const baseSrc = iframe.src.split("?")[0];
+      iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+    }
+
+  } catch (err) {
+    console.error("Chat send failed", err);
   }
+
+}
 
 });
 </script>
