@@ -896,9 +896,10 @@ function renderAIItem({ label, path, type, iconClass }) {
     <span class="nav-label">${label}</span>
   `;
 
-  item.addEventListener("click", () => {
-    openAIEditor({ path, type, label });
-  });
+item.addEventListener("click", () => {
+  window.currentEditPath = path;
+  openAIEditor({ path, type, label });
+});
 
   return item;
 }
