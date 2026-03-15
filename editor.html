@@ -1397,15 +1397,15 @@ function typeText(element, text, baseSpeed = 80) {
     aiTextarea.value = "";
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          project_id: projectId,
-          message: text,
-          source: "editor"
-        })
-      });
+const res = await fetch("https://update.sitegyn.com/api/update-field", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    project_id: projectId,
+    field_path: currentEditPath,
+    instruction: text
+  })
+});
 
       const data = await res.json();
 if (data?.reply) {
