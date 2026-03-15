@@ -589,7 +589,6 @@ function toggleRight(){
  <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 let currentEditPath = null;
-window.currentEditPath = null;
 function typeText(element, text, baseSpeed = 80) {
   return new Promise(resolve => {
     element.textContent = "";
@@ -906,8 +905,6 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 
 async function openAIEditor({ path, type, label }) {
-currentEditPath = path;
-window.currentEditPath = path;
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -1037,7 +1034,6 @@ function humanize(str) {
 
 async function openBottomPreview(path) {
 currentEditPath = path;
-  window.currentEditPath = path;
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -1083,7 +1079,6 @@ function setValueByPath(obj, path, value) {
   curr[keys[keys.length - 1]] = value;
 }
 async function saveBottomPreview() {
-
   if (!currentEditPath) return;
 
   const projectId = getProjectId();
@@ -1092,45 +1087,28 @@ async function saveBottomPreview() {
   const editor = document.getElementById("bp-editor");
   if (!editor) return;
 
-  const instruction = editor.value.trim();
-  if (!instruction) return;
+  const { data } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
 
-  try {
+  if (!data?.content_json) return;
 
-    const res = await fetch("https://update.sitegyn.com/api/update-field", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-body: JSON.stringify({
-  project_id: projectId,
-  field_path: window.currentEditPath,
-  instruction: text
-})
-    });
+  const updatedJson = structuredClone(data.content_json);
+  setValueByPath(updatedJson, currentEditPath, editor.value);
 
-    const data = await res.json();
+  await supabase
+    .from("projects")
+    .update({ content_json: updatedJson })
+    .eq("id", projectId);
 
-    console.log("Update server response:", data);
+  const iframe = document.getElementById("site-preview");
+ if (iframe) {
+  const baseSrc = iframe.src.split("?")[0];
+  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+}
 
-    if (!res.ok) {
-      console.error("Update server error:", data);
-      return;
-    }
-
-    if (data?.value) {
-      editor.value = data.value;
-    }
-
-    const iframe = document.getElementById("site-preview");
-    if (iframe) {
-      const baseSrc = iframe.src.split("?")[0];
-      iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
-    }
-
-  } catch (err) {
-    console.error("Update failed", err);
-  }
 }
 
 window.saveBottomPreview = saveBottomPreview;
@@ -1419,14 +1397,14 @@ function typeText(element, text, baseSpeed = 80) {
     aiTextarea.value = "";
 
     try {
-      const res = await fetch("https://update.sitegyn.com/api/update-field", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-  project_id: projectId,
-  field_path: currentEditPath,
-  instruction: text
-})
+        body: JSON.stringify({
+          project_id: projectId,
+          message: text,
+          source: "editor"
+        })
       });
 
       const data = await res.json();
