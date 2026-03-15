@@ -624,6 +624,8 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
 );
 
+let currentContent = {};
+
 /* =========================
    Project ID
 ========================= */
@@ -669,7 +671,7 @@ async function loadEditorSite() {
     iframe.srcdoc = "<h1 style='color:white'>No project_id</h1>";
     return;
   }
-
+  subscribeToProjectRealtime(projectId);
   canvas.dataset.projectId = projectId;
 
   const { data, error } = await supabase
@@ -896,16 +898,18 @@ function renderAIItem({ label, path, type, iconClass }) {
     <span class="nav-label">${label}</span>
   `;
 
-item.addEventListener("click", () => {
-  window.currentEditPath = path;
-  openAIEditor({ path, type, label });
-});
+  item.addEventListener("click", () => {
+    openAIEditor({ path, type, label });
+  });
 
   return item;
 }
 
 
 async function openAIEditor({ path, type, label }) {
+
+  window.currentEditPath = path;
+
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -917,7 +921,8 @@ async function openAIEditor({ path, type, label }) {
 
   if (error || !data?.content_json) return;
 
-  const currentValue = getValueByPath(data.content_json, path);
+ currentContent = data.content_json;
+ const currentValue = getValueByPath(data.content_json, path);
  const prompt = buildInitialPrompt({
   label,
   path,
@@ -1034,7 +1039,7 @@ function humanize(str) {
 
 
 async function openBottomPreview(path) {
-window.currentEditPath = path;
+currentEditPath = path;
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -1079,6 +1084,51 @@ function setValueByPath(obj, path, value) {
 
   curr[keys[keys.length - 1]] = value;
 }
+window.applyAIUpdate = async function(reply){
+
+  const projectId = getProjectId();
+
+  const match = reply.match(/<update>([\s\S]*?)<\/update>/);
+
+  if(!match){
+    console.log("No update block found");
+    return;
+  }
+
+  let data;
+
+  try{
+    data = JSON.parse(match[1]);
+  }catch(e){
+    console.error("JSON parse failed:", match[1]);
+    return;
+  }
+
+  if(!data.changes) return;
+
+  let updatedJson = structuredClone(currentContent);
+
+  data.changes.forEach(change=>{
+    const keys = change.path.split(".");
+    let obj = updatedJson;
+
+    for(let i=0;i<keys.length-1;i++){
+      obj = obj[keys[i]];
+    }
+
+    obj[keys[keys.length-1]] = change.value;
+  });
+
+  console.log("UPDATED JSON:", updatedJson);
+
+  await supabase
+    .from("projects")
+    .update({ content_json: updatedJson })
+    .eq("id", projectId);
+
+  currentContent = updatedJson;
+}
+
 async function saveBottomPreview() {
   if (!currentEditPath) return;
 
@@ -1398,31 +1448,41 @@ function typeText(element, text, baseSpeed = 80) {
     aiTextarea.value = "";
 
     try {
-const res = await fetch("https://update.sitegyn.com/api/update-field", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    project_id: projectId,
-    field_path: window.currentEditPath,
-    instruction: text
-  })
-});
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+  project_id: projectId,
+  message: text,
+  source: "editor",
+  field_path: window.currentEditPath
+})
+      });
 
-const data = await res.json();
-
-if (data?.value) {
+      const data = await res.json();
+if (data?.reply) {
 
   const bubble = createAssistantBubble();
 
   aiSend.disabled = true;
   aiTextarea.disabled = true;
 
-  await typeText(bubble, data.value);
+const clean = data.reply.replace(/<update>[\s\S]*<\/update>/, "").trim();
+await typeText(bubble, clean || "Content updated.");
+
+// ===== APPLY UPDATE =====
+await applyAIUpdate(data.reply);
+
+// ===== FORCE PREVIEW REFRESH =====
+const iframe = document.getElementById("site-preview");
+if (iframe) {
+  const baseSrc = iframe.src.split("?")[0];
+  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+}
 
   aiSend.disabled = false;
   aiTextarea.disabled = false;
   aiTextarea.focus();
-
 }
 
 
