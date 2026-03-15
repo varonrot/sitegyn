@@ -1412,15 +1412,15 @@ const data = await res.json();
 
 if (data?.reply) {
 
-  await fetch("/api/editor-update", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      project_id: projectId,
-      path: window.currentAIPath,
-      message: text
-    })
-  });
+await fetch("https://sitegyn.com:8082/api/editor-update", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    project_id: projectId,
+    path: window.currentAIPath,
+    message: text
+  })
+});
 
   const bubble = createAssistantBubble();
 
