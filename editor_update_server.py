@@ -1,15 +1,10 @@
 import os
 import json
 import re
-
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from supabase import create_client
 from openai import OpenAI
-
-# =========================
-# ENV
-# =========================
 
 load_dotenv()
 
@@ -20,72 +15,43 @@ OPENAI_KEY = os.getenv("OPENAI_API_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 client = OpenAI(api_key=OPENAI_KEY)
 
-# =========================
-# APP
-# =========================
-
 app = Flask(__name__)
 
-# =========================
-# LOAD PROMPT
-# =========================
-
 with open("editor_update_prompt.txt","r") as f:
-    PROMPT_TEMPLATE = f.read()
+    PROMPT = f.read()
 
 
-# =========================
-# HELPER
-# =========================
-
-def set_value_by_path(data, path, value):
-
-    parts = path.split(".")
-    obj = data
-
-    for p in parts[:-1]:
-
-        if p not in obj:
-            obj[p] = {}
-
-        obj = obj[p]
-
-    obj[parts[-1]] = value
+def get_value_by_path(obj, path):
+    for p in path.split("."):
+        obj = obj.get(p, "")
+    return obj
 
 
-# =========================
-# PARSE UPDATE BLOCK
-# =========================
+def set_value_by_path(obj, path, value):
+    keys = path.split(".")
+    cur = obj
+    for k in keys[:-1]:
+        if k not in cur:
+            cur[k] = {}
+        cur = cur[k]
+    cur[keys[-1]] = value
 
-def extract_update_block(text):
 
-    match = re.search(r"<update>(.*?)</update>", text, re.S)
-
-    if not match:
+def extract_update(text):
+    m = re.search(r"<update>(.*?)</update>", text, re.S)
+    if not m:
         return None
+    return json.loads(m.group(1))
 
-    try:
-        return json.loads(match.group(1))
-    except:
-        return None
-
-
-# =========================
-# API
-# =========================
 
 @app.route("/api/editor-update", methods=["POST"])
 def editor_update():
 
-    data = request.json
+    body = request.json
 
-    project_id = data["project_id"]
-    field_path = data["path"]
-    user_message = data["message"]
-
-    # =========================
-    # LOAD PROJECT
-    # =========================
+    project_id = body["project_id"]
+    path = body["path"]
+    message = body["message"]
 
     res = supabase.table("projects") \
         .select("content_json") \
@@ -95,27 +61,12 @@ def editor_update():
 
     content = res.data["content_json"]
 
-    # =========================
-    # CURRENT VALUE
-    # =========================
+    current_value = get_value_by_path(content, path)
 
-    current = content
-
-    for p in field_path.split("."):
-        current = current.get(p, "")
-
-    # =========================
-    # BUILD PROMPT
-    # =========================
-
-    prompt = PROMPT_TEMPLATE \
-        .replace("{{FIELD_PATH}}", field_path) \
-        .replace("{{CURRENT_VALUE}}", str(current)) \
-        .replace("{{USER_MESSAGE}}", user_message)
-
-    # =========================
-    # OPENAI
-    # =========================
+    prompt = PROMPT \
+        .replace("{{FIELD_PATH}}", path) \
+        .replace("{{CURRENT_VALUE}}", str(current_value)) \
+        .replace("{{USER_MESSAGE}}", message)
 
     completion = client.chat.completions.create(
         model="gpt-4.1-mini",
@@ -125,26 +76,13 @@ def editor_update():
 
     text = completion.choices[0].message.content
 
-    update = extract_update_block(text)
+    update = extract_update(text)
 
     if not update:
-        return jsonify({"error":"Invalid AI response"}),500
-
-    # =========================
-    # APPLY CHANGES
-    # =========================
+        return jsonify({"error":"invalid AI response"}),500
 
     for change in update["changes"]:
-
-        set_value_by_path(
-            content,
-            change["path"],
-            change["value"]
-        )
-
-    # =========================
-    # SAVE
-    # =========================
+        set_value_by_path(content, change["path"], change["value"])
 
     supabase.table("projects") \
         .update({"content_json":content}) \
@@ -156,10 +94,6 @@ def editor_update():
         "changes":update["changes"]
     })
 
-
-# =========================
-# RUN
-# =========================
 
 if __name__ == "__main__":
     app.run(port=8082)
