@@ -92,10 +92,9 @@ def health():
 # ==========================================
 # Update Field
 # ==========================================
-@app.route("/api/update-field", methods=["POST", "OPTIONS"])
+@app.route("/api/update-field", methods=["POST"])
 def update_field():
-    if request.method == "OPTIONS":
-        return jsonify({"status": "ok"})
+ 
     try:
 
         data = request.get_json(force=True)
