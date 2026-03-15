@@ -106,13 +106,15 @@ def editor_update():
     update = extract_update(ai_text)
 
     if not update:
-        return jsonify({"error":"invalid AI response"}),500
+        return jsonify({
+            "success": True,
+            "reply": ai_text,
+            "changes": []
+        })
 
-    # ---- apply changes
     for change in update.get("changes", []):
         set_value_by_path(content, change["path"], change["value"])
 
-    # ---- save back
     supabase.table("projects") \
         .update({"content_json": content}) \
         .eq("id", project_id) \
@@ -120,6 +122,7 @@ def editor_update():
 
     return jsonify({
         "success": True,
+        "reply": ai_text,
         "changes": update["changes"]
     })
 
