@@ -37,7 +37,12 @@ with open(PROMPT_PATH, "r", encoding="utf-8") as f:
 # Flask
 # ==========================================
 app = Flask(__name__)
-CORS(app)
+CORS(
+    app,
+    resources={r"/api/*": {"origins": "*"}},
+    allow_headers=["Content-Type"],
+    methods=["GET", "POST", "OPTIONS"]
+)
 
 # ==========================================
 # Helpers
@@ -92,9 +97,10 @@ def health():
 # ==========================================
 # Update Field
 # ==========================================
-@app.route("/api/update-field", methods=["POST"])
+@app.route("/api/update-field", methods=["POST", "OPTIONS"])
 def update_field():
-
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"})
     try:
 
         data = request.get_json(force=True)
