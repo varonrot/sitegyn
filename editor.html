@@ -1400,7 +1400,7 @@ async function sendMessage() {
 
   try {
 
-    const res = await fetch("http://localhost:8082/api/editor-update", {
+      const res = await fetch("/api/editor-update", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
