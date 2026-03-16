@@ -1391,11 +1391,12 @@ async function sendMessage() {
   const text = aiTextarea.value.trim();
   if (!text) return;
 
-  const projectId = getProjectIdFromURL();
-  if (!projectId) {
-    console.error("Missing project_id");
+  if (!currentEditPath) {
+    appendMessage("system","Select a field first from the AI Actions panel.");
     return;
   }
+
+  const projectId = getProjectIdFromURL();
 
   appendMessage("user", text);
   aiTextarea.value = "";
