@@ -1,514 +1,1446 @@
-import os
-import json
-import traceback
-import random
-from typing import List, Dict, Any
-from pathlib import Path
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sitegyn Editor</title>
 
-from flask import Flask, request, jsonify, send_from_directory, Response
-from dotenv import load_dotenv
-from flask_cors import CORS
-from supabase import create_client, Client
-from openai import OpenAI
-from templates_config import TEMPLATES
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-# === Render On-The-Fly ===
-from render_service import render_project_html_by_subdomain
+<style>
+:root{
+  --topbar-h:56px;
+  --sidebar-w:280px;
+  --bg:#05070f;
+  --canvas:#020617;
 
-# ==========================================
-# Load environment
-# ==========================================
-load_dotenv()
+  --blue1:#041831;
+  --blue2:#064893;
+  --blue3:#0f8fff;
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+  --green1:#0f3d26;
+  --green2:#1f9d55;
+  --green3:#22c55e;
 
-if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
-    raise RuntimeError("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in environment")
+  --text:#e7f5ff;
+}
 
-if not OPENAI_API_KEY:
-    raise RuntimeError("Missing OPENAI_API_KEY in environment")
+/* ================= RESET ================= */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,sans-serif;
+  overflow:hidden;
+}
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
-client = OpenAI(api_key=OPENAI_API_KEY)
+/* ================= TOPBAR ================= */
+.topbar{
+  position:fixed;
+  top:0; left:0; right:0;
+  height:var(--topbar-h);
+  background:#020617;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  z-index:500;
+}
 
-# ==========================================
-# Load Sitegyn system prompt
-# ==========================================
-PROMPT_PATH = os.path.join(os.path.dirname(__file__), "sitegyn_system_prompt.txt")
+.top-left,.top-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-with open(PROMPT_PATH, "r", encoding="utf-8") as f:
-    SITEGYN_SYSTEM_PROMPT = f.read()
+.brand{font-weight:700}
+
+.pill{
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:12px;
+  background:rgba(34,197,94,.15);
+  color:#22c55e;
+}
+
+/* ===== system buttons ===== */
+.btn-dark{
+  height:32px;
+  padding:0 14px;
+  border-radius:10px;
+  background:#020617;
+  color:white;
+  border:1px solid rgba(255,255,255,.12);
+  cursor:pointer;
+}
+.btn-green{
+  height:32px;
+  padding:0 14px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:#04110a;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+}
+
+/* ===== icon button (hamburger / AI) ===== */
+.icon-btn{
+  display:none;
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);
+  background:#020617;
+  color:white;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+}
+.icon-btn i{font-size:14px}
+
+/* ===== user cluster ===== */
+.user-cluster{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.site-pill{
+  background:rgba(255,255,255,.06);
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+  display:flex;
+  gap:6px;
+}
+.status-pill{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  color:#22c55e;
+}
+.status-pill .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#22c55e;
+}
+.avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,#2563eb,#22c55e);
+  display:grid;place-items:center;
+  font-weight:700;font-size:13px;color:white;
+}
+
+/* ================= LAYOUT ================= */
+.editor{
+  position:absolute;
+  top:var(--topbar-h);
+  bottom:0;
+  left:0; right:0;
+  display:grid;
+  grid-template-columns:var(--sidebar-w) 1fr var(--sidebar-w);
+}
+
+/* ================= SIDEBARS ================= */
+.sidebar{
+  padding:16px 14px;
+  overflow:auto;
+}
+.sidebar.left{
+  background:linear-gradient(180deg,var(--blue1),var(--blue2),var(--blue3));
+}
+.sidebar.right{
+  background:linear-gradient(180deg,var(--green1),var(--green2),var(--green3));
+}
+
+/* ================= NAV ================= */
+.section-title{
+  font-size:11px;
+  margin:18px 6px 8px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  opacity:.85;
+}
+.nav-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(0,0,0,.22);
+  cursor:pointer;
+}
+.nav-item.active{
+  background:linear-gradient(90deg,rgba(21,128,255,.9),rgba(67,56,202,.9));
+}
+.icon{
+  width:34px;height:34px;border-radius:10px;
+  display:grid;place-items:center;
+  background:rgba(0,0,0,.35);
+}
+
+/* ================= CANVAS ================= */
+.canvas{
+  background:radial-gradient(circle at top,#0f172a,var(--canvas) 60%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.canvas-box{
+  border:1px dashed rgba(255,255,255,.25);
+  border-radius:18px;
+  padding:50px 80px;
+  text-align:center;
+  color:rgba(255,255,255,.75);
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 980px){
+  .editor{grid-template-columns:1fr}
+
+  .sidebar{
+    position:fixed;
+    top:var(--topbar-h);
+    bottom:0;
+    width:85%;
+    max-width:320px;
+    z-index:400;
+    transition:transform .25s ease;
+  }
+  .sidebar.left{left:0;transform:translateX(-100%)}
+  .sidebar.right{right:0;transform:translateX(100%)}
+  .sidebar.open{transform:translateX(0)}
+
+  .icon-btn{display:grid}
+
+  .top-right .btn-dark,
+  .top-right .btn-green{
+    display:none;
+  }
+}
+    html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.editor-layout,
+.canvas {
+  height: 100%;
+}
+
+.canvas iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* =========================
+   Bottom Preview (Floating)
+========================= */
+#bottom-preview{
+  position: fixed;
+  bottom: 18px;                 /* חשוב: px */
+  left: calc(var(--sidebar-w) + 16px);
+  right: calc(var(--sidebar-w) + 16px);
+
+  max-height: 240px;
+  padding: 14px 18px 16px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255,140,90,0.95),
+    rgba(255,120,60,0.92)
+  );
+  backdrop-filter: blur(10px);
+
+  color: #2a1206;
+  z-index: 600;
+
+  border-radius: 16px;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.35),
+    0 2px 0 rgba(255,255,255,.25) inset;
+
+  transition:
+    transform .25s ease,
+    opacity .25s ease;
+
+  overflow: hidden;
+}
+
+/* Hidden state */
+#bottom-preview.hidden{
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* =========================
+   Header
+========================= */
+#bottom-preview .bp-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:8px;
+  font-size:13px;
+  opacity:.95;
+}
+
+#bottom-preview .bp-title{
+  font-weight:600;
+  letter-spacing:.02em;
+}
+
+#bottom-preview .bp-path{
+  display:block;
+  font-size:11px;
+  opacity:.7;
+  margin-top:2px;
+}
+
+/* Close button */
+#bp-close{
+  background:rgba(0,0,0,.15);
+  border:none;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  cursor:pointer;
+  color:#3a1b0a;
+  font-size:14px;
+  line-height:26px;
+  text-align:center;
+
+  transition: background .15s ease, transform .15s ease;
+}
+
+#bp-close:hover{
+  background:rgba(0,0,0,.25);
+  transform: scale(1.05);
+}
+
+/* =========================
+   Content
+========================= */
+#bottom-preview .bp-content{
+  max-height:150px;
+  overflow:auto;
+  font-size:14px;
+  line-height:1.5;
+  white-space:pre-wrap;
+  padding-right:4px;
+}
+
+/* Scrollbar (nice touch) */
+#bottom-preview .bp-content::-webkit-scrollbar{
+  width:6px;
+}
+#bottom-preview .bp-content::-webkit-scrollbar-thumb{
+  background:rgba(0,0,0,.25);
+  border-radius:6px;
+}
+
+    /* =========================
+   Mobile Bottom Preview
+========================= */
+@media (max-width: 900px){
+  #bottom-preview{
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+
+    max-height: 45vh;
+    padding: 14px 16px 18px;
+
+    border-radius: 18px;
+    box-shadow:
+      0 16px 40px rgba(0,0,0,.45),
+      0 1px 0 rgba(255,255,255,.25) inset;
+  }
+
+  #bottom-preview .bp-header{
+    font-size:14px;
+  }
+
+  #bottom-preview .bp-content{
+    max-height: 30vh;
+    font-size:15px;
+  }
+}
+
+/* =========================
+   AI CHAT MODAL
+========================= */
+.ai-chat-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(6px);
+  z-index:1000;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.ai-chat-overlay.hidden{
+  display:none;
+}
+
+.ai-chat-panel{
+  width:380px;
+  max-width:100%;
+  height:100%;
+  background:#020617;
+  border-left:1px solid rgba(255,255,255,.12);
+  display:flex;
+  flex-direction:column;
+}
+
+.ai-chat-header{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.ai-chat-sub{
+  font-size:12px;
+  opacity:.7;
+}
+
+.ai-chat-header button{
+  background:none;
+  border:none;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.ai-chat-messages{
+  flex:1;
+  padding:16px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.ai-msg{
+  max-width:85%;
+  padding:10px 12px;
+  border-radius:12px;
+  font-size:14px;
+  line-height:1.4;
+}
+
+.ai-msg-system{
+  background:rgba(255,255,255,.08);
+  align-self:flex-start;
+}
+
+.ai-msg-user{
+  background:linear-gradient(135deg,#2563eb,#22c55e);
+  color:#04110a;
+  align-self:flex-end;
+}
+
+.ai-chat-input{
+  border-top:1px solid rgba(255,255,255,.12);
+  padding:12px;
+  display:flex;
+  gap:8px;
+}
+
+.ai-chat-input textarea{
+  flex:1;
+  resize:none;
+  height:44px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.15);
+  background:#020617;
+  color:white;
+  padding:8px 10px;
+  font-family:inherit;
+}
+
+.ai-chat-input button{
+  border:none;
+  border-radius:10px;
+  padding:0 16px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  font-weight:700;
+  cursor:pointer;
+}
+.typing::after {
+  content: "▋";
+  margin-left: 2px;
+  animation: blink 1s infinite;
+  opacity: .6;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: .6 }
+  25%, 75% { opacity: 0 }
+}
+
+/* =========================
+   AI CONTEXT MESSAGE
+========================= */
+.ai-msg-context{
+  background: linear-gradient(
+    180deg,
+    rgba(34,197,94,.18),
+    rgba(34,197,94,.08)
+  );
+  border: 1px solid rgba(34,197,94,.35);
+  color: #d9ffe9;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.25);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="top-left">
+    <button class="icon-btn" onclick="toggleLeft()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <span class="brand">Sitegyn</span>
+    <span class="pill">Editor</span>
+  </div>
+
+  <div class="top-right">
+<button class="icon-btn" id="ai-chat-btn">
+  <i class="fa-solid fa-wand-magic-sparkles"></i>
+</button>
 
 
-# ==========================================
-# Flask app
-# ==========================================
-app = Flask(
-    __name__,
-    static_folder=".",
-    static_url_path=""
-)
-CORS(app)
+    <div class="user-cluster">
+      <div class="site-pill"><i class="fa-solid fa-globe"></i> sitegyn.com</div>
+      <div class="status-pill"><span class="dot"></span> Saved</div>
+      <div class="avatar">Y</div>
+    </div>
+
+    <button class="btn-dark" id="previewBtn">Preview</button>
+    <button class="btn-dark">Save</button>
+    <button class="btn-green">Dashboard</button>
+  </div>
+</div>
+
+<div class="editor">
+
+<!-- LEFT -->
+<aside class="sidebar left">
+  <div id="sidebar-dynamic"></div>
+</aside>
+
+  <!-- CANVAS -->
+<main class="canvas" id="editor-canvas" data-project-id="">
+<!--    <iframe src="https://sitegyn.com/p/yossi-pizza"></iframe>-->
+
+  <iframe
+    id="site-preview"
+    style="
+      width:100%;
+      height:100%;
+      border:none;
+      border-radius:16px;
+      background:#000;
+    "
+  ></iframe>
+</main>
 
 
-# ==========================================
-# Helpers
-# ==========================================
-def parse_update_block(assistant_text: str) -> Dict[str, Any]:
-    """Extract JSON inside <update>...</update>."""
-    try:
-        start = assistant_text.find("<update>")
-        end = assistant_text.find("</update>")
-        if start == -1 or end == -1:
-            return {}
-        raw = assistant_text[start + len("<update>"): end].strip()
-        return json.loads(raw) if raw else {}
-    except:
-        traceback.print_exc()
-        return {}
+<!-- RIGHT -->
+<aside class="sidebar right">
+  <div class="section-title">AI Actions</div>
+  <div id="sidebar-ai-dynamic"></div>
+</aside>
 
 
-# ============================
-# Template selection
-# ============================
-def pick_template_for_project(project: Dict[str, Any],
-                              update_obj: Dict[str, Any]) -> str | None:
+</div>
 
-    existing = update_obj.get("selected_template_id") or project.get("selected_template_id")
-    if existing:
-        return existing
+<script>
+function toggleLeft(){
+  document.querySelector('.sidebar.left').classList.toggle('open');
+  document.querySelector('.sidebar.right').classList.remove('open');
+}
+function toggleRight(){
+  document.querySelector('.sidebar.right').classList.toggle('open');
+  document.querySelector('.sidebar.left').classList.remove('open');
+}
+</script>
+ <script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+window.currentEditPath = null;
+function typeText(element, text, baseSpeed = 80) {
+  return new Promise(resolve => {
+    element.textContent = "";
+    let i = 0;
 
-    niche = (update_obj.get("niche") or project.get("niche") or "").strip().lower()
-    if not niche:
-        return None
+    function typeNext() {
+      if (i >= text.length) {
+        resolve();
+        return;
+      }
 
-    prefix = f"template_{niche}_"
-    candidates = [tid for tid in TEMPLATES.keys() if tid.startswith(prefix)]
-    if not candidates:
-        return None
+      const char = text.charAt(i);
+      element.textContent += char;
+      i++;
 
-    return random.choice(candidates)
+      let delay = baseSpeed + Math.random() * 40;
+      if (/[.,!?]/.test(char)) delay += 180;
+      if (char === "\n") delay += 300;
+      if (i > text.length * 0.8) delay += 40;
+
+      setTimeout(typeNext, delay);
+    }
+
+    typeNext();
+  });
+}
+
+/* =========================
+   Supabase
+========================= */
+const supabase = createClient(
+  "https://xkchlqcwntcoakmyicqb.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrY2hscWN3bnRjb2FrbXlpY3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDMyNzEsImV4cCI6MjA3ODM3OTI3MX0.702fpZLEHukvswrY0uwHknQYwdNDW-HeNsQxu_f1NnU"
+);
+
+/* =========================
+   Project ID
+========================= */
+function getProjectId() {
+  const urlId = new URLSearchParams(window.location.search).get("project_id");
+  if (urlId) return urlId;
+
+  const localId = localStorage.getItem("sitegyn_project_id");
+  if (localId) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("project_id", localId);
+    window.history.replaceState({}, "", url.toString());
+    return localId;
+  }
+  return null;
+}
+
+/* =========================
+   Load template LEFT sidebar CSS
+========================= */
+function loadTemplateLeftSidebarCSS(templateId) {
+  const cssId = "template-left-sidebar-css";
+  const existing = document.getElementById(cssId);
+  if (existing) existing.remove();
+
+  const link = document.createElement("link");
+  link.id = cssId;
+  link.rel = "stylesheet";
+  link.href = `/sitegyn/templates/${templateId}/editor_left_sidebar.css`;
+  document.head.appendChild(link);
+}
+
+/* =========================
+   Load editor + iframe
+========================= */
+async function loadEditorSite() {
+  const iframe = document.getElementById("site-preview");
+  const canvas = document.getElementById("editor-canvas");
+  if (!iframe) return;
+
+  const projectId = getProjectId();
+  if (!projectId) {
+    iframe.srcdoc = "<h1 style='color:white'>No project_id</h1>";
+    return;
+  }
+
+  canvas.dataset.projectId = projectId;
+
+  const { data, error } = await supabase
+    .from("projects")
+    .select("subdomain")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.subdomain) {
+    iframe.srcdoc = "<h1 style='color:white'>Project not found</h1>";
+    return;
+  }
+
+  const subdomain = data.subdomain;
+  window.currentProjectSlug = subdomain;
+  const sitePill = document.querySelector(".site-pill");
+  if (sitePill) sitePill.innerHTML = `<i class="fa-solid fa-globe"></i> ${subdomain}`;
+
+  iframe.src = `https://sitegyn.com/p/${subdomain}?editor=true`;
+
+  await loadTemplateSidebar(projectId);
+}
+
+loadEditorSite();
+
+/* =========================
+   Load template schema (ICON VERSION)
+========================= */
+async function loadTemplateSidebar(projectId) {
+  const { data, error } = await supabase
+    .from("projects")
+    .select("selected_template_id")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.selected_template_id) return;
+
+  const templateId = data.selected_template_id;
+
+  loadTemplateLeftSidebarCSS(templateId);
+
+  // ✅ changed to _schema_icon.json
+  const schemaUrl = `/sitegyn/templates/${templateId}/${templateId}_schema_icon.json`;
+  const schema = await fetch(schemaUrl).then(r => r.json());
 
 
-# ⬇️ כאן להדביק את generate_content_for_project ⬇️
-def generate_content_for_project(
-    client: OpenAI,
-    project_row: Dict[str, Any],
-    update_obj: Dict[str, Any],
-    template_id: str,
-) -> Dict[str, Any] | None:
-    """
-    Use the generic content_fill_prompt + template schema
-    to generate content_json for this project & template.
-    אם משהו נכשל בדרך (קובץ חסר / GPT נופל) – נחזיר None
-    ולא נשבור את זרימת העדכון ל-projects.
-    """
-    try:
-        template_conf = TEMPLATES.get(template_id)
-        if not template_conf:
-            return None
+  buildSidebarFromSchema(schema);
+  buildAISidebarFromSchema(schema);
+}
 
-        base_dir = Path(__file__).resolve().parent
+/* =========================
+   Sidebar builder
+========================= */
+const DEFAULT_ICON = "fa-circle";
 
-        # 1) schema של הטמפלט
-        schema_path = base_dir / template_conf["schema"]
-        schema_str = schema_path.read_text(encoding="utf-8")
+function getIconFromSchema(propSchema) {
+  if (!propSchema) return "fa-circle";
 
-        # 2) הפרומפט הכללי (או מה שמוגדר ב-content_prompt)
-        content_prompt_path = base_dir / "content_fill_prompt.txt"
-        if template_conf.get("content_prompt"):
-            content_prompt_path = base_dir / template_conf["content_prompt"]
+  if (typeof propSchema["ui:icon"] === "string" && propSchema["ui:icon"].trim()) {
+    return propSchema["ui:icon"].trim();
+  }
 
-        prompt_template = content_prompt_path.read_text(encoding="utf-8")
+  if (propSchema.ui && typeof propSchema.ui.icon === "string" && propSchema.ui.icon.trim()) {
+    return propSchema.ui.icon.trim();
+  }
 
-        # 3) BUSINESS_DATA_JSON – מה שיש לנו על הפרויקט + העדכון האחרון
-        business_data = {
-            "project": project_row,
-            "update": update_obj,
+  return "fa-circle";
+}
+
+
+function renderNavItem({ label, path, iconClass, nested = false }) {
+  const item = document.createElement("div");
+  item.className = nested ? "nav-item nested" : "nav-item";
+  item.dataset.path = path;
+
+  item.innerHTML = `
+    <span class="nav-ico"><i class="fa-solid ${iconClass}"></i></span>
+    <span class="nav-label">${label}</span>
+  `;
+
+  // ✅ FIX: listener ישיר
+  item.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openBottomPreview(path);
+  });
+
+  return item;
+}
+
+
+function buildSidebarFromSchema(schema) {
+  const container = document.getElementById("sidebar-dynamic");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const sections = schema.properties || {};
+
+  for (const sectionKey in sections) {
+    const sectionSchema = sections[sectionKey];
+    const sectionProps = sectionSchema.properties || {};
+
+    // Section title
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.textContent = capitalize(sectionKey);
+    container.appendChild(title);
+
+// Special: home.hero (NO "Hero" title)
+if (sectionKey === "home" && sectionProps.hero) {
+  const list = document.createElement("div");
+  list.className = "nav-list";
+
+  for (const fieldKey in sectionProps.hero.properties) {
+    const fieldSchema = sectionProps.hero.properties[fieldKey];
+    const iconClass = getIconFromSchema(fieldSchema);
+
+    const item = renderNavItem({
+      label: humanize(fieldKey),
+      path: `home.hero.${fieldKey}`,
+      iconClass
+    });
+
+    list.appendChild(item);
+  }
+
+  container.appendChild(list);
+  continue;
+}
+
+    // Regular fields
+    const list = document.createElement("div");
+    list.className = "nav-list";
+
+    for (const fieldKey in sectionProps) {
+      const fieldSchema = sectionProps[fieldKey]; // <- contains ui:icon
+      const iconClass = getIconFromSchema(fieldSchema);
+
+      const item = renderNavItem({
+        label: humanize(fieldKey),
+        path: `${sectionKey}.${fieldKey}`,
+        iconClass
+      });
+
+      list.appendChild(item);
+    }
+
+    container.appendChild(list);
+  }
+}
+function buildAISidebarFromSchema(schema) {
+  const container = document.getElementById("sidebar-ai-dynamic");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const sections = schema.properties || {};
+
+  for (const sectionKey in sections) {
+    const sectionSchema = sections[sectionKey];
+    const sectionProps = sectionSchema.properties || {};
+
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.textContent = capitalize(sectionKey);
+    container.appendChild(title);
+
+    // ===== Special: home.hero =====
+    if (sectionKey === "home" && sectionProps.hero) {
+      const list = document.createElement("div");
+      list.className = "nav-list";
+
+      for (const fieldKey in sectionProps.hero.properties) {
+        const fieldSchema = sectionProps.hero.properties[fieldKey];
+        const iconClass = getIconFromSchema(fieldSchema);
+
+        const item = renderAIItem({
+          label: humanize(fieldKey),
+          path: `home.hero.${fieldKey}`,
+          type: fieldSchema.type || "text",
+          iconClass
+        });
+
+        list.appendChild(item);
+      }
+
+      container.appendChild(list);
+      continue;
+    }
+
+    // ===== Regular sections =====
+    const list = document.createElement("div");
+    list.className = "nav-list";
+
+    for (const fieldKey in sectionProps) {
+      const fieldSchema = sectionProps[fieldKey];
+      const iconClass = getIconFromSchema(fieldSchema);
+
+      const item = renderAIItem({
+        label: humanize(fieldKey),
+        path: `${sectionKey}.${fieldKey}`,
+        type: fieldSchema.type || "text",
+        iconClass
+      });
+
+      list.appendChild(item);
+    }
+
+    container.appendChild(list);
+  }
+}
+
+
+function renderAIItem({ label, path, type, iconClass }) {
+  const item = document.createElement("div");
+  item.className = "nav-item ai-item";
+  item.dataset.aiPath = path;
+  item.dataset.fieldType = type;
+
+  item.innerHTML = `
+    <span class="nav-ico">
+      <i class="fa-solid ${iconClass || "fa-circle"}"></i>
+    </span>
+    <span class="nav-label">${label}</span>
+  `;
+
+  item.addEventListener("click", () => {
+    openAIEditor({ path, type, label });
+  });
+
+  return item;
+}
+
+
+async function openAIEditor({ path, type, label }) {
+  window.currentEditPath = path;
+  const projectId = getProjectId();
+  if (!projectId) return;
+
+  const { data, error } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.content_json) return;
+
+  const currentValue = getValueByPath(data.content_json, path);
+ const prompt = buildInitialPrompt({
+  label,
+  path,
+  type,
+  currentValue
+});
+
+const aiOverlay  = document.getElementById("ai-chat-overlay");
+const aiMessages = document.getElementById("ai-chat-messages");
+
+aiOverlay.classList.remove("hidden");
+
+aiMessages.innerHTML = "";
+
+const contextMsg = document.createElement("div");
+contextMsg.className = "ai-msg ai-msg-context typing";
+
+aiMessages.appendChild(contextMsg);
+aiMessages.scrollTop = aiMessages.scrollHeight;
+
+await typeText(contextMsg, prompt, 35);
+contextMsg.classList.remove("typing");
+
+
+aiMessages.appendChild(contextMsg);
+aiMessages.scrollTop = aiMessages.scrollHeight;
+
+}
+
+function buildNestedSection(container, titleText, fields, basePath) {
+  const subtitle = document.createElement("div");
+  subtitle.className = "section-subtitle";
+  subtitle.textContent = titleText;
+  container.appendChild(subtitle);
+
+  const list = document.createElement("div");
+  list.className = "nav-list";
+
+  for (const fieldKey in fields) {
+    const fieldSchema = fields[fieldKey]; // <- contains ui:icon
+    const iconClass = getIconFromSchema(fieldSchema);
+
+    const item = renderNavItem({
+      label: humanize(fieldKey),
+      path: `${basePath}.${fieldKey}`,
+      iconClass,
+      nested: true
+    });
+
+    list.appendChild(item);
+  }
+
+  container.appendChild(list);
+}
+function buildInitialPrompt({ label, path, type, currentValue }) {
+  const name = label.toLowerCase();
+
+  if (name.includes("kicker") || name.includes("cta") || name.includes("button")) {
+    return `You are editing a short label on your website.
+
+Field: ${label}
+Path: ${path}
+
+Current text:
+"${currentValue}"
+
+What would you like to do?
+• rewrite it
+• make it more emotional
+• make it more professional
+• shorten it
+• replace it completely`;
+  }
+
+  if (name.includes("headline") || name.includes("title")) {
+    return `This is a main headline on your website.
+
+Current headline:
+"${currentValue}"
+
+How would you like to improve it?
+• stronger impact
+• clearer message
+• different tone
+• shorter or longer`;
+  }
+
+  return `You are editing a text section on your website.
+
+Field: ${label}
+Path: ${path}
+
+Current content:
+"${currentValue}"
+
+Tell me what you'd like to change:
+• rewrite
+• simplify
+• improve clarity
+• change tone
+• replace completely`;
+}
+
+/* =========================
+   Utils
+========================= */
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function humanize(str) {
+  return str.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+}
+
+
+async function openBottomPreview(path) {
+window.currentEditPath = path;
+  const projectId = getProjectId();
+  if (!projectId) return;
+
+  const { data, error } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  if (error || !data?.content_json) return;
+
+  const value = getValueByPath(data.content_json, path);
+
+  document.getElementById("bp-title").innerText =
+    path.split(".").slice(-1)[0];
+
+  document.getElementById("bp-path").innerText = path;
+
+  const editor = document.getElementById("bp-editor");
+  if (editor) {
+    editor.value = Array.isArray(value)
+      ? value.join("\n\n")
+      : (value ?? "");
+  }
+
+  document.getElementById("bottom-preview").classList.remove("hidden");
+}
+
+
+function getValueByPath(obj, path) {
+  return path.split(".").reduce((acc, key) => acc?.[key], obj);
+}
+
+function setValueByPath(obj, path, value) {
+  const keys = path.split(".");
+  let curr = obj;
+
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (!curr[keys[i]]) curr[keys[i]] = {};
+    curr = curr[keys[i]];
+  }
+
+  curr[keys[keys.length - 1]] = value;
+}
+async function saveBottomPreview() {
+  if (!window.currentEditPath) return;
+
+  const projectId = getProjectId();
+  if (!projectId) return;
+
+  const editor = document.getElementById("bp-editor");
+  if (!editor) return;
+
+  const { data } = await supabase
+    .from("projects")
+    .select("content_json")
+    .eq("id", projectId)
+    .single();
+
+  if (!data?.content_json) return;
+
+  const updatedJson = structuredClone(data.content_json);
+  setValueByPath(updatedJson, window.currentEditPath, editor.value);
+
+  await supabase
+    .from("projects")
+    .update({ content_json: updatedJson })
+    .eq("id", projectId);
+
+  const iframe = document.getElementById("site-preview");
+ if (iframe) {
+  const baseSrc = iframe.src.split("?")[0];
+  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+}
+
+}
+
+window.saveBottomPreview = saveBottomPreview;
+
+document.getElementById("bp-editor")?.addEventListener("blur", saveBottomPreview);
+
+
+     function subscribeToProjectRealtime(projectId) {
+  supabase
+    .channel("projects-live-" + projectId)
+    .on(
+      "postgres_changes",
+      {
+        event: "UPDATE",
+        schema: "public",
+        table: "projects",
+        filter: `id=eq.${projectId}`,
+      },
+      (payload) => {
+        console.log("Realtime update", payload);
+
+        const iframe = document.getElementById("site-preview");
+        if (iframe) {
+          iframe.contentWindow.postMessage(
+            { type: "content-updated" },
+            "*"
+          );
         }
-        business_data_str = json.dumps(business_data, ensure_ascii=False)
-
-        # 4) מכניסים את ה-schema ואת BUSINESS_DATA לתוך הפרומפט
-        final_prompt = (
-            prompt_template
-            .replace("{{SCHEMA_JSON}}", schema_str)
-            .replace("{{BUSINESS_DATA_JSON}}", business_data_str)
-        )
-
-        # 5) קריאה שנייה ל-GPT שמחזירה JSON טהור בלבד
-        completion = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[{"role": "user", "content": final_prompt}],
-            temperature=0.0,
-        )
-        text = completion.choices[0].message.content.strip()
-        content_json = json.loads(text)
-        return content_json
-
-    except Exception:
-        traceback.print_exc()
-        return None
-
-# ==========================================
-# ROUTES
-# ==========================================
-
-@app.route("/")
-def homepage():
-    return send_from_directory(".", "index.html")
-
-
-@app.route("/api/health")
-def health():
-    return jsonify({"status": "ok"})
-
-
-@app.route("/api/start_project", methods=["POST"])
-def start_project():
-    resp = supabase.table("projects").insert({}).execute()
-    if not resp.data:
-        return jsonify({"error": "insert_failed"}), 500
-    return jsonify({"project_id": resp.data[0]["id"]})
-
-
-# ==========================================
-# CHAT — stores history + updates DB
-# ==========================================
-@app.route("/api/chat", methods=["POST"])
-def chat():
-    try:
-        data = request.get_json(force=True)
-        project_id = data.get("project_id")
-        user_message = data.get("message", "").strip()
-
-        if not project_id:
-            return jsonify({"error": "missing_project_id"}), 400
-        if not user_message:
-            return jsonify({"error": "empty_message"}), 400
-
-        # Save user message
-        supabase.table("chat_messages").insert({
-            "project_id": project_id,
-            "role": "user",
-            "content": user_message,
-        }).execute()
-
-        # Load entire history
-        history = supabase.table("chat_messages") \
-            .select("role, content") \
-            .eq("project_id", project_id) \
-            .order("created_at", desc=False) \
-            .execute().data or []
-
-        user_turns = sum(1 for r in history if r["role"] == "user")
-
-        # Build messages
-        messages = [
-            {"role": "system", "content": SITEGYN_SYSTEM_PROMPT},
-            {"role": "system", "content": f"The current project_id is {project_id}."},
-            {
-                "role": "system",
-                "content": (
-                    f"For this project there have been {user_turns} user answers so far. "
-                    "After 2 or more user answers, offer a demo or continue."
-                )
-            }
-        ]
-
-        for row in history:
-            messages.append({"role": row["role"], "content": row["content"]})
-
-        # OpenAI call
-        completion = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=messages,
-            temperature=0.5,
-        )
-
-        assistant_text = completion.choices[0].message.content or ""
-
-        # strip update block for UI
-        visible_text = assistant_text
-        if "<update>" in assistant_text and "</update>" in assistant_text:
-            before = visible_text.split("<update>")[0]
-            after = visible_text.split("</update>")[-1]
-            visible_text = (before + after).strip()
-
-        # Save assistant message
-        supabase.table("chat_messages").insert({
-            "project_id": project_id,
-            "role": "assistant",
-            "content": assistant_text,
-        }).execute()
-
-        # Parse <update> block מהתשובה הראשונה
-        update_obj = parse_update_block(assistant_text)
-
-        # אם המודל לא החזיר בכלל <update>...</update> – נעשה קריאה שנייה "נסתרת"
-        if not update_obj:
-            try:
-                backend_messages = messages + [
-                    {
-                        "role": "system",
-                        "content": (
-                            "Your previous reply did not follow the instructions. "
-                            "Now respond ONLY with a single <update>{...}</update> block "
-                            "containing valid JSON for the current project. "
-                            "Do not add any natural language or explanation."
-                        ),
-                    }
-                ]
-                completion2 = client.chat.completions.create(
-                    model="gpt-4.1-mini",
-                    messages=backend_messages,
-                    temperature=0.0,
-                )
-                backend_text = completion2.choices[0].message.content or ""
-                update_obj = parse_update_block(backend_text)
-            except Exception:
-                traceback.print_exc()
-                update_obj = {}
-
-        # אם יש לנו עדכון אחרי אחד משני הניסיונות – ממשיכים כרגיל
-        if update_obj:
-            # שולפים את רשומת הפרויקט
-            project_row = (
-                supabase.table("projects")
-                .select("*")
-                .eq("id", project_id)
-                .execute()
-                .data[0]
-            )
-
-            # --- Conversation history update ---
-            existing_history = project_row.get("conversation_history") or {}
-
-            # נדאג שתמיד יהיה dict
-            if not isinstance(existing_history, dict):
-                existing_history = {}
-
-            # נוסיף רשומה חדשה עם התשובה האחרונה של המשתמש
-            # אפשר לפי מספר סבב, או פשוט רשימת פניות
-            user_history_list = existing_history.get("user_turns", [])
-            if not isinstance(user_history_list, list):
-                user_history_list = []
-
-            user_history_list.append({
-                "message": user_message,
-            })
-
-            existing_history["user_turns"] = user_history_list
-
-            # נעדכן את ה-update_obj כך שישמר בטבלת projects
-            update_obj["conversation_history"] = existing_history
-            # --- סוף עדכון היסטוריה ---
-
-
-            # 1) בחירת טמפלט
-            template_id = pick_template_for_project(project_row, update_obj)
-            if template_id and not update_obj.get("selected_template_id"):
-                update_obj["selected_template_id"] = template_id
-
-            # 2) קריאה שנייה ל-GPT ליצירת content_json (רק אם עדיין אין)
-            if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
-                try:
-                    content_json = generate_content_for_project(
-                        client=client,
-                        project_row=project_row,
-                        update_obj=update_obj,
-                        template_id=template_id,
-                    )
-                    if content_json:
-                        update_obj["content_json"] = content_json
-                except Exception:
-                    traceback.print_exc()
-                    # ממשיכים בלי content_json, אבל לא עוצרים את העדכון
-
-            # 3) עדכון הטבלה ב-Supabase
-            supabase.table("projects").update(update_obj).eq("id", project_id).execute()
-
-        # === fetch subdomain for frontend redirect ===
-        project_row = (
-            supabase.table("projects")
-            .select("subdomain")
-            .eq("id", project_id)
-            .execute()
-            .data
-        )
-
-        subdomain = None
-        if project_row and project_row[0].get("subdomain"):
-            subdomain = project_row[0]["subdomain"]
-
-        return jsonify({
-            "reply": visible_text,
-            "project_id": project_id,
-            "subdomain": subdomain
-        })
-
-
-    except Exception as e:
-        traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
-
-# ==========================================
-# EDITOR UPDATE (RIGHT SIDEBAR)
-# ==========================================
-
-@app.route("/api/editor-update", methods=["POST"])
-def editor_update():
-
-    data = request.get_json()
-
-    project_id = data.get("project_id")
-    path = data.get("path")
-    message = data.get("message")
-
-    if not project_id or not path or not message:
-        return jsonify({"error": "missing parameters"}), 400
-
-    # load project
-    project = supabase.table("projects") \
-        .select("content_json") \
-        .eq("id", project_id) \
-        .single() \
-        .execute().data
-
-    content = project.get("content_json") or {}
-
-    # update JSON field
-    keys = path.split(".")
-    cur = content
-
-    for k in keys[:-1]:
-        if k not in cur:
-            cur[k] = {}
-        cur = cur[k]
-
-    cur[keys[-1]] = message
-
-    # save to supabase
-    supabase.table("projects") \
-        .update({"content_json": content}) \
-        .eq("id", project_id) \
-        .execute()
-
-    return jsonify({
-        "reply": "Updated successfully",
-        "updated_value": message
-    })
-# ==========================================
-# PUBLIC SITE — on-the-fly render (NEW)
-# ==========================================
-@app.route("/p/<subdomain>")
-def public_page_by_subdomain(subdomain: str):
-    html = render_project_html_by_subdomain(subdomain)
-    if html is None:
-        return "Project not found or failed to render", 404
-    return Response(html, mimetype="text/html")
-
-@app.route("/p/<subdomain>/wow")
-def public_page_wow(subdomain: str):
-    project = (
-        supabase.table("projects")
-        .select("id, wow_seen")
-        .eq("subdomain", subdomain)
-        .single()
-        .execute()
-        .data
+      }
     )
+    .subscribe();
+}
 
-    if not project:
-        return "Project not found", 404
+</script>
 
-    # אם כבר נצפה – מעבר לאתר הרגיל
-    if project.get("wow_seen"):
-        return Response(
-            "", status=302,
-            headers={"Location": f"/p/{subdomain}"}
-        )
+<div id="bottom-preview" class="hidden">
+  <div class="bp-header">
+    <div>
+      <span class="bp-title" id="bp-title"></span>
+      <span class="bp-path" id="bp-path"></span>
+    </div>
 
-    # 🔥 כאן הסימון
-    supabase.table("projects") \
-        .update({"wow_seen": True}) \
-        .eq("subdomain", subdomain) \
-        .execute()
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button
+        id="bp-preview"
+        style="
+          background:#111;
+          color:#fff;
+          border:1px solid rgba(255,255,255,.25);
+          border-radius:6px;
+          padding:4px 10px;
+          font-size:12px;
+          cursor:pointer;
+        "
+      >
+        Preview
+      </button>
 
-    html = render_project_html_by_subdomain(subdomain)
-    if html is None:
-        return "Project not found or failed to render", 404
+      <button
+        id="bp-close"
+        style="
+          background:none;
+          border:none;
+          font-size:18px;
+          cursor:pointer;
+          color:#3a1b0a;
+        "
+      >✕</button>
+    </div>
+  </div>
 
-    return Response(html, mimetype="text/html")
+  <textarea
+    class="bp-editor"
+    id="bp-editor"
+    placeholder="Edit content here..."
+  ></textarea>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const closeBtn = document.getElementById("bp-close");
+  const previewBtn = document.getElementById("bp-preview");
+  const preview = document.getElementById("bottom-preview");
+
+  if (closeBtn && preview) {
+    closeBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      await saveBottomPreview();
+      preview.classList.add("hidden");
+    });
+  }
+
+  if (previewBtn) {
+    previewBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      await saveBottomPreview();
+    });
+  }
+});
+
+</script>
+<script>document.getElementById("previewBtn").addEventListener("click", () => {
+  const projectSlug = window.currentProjectSlug;
+
+  const previewUrl = `https://sitegyn.com/p/${projectSlug}`;
+
+  window.open(previewUrl, "_blank");
+});
+</script>
+
+    <!-- =========================
+   AI CHAT MODAL
+========================= -->
+<div id="ai-chat-overlay" class="ai-chat-overlay hidden">
+  <div class="ai-chat-panel">
+    <div class="ai-chat-header">
+      <div>
+        <strong>AI Assistant</strong>
+        <div class="ai-chat-sub">Improve your website</div>
+      </div>
+      <button id="ai-chat-close">✕</button>
+    </div>
+
+    <div class="ai-chat-messages" id="ai-chat-messages">
+      <div class="ai-msg ai-msg-system">
+        Hi 👋
+        You can talk to me about your website and we’ll improve it together.
+      </div>
+    </div>
+
+    <div class="ai-chat-input">
+      <textarea
+        id="ai-chat-textarea"
+        placeholder="Tell me what you'd like to improve..."
+      ></textarea>
+      <button id="ai-chat-send">Send</button>
+    </div>
+  </div>
+</div>
+
+ <script>
+window.currentEditPath = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ===== Elements =====
+  const aiOverlay   = document.getElementById("ai-chat-overlay");
+  const aiClose     = document.getElementById("ai-chat-close");
+  const aiSend      = document.getElementById("ai-chat-send");
+  const aiTextarea  = document.getElementById("ai-chat-textarea");
+  const aiMessages  = document.getElementById("ai-chat-messages");
+  const aiChatBtn   = document.getElementById("ai-chat-btn");
+
+  if (!aiOverlay || !aiChatBtn || !aiMessages) {
+    console.warn("AI Chat: missing required elements");
+    return;
+  }
+
+  // =========================
+  // Helpers
+  // =========================
+  function getProjectIdFromURL() {
+    return new URLSearchParams(window.location.search).get("project_id");
+  }
+
+  function appendMessage(role, content) {
+    const div = document.createElement("div");
+    div.className =
+      role === "user"
+        ? "ai-msg ai-msg-user"
+        : "ai-msg ai-msg-system";
+
+    div.textContent = content;
+    aiMessages.appendChild(div);
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+  }
+  function createAssistantBubble() {
+  const div = document.createElement("div");
+  div.className = "ai-msg ai-msg-system";
+  aiMessages.appendChild(div);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+  return div;
+}
+
+function typeText(element, text, baseSpeed = 80) {
+  return new Promise(resolve => {
+    element.textContent = "";
+    let i = 0;
+
+    function typeNext() {
+      if (i >= text.length) {
+        resolve();
+        return;
+      }
+
+      const char = text.charAt(i);
+      element.textContent += char;
+      i++;
+
+      // ===== Human typing logic =====
+      let delay = baseSpeed;
+
+      // random variance (human inconsistency)
+      delay += Math.random() * 40;
+
+      // punctuation pauses
+      if (/[.,!?]/.test(char)) delay += 180;
+      if (char === "\n") delay += 300;
+
+      // slight slow-down near end
+      if (i > text.length * 0.8) delay += 40;
+
+      element.scrollIntoView({ behavior: "smooth", block: "end" });
+
+      setTimeout(typeNext, delay);
+    }
+
+    typeNext();
+  });
+}
 
 
-# ==========================================
-# Admin
-# ==========================================
-@app.route("/api/projects", methods=["GET"])
-def api_list_projects():
-    try:
-        rows = supabase.table("projects") \
-            .select("id, business_name, business_type, subdomain, created_at") \
-            .order("created_at", desc=True) \
-            .limit(100) \
-            .execute().data or []
+  // =========================
+  // Load history via backend
+  // =========================
+  async function loadChatHistory(projectId) {
+    try {
+      const res = await fetch("/api/chat/history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project_id: projectId })
+      });
 
-        return jsonify({"status": "ok", "projects": rows})
-    except:
-        traceback.print_exc()
-        return jsonify({"status": "error"}), 500
+      const data = await res.json();
+      if (!Array.isArray(data)) return;
 
-@app.route("/api/projects/<project_id>/wow_seen", methods=["POST"])
-def mark_wow_seen(project_id):
-    supabase.table("projects") \
-        .update({"wow_seen": True}) \
-        .eq("id", project_id) \
-        .execute()
+      aiMessages.innerHTML = "";
+      data.forEach(msg => appendMessage(msg.role, msg.content));
 
-    return jsonify({"ok": True})
+    } catch (err) {
+      console.error("Failed to load chat history", err);
+    }
+  }
 
-@app.route("/api/projects/<project_id>/subdomain", methods=["POST"])
-def api_update_subdomain(project_id):
-    try:
-        payload = request.get_json() or {}
-        sub = (payload.get("subdomain") or "").strip().lower()
+  // ===== OPEN =====
+  aiChatBtn.addEventListener("click", async () => {
+    aiOverlay.classList.remove("hidden");
 
-        if not sub:
-            return jsonify({"status": "error", "message": "subdomain required"}), 400
+    const projectId = getProjectIdFromURL();
+    if (projectId) {
+      await loadChatHistory(projectId);
+    }
 
-        # --- Auto-resolve subdomain conflicts ---
-        base = sub
-        candidate = base
-        counter = 1
+    setTimeout(() => aiTextarea?.focus(), 50);
+  });
 
-        while True:
-            conflict = supabase.table("projects") \
-                .select("id") \
-                .eq("subdomain", candidate) \
-                .neq("id", project_id) \
-                .execute().data
+  // ===== CLOSE =====
+  aiClose?.addEventListener("click", () => {
+    aiOverlay.classList.add("hidden");
+  });
 
-            if not conflict:
-                break  # פנוי
+  aiOverlay.addEventListener("click", (e) => {
+    if (e.target === aiOverlay) {
+      aiOverlay.classList.add("hidden");
+    }
+  });
 
-            candidate = f"{base}-{counter}"
-            counter += 1
+  // ===== SEND =====
+  aiSend?.addEventListener("click", sendMessage);
+  aiTextarea?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
 
-        # candidate = subdomain הסופי והפנוי
+async function sendMessage() {
 
-        updated = supabase.table("projects") \
-            .update({"subdomain": candidate}) \
-            .eq("id", project_id) \
-            .execute().data
+  const text = aiTextarea.value.trim();
+  if (!text) return;
 
-        return jsonify({"status": "ok", "subdomain": candidate, "project": updated})
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+    if (!window.currentEditPath) {
+    appendMessage("system","Select a field first from the AI Actions panel.");
+    return;
+  }
 
-# ==========================================
-# Run server
-# ==========================================
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", "8000")), debug=True)
+  const projectId = getProjectIdFromURL();
+
+  appendMessage("user", text);
+  aiTextarea.value = "";
+
+  try {
+
+const res = await fetch("/api/chat", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    project_id: projectId,
+    message: text
+  })
+});
+
+    const data = await res.json();
+
+    if (data?.reply) {
+
+      const bubble = createAssistantBubble();
+
+      aiSend.disabled = true;
+      aiTextarea.disabled = true;
+
+await typeText(bubble, data.reply);
+
+aiSend.disabled = false;
+aiTextarea.disabled = false;
+aiTextarea.focus();
+
+const iframe = document.getElementById("site-preview");
+if (iframe) {
+  const baseSrc = iframe.src.split("?")[0];
+  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+};
+    }
+
+  } catch (err) {
+    console.error("Chat send failed", err);
+  }
+}
+
+});
+</script>
+
+</body>
+</html>
