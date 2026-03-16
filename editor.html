@@ -905,6 +905,7 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 
 async function openAIEditor({ path, type, label }) {
+  currentEditPath = path;
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -1383,49 +1384,58 @@ function typeText(element, text, baseSpeed = 80) {
     }
   });
 
-  async function sendMessage() {
-    const text = aiTextarea.value.trim();
-    if (!text) return;
+async function sendMessage() {
 
-    const projectId = getProjectIdFromURL();
-    if (!projectId) {
-      console.error("Missing project_id");
-      return;
-    }
+  const text = aiTextarea.value.trim();
+  if (!text) return;
 
-    appendMessage("user", text);
-    aiTextarea.value = "";
-
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          project_id: projectId,
-          message: text,
-          source: "editor"
-        })
-      });
-
-      const data = await res.json();
-if (data?.reply) {
-  const bubble = createAssistantBubble();
-
-  aiSend.disabled = true;
-  aiTextarea.disabled = true;
-
-  await typeText(bubble, data.reply);
-
-  aiSend.disabled = false;
-  aiTextarea.disabled = false;
-  aiTextarea.focus();
-}
-
-
-    } catch (err) {
-      console.error("Chat send failed", err);
-    }
+  const projectId = getProjectIdFromURL();
+  if (!projectId) {
+    console.error("Missing project_id");
+    return;
   }
+
+  appendMessage("user", text);
+  aiTextarea.value = "";
+
+  try {
+
+    const res = await fetch("http://localhost:8082/api/editor-update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        project_id: projectId,
+        path: currentEditPath,
+        message: text
+      })
+    });
+
+    const data = await res.json();
+
+    if (data?.reply) {
+
+      const bubble = createAssistantBubble();
+
+      aiSend.disabled = true;
+      aiTextarea.disabled = true;
+
+await typeText(bubble, data.reply);
+
+aiSend.disabled = false;
+aiTextarea.disabled = false;
+aiTextarea.focus();
+
+const iframe = document.getElementById("site-preview");
+if (iframe) {
+  const baseSrc = iframe.src.split("?")[0];
+  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+};
+    }
+
+  } catch (err) {
+    console.error("Chat send failed", err);
+  }
+}
 
 });
 </script>
