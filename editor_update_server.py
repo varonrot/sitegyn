@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from supabase import create_client
 from openai import OpenAI
+from flask_cors import CORS
 
 load_dotenv()
 
@@ -16,6 +17,7 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 client = OpenAI(api_key=OPENAI_KEY)
 
 app = Flask(__name__)
+CORS(app)
 
 with open("editor_update_prompt.txt","r") as f:
     PROMPT = f.read()
@@ -81,7 +83,7 @@ def editor_update():
         .single() \
         .execute()
 
-    content = res.data.get("content_json")
+    content = res.data.get("content_json") or {}
 
     if not content:
         content = {}
@@ -123,7 +125,8 @@ def editor_update():
     return jsonify({
         "success": True,
         "reply": ai_text,
-        "changes": update["changes"]
+        "changes": update["changes"],
+        "updated_value": get_value_by_path(content, path)
     })
 
 
