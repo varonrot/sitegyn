@@ -1403,15 +1403,14 @@ async function sendMessage() {
 
   try {
 
-      const res = await fetch("/api/editor-update", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        project_id: projectId,
-        path: currentEditPath,
-        message: text
-      })
-    });
+const res = await fetch("/api/chat", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    project_id: projectId,
+    message: text
+  })
+});
 
     const data = await res.json();
 
