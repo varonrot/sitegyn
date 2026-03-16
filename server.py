@@ -353,7 +353,52 @@ def chat():
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
+# ==========================================
+# EDITOR UPDATE (RIGHT SIDEBAR)
+# ==========================================
 
+@app.route("/api/editor-update", methods=["POST"])
+def editor_update():
+
+    data = request.get_json()
+
+    project_id = data.get("project_id")
+    path = data.get("path")
+    message = data.get("message")
+
+    if not project_id or not path or not message:
+        return jsonify({"error": "missing parameters"}), 400
+
+    # load project
+    project = supabase.table("projects") \
+        .select("content_json") \
+        .eq("id", project_id) \
+        .single() \
+        .execute().data
+
+    content = project.get("content_json") or {}
+
+    # update JSON field
+    keys = path.split(".")
+    cur = content
+
+    for k in keys[:-1]:
+        if k not in cur:
+            cur[k] = {}
+        cur = cur[k]
+
+    cur[keys[-1]] = message
+
+    # save to supabase
+    supabase.table("projects") \
+        .update({"content_json": content}) \
+        .eq("id", project_id) \
+        .execute()
+
+    return jsonify({
+        "reply": "Updated successfully",
+        "updated_value": message
+    })
 # ==========================================
 # PUBLIC SITE — on-the-fly render (NEW)
 # ==========================================
