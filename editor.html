@@ -588,7 +588,7 @@ function toggleRight(){
 </script>
  <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-window.currentEditPath = null;
+let currentEditPath = null;
 function typeText(element, text, baseSpeed = 80) {
   return new Promise(resolve => {
     element.textContent = "";
@@ -905,8 +905,6 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 
 async function openAIEditor({ path, type, label }) {
-  window.currentEditPath = path;
-  localStorage.setItem("currentEditPath", path);
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -943,6 +941,7 @@ await typeText(contextMsg, prompt, 35);
 contextMsg.classList.remove("typing");
 
 
+aiMessages.appendChild(contextMsg);
 aiMessages.scrollTop = aiMessages.scrollHeight;
 
 }
@@ -1034,8 +1033,7 @@ function humanize(str) {
 
 
 async function openBottomPreview(path) {
-window.currentEditPath = path;
-localStorage.setItem("currentEditPath", path);
+currentEditPath = path;
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -1081,7 +1079,7 @@ function setValueByPath(obj, path, value) {
   curr[keys[keys.length - 1]] = value;
 }
 async function saveBottomPreview() {
-  if (!window.currentEditPath) return;
+  if (!currentEditPath) return;
 
   const projectId = getProjectId();
   if (!projectId) return;
@@ -1098,7 +1096,7 @@ async function saveBottomPreview() {
   if (!data?.content_json) return;
 
   const updatedJson = structuredClone(data.content_json);
-  setValueByPath(updatedJson, window.currentEditPath, editor.value);
+  setValueByPath(updatedJson, currentEditPath, editor.value);
 
   await supabase
     .from("projects")
@@ -1252,8 +1250,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
  <script>
-
-
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===== Elements =====
@@ -1356,16 +1352,8 @@ function typeText(element, text, baseSpeed = 80) {
   }
 
   // ===== OPEN =====
-aiChatBtn.addEventListener("click", async () => {
-  aiOverlay.classList.remove("hidden");
-
-const savedPath = localStorage.getItem("currentEditPath");
-
-if (savedPath) {
-  window.currentEditPath = savedPath;
-} else {
-  console.warn("No edit path selected");
-}
+  aiChatBtn.addEventListener("click", async () => {
+    aiOverlay.classList.remove("hidden");
 
     const projectId = getProjectIdFromURL();
     if (projectId) {
@@ -1395,66 +1383,49 @@ if (savedPath) {
     }
   });
 
-async function sendMessage() {
+  async function sendMessage() {
+    const text = aiTextarea.value.trim();
+    if (!text) return;
 
-  const text = aiTextarea.value.trim();
-  if (!text) return;
-
-if (!window.currentEditPath) {
-  appendMessage(
-    "system",
-    "⚠️ You must select a field from the AI Actions panel before sending a message."
-  );
-
-  // 🔥 פוקוס חזרה למשתמש
-  aiTextarea.focus();
-
-  return;
-}
-
-  const projectId = getProjectIdFromURL();
-
-  appendMessage("user", text);
-  aiTextarea.value = "";
-
-  try {
-
-const res = await fetch("/api/chat", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-  project_id: projectId,
-  message: text,
-  path: window.currentEditPath
-})
-});
-
-    const data = await res.json();
-
-    if (data?.reply) {
-
-      const bubble = createAssistantBubble();
-
-      aiSend.disabled = true;
-      aiTextarea.disabled = true;
-
-await typeText(bubble, data.reply);
-
-aiSend.disabled = false;
-aiTextarea.disabled = false;
-aiTextarea.focus();
-
-const iframe = document.getElementById("site-preview");
-if (iframe) {
-  const baseSrc = iframe.src.split("?")[0];
-  iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
-};
+    const projectId = getProjectIdFromURL();
+    if (!projectId) {
+      console.error("Missing project_id");
+      return;
     }
 
-  } catch (err) {
-    console.error("Chat send failed", err);
-  }
+    appendMessage("user", text);
+    aiTextarea.value = "";
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          project_id: projectId,
+          message: text,
+          source: "editor"
+        })
+      });
+
+      const data = await res.json();
+if (data?.reply) {
+  const bubble = createAssistantBubble();
+
+  aiSend.disabled = true;
+  aiTextarea.disabled = true;
+
+  await typeText(bubble, data.reply);
+
+  aiSend.disabled = false;
+  aiTextarea.disabled = false;
+  aiTextarea.focus();
 }
+
+
+    } catch (err) {
+      console.error("Chat send failed", err);
+    }
+  }
 
 });
 </script>
