@@ -1397,10 +1397,17 @@ async function sendMessage() {
   const text = aiTextarea.value.trim();
   if (!text) return;
 
-  if (!window.currentEditPath) {
-    appendMessage("system","Select a field first from the AI Actions panel.");
-    return;
-  }
+if (!window.currentEditPath) {
+  appendMessage(
+    "system",
+    "⚠️ You must select a field from the AI Actions panel before sending a message."
+  );
+
+  // 🔥 פוקוס חזרה למשתמש
+  aiTextarea.focus();
+
+  return;
+}
 
   const projectId = getProjectIdFromURL();
 
