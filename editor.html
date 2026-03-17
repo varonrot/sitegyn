@@ -940,10 +940,39 @@ aiMessages.scrollTop = aiMessages.scrollHeight;
 await typeText(contextMsg, prompt, 35);
 contextMsg.classList.remove("typing");
 
+// ===== AI ACTION =====
+const userInstruction = prompt("What do you want to change?");
+if (!userInstruction) return;
 
-aiMessages.appendChild(contextMsg);
-aiMessages.scrollTop = aiMessages.scrollHeight;
+const res = await fetch("/api/ai-update", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    project_id: projectId,
+    path,
+    instruction: userInstruction
+  })
+});
 
+const result = await res.json();
+
+if (result?.value) {
+  const updatedJson = structuredClone(data.content_json);
+
+  setValueByPath(updatedJson, path, result.value);
+
+  await supabase
+    .from("projects")
+    .update({ content_json: updatedJson })
+    .eq("id", projectId);
+
+  // refresh iframe
+  const iframe = document.getElementById("site-preview");
+  if (iframe) {
+    const baseSrc = iframe.src.split("?")[0];
+    iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
+  }
+}
 }
 
 function buildNestedSection(container, titleText, fields, basePath) {
