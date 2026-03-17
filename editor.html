@@ -943,7 +943,6 @@ await typeText(contextMsg, prompt, 35);
 contextMsg.classList.remove("typing");
 
 
-aiMessages.appendChild(contextMsg);
 aiMessages.scrollTop = aiMessages.scrollHeight;
 
 }
@@ -1036,6 +1035,7 @@ function humanize(str) {
 
 async function openBottomPreview(path) {
 window.currentEditPath = path;
+localStorage.setItem("currentEditPath", path);
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -1359,10 +1359,13 @@ function typeText(element, text, baseSpeed = 80) {
 aiChatBtn.addEventListener("click", async () => {
   aiOverlay.classList.remove("hidden");
 
-  const savedPath = localStorage.getItem("currentEditPath");
-  if (savedPath) {
-    window.currentEditPath = savedPath;
-  }
+const savedPath = localStorage.getItem("currentEditPath");
+
+if (savedPath) {
+  window.currentEditPath = savedPath;
+} else {
+  console.warn("No edit path selected");
+}
 
     const projectId = getProjectIdFromURL();
     if (projectId) {
