@@ -906,6 +906,7 @@ function renderAIItem({ label, path, type, iconClass }) {
 
 async function openAIEditor({ path, type, label }) {
   window.currentEditPath = path;
+  localStorage.setItem("currentEditPath", path);
   const projectId = getProjectId();
   if (!projectId) return;
 
@@ -1355,8 +1356,13 @@ function typeText(element, text, baseSpeed = 80) {
   }
 
   // ===== OPEN =====
-  aiChatBtn.addEventListener("click", async () => {
-    aiOverlay.classList.remove("hidden");
+aiChatBtn.addEventListener("click", async () => {
+  aiOverlay.classList.remove("hidden");
+
+  const savedPath = localStorage.getItem("currentEditPath");
+  if (savedPath) {
+    window.currentEditPath = savedPath;
+  }
 
     const projectId = getProjectIdFromURL();
     if (projectId) {
