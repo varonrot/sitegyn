@@ -311,55 +311,7 @@ def chat():
 
         # Parse <update> block מהתשובה הראשונה
         update_obj = parse_update_block(assistant_text)
-        # ==========================================
-        # INITIAL BUILD (missing piece)
-        # ==========================================
-        project_row = (
-            supabase.table("projects")
-            .select("*")
-            .eq("id", project_id)
-            .single()
-            .execute()
-            .data
-        )
-
-        # אם אין עדיין תוכן – נבנה
-        if update_obj:
-
-            # ===============================
-            # 1. Template selection
-            # ===============================
-            template_id = pick_template_for_project(project_row, update_obj)
-
-            if template_id and not update_obj.get("selected_template_id"):
-                update_obj["selected_template_id"] = template_id
-
-            # ===============================
-            # 2. Generate content_json
-            # ===============================
-            if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
-
-                content_json = generate_content_for_project(
-                    client,
-                    project_row,
-                    update_obj,
-                    template_id
-                )
-
-                if content_json:
-                    update_obj["content_json"] = content_json
-
-            # ===============================
-            # 3. Create subdomain (🔥 חשוב)
-            # ===============================
-            if not project_row.get("subdomain"):
-                update_obj["subdomain"] = f"site-{project_id[:6]}"
-
-            # ===============================
-            # 4. Save everything together
-            # ===============================
-            supabase.table("projects").update(update_obj).eq("id", project_id).execute()
-
+   
 
         # אם המודל לא החזיר בכלל <update>...</update> – נעשה קריאה שנייה "נסתרת"
         if not update_obj:
@@ -388,6 +340,56 @@ def chat():
             except Exception:
                 traceback.print_exc()
                 update_obj = {}
+
+                # ==========================================
+                # INITIAL BUILD (missing piece)
+                # ==========================================
+                project_row = (
+                    supabase.table("projects")
+                    .select("*")
+                    .eq("id", project_id)
+                    .single()
+                    .execute()
+                    .data
+                )
+
+                # אם אין עדיין תוכן – נבנה
+                if update_obj:
+
+                    # ===============================
+                    # 1. Template selection
+                    # ===============================
+                    template_id = pick_template_for_project(project_row, update_obj)
+
+                    if template_id and not update_obj.get("selected_template_id"):
+                        update_obj["selected_template_id"] = template_id
+
+                    # ===============================
+                    # 2. Generate content_json
+                    # ===============================
+                    if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
+
+                        content_json = generate_content_for_project(
+                            client,
+                            project_row,
+                            update_obj,
+                            template_id
+                        )
+
+                        if content_json:
+                            update_obj["content_json"] = content_json
+
+                    # ===============================
+                    # 3. Create subdomain (🔥 חשוב)
+                    # ===============================
+                    if not project_row.get("subdomain"):
+                        update_obj["subdomain"] = f"site-{project_id[:6]}"
+
+                    # ===============================
+                    # 4. Save everything together
+                    # ===============================
+                    supabase.table("projects").update(update_obj).eq("id", project_id).execute()
+
         # ===== Editor content patch =====
         if is_editor and editor_payload:
             project_row = (
