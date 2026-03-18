@@ -438,9 +438,22 @@ def chat():
         if update_obj or editor_payload:
             final_message = "Content updated"
 
+        # שלוף subdomain מהDB
+        project_row = (
+            supabase.table("projects")
+            .select("subdomain")
+            .eq("id", project_id)
+            .single()
+            .execute()
+            .data
+        )
+
+        subdomain = project_row.get("subdomain") if project_row else None
+
         return jsonify({
             "reply": final_message,
-            "project_id": project_id
+            "project_id": project_id,
+            "subdomain": subdomain
         })
     except Exception as e:
         traceback.print_exc()
