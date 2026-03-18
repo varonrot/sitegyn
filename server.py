@@ -49,9 +49,6 @@ EDITOR_PROMPT_PATH = os.path.join(
 with open(EDITOR_PROMPT_PATH, "r", encoding="utf-8") as f:
     EDITOR_UPDATE_PROMPT = f.read()
 
-    with open(EDITOR_PROMPT_PATH, "r", encoding="utf-8") as f:
-        EDITOR_UPDATE_PROMPT = f.read()
-
 IMPROVE_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "content_improve_prompt.txt")
 
 with open(IMPROVE_PROMPT_PATH, "r", encoding="utf-8") as f:
@@ -327,11 +324,21 @@ def chat():
         )
 
         # אם אין עדיין תוכן – נבנה
-        if project_row and not project_row.get("content_json"):
+        if update_obj:
 
+            # ===============================
+            # 1. Template selection
+            # ===============================
             template_id = pick_template_for_project(project_row, update_obj)
 
-            if template_id:
+            if template_id and not update_obj.get("selected_template_id"):
+                update_obj["selected_template_id"] = template_id
+
+            # ===============================
+            # 2. Generate content_json
+            # ===============================
+            if template_id and not (project_row.get("content_json") or update_obj.get("content_json")):
+
                 content_json = generate_content_for_project(
                     client,
                     project_row,
@@ -340,10 +347,20 @@ def chat():
                 )
 
                 if content_json:
-                    supabase.table("projects").update({
-                        "content_json": content_json,
-                        "selected_template_id": template_id
-                    }).eq("id", project_id).execute()
+                    update_obj["content_json"] = content_json
+
+            # ===============================
+            # 3. Create subdomain (🔥 חשוב)
+            # ===============================
+            if not project_row.get("subdomain"):
+                update_obj["subdomain"] = f"site-{project_id[:6]}"
+
+            # ===============================
+            # 4. Save everything together
+            # ===============================
+            supabase.table("projects").update(update_obj).eq("id", project_id).execute()
+
+
         # אם המודל לא החזיר בכלל <update>...</update> – נעשה קריאה שנייה "נסתרת"
         if not update_obj:
             try:
@@ -415,8 +432,14 @@ def chat():
                     "subdomain": sub
                 }).eq("id", project_id).execute()
 
+        final_message = visible_text
+
+        # אם זה עדכון (יש update או editor)
+        if update_obj or editor_payload:
+            final_message = "Content updated"
+
         return jsonify({
-            "reply": visible_text,
+            "reply": final_message,
             "project_id": project_id
         })
     except Exception as e:
