@@ -972,6 +972,7 @@ if (result?.value) {
     const baseSrc = iframe.src.split("?")[0];
     iframe.src = baseSrc + "?editor=true&preview=" + Date.now();
   }
+    appendMessage("assistant", "Content updated ✅");
 }
 }
 
