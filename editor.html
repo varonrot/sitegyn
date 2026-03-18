@@ -917,7 +917,7 @@ async function openAIEditor({ path, type, label }) {
   if (error || !data?.content_json) return;
 
   const currentValue = getValueByPath(data.content_json, path);
- const prompt = buildInitialPrompt({
+  const initialPrompt = buildInitialPrompt({
   label,
   path,
   type,
@@ -937,11 +937,11 @@ contextMsg.className = "ai-msg ai-msg-context typing";
 aiMessages.appendChild(contextMsg);
 aiMessages.scrollTop = aiMessages.scrollHeight;
 
-await typeText(contextMsg, prompt, 35);
+await typeText(contextMsg, initialPrompt, 35);
 contextMsg.classList.remove("typing");
 
 // ===== AI ACTION =====
-const userInstruction = prompt("What do you want to change?");
+const userInstruction = window.prompt("What do you want to change?");
 if (!userInstruction) return;
 
 const res = await fetch("/api/ai-update", {
